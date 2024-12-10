@@ -4,7 +4,6 @@ Modified: 2010-12-05 19:30
 Category: Python
 Tags: sth
 Slug: my-super-post-2
-Authors: Alexis Metaireau, Conan Doyle
 Summary: Short version for index and feeds
 
 # Wave Equation
