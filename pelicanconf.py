@@ -1,10 +1,22 @@
-AUTHOR = "Joana"
+# AUTHOR = "Joana"
 SITENAME = "Jo's Blog"
 SITEURL = ""
 
 PATH = "content"
 ARTICLE_PATHS = ["articles"]
 PAGE_PATHS = ["pages"]
+PAGE_SAVE_AS = "{slug}.html"
+PAGE_URL = "{slug}.html"
+OUTPUT_PATH = "docs"
+TAGS_SAVE_AS = "tags.html"
+ARTICLE_SAVE_AS = "{slug}.html"
+AUTHORS_SAVE_AS = ""  # Prevent authors page from being generated
+CATEGORIES_SAVE_AS = ""  # Prevent category page from being generated
+AUTHOR_SAVE_AS = ""
+TAG_SAVE_AS = ""
+TAG_URL = ""
+CATEGORY_SAVE_AS = ""
+ARCHIVES_SAVE_AS = ""
 
 TIMEZONE = "Europe/Sofia"
 
