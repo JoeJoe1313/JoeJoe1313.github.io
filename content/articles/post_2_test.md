@@ -1,3 +1,4 @@
+---
 Title: My super title 2 test
 Date: 2024-12-10 10:20
 Modified: 2024-12-10 10:27
@@ -5,6 +6,7 @@ Category: Python
 Tags: sth
 Slug: my-super-post-2
 Summary: Short version for index and feeds
+---
 
 # Wave Equation
 
