@@ -14,6 +14,7 @@
                         <nav><ul>
                                                 <li><a href="/about.html">About</a></li>
                                                 <li><a href="/category/mathematics.html">Mathematics</a></li>
+                                                <li><a href="/category/photography.html">Photography</a></li>
                                                 <li><a href="/category/python.html">Python</a></li>
                         </ul></nav>
                 </header><!-- /#banner -->
@@ -42,6 +43,26 @@
 <h2>Circular Membrane</h2>
 <p>Pass</p>
 <p>Test some code:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.animation</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">FuncAnimation</span><span class="p">,</span><span class="w"> </span><span class="n">PillowWriter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.mplot3d</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">Axes3D</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">root_scalar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.special</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">jv</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">besselj</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">circular_membrane</span><span class="p">():</span>
+<span class="w">    </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5</span>
+<span class="w">    </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span>
+<span class="w">    </span><span class="n">rho</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="mi">51</span><span class="p">)</span>
+<span class="w">    </span><span class="n">phi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="w"> </span><span class="mi">51</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Test code collapse:</p>
+<details>
+<summary>Click to expand code</summary>
+
+
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.animation</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">FuncAnimation</span><span class="p">,</span><span class="w"> </span><span class="n">PillowWriter</span>
@@ -121,12 +142,38 @@
 <span class="w">    </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div>
 
+
+</details>
+
 <p><img alt="Membrane" src="/images/circular_membrane_animation.gif"></p>                    </article>
                 </aside><!-- /#featured -->
                     <section id="content" class="body">
                         <h1>Other articles</h1>
                         <hr />
                         <ol id="posts-list" class="hfeed">
+
+                <li><article class="hentry">
+                    <header>
+                        <h1><a href="/photo-1.html" rel="bookmark"
+                               title="Permalink to Mirrorless vs DSLR Cameras">Mirrorless vs DSLR Cameras</a></h1>
+                    </header>
+
+                    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2023-12-10T10:20:00+02:00">
+                Published: Sun 10 December 2023
+        </abbr>
+                <br />
+                <abbr class="modified" title="2023-12-10T10:27:00+02:00">
+                        Updated: Sun 10 December 2023
+                </abbr>
+
+        <p>In <a href="/category/photography.html">Photography</a>.</p>
+<p>tags: <a href="/">sony</a> </p>        
+</footer><!-- /.post-info -->                        <p>Short version for index and feeds</p>
+                        <a class="readmore" href="/photo-1.html">read more</a>
+                    </div><!-- /.entry-content -->
+                </article></li>
 
                 <li><article class="hentry">
                     <header>

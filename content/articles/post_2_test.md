@@ -42,6 +42,27 @@ def circular_membrane():
     r = 3
     rho = np.linspace(0, r, 51)
     phi = np.linspace(0, 2 * np.pi, 51)
+```
+
+Test code collapse:
+
+<details>
+<summary>Click to expand code</summary>
+
+```{python}
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.animation import FuncAnimation, PillowWriter
+from mpl_toolkits.mplot3d import Axes3D
+from scipy.optimize import root_scalar
+from scipy.special import jv as besselj
+
+
+def circular_membrane():
+    a = 0.5
+    r = 3
+    rho = np.linspace(0, r, 51)
+    phi = np.linspace(0, 2 * np.pi, 51)
 
     tmax = 30
     t = np.linspace(0, tmax, 100)
@@ -107,5 +128,6 @@ def circular_membrane():
 
     plt.show()
 ```
+</details>
 
 ![Membrane](/images/circular_membrane_animation.gif)
