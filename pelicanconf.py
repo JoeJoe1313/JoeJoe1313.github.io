@@ -1,12 +1,14 @@
-AUTHOR = 'Joana'
+AUTHOR = "Joana"
 SITENAME = "Jo's Blog"
 SITEURL = ""
 
 PATH = "content"
+ARTICLE_PATHS = ["articles"]
+PAGE_PATHS = ["pages"]
 
-TIMEZONE = 'Europe/Sofia'
+TIMEZONE = "Europe/Sofia"
 
-DEFAULT_LANG = 'en'
+DEFAULT_LANG = "en"
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
