@@ -20,6 +20,7 @@ jobs:
 
   deploy:
 
+    needs: build
     uses: "getpelican/pelican/.github/workflows/github_pages.yml@main"
     permissions:
       contents: "read"
