@@ -5,7 +5,6 @@ Modified: 2024-12-10 10:27
 Category: Python
 Tags: sth
 Slug: my-super-post-2
-Summary: Short version for index and feeds
 ---
 
 # Wave Equation
