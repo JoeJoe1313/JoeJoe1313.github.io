@@ -1,4 +1,4 @@
-name: Pelican site CI
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -13,7 +13,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Pelican Action
-        uses: nelsonjchen/gh-pages-pelican-action@0.2.0
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Install requirements
+        run:  |
+          pip install -r requirements.txt
+      - name: Pelican site
+        run:  |
+          pelican ./content
+        # uses: nelsonjchen/gh-pages-pelican-action@0.2.0
+        # env:
+        #   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+  deploy:
+
+    needs: build
+    uses: getpelican/pelican/.github/workflows/github_pages.yml@main
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    with:
+      settings: publishconf.py
