@@ -45,7 +45,11 @@ SOCIAL = (
 )
 
 DEFAULT_PAGINATION = 10
-SUMMARY_MAX_PARAGRAPHS = 1
+
+PLUGINS = [
+    "plugins.summary",
+]
+SUMMARY_USE_FIRST_PARAGRAPH = True
 
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
