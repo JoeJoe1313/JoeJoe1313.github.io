@@ -8,4 +8,4 @@ Slug: my-super-post-4
 Summary: Short version for index and feeds 4
 ---
 
-This is the content of my super blog post 4. More tests.
+This is the content of my super blog post 4. More tests!
