@@ -28,3 +28,4 @@ jobs:
       id-token: "write"
     with:
       settings: "publishconf.py"
+      branch: "gh-pages"
