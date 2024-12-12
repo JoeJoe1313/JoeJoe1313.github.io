@@ -1,13 +1,12 @@
 ---
-Title: My super title 2 test
-Date: 2024-12-10 10:20
-Modified: 2024-12-10 10:27
+Title: Wave Equation
+Date: 2024-12-12 13:15
 Category: Python
 Tags: sth
-Slug: my-super-post-2
+Slug: 2024-12-12-wave-equation
 ---
 
-# Wave Equation
+The following equation
 
 ## Introduction
 
