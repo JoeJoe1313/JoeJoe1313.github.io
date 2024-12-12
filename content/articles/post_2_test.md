@@ -6,13 +6,11 @@ Tags: sth
 Slug: 2024-12-12-wave-equation
 ---
 
-The following equation
-
 ## Introduction
 
-Test
-
+<!-- PELICAN_BEGIN_SUMMARY -->
 The following equation
+<!-- PELICAN_END_SUMMARY -->
 
 $$u(x, y, t)$$
 
