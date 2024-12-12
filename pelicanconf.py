@@ -50,7 +50,7 @@ PLUGINS = [
     "plugins.summary",
     "plugins.render_math",
 ]
-SUMMARY_USE_FIRST_PARAGRAPH = True
+SUMMARY_USE_FIRST_PARAGRAPH = False
 
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
