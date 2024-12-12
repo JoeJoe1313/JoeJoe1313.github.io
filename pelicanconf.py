@@ -13,7 +13,7 @@ ARTICLE_SAVE_AS = "{slug}.html"
 AUTHORS_SAVE_AS = ""  # Prevent authors page from being generated
 # CATEGORIES_SAVE_AS = ""  # Prevent category page from being generated
 AUTHOR_SAVE_AS = ""
-TAG_SAVE_AS = ""
+# TAG_SAVE_AS = ""
 TAG_URL = ""
 # CATEGORY_SAVE_AS = ""
 ARCHIVES_SAVE_AS = ""
@@ -48,6 +48,7 @@ DEFAULT_PAGINATION = False
 
 PLUGINS = [
     "plugins.summary",
+    "plugins.render_math",
 ]
 SUMMARY_USE_FIRST_PARAGRAPH = True
 
