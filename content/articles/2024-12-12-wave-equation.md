@@ -1,16 +1,14 @@
 ---
 Title: Wave Equation
 Date: 2024-12-12 13:15
-Category: Python
-Tags: sth
+Category: Mathematics
+Tags: mathematics, python
 Slug: 2024-12-12-wave-equation
 ---
 
 ## Introduction
 
-<!-- PELICAN_BEGIN_SUMMARY -->
 The following equation
-<!-- PELICAN_END_SUMMARY -->
 
 $$u(x, y, t)$$
 
