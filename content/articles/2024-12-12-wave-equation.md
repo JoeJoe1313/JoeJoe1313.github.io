@@ -6,21 +6,46 @@ Tags: mathematics, python
 Slug: 2024-12-12-wave-equation
 ---
 
+Partial differential equations...
+
 ## Introduction
 
-The following equation
-
-$$u(x, y, t)$$
+Let $u(x, y, t)$ be ...
+ 
+The homogenous wave equation is given by
 
 $$\frac{\partial^2 u}{\partial t^2} - c^2 (\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2}) = 0$$
 
-$$u_{tt} - c^2 (u_{xx} + u_{yy}) = 0$$
+or
 
-is
+$$u_{tt} - c^2 (u_{xx} + u_{yy}) = 0.$$
+
+## Physical interpretation
+
+The wave equation is a simplified model for a vibrating
+string (𝑛 = 1), membrane (𝑛 = 2), or elastic solid (𝑛 = 3). In these
+physical interpretations 𝑢(𝑥, 𝑡) represents the displacement in some direction
+of the point 𝑥 at time 𝑡 ≥ 0.
 
 ## Circular Membrane
 
 Pass
+
+$$\left\{\begin{align*}
+u_{tt} - \frac{1}{4} (u_{xx} + u_{yy}) = 0, x^2 + y^2 < 9, t > 0, \\ 
+u|_{t=0} = (x^2 + y^2) \sin^3(\pi \sqrt{x^2 + y^2}), u_t |_{t=0} = 0, x^2 + y^2 \leq 9, \\
+u|_{x^2 + y^2 = 9} = 0, t \geq 0.
+\end{align*}\right.$$
+
+Fourier method: Change to polar coordinates
+
+$$\left\{\begin{align*}
+x = \rho \cos(\phi), \\
+y = \rho \sin(\phi)
+\end{align*}\right.
+$$
+
+...
 
 Test some code:
 
@@ -127,3 +152,7 @@ def circular_membrane():
 </details>
 
 ![Membrane](/images/circular_membrane_animation.gif)
+
+## References
+
+- ![ref_1](https://www.amazon.co.uk/Partial-Differential-Equations-Graduate-Mathematics/dp/1470469421/ref=sr_1_3?crid=2BINQDJ5R7XUB&dib=eyJ2IjoiMSJ9.GgU4uQBUKYO960lL6EjVJjksjFysLhCJKEHP436_saFGnfKf4uvgqyl_3WBjV779K4AwonOY5XnkRxVFCIqqGZCCE3I8YEjIC7mzvLwUa2lBPvByBCoFxTvGhrSKGLiAKlAvTVFSlbwklqyWEj4o852csy80_D3G2Gk9pedHKz22vqyc8UI8HAxWZ1wfu5bNoaqOOEDhy0W2XLaSijLCENnzVXjxTLS5xZkMCXr72G0.NeT6LdhY-WV9xVA26fbGHp37FbAKGo7mLwpV9m_2Rdk&dib_tag=se&keywords=partial+differential+equations&nsdOptOutParam=true&qid=1734133658&sprefix=partial+diff%2Caps%2C129&sr=8-3)
