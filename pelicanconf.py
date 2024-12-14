@@ -17,6 +17,7 @@ TAG_SAVE_AS = ""
 TAG_URL = ""
 # CATEGORY_SAVE_AS = ""
 ARCHIVES_SAVE_AS = ""
+THEME = "themes/notmyidea"
 
 TIMEZONE = "Europe/Sofia"
 
