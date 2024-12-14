@@ -2,7 +2,7 @@
 Title: Mirrorless vs DSLR Cameras
 Date: 2024-12-17 12:15
 Category: Photography
-Tags: sony, photography, draft
+Tags: sony, photography
 Slug: 2024-12-17-mirrorless-vs-dslr-cameras
 ---
 
