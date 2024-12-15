@@ -33,6 +33,19 @@ of the point 𝑥 at time 𝑡 ≥ 0.
 
 Pass
 
+$$D := \{0 < x < a, 0 < y < b\}
+$$
+
+...
+
+$$\left\{\begin{align*}
+u_{tt} - c^2 (u_{xx} + u_{yy}) = 0, (x,y,t) \in G = D \times (0, +\infty), \\ 
+u|_{t=0} = \phi(x, y), u_t |_{t=0} = \psi(x, y), (x, y) \in \bar{D}, \\
+u|_{\partial D} = 0, t \geq 0.
+\end{align*}\right.$$
+
+...
+
 ## Circular Membrane
 
 Pass
