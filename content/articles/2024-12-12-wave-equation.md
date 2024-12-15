@@ -110,6 +110,10 @@ For $t \in [0, 6]$:
 
 ![Rectangular Membrane 1](/images/rectangular_membrane_1_animation.gif)
 
+Snaphots:
+
+![t0](/images/rectangular_membrane_1_t0.png)![t1](/images/rectangular_membrane_1_t1.png)![t6](/images/rectangular_membrane_1_t6.png)
+
 ## Example 2
 
 ...
