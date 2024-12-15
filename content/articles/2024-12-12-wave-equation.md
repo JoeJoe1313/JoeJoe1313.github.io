@@ -85,7 +85,7 @@ and $\mu_m^{(0)}$ are the positive solutions to $J_0(\mu) = 0$.
 
 ...
 
-![Bessel Functions](/Users/ljoana/repos/JoeJoe1313.github.io/content/images/BesselJ_800.svg)
+![Bessel Functions](/images/BesselJ_800.svg)
 
 Test some code:
 
