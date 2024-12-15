@@ -8,7 +8,7 @@ Slug: 2024-12-12-wave-equation
 
 Partial differential equations...
 
-## Introduction
+# Introduction
 
 Let $u(x, y, t)$ be ...
  
@@ -20,7 +20,7 @@ or
 
 $$u_{tt} - c^2 (u_{xx} + u_{yy}) = 0.$$
 
-## Physical interpretation
+# Physical interpretation
 
 The wave equation is a simplified model for a vibrating
 string (𝑛 = 1), membrane (𝑛 = 2), or elastic solid (𝑛 = 3). In these
@@ -29,7 +29,7 @@ of the point 𝑥 at time 𝑡 ≥ 0.
 
 1D and 2D Equations
 
-## Rectangular Membrane
+# Rectangular Membrane
 
 Pass
 
@@ -40,13 +40,81 @@ $$
 
 $$\left\{\begin{align*}
 u_{tt} - c^2 (u_{xx} + u_{yy}) = 0, (x,y,t) \in G = D \times (0, +\infty), \\ 
-u|_{t=0} = \phi(x, y), u_t |_{t=0} = \psi(x, y), (x, y) \in \bar{D}, \\
+u|_{t=0} = \varphi(x, y), u_t |_{t=0} = \psi(x, y), (x, y) \in \bar{D}, \\
 u|_{\partial D} = 0, t \geq 0.
 \end{align*}\right.$$
 
 ...
 
-## Circular Membrane
+$$\varphi(x, y) \in C^3 (\bar{D}), \psi(x, y) \in C^2 (\bar{D})
+$$
+
+and ...
+
+$$\varphi |_{\partial D} = \varphi_{xx} |_{x = 0} = \varphi_{xx} |_{x = a} = \varphi_{yy} |_{y =0} = \varphi_{yy} |_{y = b} = \psi |_{\partial D} = 0.
+$$
+
+Solution... :
+
+$$u(x, y, t) = \sum_{n, m = 1}^{\infty} \left(A_{n, m} \cos{\sqrt{\lambda_{n, m}} ct} + B_{n, m} \sin{\sqrt{\lambda_{n, m}} ct} \right) \sin{\frac{\pi n}{a}} x \sin{\frac{\pi m}{b}} y,
+$$
+
+where
+
+$$\lambda_{n, m} = \left(\frac{\pi n}{a} \right)^2 + \left(\frac{\pi m}{b} \right)^2.
+$$
+
+From the initial conditions it follows
+
+$$A_{n, m} = \frac{4}{ab} \int_D \varphi(x, y) \sin{\frac{\pi n}{a}} x \sin{\frac{\pi m}{b}} y \mathrm{d}x \mathrm{d}y,
+$$
+
+and
+
+$$B_{n, m} = \frac{4}{abc\sqrt{\lambda_{n, m}}} \int_D \psi(x, y) \sin{\frac{\pi n}{a}} x \sin{\frac{\pi m}{b}} y \mathrm{d}x \mathrm{d}y.
+$$
+
+## Example 1
+
+...
+
+$$\left\{\begin{align*}
+u_{tt} - u_{xx} - u_{yy} = 0, 0 < x < \pi, 0 < y < \pi, t > 0, \\
+u|_{t=0} = \sin{x} \sin{y}, u_t |_{t=0} = \sin{4x} \sin{3y}, x, y \in (0, \pi), \\
+u|_{x = 0} = 0, u|_{x = \pi} = 0, 0 < y < \pi, t > 0, \\
+u|_{y = 0} = 0, u|_{y = \pi} = 0, 0 < x < \pi, t > 0.
+\end{align*}\right.$$
+
+Solution:
+
+$$u(x, y, t) = \sum_{n, m = 1}^{\infty} \left(A_{n, m} \cos{\sqrt{\lambda_{n, m}} t} + B_{n, m} \sin{\sqrt{\lambda_{n, m}} t} \right) \sin{n} x \sin{m} y,
+$$
+
+where
+
+$$\lambda_{n, m} = n^2 + m^2,
+$$
+
+$$A_{n, m} = \frac{4}{\pi^2} \int_0^\pi \sin{x} \sin{nx} \mathrm{d}x \int_0^\pi \sin{y} \sin{my} \mathrm{d}y,
+$$
+
+$$B_{n, m} = \frac{4}{\pi^2\sqrt{\lambda_{n, m}}} \int_0^\pi \sin{4x} \sin{nx} \mathrm{d}x \int_0^\pi \sin{3y} \sin{my} \mathrm{d}y.
+$$
+
+Therefore, $A_{1, 1} = 1$, $B_{4, 3} = \frac{1}{5}$, and every other coefficients is equal to $0$. Finally, 
+
+$$u(x, y, t) = \cos{\sqrt{2}t} \sin{x} \sin{y} + \frac{1}{5} \sin{5t} \sin{4x} \sin{3y}.
+$$
+
+For $t \in [0, 6]$:
+
+![Rectangular Membrane 1](/images/rectangular_membrane_1_animation.gif)
+
+## Example 2
+
+...
+
+# Circular Membrane
 
 Pass
 
@@ -59,19 +127,19 @@ u|_{x^2 + y^2 = 9} = 0, t \geq 0.
 Fourier method: Change to polar coordinates
 
 $$\left\{\begin{align*}
-x = \rho \cos(\phi), \\
-y = \rho \sin(\phi)
+x = \rho \cos(\varphi), \\
+y = \rho \sin(\varphi)
 \end{align*}\right.
 $$
 
 ...
 
-Then the function in the first initial contition $u |_{t=0}$ becomes
+Then the function in the first initial condition $u |_{t=0}$ becomes
 
 $$\tau(\rho) = \rho^2 \sin^3(\pi \rho)
 $$
 
-which is radially symmetric and hence the solutions will be also radially symmetric. It is given by
+which is radially symmetric and hence the solution will be also radially symmetric. It is given by
 
 $$u(\rho, t) = \sum_{m=1}^{\infty} A_m \cos{\frac{a \mu_m^{(0)}t}{r}} J_0\left(\frac{\mu_m^{(0)}}{r}\rho\right),
 $$
@@ -86,6 +154,8 @@ and $\mu_m^{(0)}$ are the positive solutions to $J_0(\mu) = 0$.
 ...
 
 ![Bessel Functions](/images/BesselJ_800.svg)
+
+...
 
 Test some code:
 
@@ -195,7 +265,7 @@ def circular_membrane():
 
 ![Matlab Membrane](/images/CircularMembrane.gif)
 
-## References
+# References
 
 - [1](https://www.amazon.co.uk/Partial-Differential-Equations-Graduate-Mathematics/dp/1470469421/ref=sr_1_3?crid=2BINQDJ5R7XUB&dib=eyJ2IjoiMSJ9.GgU4uQBUKYO960lL6EjVJjksjFysLhCJKEHP436_saFGnfKf4uvgqyl_3WBjV779K4AwonOY5XnkRxVFCIqqGZCCE3I8YEjIC7mzvLwUa2lBPvByBCoFxTvGhrSKGLiAKlAvTVFSlbwklqyWEj4o852csy80_D3G2Gk9pedHKz22vqyc8UI8HAxWZ1wfu5bNoaqOOEDhy0W2XLaSijLCENnzVXjxTLS5xZkMCXr72G0.NeT6LdhY-WV9xVA26fbGHp37FbAKGo7mLwpV9m_2Rdk&dib_tag=se&keywords=partial+differential+equations&nsdOptOutParam=true&qid=1734133658&sprefix=partial+diff%2Caps%2C129&sr=8-3)
 - [2](https://mathworld.wolfram.com/BesselFunctionoftheFirstKind.html)
