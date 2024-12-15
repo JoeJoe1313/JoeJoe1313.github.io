@@ -168,7 +168,11 @@ Animation:
 
 Snaphots:
 
-![t0](/images/rectangular_membrane_1_t0.png)![t1](/images/rectangular_membrane_1_t1.png)![t6](/images/rectangular_membrane_1_t6.png)
+<div style="display: flex; justify-content: space-between;">
+  <img src="/images/rectangular_membrane_1_t0.png" alt="t0" style="width: 30%;"/>
+  <img src="/images/rectangular_membrane_1_t1.png" alt="t1" style="width: 30%;"/>
+  <img src="/images/rectangular_membrane_1_t6.png" alt="t6" style="width: 30%;"/>
+</div>
 
 ## Example 2
 
