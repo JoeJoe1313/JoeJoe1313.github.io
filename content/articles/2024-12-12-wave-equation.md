@@ -27,6 +27,12 @@ string (𝑛 = 1), membrane (𝑛 = 2), or elastic solid (𝑛 = 3). In these
 physical interpretations 𝑢(𝑥, 𝑡) represents the displacement in some direction
 of the point 𝑥 at time 𝑡 ≥ 0.
 
+1D and 2D Equations
+
+## Rectangular Membrane
+
+Pass
+
 ## Circular Membrane
 
 Pass
@@ -47,9 +53,28 @@ $$
 
 ...
 
+Then the function in the first initial contition $u |_{t=0}$ becomes
+
+$$\tau(\rho) = \rho^2 \sin^3(\pi \rho)
+$$
+
+which is radially symmetric and hence the solutions will be also radially symmetric. It is given by
+
+$$u(\rho, t) = \sum_{m=1}^{\infty} A_m \cos{\frac{a \mu_m^{(0)}t}{r}} J_0\left(\frac{\mu_m^{(0)}}{r}\rho\right),
+$$
+
+where
+
+$$A_m = \frac{4}{r^2 J_1^2(\mu_m^{(0)})} \int_0^r \rho^3 \sin^3(\pi \rho) J_0\left(\frac{\mu_m^{(0)}}{r}\rho\right) d\rho,
+$$
+
+and $\mu_m^{(0)}$ are the positive solutions to $J_0(\mu) = 0$.
+
+...
+
 Test some code:
 
-```{python}
+```
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.animation import FuncAnimation, PillowWriter
@@ -157,4 +182,4 @@ def circular_membrane():
 
 ## References
 
-- ![ref_1](https://www.amazon.co.uk/Partial-Differential-Equations-Graduate-Mathematics/dp/1470469421/ref=sr_1_3?crid=2BINQDJ5R7XUB&dib=eyJ2IjoiMSJ9.GgU4uQBUKYO960lL6EjVJjksjFysLhCJKEHP436_saFGnfKf4uvgqyl_3WBjV779K4AwonOY5XnkRxVFCIqqGZCCE3I8YEjIC7mzvLwUa2lBPvByBCoFxTvGhrSKGLiAKlAvTVFSlbwklqyWEj4o852csy80_D3G2Gk9pedHKz22vqyc8UI8HAxWZ1wfu5bNoaqOOEDhy0W2XLaSijLCENnzVXjxTLS5xZkMCXr72G0.NeT6LdhY-WV9xVA26fbGHp37FbAKGo7mLwpV9m_2Rdk&dib_tag=se&keywords=partial+differential+equations&nsdOptOutParam=true&qid=1734133658&sprefix=partial+diff%2Caps%2C129&sr=8-3)
+- [ref_1](https://www.amazon.co.uk/Partial-Differential-Equations-Graduate-Mathematics/dp/1470469421/ref=sr_1_3?crid=2BINQDJ5R7XUB&dib=eyJ2IjoiMSJ9.GgU4uQBUKYO960lL6EjVJjksjFysLhCJKEHP436_saFGnfKf4uvgqyl_3WBjV779K4AwonOY5XnkRxVFCIqqGZCCE3I8YEjIC7mzvLwUa2lBPvByBCoFxTvGhrSKGLiAKlAvTVFSlbwklqyWEj4o852csy80_D3G2Gk9pedHKz22vqyc8UI8HAxWZ1wfu5bNoaqOOEDhy0W2XLaSijLCENnzVXjxTLS5xZkMCXr72G0.NeT6LdhY-WV9xVA26fbGHp37FbAKGo7mLwpV9m_2Rdk&dib_tag=se&keywords=partial+differential+equations&nsdOptOutParam=true&qid=1734133658&sprefix=partial+diff%2Caps%2C129&sr=8-3)
