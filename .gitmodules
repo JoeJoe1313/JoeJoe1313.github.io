@@ -1,3 +1,0 @@
-[submodule "plugins/liquid-tags"]
-	path = plugins/liquid-tags
-	url = git@github.com:pelican-plugins/liquid-tags.git

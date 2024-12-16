@@ -10,5 +10,5 @@ Pass
 
 # Introduction
 
-{% include_code /code/t.py [lang:python] [Title text] [codec:utf8] %}
+<!-- {% include_code /code/t.py [lang:python] [Title text] [codec:utf8] %} -->
 
