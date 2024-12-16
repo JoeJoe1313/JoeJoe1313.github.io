@@ -1,8 +1,8 @@
 ---
-Title: Mirrorless vs DSLR Cameras Copy
+Title: Fourier Method for PDEs
 Date: 2024-12-11 12:15
-Category: Photography
-Tags: sony, photography
+Category: Mathematics
+Tags: mathematics
 Slug: 2024-12-11-mirrorless-vs-dslr-cameras-copy
 ---
 

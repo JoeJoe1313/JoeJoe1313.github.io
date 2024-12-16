@@ -301,6 +301,8 @@ Snapshots:
   <img src="/images/rectangular_membrane_2_t4.5.png" alt="t4.5" style="width: 33%;"/>
 </div>
 
+{% include_code t.py lang:python %}
+
 # Circular Membrane
 
 Pass
