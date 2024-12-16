@@ -11,7 +11,7 @@ MarkupSafe==3.0.2
 mdurl==0.1.2
 ordered-set==4.1.0
 pelican==4.10.2
-pelican-liquid-tags==1.0.4
+# pelican-liquid-tags==1.0.4
 Pygments==2.18.0
 python-dateutil==2.9.0.post0
 pytz==2024.2
