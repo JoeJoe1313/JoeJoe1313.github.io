@@ -55,7 +55,7 @@ PLUGINS = [
 SUMMARY_USE_FIRST_PARAGRAPH = True
 WITH_FUTURE_DATES = False
 MATH_JAX = {
-    "align": "left",
+    "linebreak_automatic": True,
 }
 
 # Uncomment following line if you want document-relative URLs when developing
