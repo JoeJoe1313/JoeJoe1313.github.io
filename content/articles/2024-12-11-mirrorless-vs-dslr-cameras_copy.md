@@ -6,4 +6,6 @@ Tags: sony, photography
 Slug: 2024-12-11-mirrorless-vs-dslr-cameras-copy
 ---
 
-Some text here
+Some text here...
+
+{% include_code /code/t.py lang:python Title text %}
