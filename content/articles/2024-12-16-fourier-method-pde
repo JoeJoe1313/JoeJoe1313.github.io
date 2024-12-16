@@ -1,0 +1,14 @@
+---
+Title: Fourier Method for PDEs
+Date: 2024-12-16 13:15
+Category: Mathematics
+Tags: mathematics, python
+Slug: 2024-12-16-fourier-method-pde
+---
+
+Pass
+
+# Introduction
+
+{% include_code /code/t.py [lang:python] [Title text] [codec:utf8] %}
+

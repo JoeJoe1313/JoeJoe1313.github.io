@@ -57,6 +57,9 @@ WITH_FUTURE_DATES = False
 MATH_JAX = {
     "linebreak_automatic": True,
 }
+LIQUID_TAGS = [
+    "include_code",
+]
 
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
