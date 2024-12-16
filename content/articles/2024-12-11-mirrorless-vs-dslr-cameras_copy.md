@@ -8,4 +8,4 @@ Slug: 2024-12-11-mirrorless-vs-dslr-cameras-copy
 
 Some text here...
 
-{% include_code /code/t.py lang:python Title text %}
+{% include_code t.py lang:python Title text %}
