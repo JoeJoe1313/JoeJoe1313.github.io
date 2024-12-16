@@ -166,17 +166,140 @@ Animation:
 
 ![Rectangular Membrane 1](/images/rectangular_membrane_1_animation.gif)
 
-Snaphots:
+Snapshots:
 
 <div style="display: flex; justify-content: space-between;">
-  <img src="/images/rectangular_membrane_1_t0.png" alt="t0" style="width: 30%;"/>
-  <img src="/images/rectangular_membrane_1_t1.png" alt="t1" style="width: 30%;"/>
-  <img src="/images/rectangular_membrane_1_t6.png" alt="t6" style="width: 30%;"/>
+  <img src="/images/rectangular_membrane_1_t0.png" alt="t0" style="width: 33%;"/>
+  <img src="/images/rectangular_membrane_1_t1.png" alt="t1" style="width: 33%;"/>
+  <img src="/images/rectangular_membrane_1_t6.png" alt="t6" style="width: 33%;"/>
 </div>
 
 ## Example 2
 
 ...
+
+$$\left\{\begin{align*}
+u_{tt} - \pi^2 (u_{xx} + u_{yy}) = 0, 0 < x < 1, 0 < y < 2, t > 0, \\
+u|_{t=0} = \cos{\left(\left(x + \frac{1}{2}\right)\pi\right)} \cos{\left(\frac{\pi}{2}\left(y + 1\right)\right)}, u_t |_{t=0} = 0, 0 \leq x \leq 1, 0 \leq y \leq 2, \\
+u|_{x = 0} = 0, u|_{x = 1} = 0, 0 \leq y < 2, t \geq 0, \\
+u|_{y = 0} = 0, u|_{y = 2} = 0, 0 \leq x \leq 1, t \geq 0.
+\end{align*}\right.$$
+
+Solution with Fourier method:
+
+$$u(x, y, t) = \sum_{n, m = 1}^{\infty} \left(A_{n, m} \cos{\sqrt{\lambda_{n, m}} t} + B_{n, m} \sin{\sqrt{\lambda_{n, m}} t} \right) \sin{\pi n} x \sin{\pi m} y,
+$$
+
+where
+
+$$\lambda_{n, m} = \pi^2 (n^2 + m^2)
+$$
+
+and
+
+$$B_{n, m} = 0.
+$$
+
+$$A_{n, m} = 2 \int_{0}^{1} \cos{\left(\left(x + \frac{1}{2}\right)\pi\right)} \sin{\pi nx} \mathrm{d}x \int_0^2 \cos{\left(\frac{\pi}{2}\left(y + 1\right)\right)} \sin{\pi my} \mathrm{d}y.
+$$
+
+Visualising the solution for $t \in [0, 6]$ with the partial sum
+
+$$\tilde{u}(x, y, t) = \sum_{n, m = 1}^{30} A_{n, m} \cos{\sqrt{\lambda_{n, m}} t} \sin{\pi n} x \sin{\pi m} y.
+$$
+
+Code:
+
+```{python}
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.animation import FuncAnimation
+from mpl_toolkits.mplot3d import Axes3D
+
+
+def Rmembrana2():
+    a = 1
+    b = 2
+    c = np.pi
+    tmax = 6
+    t = np.linspace(0, tmax, 100)  # Time points for animation
+    x = np.linspace(0, a, 50)  # x grid
+    y = np.linspace(0, b, 50)  # y grid
+    X, Y = np.meshgrid(x, y)
+
+    # Define the solution function
+    def solution(x, y, t):
+        z = 0
+        for n in range(1, 31):  # Sum over n
+            for m in range(1, 31):  # Sum over m
+                lambda_nm = np.pi**2 * (n**2 / a**2 + m**2 / b**2)
+                # Compute the coefficient Anm
+                xx = np.linspace(0, a, 100)
+                yy = np.linspace(0, b, 100)
+                Anm = (
+                    4
+                    * np.trapz(
+                        np.cos(np.pi / 2 + np.pi * xx / a) * np.sin(n * np.pi * xx / a),
+                        xx,
+                    )
+                    * np.trapz(
+                        np.cos(np.pi / 2 + np.pi * yy / b) * np.sin(m * np.pi * yy / b),
+                        yy,
+                    )
+                    / (a * b)
+                )
+                z += (
+                    Anm
+                    * np.cos(c * np.sqrt(lambda_nm) * t)
+                    * np.sin(n * np.pi * x / a)
+                    * np.sin(m * np.pi * y / b)
+                )
+        return z
+
+    # Set up the figure and axis for animation
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection="3d")
+    ax.set_xlim(0, a)
+    ax.set_ylim(0, b)
+    ax.set_zlim(-1, 1)
+    ax.set_xlabel("x")
+    ax.set_ylabel("y")
+    ax.set_zlabel("u(x,y,t)")
+    ax.set_title("Rectangular Membrane")
+
+    # Update function for FuncAnimation
+    def update(frame):
+        ax.clear()
+        Z = solution(X, Y, frame)  # Compute the new Z values
+        ax.plot_surface(X, Y, Z, cmap="viridis", vmin=-1, vmax=1)
+        ax.set_xlim(0, a)
+        ax.set_ylim(0, b)
+        ax.set_zlim(-1, 1)
+        ax.set_xlabel("x")
+        ax.set_ylabel("y")
+        ax.set_zlabel("u(x,y,t)")
+        ax.set_title("Rectangular Membrane")
+
+    # Create the animation
+    anim = FuncAnimation(fig, update, frames=t, interval=50)
+
+    # Save the animation as a GIF
+    anim.save("rectangular_membrane_2_animation.gif", writer="imagemagick", fps=20)
+
+    plt.show()
+```
+
+Animation:
+
+![Rectangular Membrane 2](/images/rectangular_membrane_2_animation.gif)
+
+Snapshots:
+
+<div style="display: flex; justify-content: space-between;">
+  <img src="/images/rectangular_membrane_2_t0.0.png" alt="t0.0" style="width: 33%;"/>
+  <img src="/images/rectangular_membrane_2_t2.0.png" alt="t2.0" style="width: 33%;"/>
+  <img src="/images/rectangular_membrane_2_t4.5.png" alt="t4.5" style="width: 33%;"/>
+</div>
 
 # Circular Membrane
 
