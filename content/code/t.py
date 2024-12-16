@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.animation import FuncAnimation
 from mpl_toolkits.mplot3d import Axes3D
 
 
@@ -7,7 +8,8 @@ def Rmembrana2():
     a = 1
     b = 2
     c = np.pi
-    snapshots = [0, 2, 4.5]  # Specific time points for snapshots
+    tmax = 6
+    t = np.linspace(0, tmax, 100)  # Time points for animation
     x = np.linspace(0, a, 50)  # x grid
     y = np.linspace(0, b, 50)  # y grid
     X, Y = np.meshgrid(x, y)
@@ -41,13 +43,21 @@ def Rmembrana2():
                 )
         return z
 
-    # Save snapshots for specified time points
-    for t in snapshots:
-        Z = solution(X, Y, t)  # Compute the Z values for this time
+    # Set up the figure and axis for animation
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection="3d")
+    ax.set_xlim(0, a)
+    ax.set_ylim(0, b)
+    ax.set_zlim(-1, 1)
+    ax.set_xlabel("x")
+    ax.set_ylabel("y")
+    ax.set_zlabel("u(x,y,t)")
+    ax.set_title("Rectangular Membrane")
 
-        # Set up the figure
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection="3d")
+    # Update function for FuncAnimation
+    def update(frame):
+        ax.clear()
+        Z = solution(X, Y, frame)  # Compute the new Z values
         ax.plot_surface(X, Y, Z, cmap="viridis", vmin=-1, vmax=1)
         ax.set_xlim(0, a)
         ax.set_ylim(0, b)
@@ -55,11 +65,12 @@ def Rmembrana2():
         ax.set_xlabel("x")
         ax.set_ylabel("y")
         ax.set_zlabel("u(x,y,t)")
-        ax.set_title(f"Rectangular Membrane at t = {t}")
+        ax.set_title("Rectangular Membrane")
 
-        # Save the snapshot
-        plt.savefig(f"rectangular_membrane_2_t{t:.1f}.png")
-        plt.close(fig)
+    # Create the animation
+    anim = FuncAnimation(fig, update, frames=t, interval=50)
 
+    # Save the animation as a GIF
+    anim.save("rectangular_membrane_2_animation.gif", writer="imagemagick", fps=20)
 
-Rmembrana2()
+    plt.show()
