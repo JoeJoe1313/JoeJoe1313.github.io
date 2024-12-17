@@ -112,6 +112,8 @@ Animation:
 
 ![Rectangular Membrane 1](/images/2024-12-12-wave-equation/rectangular_membrane_1_animation.gif)
 
+{% include_code_collapsible 2024-12-12-wave-equation/rectangular_membrane_1.py lang:python :hideall: %}
+
 Snapshots:
 
 <div style="display: flex; justify-content: space-between;">
@@ -119,8 +121,6 @@ Snapshots:
   <img src="/images/2024-12-12-wave-equation/rectangular_membrane_1_t1.png" alt="t1" style="width: 33%;"/>
   <img src="/images/2024-12-12-wave-equation/rectangular_membrane_1_t6.png" alt="t6" style="width: 33%;"/>
 </div>
-
-{% include_code_collapsible 2024-12-12-wave-equation/rectangular_membrane_1.py lang:python :hideall: %}
 
 ## Example 2
 
@@ -160,6 +160,8 @@ Animation:
 
 ![Rectangular Membrane 2](/images/2024-12-12-wave-equation/rectangular_membrane_2_animation.gif)
 
+{% include_code_collapsible 2024-12-12-wave-equation/rectangular_membrane_2.py lang:python :hideall: %}
+
 Snapshots:
 
 <div style="display: flex; justify-content: space-between;">
@@ -167,8 +169,6 @@ Snapshots:
   <img src="/images/2024-12-12-wave-equation/rectangular_membrane_2_t2.0.png" alt="t2.0" style="width: 33%;"/>
   <img src="/images/2024-12-12-wave-equation/rectangular_membrane_2_t4.5.png" alt="t4.5" style="width: 33%;"/>
 </div>
-
-{% include_code_collapsible 2024-12-12-wave-equation/rectangular_membrane_2.py lang:python :hideall: %}
 
 # Circular Membrane
 
@@ -217,6 +217,8 @@ Animation:
 
 ![Circular Membrane](/images/2024-12-12-wave-equation/circular_membrane_animation.gif)
 
+{% include_code_collapsible 2024-12-12-wave-equation/circular_membrane.py lang:python :hideall: %}
+
 Snapshots:
 
 <div style="display: flex; justify-content: space-between;">
@@ -224,8 +226,6 @@ Snapshots:
   <img src="/images/2024-12-12-wave-equation/circular_membrane_t10.png" alt="t2.0" style="width: 33%;"/>
   <img src="/images/2024-12-12-wave-equation/circular_membrane_t30.png" alt="t4.5" style="width: 33%;"/>
 </div>
-
-{% include_code_collapsible 2024-12-12-wave-equation/circular_membrane.py lang:python :hideall: %}
 
 # References
 
