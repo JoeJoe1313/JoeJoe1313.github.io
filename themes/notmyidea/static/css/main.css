@@ -284,10 +284,35 @@ div.figure p.caption, figure p.caption { /* margin provided by figure */
     -webkit-border-radius: 10px;
 }
 
+/*
+	Code blocks
+*****************/
 figure.code {
     width: 100%;            /* Take up 100% of the parent container */
     margin: 0 auto;         /* Center the block */
     overflow: hidden;       /* Enable scrolling if content overflows */
+}
+
+details {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+summary {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+details pre {
+    margin: 0;
+    /* background: #2e3440; */
+    /* color: #d8dee9; */
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
 }
 
 /*

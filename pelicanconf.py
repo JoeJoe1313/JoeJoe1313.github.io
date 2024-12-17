@@ -54,7 +54,8 @@ DEFAULT_PAGINATION = False
 PLUGINS = [
     "plugins.summary",
     "plugins.render_math",
-    "plugins.liquid_tags",
+    "plugins.liquid_tags.include_code",
+    "plugins.liquid_tags.include_code_collapsible",
 ]
 SUMMARY_USE_FIRST_PARAGRAPH = True
 WITH_FUTURE_DATES = False
