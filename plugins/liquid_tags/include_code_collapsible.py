@@ -76,7 +76,7 @@ def include_code_collapsible(preprocessor, tag, markup):  # NOQA: C901
     title = None
     lang = None
     src = None
-    summary = "Click to expand"  # Default summary text for collapsible
+    summary = "Click to expand code"  # Default summary text for collapsible
 
     match = FORMAT.search(markup)
     if match:

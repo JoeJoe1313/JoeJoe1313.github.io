@@ -108,10 +108,6 @@ $$
 
 For $t \in [0, 6]$:
 
-Code:
-
-{% include_code 2024-12-12-wave-equation/rectangular_membrane_1.py lang:python :hideall: %}
-
 Animation:
 
 ![Rectangular Membrane 1](/images/2024-12-12-wave-equation/rectangular_membrane_1_animation.gif)
@@ -123,6 +119,8 @@ Snapshots:
   <img src="/images/2024-12-12-wave-equation/rectangular_membrane_1_t1.png" alt="t1" style="width: 33%;"/>
   <img src="/images/2024-12-12-wave-equation/rectangular_membrane_1_t6.png" alt="t6" style="width: 33%;"/>
 </div>
+
+{% include_code_collapsible 2024-12-12-wave-equation/rectangular_membrane_1.py lang:python :hideall: %}
 
 ## Example 2
 
@@ -158,10 +156,6 @@ Visualising the solution for $t \in [0, 6]$ with the partial sum
 $$\tilde{u}(x, y, t) = \sum_{n, m = 1}^{30} A_{n, m} \cos{\sqrt{\lambda_{n, m}} t} \sin{\pi n} x \sin{\pi m} y.
 $$
 
-Code:
-
-{% include_code 2024-12-12-wave-equation/rectangular_membrane_2.py lang:python :hideall: %}
-
 Animation:
 
 ![Rectangular Membrane 2](/images/2024-12-12-wave-equation/rectangular_membrane_2_animation.gif)
@@ -173,6 +167,8 @@ Snapshots:
   <img src="/images/2024-12-12-wave-equation/rectangular_membrane_2_t2.0.png" alt="t2.0" style="width: 33%;"/>
   <img src="/images/2024-12-12-wave-equation/rectangular_membrane_2_t4.5.png" alt="t4.5" style="width: 33%;"/>
 </div>
+
+{% include_code_collapsible 2024-12-12-wave-equation/rectangular_membrane_2.py lang:python :hideall: %}
 
 # Circular Membrane
 
@@ -216,17 +212,6 @@ and $\mu_m^{(0)}$ are the positive solutions to $J_0(\mu) = 0$.
 ![Bessel Functions](/images/2024-12-12-wave-equation/BesselJ_800.svg)
 
 ...
-
-Test code collapse:
-
-<!-- <details>
-<summary>Click to expand code</summary>
-
-{% include_code 2024-12-12-wave-equation/circular_membrane.py lang:python %}
-
-</details> -->
-
-{% include_code 2024-12-12-wave-equation/circular_membrane.py lang:python :hideall: %}
 
 Animation:
 
