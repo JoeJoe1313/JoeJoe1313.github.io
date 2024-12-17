@@ -110,68 +110,18 @@ For $t \in [0, 6]$:
 
 Code:
 
-```{python}
-import matplotlib.pyplot as plt
-import numpy as np
-from matplotlib.animation import FuncAnimation
-from mpl_toolkits.mplot3d import Axes3D
-
-
-def Rmembrane1():
-    tmax = 6
-    t = np.linspace(0, tmax, 100)  # Time points for animation
-    x = np.linspace(0, np.pi, 51)  # x grid
-    y = np.linspace(0, np.pi, 51)  # y grid
-    X, Y = np.meshgrid(x, y)
-
-    # Define the solution function
-    def solution(x, y, t):
-        return (
-            np.cos(np.sqrt(2) * t) * np.sin(x) * np.sin(y)
-            + np.sin(5 * t) * np.sin(4 * x) * np.sin(3 * y) / 5
-        )
-
-    # Set up the figure and axis for animation
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection="3d")
-    ax.set_xlim(0, np.pi)
-    ax.set_ylim(0, np.pi)
-    ax.set_zlim(-1, 1)
-    ax.set_xlabel("x")
-    ax.set_ylabel("y")
-    ax.set_zlabel("u(x,y,t)")
-    ax.set_title("Rectangular Membrane")
-
-    # Update function for FuncAnimation
-    def update(frame):
-        ax.clear()  # Clear the previous frame
-        Z = solution(X, Y, frame)  # Compute the new Z values
-        surf = ax.plot_surface(X, Y, Z, cmap="viridis", vmin=-1, vmax=1)
-        ax.set_xlim(0, np.pi)
-        ax.set_ylim(0, np.pi)
-        ax.set_zlim(-1, 1)
-        ax.set_xlabel("x")
-        ax.set_ylabel("y")
-        ax.set_zlabel("u(x,y,t)")
-        ax.set_title("Rectangular Membrane")
-
-    # Animation
-    anim = FuncAnimation(fig, update, frames=t, interval=50)
-    anim.save("rectangular_membrane_animation.gif", writer="imagemagick", fps=20)
-
-    plt.show()
-```
+{% include_code 2024-12-12-wave-equation/rectangular_membrane_1.py lang:python :hideall: %}
 
 Animation:
 
-![Rectangular Membrane 1](/images/rectangular_membrane_1_animation.gif)
+![Rectangular Membrane 1](/images/2024-12-12-wave-equation/rectangular_membrane_1_animation.gif)
 
 Snapshots:
 
 <div style="display: flex; justify-content: space-between;">
-  <img src="/images/rectangular_membrane_1_t0.png" alt="t0" style="width: 33%;"/>
-  <img src="/images/rectangular_membrane_1_t1.png" alt="t1" style="width: 33%;"/>
-  <img src="/images/rectangular_membrane_1_t6.png" alt="t6" style="width: 33%;"/>
+  <img src="/images/2024-12-12-wave-equation/rectangular_membrane_1_t0.png" alt="t0" style="width: 33%;"/>
+  <img src="/images/2024-12-12-wave-equation/rectangular_membrane_1_t1.png" alt="t1" style="width: 33%;"/>
+  <img src="/images/2024-12-12-wave-equation/rectangular_membrane_1_t6.png" alt="t6" style="width: 33%;"/>
 </div>
 
 ## Example 2
@@ -210,95 +160,18 @@ $$
 
 Code:
 
-```{python}
-import matplotlib.pyplot as plt
-import numpy as np
-from matplotlib.animation import FuncAnimation
-from mpl_toolkits.mplot3d import Axes3D
-
-
-def Rmembrana2():
-    a = 1
-    b = 2
-    c = np.pi
-    tmax = 6
-    t = np.linspace(0, tmax, 100)  # Time points for animation
-    x = np.linspace(0, a, 50)  # x grid
-    y = np.linspace(0, b, 50)  # y grid
-    X, Y = np.meshgrid(x, y)
-
-    # Define the solution function
-    def solution(x, y, t):
-        z = 0
-        for n in range(1, 31):  # Sum over n
-            for m in range(1, 31):  # Sum over m
-                lambda_nm = np.pi**2 * (n**2 / a**2 + m**2 / b**2)
-                # Compute the coefficient Anm
-                xx = np.linspace(0, a, 100)
-                yy = np.linspace(0, b, 100)
-                Anm = (
-                    4
-                    * np.trapz(
-                        np.cos(np.pi / 2 + np.pi * xx / a) * np.sin(n * np.pi * xx / a),
-                        xx,
-                    )
-                    * np.trapz(
-                        np.cos(np.pi / 2 + np.pi * yy / b) * np.sin(m * np.pi * yy / b),
-                        yy,
-                    )
-                    / (a * b)
-                )
-                z += (
-                    Anm
-                    * np.cos(c * np.sqrt(lambda_nm) * t)
-                    * np.sin(n * np.pi * x / a)
-                    * np.sin(m * np.pi * y / b)
-                )
-        return z
-
-    # Set up the figure and axis for animation
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection="3d")
-    ax.set_xlim(0, a)
-    ax.set_ylim(0, b)
-    ax.set_zlim(-1, 1)
-    ax.set_xlabel("x")
-    ax.set_ylabel("y")
-    ax.set_zlabel("u(x,y,t)")
-    ax.set_title("Rectangular Membrane")
-
-    # Update function for FuncAnimation
-    def update(frame):
-        ax.clear()
-        Z = solution(X, Y, frame)  # Compute the new Z values
-        ax.plot_surface(X, Y, Z, cmap="viridis", vmin=-1, vmax=1)
-        ax.set_xlim(0, a)
-        ax.set_ylim(0, b)
-        ax.set_zlim(-1, 1)
-        ax.set_xlabel("x")
-        ax.set_ylabel("y")
-        ax.set_zlabel("u(x,y,t)")
-        ax.set_title("Rectangular Membrane")
-
-    # Create the animation
-    anim = FuncAnimation(fig, update, frames=t, interval=50)
-
-    # Save the animation as a GIF
-    anim.save("rectangular_membrane_2_animation.gif", writer="imagemagick", fps=20)
-
-    plt.show()
-```
+{% include_code 2024-12-12-wave-equation/rectangular_membrane_2.py lang:python :hideall: %}
 
 Animation:
 
-![Rectangular Membrane 2](/images/rectangular_membrane_2_animation.gif)
+![Rectangular Membrane 2](/images/2024-12-12-wave-equation/rectangular_membrane_2_animation.gif)
 
 Snapshots:
 
 <div style="display: flex; justify-content: space-between;">
-  <img src="/images/rectangular_membrane_2_t0.0.png" alt="t0.0" style="width: 33%;"/>
-  <img src="/images/rectangular_membrane_2_t2.0.png" alt="t2.0" style="width: 33%;"/>
-  <img src="/images/rectangular_membrane_2_t4.5.png" alt="t4.5" style="width: 33%;"/>
+  <img src="/images/2024-12-12-wave-equation/rectangular_membrane_2_t0.0.png" alt="t0.0" style="width: 33%;"/>
+  <img src="/images/2024-12-12-wave-equation/rectangular_membrane_2_t2.0.png" alt="t2.0" style="width: 33%;"/>
+  <img src="/images/2024-12-12-wave-equation/rectangular_membrane_2_t4.5.png" alt="t4.5" style="width: 33%;"/>
 </div>
 
 {% include_code t.py lang:python :hideall: %}
@@ -342,117 +215,32 @@ and $\mu_m^{(0)}$ are the positive solutions to $J_0(\mu) = 0$.
 
 ...
 
-![Bessel Functions](/images/BesselJ_800.svg)
+![Bessel Functions](/images/2024-12-12-wave-equation/BesselJ_800.svg)
 
 ...
 
-Test some code:
-
-```
-import matplotlib.pyplot as plt
-import numpy as np
-from matplotlib.animation import FuncAnimation, PillowWriter
-from mpl_toolkits.mplot3d import Axes3D
-from scipy.optimize import root_scalar
-from scipy.special import jv as besselj
-
-
-def circular_membrane():
-    a = 0.5
-    r = 3
-    rho = np.linspace(0, r, 51)
-    phi = np.linspace(0, 2 * np.pi, 51)
-```
-
 Test code collapse:
 
-<details>
+<!-- <details>
 <summary>Click to expand code</summary>
 
-```{python}
-import matplotlib.pyplot as plt
-import numpy as np
-from matplotlib.animation import FuncAnimation, PillowWriter
-from mpl_toolkits.mplot3d import Axes3D
-from scipy.optimize import root_scalar
-from scipy.special import jv as besselj
+{% include_code 2024-12-12-wave-equation/circular_membrane.py lang:python %}
 
+</details> -->
 
-def circular_membrane():
-    a = 0.5
-    r = 3
-    rho = np.linspace(0, r, 51)
-    phi = np.linspace(0, 2 * np.pi, 51)
+{% include_code 2024-12-12-wave-equation/circular_membrane.py lang:python :hideall: %}
 
-    tmax = 30
-    t = np.linspace(0, tmax, 100)
-    N = 40
+Animation:
 
-    # Find the first 40 positive zeros of the Bessel function J0
-    mju = []
-    for n in range(1, N + 1):
-        zero = root_scalar(
-            lambda x: besselj(0, x), bracket=[(n - 1) * np.pi, n * np.pi]
-        )
-        mju.append(zero.root)
-    mju = np.array(mju)
+![Circular Membrane](/images/2024-12-12-wave-equation/circular_membrane_animation.gif)
 
-    # Define the initial position function
-    def tau(rho):
-        return rho**2 * np.sin(np.pi * rho) ** 3
+Snapshots:
 
-    # Solution function
-    def solution(R, t):
-        y = np.zeros_like(R)
-        for m in range(N):
-            s = tau(R[0, :]) * R[0, :] * besselj(0, mju[m] * R[0, :] / r)
-            A0m = 4 * np.trapz(s, R[0, :]) / ((r**2) * (besselj(1, mju[m]) ** 2))
-            y += A0m * np.cos(a * mju[m] * t / r) * besselj(0, mju[m] * R / r)
-        return y
-
-    # Create a grid of points
-    R, p = np.meshgrid(rho, phi)
-    X = R * np.cos(p)
-    Y = R * np.sin(p)
-
-    # Set up the figure and axis for animation
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection="3d")
-    ax.set_xlim(-r, r)
-    ax.set_ylim(-r, r)
-    ax.set_zlim(-30, 30)
-    ax.set_title("Circular membrane")
-    ax.set_xlabel("x")
-    ax.set_ylabel("y")
-    ax.set_zlabel("u(x,y,t)")
-
-    # Update function for FuncAnimation
-    def update(frame):
-        ax.clear()
-        Z = solution(R, frame)
-        # ax.plot_surface(X, Y, Z, cmap="viridis")
-        ax.plot_surface(X, Y, Z, cmap="viridis", vmin=-30, vmax=30)
-        ax.set_xlim(-r, r)
-        ax.set_ylim(-r, r)
-        ax.set_zlim(-30, 30)
-        ax.set_title("Circular membrane")
-        ax.set_xlabel("x")
-        ax.set_ylabel("y")
-        ax.set_zlabel("u(x,y,t)")
-
-    # Create the animation
-    anim = FuncAnimation(fig, update, frames=t, interval=50)
-
-    # Save the animation in GIF format:
-    anim.save("circular_membrane_animation.gif", writer="imagemagick", fps=20)
-
-    plt.show()
-```
-</details>
-
-![Membrane](/images/circular_membrane_animation.gif)
-
-![Matlab Membrane](/images/CircularMembrane.gif)
+<div style="display: flex; justify-content: space-between;">
+  <img src="/images/2024-12-12-wave-equation/circular_membrane_t0.png" alt="t0.0" style="width: 33%;"/>
+  <img src="/images/2024-12-12-wave-equation/circular_membrane_t10.png" alt="t2.0" style="width: 33%;"/>
+  <img src="/images/2024-12-12-wave-equation/circular_membrane_t30.png" alt="t4.5" style="width: 33%;"/>
+</div>
 
 # References
 
