@@ -174,8 +174,6 @@ Snapshots:
   <img src="/images/2024-12-12-wave-equation/rectangular_membrane_2_t4.5.png" alt="t4.5" style="width: 33%;"/>
 </div>
 
-{% include_code t.py lang:python :hideall: %}
-
 # Circular Membrane
 
 Pass

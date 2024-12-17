@@ -54,16 +54,13 @@ DEFAULT_PAGINATION = False
 PLUGINS = [
     "plugins.summary",
     "plugins.render_math",
-    "liquid_tags",
+    "plugins.liquid_tags",
 ]
 SUMMARY_USE_FIRST_PARAGRAPH = True
 WITH_FUTURE_DATES = False
 MATH_JAX = {
     "linebreak_automatic": True,
 }
-LIQUID_TAGS = [
-    "include_code",
-]
 
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
