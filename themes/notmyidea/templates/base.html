@@ -13,6 +13,14 @@
                         {% if FEED_ALL_RSS %}
                                 <link href="{{ FEED_DOMAIN }}/{% if FEED_ALL_RSS_URL %}{{ FEED_ALL_RSS_URL }}{% else %}{{ FEED_ALL_RSS }}{% endif %}" type="application/rss+xml" rel="alternate" title="{{ SITENAME|striptags }} RSS Feed" />
                         {% endif %}
+                        <script type="text/javascript">
+                                MathJax = {
+                                    tex: {
+                                        tags: 'ams'  // Enables equation numbering
+                                    }
+                                };
+                        </script>
+                        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>                            
                         {% block extra_head %}{% endblock extra_head %}
                 {% endblock head %}
         </head>
