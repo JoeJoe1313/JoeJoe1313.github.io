@@ -16,7 +16,8 @@
                         <script type="text/javascript">
                                 MathJax = {
                                     tex: {
-                                        tags: 'ams'  // Enables equation numbering
+                                        tags: 'ams',  // Enables equation numbering
+                                        linebreaks: { automatic: {{ MATH_JAX.linebreak_automatic|default("false")|lower }} }
                                     }
                                 };
                         </script>
