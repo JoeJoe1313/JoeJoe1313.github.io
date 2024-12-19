@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>Fourier Method for the Wave Equation</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+    <meta name="description" content="In this post we are going to explore the Fourier method for solving the 1D and 2D wave equations. The method is more known under the name of the..." />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li class="active"><a href="/category/mathematics.html">Mathematics</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="/2024-12-19-fourier-method-wave-equation.html" rel="bookmark"
+             title="Permalink to Fourier Method for the Wave Equation">Fourier Method for the Wave Equation</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2024-12-19T07:00:00+02:00">
+            Published: Thu 19 December 2024
+    </abbr>
+
+    <p>In <a href="/category/mathematics.html">Mathematics</a>.</p>
+<p>tags: <a href="/tag/mathematics.html">mathematics</a> </p>    
+</footer><!-- /.post-info -->        <p>In this post we are going to explore the Fourier method for solving the 1D and 2D wave equations. The method is more known under the name of the method of separation of variables.</p>
+<h1>Fixed String (1D Wave Equation)</h1>
+<p>First, let's take a look at the model of a string with length <span class="math">\(l\)</span> which is also fixed at both ends:</p>
+<div class="math">$$
+\left\{\begin{align*}
+u_{tt} = a^2 u_{xx}, \\ 
+u(x, 0) = \varphi_1(x),\\
+u_t(x, 0) = \varphi_2(x), \\
+u(0, t) = u(l, t) = 0.
+\end{align*}\right.
+$$</div>
+<p>We start solving the equation by taking into account only the boundary conditions <span class="math">\(u(0, t) = u(l, t) = 0\)</span>. The idea is to find solution <span class="math">\(u(x, t)\)</span> of the form</p>
+<div class="math">$$
+u(x, t) = X(x)T(t).
+$$</div>
+<p>We substitute this form of the solution into the wave equation and get </p>
+<div class="math">$$
+\frac{1}{a^2} T^{\prime\prime}(t)X(x) = T(t)X^{\prime\prime}(x),
+$$</div>
+<p>further divding by <span class="math">\(X(x)T(t)\)</span> leads to</p>
+<div class="math">$$
+\frac{1}{a^2} \frac{T^{\prime\prime}(t)}{T(t)} = \frac{X^{\prime\prime}(x)}{X(x)}.
+$$</div>
+<p>...</p>
+<div class="math">$$
+\frac{1}{a^2} \frac{T^{\prime\prime}(t)}{T(t)} = \frac{X^{\prime\prime}(x)}{X(x)} = -\lambda,
+$$</div>
+<p>producing the following two equeations:</p>
+<div class="math">$$
+T^{\prime\prime}(t) + a^2 \lambda T(t) = 0
+$$</div>
+<p>and</p>
+<div class="math">$$
+X^{\prime\prime}(x) + \lambda X(x) = 0.
+$$</div>
+<p>Let's begin with solving the second equation. The boundary conditions give</p>
+<div class="math">$$
+X(0)T(t) = 0 \quad \text{and} \quad X(l)T(t) = 0.
+$$</div>
+<p>Because we are interested only in non-trivial solutions and thus <span class="math">\(T \neq 0\)</span>, we have</p>
+<div class="math">$$
+X(0) = 0 \quad \text{and} \quad X(l) = 0.
+$$</div>
+<p>Now, we have to find the non-trivial solutions for <span class="math">\(X(x)\)</span> satisfying</p>
+<div class="math">$$
+\left\{\begin{align*}
+X^{\prime\prime}(x) + \lambda X(x) = 0, \\
+X(0) = 0, \\
+X(l) = 0.
+\end{align*}\right.
+$$</div>
+<p>The above problem is an example of the so called <strong>Sturm-Liouville problem</strong>.</p>
+<h1>Sturm-Liouville problem</h1>
+<p>...</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "true";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+
+                <footer id="contentinfo" class="body">
+                        <p>The theme is by <a rel="nofollow" href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+                </footer><!-- /#contentinfo -->
+
+        </body>
+</html>
