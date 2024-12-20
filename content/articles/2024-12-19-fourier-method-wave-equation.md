@@ -97,4 +97,47 @@ c_1 e^{\sqrt{-\lambda}l} + c_2 e^{-\sqrt{-\lambda}l} = 0.
 $$
 This results in $c_1 = c_2 = 0$, meaning our Sturm-Liouville problem doesn't have a non-zero solution for $\lambda < 0$.
 
-- If $\lambda = 0$, ...
+- If $\lambda = 0$, then $r_1 = r_2 = 0$ and the general solution is
+$$
+X(x) = c_1 + c_2 x.
+$$
+Substituing it into the boundary conditions $\eqref{eq:ref2}$ again lead to $c_1 = c_2 = 0$, hence no non-zero solutions of our Sturm-Liouville problem for $\lambda \leq 0$.
+
+- If $\lambda > 0$, then $r_{1, 2} = \pm i \sqrt{\lambda}$, and the general solution becomes
+$$
+X(x) = c_1 \cos{\left( \sqrt{\lambda} x \right)} + c_2 \sin{\left(\sqrt{\lambda}x\right)}.
+$$
+Substituting into the boundary conditions $\eqref{eq:ref2}$ results in
+$$
+\left\{\begin{align*}
+c_1 = 0, \\
+c_2 \sin{\left(\sqrt{\lambda}l\right)} = 0
+\end{align*}\right.
+$$
+If $c_2 = 0$, then $X(x) \equiv 0$ which is a trivial solution. Therefore, we set $c_2 \neq 0$ and hence
+$$
+\sin{\left(\sqrt{\lambda}l\right)} = 0,
+$$
+giving $\sqrt{\lambda}l = k \pi$, $k = \pm 1, \pm 2, ...$. Theerfore,
+$$
+\lambda = \lambda_k = \left(\frac{k \pi}{l}\right)^2,
+$$
+meaning eigenvalues exist when $\lambda > 0$. The eigenfunctions corresponding to the above eigenvalues are
+$$
+X_k(x) = \sin{\left(\frac{k \pi x}{l}\right)}, \quad k > 0, k \in N.
+$$
+
+Going back to $T^{\prime\prime}(t) + a^2 \lambda T(t) = 0$, solving in analogical way, when $\lambda = \lambda_k$ the solution becomes
+
+$$
+T_k(t) = A_k \cos{\left(\frac{ak\pi}{l}t\right)} + B_k \sin{\left(\frac{ak\pi}{l}t\right)}
+$$
+
+for some constants $A_k$ and $B_k$. Hence,
+
+$$
+u_k(x,t) = X_k(x) T_k(t) = \left(A_k \cos{\left(\frac{ak\pi}{l}t\right)} + B_k \sin{\left(\frac{ak\pi}{l}t\right)}\right) \sin{\left(\frac{k \pi x}{l}\right)}, \quad k > 0, k \in N
+$$
+
+are solutions to our wave equation, also satisfying the boundary conditions. Since our equation is linear, the **principle of superposition** is valid. In other words, if ...
+ 
