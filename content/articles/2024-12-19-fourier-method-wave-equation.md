@@ -53,8 +53,8 @@ $$
 
 and
 
-$$
-X^{\prime\prime}(x) + \lambda X(x) = 0.
+$$\label{eq:ref}
+X^{\prime\prime}(x) + \lambda X(x) = 0. \tag{*}
 $$
 
 Let's begin with solving the second equation. The boundary conditions give
@@ -65,8 +65,8 @@ $$
 
 Because we are interested only in non-trivial solutions and thus $T \neq 0$, we have
 
-$$
-X(0) = 0 \quad \text{and} \quad X(l) = 0.
+$$\label{eq:ref2}
+X(0) = 0 \quad \text{and} \quad X(l) = 0. \tag{**}
 $$
 
 Now, we have to find the non-trivial solutions for $X(x)$ satisfying
@@ -74,13 +74,27 @@ Now, we have to find the non-trivial solutions for $X(x)$ satisfying
 $$
 \left\{\begin{align*}
 X^{\prime\prime}(x) + \lambda X(x) = 0, \\
-X(0) = 0, \\
-X(l) = 0.
+X(0) = 0, \quad X(l) = 0.
 \end{align*}\right.
 $$
 
-The above problem is an example of the so called **Sturm-Liouville problem**.
+The above problem is an example of the so called **Sturm-Liouville problem**. In order to find the general solution of the second order linear homogeneous differential equation with constant coefficients $\eqref{eq:ref}$ we should solve its characteristic equation
 
-# Sturm-Liouville problem
+$$
+r^2 + \lambda = 0.
+$$
 
-...
+- If $\lambda < 0$, then $r_{1, 2} = \pm \sqrt{-\lambda}$, hence the general solution is
+$$
+X(x) = c_1 e^{\sqrt{-\lambda}x} + c_2 e^{-\sqrt{-\lambda}x}
+$$
+for some constants $c_1$ and $c_2$. In order to determine the constants we substitute the above solution into the boundary conditions $\eqref{eq:ref2}$ and get the system
+$$
+\left\{\begin{align*}
+c_1 + c_2 = 0, \\
+c_1 e^{\sqrt{-\lambda}l} + c_2 e^{-\sqrt{-\lambda}l} = 0. 
+\end{align*}\right.
+$$
+This results in $c_1 = c_2 = 0$, meaning our Sturm-Liouville problem doesn't have a non-zero solution for $\lambda < 0$.
+
+- If $\lambda = 0$, ...
