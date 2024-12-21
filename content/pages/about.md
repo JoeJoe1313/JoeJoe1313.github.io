@@ -21,6 +21,12 @@ Here are some ideas to get you started:
 - ⚡ Fun fact: ...
 -->
 
+- 🎓 Education:
+   - MSc Machine Learning and Data Science @ Imperial College London
+      - Thesis: Probabilistic Sequential Matrix Factorisation for 12-Lead ECG Data
+      - Portfolio: ...
+   - BSc Applied Mathematics @ Sofia University
+   - Sofia High School of Mathematics
 - 📫 How to reach me:
     - [Linkedin](https://www.linkedin.com/in/joana-levtcheva-479844164/)
     - Email: ...

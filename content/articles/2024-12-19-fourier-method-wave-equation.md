@@ -139,5 +139,74 @@ $$
 u_k(x,t) = X_k(x) T_k(t) = \left(A_k \cos{\left(\frac{ak\pi}{l}t\right)} + B_k \sin{\left(\frac{ak\pi}{l}t\right)}\right) \sin{\left(\frac{k \pi x}{l}\right)}, \quad k > 0, k \in N
 $$
 
-are solutions to our wave equation, also satisfying the boundary conditions. Since our equation is linear, the **principle of superposition** is valid. In other words, if ...
- 
+are solutions to our wave equation, also satisfying the boundary conditions. Since our equation is linear, forming a linear system with its conditions, the **principle of superposition** is valid. In other words, if $u_1, u_2, ..., u_n$ are solutions of our system, then
+
+$$
+\alpha_1 u_1 + \alpha_2 u_2 + ... + \alpha_n u_n
+$$
+
+for some constants $\alpha_1, \alpha_2, ..., \alpha_n$ is also a solution of the system. But in our case we have an infinite number of functions $u_1, u_2, ...$ which satisfy the linear system. Therefore, we need the **generalised superposition principle** stating that in such case
+
+$$
+u = \sum_n^{\infty} \alpha_n u_n
+$$
+
+for some arbitrary constants $\alpha_n$ is a solution to the system if the series converges uniformly and is twice differentiable termwise. This generalisation is a Lemma and should be prooved. The proof can be found in ...
+
+Assuming we have prooved the said Lemma, we can state that our system has a solution of the form
+
+$$
+u(x, t) = \sum_{k=1}
+^{\infty} u_k(x, t) = \sum_{k=1}^{\infty} \left(A_k \cos{\left(\frac{ak\pi}{l}t\right)} + B_k \sin{\left(\frac{ak\pi}{l}t\right)}\right) \sin{\left(\frac{k \pi x}{l}\right)}.
+$$
+
+The next task we have to tackle is to determine the coefficients $A_k$ and $B_k$. We can achieve this by using the initial conditions 
+
+$$
+u(x, 0) = \varphi_1(x), \quad \text{and} \quad u_t(x, 0) = \varphi_2(x).
+$$
+
+We get
+
+$$
+u(x, 0) = \sum_{k=1}
+^{\infty} A_k \sin{\left(\frac{k \pi x}{l}\right)} = \varphi_1(x)
+$$
+
+and
+
+$$
+u_t(x, 0) = \sum_{k=1}^{\infty} \frac{ak\pi}{l} B_k \sin{\left(\frac{k \pi x}{l}\right)} = \varphi_2(x).
+$$
+
+Now, we have to expand both $\varphi_1(x)$ and $\varphi_2(x)$ into series in terms of sines only (why?). We have
+
+$$
+\varphi_1(x) = \sum_{k=1}^{\infty} \varphi_k^{(1)} \sin{\left(\frac{k \pi}{l}x\right)}
+$$
+
+and
+
+$$
+\varphi_2(x) = \sum_{k=1}^{\infty} \varphi_k^{(2)} \sin{\left(\frac{k \pi}{l}x\right)}.
+$$
+
+By the Fourier series theroem of uniqueness, we get
+
+$$
+A_k = \varphi_k^{(1)} \quad \text{and} \quad B_k = \frac{l}{ak\pi} \varphi_k^{(2)},
+$$
+
+or (why?)
+
+$$
+A_k = \frac{2}{l} \int_{0}^{l} \varphi_1(x) \sin{\left(\frac{k \pi}{l}x\right)} \mathrm{d}x
+$$
+
+and
+
+$$
+B_k = \frac{2}{ak\pi} \int_{0}^{l} \varphi_2(x) \sin{\left(\frac{k \pi}{l}x\right)} \mathrm{d}x.
+$$
+
+...
