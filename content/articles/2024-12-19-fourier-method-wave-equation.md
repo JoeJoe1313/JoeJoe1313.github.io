@@ -209,4 +209,43 @@ $$
 B_k = \frac{2}{ak\pi} \int_{0}^{l} \varphi_2(x) \sin{\left(\frac{k \pi}{l}x\right)} \mathrm{d}x.
 $$
 
+We are left with the task of the covergence of the infinite series. We have to explore the following series
+
+$$
+|u(x, t)| \leq \sum_{k=1}^{\infty}(|A_k| + |B_k|),
+$$
+
+$$
+|u_t(x, t)| \leq \sum_{k=1}^{\infty}\frac{ak\pi}{l}(|A_k| + |B_k|),
+$$
+
+$$
+|u_x(x, t)| \leq \sum_{k=1}^{\infty}\frac{k\pi}{l}(|A_k| + |B_k|),
+$$
+
+$$
+|u_{tt}(x, t)| \leq \sum_{k=1}^{\infty}\frac{a^2 k^2 \pi^2}{l^2}(|A_k| + |B_k|),
+$$
+
+$$
+|u_{xx}(x, t)| \leq \sum_{k=1}^{\infty}\frac{k^2 \pi^2}{l^2}(|A_k| + |B_k|).
+$$
+
+If the series on the right side (majorizing series) converge then the series on the left would also converge and the needed differentiation would exist. It is enough (why?) for the following series to converge
+
+$$
+\sum_{k=1}^{\infty} k^j \left(|\varphi_k^{(1)}| + \frac{2}{ak\pi}|\varphi_k^{(2)}|\right), j = 0, 1, 2.
+$$
+
+This is possible only if 
+
+$$
+\left\{\begin{align*}
+\sum_{k=1}^{\infty} k^j |\varphi_k^{(1)}|, \\
+\sum_{k=1}^{\infty} k^{j-1} |\varphi_k^{(2)}|,
+\end{align*}\right. \quad j = 0, 1, 2.
+$$
+
+converge.
+
 ...
