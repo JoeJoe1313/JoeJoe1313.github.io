@@ -5,14 +5,10 @@ from scipy.optimize import root_scalar
 from scipy.special import jv as besselj
 
 
-def CircularMembrane():
-    a = 0.5  # Constant for time evolution
-    r = 3  # Maximum radius
+def CircularMembrane(a=0.5, r=3, tmax=30, N=40):
     rho = np.linspace(0, r, 51)  # Radial grid points
     phi = np.linspace(0, 2 * np.pi, 51)  # Angular grid points
-    tmax = 30
     t = np.linspace(0, tmax, 100)  # Time steps
-    N = 40  # Number of Bessel function zeros to consider
 
     # Find the first 40 positive zeros of the Bessel function J0
     mju = []
@@ -65,14 +61,8 @@ def CircularMembrane():
         ax.set_ylabel("y")
         ax.set_zlabel("u(x,y,t)")
 
-    # Create the animation
+    # Create and save the animation
     anim = FuncAnimation(fig, update, frames=t, interval=50)
-
-    # Save the animation as a GIF
     anim.save("circular_membrane_animation.gif", writer="imagemagick", fps=20)
 
     plt.show()
-
-
-# Call the function to execute the animation
-CircularMembrane()
