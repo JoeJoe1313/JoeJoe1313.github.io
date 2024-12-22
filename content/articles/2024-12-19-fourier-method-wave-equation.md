@@ -39,7 +39,7 @@ $$
 \frac{1}{a^2} \frac{T^{\prime\prime}(t)}{T(t)} = \frac{X^{\prime\prime}(x)}{X(x)}.
 $$
 
-...
+We have two functions of independent variables which are equal. This is only possible if they are equal to the same constant. Therefore, let
 
 $$
 \frac{1}{a^2} \frac{T^{\prime\prime}(t)}{T(t)} = \frac{X^{\prime\prime}(x)}{X(x)} = -\lambda,
