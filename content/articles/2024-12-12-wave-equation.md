@@ -229,6 +229,8 @@ Snapshots:
   <img src="/images/2024-12-12-wave-equation/circular_membrane_t30.png" alt="t4.5" style="width: 33%;"/>
 </div>
 
+![t0](./images/2024-12-12-wave-equation/circular_membrane_t0.png){width=33%}![t10](./images/2024-12-12-wave-equation/circular_membrane_t10.png){width=33%}![t30](./images/2024-12-12-wave-equation/circular_membrane_t30.png){width=33%}
+
 # References
 
 - [1](https://www.amazon.co.uk/Partial-Differential-Equations-Graduate-Mathematics/dp/1470469421/ref=sr_1_3?crid=2BINQDJ5R7XUB&dib=eyJ2IjoiMSJ9.GgU4uQBUKYO960lL6EjVJjksjFysLhCJKEHP436_saFGnfKf4uvgqyl_3WBjV779K4AwonOY5XnkRxVFCIqqGZCCE3I8YEjIC7mzvLwUa2lBPvByBCoFxTvGhrSKGLiAKlAvTVFSlbwklqyWEj4o852csy80_D3G2Gk9pedHKz22vqyc8UI8HAxWZ1wfu5bNoaqOOEDhy0W2XLaSijLCENnzVXjxTLS5xZkMCXr72G0.NeT6LdhY-WV9xVA26fbGHp37FbAKGo7mLwpV9m_2Rdk&dib_tag=se&keywords=partial+differential+equations&nsdOptOutParam=true&qid=1734133658&sprefix=partial+diff%2Caps%2C129&sr=8-3)

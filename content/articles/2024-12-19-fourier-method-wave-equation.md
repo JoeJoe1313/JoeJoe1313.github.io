@@ -12,14 +12,14 @@ In this post we are going to explore the Fourier method for solving the 1D and 2
 
 First, let's take a look at the model of a string with length $l$ which is also fixed at both ends:
 
-$$
-\left\{\begin{align*}
+\begin{equation}
+\left\{\begin{aligned}
 u_{tt} = a^2 u_{xx}, \\ 
 u(x, 0) = \varphi_1(x),\\
 u_t(x, 0) = \varphi_2(x), \\
 u(0, t) = u(l, t) = 0.
-\end{align*}\right.
-$$
+\end{aligned}\right.
+\end{equation}
 
 We start solving the equation by taking into account only the boundary conditions $u(0, t) = u(l, t) = 0$. The idea is to find solution $u(x, t)$ of the form
 
