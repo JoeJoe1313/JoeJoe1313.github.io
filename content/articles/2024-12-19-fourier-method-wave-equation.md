@@ -6,7 +6,7 @@ Tags: mathematics, draft
 Slug: 2024-12-19-fourier-method-wave-equation
 ---
 
-In this post we are going to explore the Fourier method for solving the 1D and 2D wave equations. The method is more known under the name of the method of separation of variables.
+In this post we are going to explore the Fourier method for solving the 1D and 2D wave equations. The method is more known under the name of the method of separation of variables. For the 1D wave equation we are going to show the application of the method to a fixed string, and for the 2D wave equation we are going to apply the method to a rectangular membrane and a circular membrane. We are also going to attempt to outline the physical interpretations of all scenarios.
 
 # 1D Wave Equation
 
