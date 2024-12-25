@@ -295,7 +295,34 @@ $$
 
 is a regular solution of the problem.
 
-**Physical interpretation:** TBD
+**Physical interpretation:**
+
+If we go back to the eigenfunction
+
+$$
+u_k(x,t) = \left(A_k \cos{\left(\frac{ak\pi}{l}t\right)} + B_k \sin{\left(\frac{ak\pi}{l}t\right)}\right) \sin{\left(\frac{k \pi}{l}x\right)}, \quad k > 0, k \in N
+$$
+
+we can rewrite it as
+
+$$
+u_k(x,t) = \sqrt{A_k^2 + B_k^2} \sin{\left(\frac{k \pi}{l}x\right)} \sin{\left(\frac{ak\pi}{l}t + \phi_k\right)}, \quad k \in N,
+$$
+
+where
+
+$$
+\tan{(\phi_k)} = \frac{A_k}{B_k}.
+$$
+
+<center>
+![Fixed String](./images/2024-12-19-fourier-method-wave-equation/fixed_string.svg){width=50%}
+</center>
+
+<center>
+![Fixed Strings](./images/2024-12-19-fourier-method-wave-equation/fixed_strings.svg){width=50%}
+</center>
+
 
 # 2D Wave Equation
 
