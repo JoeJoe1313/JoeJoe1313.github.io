@@ -2,13 +2,15 @@
 Title: Fourier Method for the Wave Equation
 Date: 2024-12-19 07:00
 Category: Mathematics
-Tags: mathematics
+Tags: mathematics, draft
 Slug: 2024-12-19-fourier-method-wave-equation
 ---
 
 In this post we are going to explore the Fourier method for solving the 1D and 2D wave equations. The method is more known under the name of the method of separation of variables.
 
-# Fixed String (1D Wave Equation)
+# 1D Wave Equation
+
+## Fixed String
 
 First, let's take a look at the model of a string with length $l$ which is also fixed at both ends:
 
@@ -246,6 +248,61 @@ $$
 \end{align*}\right. \quad j = 0, 1, 2.
 $$
 
-converge.
+converge. From Calculus we know (theorem) that if $\varphi(x)$ is $m$-times differentiable then
 
-...
+$$
+\sum_{k=1}^{\infty} k^{m-1} |\varphi_k|
+$$
+
+convergres. Therefore, in order for all the majorzing series to converge it is enough $\varphi_1(x)$ to be $3$-times differentiable, and $\varphi_2(x)$ to be $2$-times differentiable.
+
+Finally, we should note a few things about the expansion of $\varphi_1(x)$ and $\varphi_2(x)$ into sine series. We have to note that in order to do that the function needs to be continued as an odd function which my lead to loss of the regularity of the lower derivatives. Let $\tilde{\varphi}_1(x)$ be the continuation of $\varphi_1(x)$ as an odd function (see the Figure below) defined as
+
+<center>
+![Odd continuation of a function](./images/2024-12-19-fourier-method-wave-equation/odd_continuation.png){width=50%}
+</center>
+
+$$
+\tilde{\varphi}_1(x) = \left\{\begin{align*}
+\varphi_1(x), \quad 0 \leq x \leq l, \\
+-\varphi_1(-x), \quad -l \leq x \leq 0.
+\end{align*}\right.
+$$
+
+Hence, in order for it to be continous and continously differentibale we need to enforce the following condition
+
+$$
+\varphi_1(0) = \varphi_1(l) = 0.
+$$
+
+To summarise, in order for $\sum_{k=1}^{\infty} \varphi_k^{(1)} \sin{\left( \frac{k\pi}{l}x\right)}$ to converge in $[0, l]$ it is necessary to enforce the above conditions to have zero values at both ends of the interval. As for the second derivative, if it exists it would be continuous as well. Similarly, for the third derivative to exist we enforce
+
+$$
+\varphi_1^{\prime\prime}(0) = \varphi_1^{\prime\prime}(l) = 0
+$$
+
+and obtain the corresponding necessary condition
+
+$$
+\varphi_2(0) = \varphi_2(l) = 0.
+$$
+
+Finally, after these enforced conditions we can conclude that (tehorem)
+
+$$
+u(x, t) = \sum_{k=1}^{\infty} \left(A_k \cos{\left(\frac{ak\pi}{l}t\right)} + B_k \sin{\left(\frac{ak\pi}{l}t\right)}\right) \sin{\left(\frac{k \pi x}{l}\right)}
+$$
+
+is a regular solution of the problem.
+
+**Physical interpretation:** TBD
+
+# 2D Wave Equation
+
+## Rectangular Membrane
+
+TBD
+
+## Circular Membrane
+
+TBD
