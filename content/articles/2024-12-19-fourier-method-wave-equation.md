@@ -26,7 +26,7 @@ u(0, t) = u(l, t) = 0.
 A visualisation of the string can be seen in the figure below.
 
 <center>
-![Fixed String 1](./images/2024-12-19-fourier-method-wave-equation/fixed_string_1.svg){width=50%}
+![Fixed String](./images/2024-12-19-fourier-method-wave-equation/fixed_string.svg){width=50%}
 </center>
 
 We start solving the equation by taking into account only the boundary conditions $u(0, t) = u(l, t) = 0$. The idea is to find solution $u(x, t)$ of the form

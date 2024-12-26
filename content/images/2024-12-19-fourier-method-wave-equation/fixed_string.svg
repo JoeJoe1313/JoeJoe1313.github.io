@@ -61,7 +61,7 @@
   <circle cx="550" cy="150" r="4" fill="black"/>
   
   <!-- Legend Box -->
-  <rect x="50" y="305" width="350" height="80" 
+  <rect x="250" y="305" width="350" height="80" 
         fill="white" 
         stroke="#CCCCCC" 
         stroke-width="1"
@@ -69,25 +69,25 @@
   
   <!-- Legend Items -->
   <!-- Initial displacement -->
-  <line x1="70" y1="320" x2="120" y2="320" 
+  <line x1="270" y1="320" x2="320" y2="320" 
         stroke="#2196F3" 
         stroke-width="2.5"/>
-  <text x="140" y="325" 
+  <text x="340" y="325" 
         font-family="Arial" 
         font-size="14">Initial displacement φ₁(x)</text>
   
   <!-- Initial velocity -->
-  <line x1="70" y1="350" x2="120" y2="350" 
+  <line x1="270" y1="350" x2="320" y2="350" 
         stroke="#F44336" 
         stroke-width="1.5"
         marker-end="url(#velocity)"/>
-  <text x="140" y="355" 
+  <text x="340" y="355" 
         font-family="Arial" 
         font-size="14">Initial velocity φ₂(x)</text>
   
   <!-- Fixed endpoints -->
-  <circle cx="95" cy="370" r="4" fill="black"/>
-  <text x="140" y="375" 
+  <circle cx="295" cy="370" r="4" fill="black"/>
+  <text x="340" y="375" 
         font-family="Arial" 
         font-size="14">Fixed endpoints: u(0,t) = u(l,t) = 0</text>
   
@@ -111,3 +111,4 @@
   </text>
 
 </svg>
+
