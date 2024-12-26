@@ -1,34 +1,113 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
   <!-- Background -->
-  <rect width="400" height="200" fill="white"/>
+  <rect width="600" height="400" fill="white"/>
+  
+  <!-- Coordinate System -->
+  <!-- x-axis -->
+  <line x1="50" y1="150" x2="550" y2="150" 
+        stroke="black" 
+        stroke-width="1.5"
+        marker-end="url(#arrowhead)"/>
+  <text x="570" y="155" 
+        font-family="Arial" 
+        font-size="16">x</text>
+  
+  <!-- Origin and endpoint labels -->
+  <text x="40" y="170" 
+        font-family="Arial" 
+        font-size="16">0</text>
+  <text x="550" y="170" 
+        font-family="Arial" 
+        font-size="16">l</text>
+  
+  <!-- Initial displacement φ₁(x) -->
+  <path d="M 50 150 Q 200 100, 300 180 Q 400 260, 550 150" 
+        stroke="#2196F3" 
+        stroke-width="2.5" 
+        fill="none"/>
+  <text x="500" y="200" 
+        font-family="Arial" 
+        font-size="16" 
+        fill="#2196F3">φ₁(x)</text>
+        
+  <!-- Initial velocity arrows -->
+  <defs>
+    <marker id="velocity" 
+            markerWidth="10" 
+            markerHeight="7" 
+            refX="9" 
+            refY="3.5" 
+            orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#F44336"/>
+    </marker>
+  </defs>
+  
+  <!-- Velocity arrows -->
+  <line x1="200" y1="100" x2="200" y2="70" 
+        stroke="#F44336" 
+        stroke-width="1.5" 
+        marker-end="url(#velocity)"/>
+  <line x1="300" y1="180" x2="300" y2="210" 
+        stroke="#F44336" 
+        stroke-width="1.5" 
+        marker-end="url(#velocity)"/>
+  <line x1="400" y1="230" x2="400" y2="260" 
+        stroke="#F44336" 
+        stroke-width="1.5" 
+        marker-end="url(#velocity)"/>
   
   <!-- Fixed endpoints -->
-  <circle cx="50" cy="100" r="5" fill="black"/>
-  <circle cx="350" cy="100" r="5" fill="black"/>
+  <circle cx="50" cy="150" r="4" fill="black"/>
+  <circle cx="550" cy="150" r="4" fill="black"/>
   
-  <!-- String (represented as a sine wave to show possible vibration mode) -->
-  <path d="M 50 100 Q 200 50, 350 100" 
-        stroke="blue" 
-        stroke-width="2" 
-        fill="none"/>
+  <!-- Legend Box -->
+  <rect x="50" y="305" width="350" height="80" 
+        fill="white" 
+        stroke="#CCCCCC" 
+        stroke-width="1"
+        rx="5"/>
   
-  <!-- Length label -->
-  <text x="190" y="160" font-family="Arial" font-size="24">l</text>
+  <!-- Legend Items -->
+  <!-- Initial displacement -->
+  <line x1="70" y1="320" x2="120" y2="320" 
+        stroke="#2196F3" 
+        stroke-width="2.5"/>
+  <text x="140" y="325" 
+        font-family="Arial" 
+        font-size="14">Initial displacement φ₁(x)</text>
   
-  <!-- Arrows indicating length -->
-  <path d="M 50 140 L 350 140" 
-        stroke="black" 
-        stroke-width="1" 
-        marker-end="url(#arrow)" 
-        marker-start="url(#arrow)"/>
+  <!-- Initial velocity -->
+  <line x1="70" y1="350" x2="120" y2="350" 
+        stroke="#F44336" 
+        stroke-width="1.5"
+        marker-end="url(#velocity)"/>
+  <text x="140" y="355" 
+        font-family="Arial" 
+        font-size="14">Initial velocity φ₂(x)</text>
+  
+  <!-- Fixed endpoints -->
+  <circle cx="95" cy="370" r="4" fill="black"/>
+  <text x="140" y="375" 
+        font-family="Arial" 
+        font-size="14">Fixed endpoints: u(0,t) = u(l,t) = 0</text>
   
   <!-- Arrow marker definition -->
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" 
-            refX="5" refY="5"
-            markerWidth="6" markerHeight="6"
-            orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z"/>
+    <marker id="arrowhead" 
+            markerWidth="10" 
+            markerHeight="7" 
+            refX="9" 
+            refY="3.5" 
+            orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="black"/>
     </marker>
   </defs>
+
+  <!-- Labels for initial velocity -->
+  <text x="180" y="60" 
+        font-family="Arial" 
+        font-size="16" 
+        fill="#F44336">φ₂(x)
+  </text>
+
 </svg>
