@@ -33,6 +33,23 @@ of the point 𝑥 at time 𝑡 ≥ 0.
 
 # Fixed String
 
+...
+
+$$
+\varphi(x) := \left\{\begin{align*}
+\sin^3{(\pi x)}, \quad 1 \leq x \leq3, \\
+0, \quad x \in R \backslash [1, 3],
+\end{align*}\right.
+$$
+
+and
+
+$$
+\psi(x) \equiv 0,
+$$
+
+for $t \in [0, 30]$. Using the $100$-th partial Fourier sum, $L = \pi \sqrt{5}$, $a = \frac{2}{3}$...
+
 Animation:
 
 ![Fixed String](./images/2024-12-12-wave-equation/string_vibration_animation.gif)
