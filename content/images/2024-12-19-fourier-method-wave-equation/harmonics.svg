@@ -155,6 +155,26 @@
           font-size="14" 
           fill="#4CAF50"
           text-anchor="middle">Crest</text>
+    
+    <!-- Arrow for oscillation -->
+    <line x1="200" y1="89" x2="200" y2="155" 
+          stroke="gray" 
+          stroke-width="1"
+          stroke-dasharray="5,2"/>
+    <polygon points="197,99 200,89 203,99" fill="gray"/>
+    <polygon points="197,145 200,155 203,145" fill="gray"/>
+    <line x1="400" y1="85" x2="400" y2="150" 
+          stroke="gray" 
+          stroke-width="1"
+          stroke-dasharray="5,2"/>
+    <polygon points="397,95 400,85 403,95" fill="gray"/>
+    <polygon points="397,142 400,152 403,142" fill="gray"/>
+    <line x1="600" y1="89" x2="600" y2="155" 
+          stroke="gray" 
+          stroke-width="1"
+          stroke-dasharray="5,2"/>
+    <polygon points="597,99 600,89 603,99" fill="gray"/>
+    <polygon points="597,145 600,155 603,145" fill="gray"/>
   </g>
 
   <!-- Legend -->
