@@ -26,7 +26,7 @@ u(0, t) = u(l, t) = 0.
 A visualisation of the string can be seen in the figure below.
 
 <center>
-![Fixed String](./images/2024-12-19-fourier-method-wave-equation/fixed_string.svg){width=50%}
+![Fixed String](./images/2024-12-19-fourier-method-wave-equation/fixed_string.svg){width=60%}
 </center>
 
 We start solving the equation by taking into account only the boundary conditions $u(0, t) = u(l, t) = 0$. The idea is to find solution $u(x, t)$ of the form
@@ -320,6 +320,18 @@ where
 $$
 \tan{(\phi_k)} = \frac{A_k}{B_k}.
 $$
+
+We can translate this as the points of the string to oscillate at the frequency $\omega_k = \frac{ak\pi}{l}$ with phase $\phi_k$. The amplitude is dependant on $x$ and is given by
+$$
+F_k = \sqrt{A_k^2 + B_k^2} \sin{\left(\frac{k\pi}{l}x\right)}.
+$$
+
+The $u_k(x, t)$ waves are called **standing-waves**. Depending on the values of $k$ we have the following scenarios:
+
+- When $k = 1$ there are $2$ motionless points which are the ends of the (fixed) string
+- When $k = 2$ a third moitonless point $x = \frac{l}{2}$ is added
+
+These motionless points are called **nodes** of the standing wave. In general, $u_k(x, t)$ has $(k + 1)$ nodes located ate $0, \frac{1}{k}l, \frac{2}{k}l, ..., \frac{k-1}{k}l, l$. The maximum amplitude is achieved in the middle points between two nodes. These points are called **crests**. The fundamental tone, or the lowest tone, has frequency of $\omega_1 = \frac{a\pi}{l}$. The frequencies $\omega_k$ are called **harmonics**, while the higher tones corresponding to $\omega_k$, $k = 2, 3, ...$ are called **overtones**. It is quite natural to notice that the higher the value of $k$ the rapidly lower the amplitude of $u_k(x, t)$ becomes. Meaning, the effect from the higher harmonics all combined influences the quality of the sound. The below figure shows the harmonics for $k = 1, 2, 3$.
 
 <center>
 ![Fixed Strings](./images/2024-12-19-fourier-method-wave-equation/fixed_strings.svg){width=50%}
