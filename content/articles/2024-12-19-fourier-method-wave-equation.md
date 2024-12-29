@@ -334,7 +334,7 @@ The $u_k(x, t)$ waves are called **standing-waves**. Depending on the values of 
 These motionless points are called **nodes** of the standing wave. In general, $u_k(x, t)$ has $(k + 1)$ nodes located ate $0, \frac{1}{k}l, \frac{2}{k}l, ..., \frac{k-1}{k}l, l$. The maximum amplitude is achieved in the middle points between two nodes. These points are called **crests**. The fundamental tone, or the lowest tone, has frequency of $\omega_1 = \frac{a\pi}{l}$. The frequencies $\omega_k$ are called **harmonics**, while the higher tones corresponding to $\omega_k$, $k = 2, 3, ...$ are called **overtones**. It is quite natural to notice that the higher the value of $k$ the rapidly lower the amplitude of $u_k(x, t)$ becomes. Meaning, the effect from the higher harmonics all combined influences the quality of the sound. The below figure shows the harmonics for $k = 1, 2, 3$.
 
 <center>
-![Fixed Strings](./images/2024-12-19-fourier-method-wave-equation/fixed_strings.svg){width=50%}
+![Fixed Strings](./images/2024-12-19-fourier-method-wave-equation/harmonics.svg){width=70%}
 </center>
 
 # 2D Wave Equation
