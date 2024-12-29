@@ -11,6 +11,9 @@
 
   <!-- k=1 (First harmonic) -->
   <g transform="translate(0,0)">
+    <text x="50" y="90" font-family="Arial" font-size="14" fill="#555">
+      First Harmonic
+    </text>
     <!-- Axis -->
     <line x1="100" y1="120" x2="700" y2="120" 
           stroke="black" 
@@ -54,6 +57,9 @@
 
   <!-- k=2 (Second harmonic) -->
   <g transform="translate(0,140)">
+    <text x="50" y="90" font-family="Arial" font-size="14" fill="#555">
+      Second Harmonic
+    </text>
     <!-- Axis -->
     <line x1="100" y1="120" x2="700" y2="120" 
           stroke="black" 
@@ -110,6 +116,9 @@
 
   <!-- k=3 (Third harmonic) -->
   <g transform="translate(0,280)">
+    <text x="50" y="90" font-family="Arial" font-size="14" fill="#555">
+      Third Harmonic
+    </text>
     <!-- Axis -->
     <line x1="100" y1="120" x2="700" y2="120" 
           stroke="black" 
