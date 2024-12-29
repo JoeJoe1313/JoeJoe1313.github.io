@@ -31,6 +31,20 @@ of the point 𝑥 at time 𝑡 ≥ 0.
 
 1D and 2D Equations
 
+# Fixed String
+
+Animation:
+
+![Fixed String](./images/2024-12-12-wave-equation/string_vibration_animation.gif)
+
+{% include_code_collapsible 2024-12-12-wave-equation/fixed_string.py lang:python :hideall: %}
+
+Snapshots:
+
+![t0](./images/2024-12-12-wave-equation/string_snapshot_t0.png)
+![t20](./images/2024-12-12-wave-equation/string_snapshot_t20.png)
+![t30](./images/2024-12-12-wave-equation/string_snapshot_t30.png)
+
 # Rectangular Membrane
 
 Pass
