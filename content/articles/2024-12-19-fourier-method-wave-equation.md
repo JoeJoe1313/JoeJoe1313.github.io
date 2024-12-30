@@ -450,7 +450,110 @@ $$
 X(0) Y(y) T(t) = 0, \quad \text{and} \quad X(l_1) Y(y) T(t) = 0,
 $$
 
-and ...
+and because we are looking for non-trivial solutions meaning $T(t) \neq 0$ and $Y(y) \neq 0$ identically, it follows
+
+$$
+X(0) = X(l_1) = 0.
+$$
+
+Now, with the same logic first we have the boundary conditions
+
+$$
+X(x)Y(0)T(t) = 0, \quad \text{and} \quad X(x)Y(l_2)T(t) = 0,
+$$
+
+then since $X(x) \neq 0$, and $T(t) \neq 0$ it follows
+
+$$
+Y(0) = Y(l_2) = 0.
+$$
+
+We obtain the following Sturm-Liouville problms
+
+$$
+\left\{\begin{align*}
+X^{\prime\prime} + \alpha^2 X = 0, \\
+X(0) = X(l_1) = 0,
+\end{align*}\right.
+$$
+
+and
+
+$$
+\left\{\begin{align*}
+Y^{\prime\prime} + \beta^2Y = 0, \\
+Y(0) = Y(l_2) = 0,
+\end{align*}\right.
+$$
+
+with eigenvalues and corresponing eigenfunctions, respectively,
+
+$$
+\alpha_k = \frac{k\pi}{l_1}, k = 1,2,..., \quad X_k(x) = \sin{\left(\frac{k\pi}{l_1}x\right)}
+$$
+
+and
+
+$$
+\beta_k = \frac{n\pi}{l_2}, n = 1,2,..., \quad Y_n(y) = \sin{\left(\frac{n\pi}{l_2}y\right)}.
+$$
+
+As defined earlier, to every pair $\alpha_k$, $\beta_k$ there is a corresponding $\lambda_{kn}^2 = \alpha_k^2 + \beta_k^2$. This is a Dirichlet eigenvalue of the Laplacian in our rectangular membrane. For each $\lambda_{kn}$ we have
+
+$$
+\lambda_{kn} = \sqrt{\alpha_k^2 + \beta_k^2} = \pi \sqrt{\frac{k^2}{l_1^2} + \frac{n^2}{l_2^2}}
+$$
+
+and hence the corresponding general solution of $T^{\prime\prime} + \lambda_{kn}^2 a^2 T = 0$ is
+
+$$
+T_{kn}(t) = A_{kn}\cos{(a\lambda_{kn}t)} + B_{kn}\sin{(a\lambda_{kn}t)}.
+$$
+
+Again, by the superposition principle, the solution of our 2D wave equation on rectangular membrane is sought in the form
+
+$$
+u(x, y, t) = \sum_{k,n=1}^{\infty}\left(A_{kn}\cos{(a\lambda_{kn}t)} + B_{kn}\sin{(a\lambda_{kn}t)}\right)\sin{\left(\frac{k\pi}{l_1}x\right)}\sin{\left(\frac{n\pi}{l_2}y\right)}.
+$$
+
+...
+
+$$
+u(x, y, 0) = \sum_{k,n=1}^{\infty}A_{kn}\sin{\left(\frac{k\pi}{l_1}x\right)}\sin{\left(\frac{n\pi}{l_2}y\right)} = \varphi(x, y),
+$$
+
+and
+
+$$
+u_t(x, y, 0) = \sum_{k,n=1}^{\infty}B_{kn}a\lambda_{kn}\sin{\left(\frac{k\pi}{l_1}x\right)}\sin{\left(\frac{n\pi}{l_2}y\right)} = \psi(x, y).
+$$
+
+...
+
+$$
+\omega_{kn}(x, y) := \sin{\left(\frac{k\pi}{l_1}x\right)}\sin{\left(\frac{n\pi}{l_2}y\right)}
+$$
+
+...
+
+$$
+\int_0^{l_1} \int_0^{l_2} \omega_{kn}(x, y) \omega_{rs}(x, y) \mathrm{d}x \mathrm{d}y = \left\{\begin{align*}
+0, \quad k \neq r \quad \text{or} \quad n \neq s, \\
+\frac{l_1 l_2}{4}, \quad k = r \quad \text{and} \quad n = s.
+\end{align*}\right.
+$$
+
+...
+
+$$
+A_{kn} = \frac{4}{l_1 l_2} \int_0^{l_1} \int_0^{l_2} \varphi(x, y) \sin{\left(\frac{k\pi}{l_1}x\right)} \sin{\left(\frac{n\pi}{l_2}y\right)} \mathrm{d}x \mathrm{d}y,
+$$
+
+and
+
+$$
+B_{kn} = \frac{4}{l_1 l_2 a \lambda_{kn}} \int_0^{l_1} \int_0^{l_2} \psi(x, y) \sin{\left(\frac{k\pi}{l_1}x\right)} \sin{\left(\frac{n\pi}{l_2}y\right)} \mathrm{d}x \mathrm{d}y.
+$$
 
 ## Circular Membrane
 
