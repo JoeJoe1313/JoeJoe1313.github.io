@@ -341,7 +341,30 @@ These motionless points are called **nodes** of the standing wave. In general, $
 
 ## Rectangular Membrane
 
-TBD
+Let's assume we have a rectangular membrane with sides of length $l_1$ and $l_2$. Let's also assume it is fastened along the edges. A visaulisation can be seen below.
+
+<center>
+![Rectangular Membrane](./images/2024-12-19-fourier-method-wave-equation/rectangular_membrane.svg){width=70%}
+</center>
+
+We can describe the problem via the model
+
+$$
+\left\{\begin{align*}
+\frac{\partial^2 u}{\partial t^2} = a^2 \Delta{u} = a^2\left(\frac{\partial^2 u}{\partial^2 x^2} + \frac{\partial^2 u}{\partial y^2}\right), \quad 0 < x < l_1, \quad 0 < y < l_2, \\
+u|_{\Gamma} = 0, \\
+u|_{t=0} = \varphi(x, y), u_t|_{t=0} = \psi(x, y),
+\end{align*}\right.
+$$
+
+also with boundary conditions coming from the rectangular boundary $\Gamma$
+
+$$
+\left\{\begin{align*}
+u(0, y, t) = 0, \quad u(x, 0, t) = 0, \\
+u(l_1, y, t) = 0, \quad u(x, l_2, t) = 0.
+\end{align*}\right.
+$$
 
 ## Circular Membrane
 
