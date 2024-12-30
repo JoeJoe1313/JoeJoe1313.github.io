@@ -10,6 +10,12 @@ In this post we are going to explore the Fourier method for solving the 1D and 2
 
 # 1D Wave Equation
 
+The 1D wave equation is of the form
+
+$$
+u_{tt} = a^2 u_{xx}.
+$$
+
 ## Fixed String
 
 First, let's take a look at the model of a string with length $l$ which is also fixed at both ends:
@@ -339,12 +345,18 @@ These motionless points are called **nodes** of the standing wave. In general, $
 
 # 2D Wave Equation
 
+The 2D wave equation is of the form
+
+$$\label{eq:tdwave}
+\frac{\partial^2 u}{\partial t^2} = a^2 \Delta{u} = a^2\left(\frac{\partial^2 u}{\partial^2 x^2} + \frac{\partial^2 u}{\partial y^2}\right). \tag{1}
+$$
+
 ## Rectangular Membrane
 
 Let's assume we have a rectangular membrane with sides of length $l_1$ and $l_2$. Let's also assume it is fastened along the edges. A visaulisation can be seen below.
 
 <center>
-![Rectangular Membrane](./images/2024-12-19-fourier-method-wave-equation/rectangular_membrane.svg){width=70%}
+![Rectangular Membrane](./images/2024-12-19-fourier-method-wave-equation/rectangular_membrane.svg){width=50%}
 </center>
 
 We can describe the problem via the model
@@ -365,6 +377,80 @@ u(0, y, t) = 0, \quad u(x, 0, t) = 0, \\
 u(l_1, y, t) = 0, \quad u(x, l_2, t) = 0.
 \end{align*}\right.
 $$
+
+As in the 1D wave equation, we are going to apply the Fourier method, meaning we are looking for a solution of the form
+
+$$
+U(x, y, t) = T(t)W(x, y).
+$$
+
+Substituting into the 2D wave equation $\eqref{eq:tdwave}$ we get
+
+$$
+T^{\prime\prime}W = a^2 T \Delta{W}.
+$$
+
+Then, we divide by $a^2TW$ and get
+
+$$
+\frac{T^{\prime\prime}}{a^2T} = \frac{\Delta{W}}{W} = - \lambda^2,
+$$
+
+leading to the following equations
+
+$$
+T^{\prime\prime} + \lambda^2 a^2 T = 0
+$$
+
+and
+
+$$
+\Delta{W} + \lambda^2 W = 0. \quad \text{(Helmholtz equation)}
+$$
+
+Now, we should do the same and apply the Fourier method to the Helmoltz equation. We are looking for a solution of the form
+
+$$
+W(x, y) = X(x) Y(y).
+$$
+
+Substitution leads to
+
+$$
+X^{\prime\prime}Y + XY^{\prime\prime} + \lambda^2 XY = 0.
+$$
+
+Further, dividing by $XY$ gives
+
+$$
+-\frac{X^{\prime\prime}}{X} = \frac{Y^{\prime\prime}}{Y} + \lambda^2 = \alpha^2.
+$$
+
+Once again, we obtain the following to equations
+
+$$
+X^{\prime\prime} + \alpha^2 X = 0,
+$$
+
+and
+
+$$
+Y^{\prime\prime} + \beta^2Y = 0,
+$$
+
+where
+
+$$
+\lambda^2 = \alpha^2 + \beta^2.
+$$
+
+Now, the boundary conditions take the forms
+
+$$
+X(0) Y(y) T(t) = 0, \quad \text{and} \quad X(l_1) Y(y) T(t) = 0,
+$$
+
+and ...
 
 ## Circular Membrane
 
