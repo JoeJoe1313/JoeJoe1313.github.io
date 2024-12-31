@@ -378,6 +378,12 @@ u(l_1, y, t) = 0, \quad u(x, l_2, t) = 0.
 \end{align*}\right.
 $$
 
+A visualisation of the problem can be seen below.
+
+<center>
+![Rectangular Membrane 3D](./images/2024-12-19-fourier-method-wave-equation/rectangular_membrane_t0_custom_axes.svg){width=50%}
+</center>
+
 As in the 1D wave equation, we are going to apply the Fourier method, meaning we are looking for a solution of the form
 
 $$
