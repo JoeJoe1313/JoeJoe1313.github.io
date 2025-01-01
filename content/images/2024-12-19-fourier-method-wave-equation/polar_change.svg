@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300">
+<!-- Left: Rectangular System -->
+<g transform="translate(150,150)">
+<!-- Axes -->
+<g stroke="black" stroke-width="1.5">
+<line x1="-100" y1="0" x2="100" y2="0"/>
+<line x1="0" y1="-100" x2="0" y2="100"/>
+<!-- Arrows -->
+<path d="M 100,0 L 95,-5 L 95,5 Z"/>
+<path d="M 0,-100 L -5,-95 L 5,-95 Z"/>
+</g>
+<!-- Point and components -->
+<circle cx="48.5" cy="-64" r="4" fill="#2563eb"/>
+<line x1="48.5" y1="0" x2="48.5" y2="-64" stroke="#64748b" stroke-dasharray="4"/>
+<line x1="0" y1="-64" x2="48.5" y2="-64" stroke="#64748b" stroke-dasharray="4"/>
+<!-- Labels -->
+<text x="53" y="-70" fill="#2563eb" font-size="10">P(x, y)</text>
+<text x="48.5" y="10" fill="#000000" font-size="10">x</text>
+<text x="-10" y="-64" fill="#000000" font-size="10">y</text>
+<circle cx="48.5" cy="0" r="2" fill="#000000"/>
+<circle cx="0" cy="-64" r="2" fill="#000000"/>
+</g>
+
+<!-- Arrow -->
+<g transform="translate(300,150)">
+<line x1="-20" y1="0" x2="20" y2="0" stroke="#475569" stroke-width="1.5"/>
+<path d="M 10,-10 L 20,0 L 10,10" fill="none" stroke="#475569" stroke-width="1.5"/>
+<text x="0" y="18" text-anchor="middle" fill="#0f172a" font-size="10">x = ρ cos(φ)</text>
+<text x="0" y="28" text-anchor="middle" fill="#0f172a" font-size="10">y = ρ sin(φ)</text>
+</g>
+
+<!-- Right: Polar System -->
+<g transform="translate(450,150)">
+<!-- Circle for ρ -->
+<circle cx="0" cy="0" r="80" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-dasharray="4"/>
+<!-- Axes -->
+<g stroke="black" stroke-width="1.5">
+<line x1="-100" y1="0" x2="100" y2="0"/>
+<line x1="0" y1="-100" x2="0" y2="100"/>
+<!-- Arrows -->
+<path d="M 100,0 L 95,-5 L 95,5 Z"/>
+<path d="M 0,-100 L -5,-95 L 5,-95 Z"/>
+</g>
+<!-- Point and radius -->
+<circle cx="48.5" cy="-64" r="4" fill="#2563eb"/>
+<line x1="0" y1="0" x2="48.5" y2="-64" stroke="#2563eb" stroke-width="2"/>
+
+<!-- Point and components -->
+<line x1="48.5" y1="0" x2="48.5" y2="-64" stroke="#64748b" stroke-dasharray="4"/>
+<circle cx="48.5" cy="0" r="2" fill="#000000"/>
+<line x1="0" y1="-64" x2="48.5" y2="-64" stroke="#64748b" stroke-dasharray="4"/>
+<circle cx="0" cy="-64" r="2" fill="#000000"/>
+
+<!-- Mirrored Angle arc -->
+<path d="M 25,0 A 25,25 0 0 0 15,-20" fill="none" stroke="#475569" stroke-width="1.5"/>
+<!-- Labels -->
+<text x="21" y="-45" fill="#1e3a8a" font-size="14">ρ</text>
+<text x="25" y="-10" fill="#1e3a8a" font-size="14">φ</text>
+<text x="50" y="-70" fill="#2563eb" font-size="10">P(ρ, φ)</text>
+<text x="33" y="10" fill="#000000" font-size="10">ρ cos(φ)</text>
+<text transform="translate(-7,-42) rotate(-90)" fill="#000000" font-size="10">ρ sin(φ)</text>
+</g>
+
+<!-- System Labels -->
+<text x="150" y="40" text-anchor="middle" fill="#0f172a" font-size="16">Cartesian</text>
+<text x="450" y="40" text-anchor="middle" fill="#0f172a" font-size="16">Polar</text>
+</svg>
