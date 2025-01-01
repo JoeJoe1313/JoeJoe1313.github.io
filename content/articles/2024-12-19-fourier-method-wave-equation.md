@@ -564,5 +564,5 @@ $$
 ## Circular Membrane
 
 <center>
-![Rectangular Membrane](./images/2024-12-19-fourier-method-wave-equation/rectangular_membrane.svg){width=50%}
+![Rectangular Membrane](./images/2024-12-19-fourier-method-wave-equation/polar_change.svg){width=50%}
 </center>
