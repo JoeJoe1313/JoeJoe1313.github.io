@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+  <!-- =============== Arrow definitions =============== -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="black"/>
+    </marker>
+    
+    <!-- Hatching pattern -->
+    <pattern id="hatch" patternUnits="userSpaceOnUse" width="4" height="4" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="4" stroke="black" stroke-width="1"/>
+    </pattern>
+  </defs>
+  
+  <!-- =============== Axes =============== -->
+  <!-- x-axis: from left to right through (150,100) -->
+  <path d="M 70,100 L 250,100" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <!-- y-axis: from bottom to top through (150,100) -->
+  <path d="M 150,180 L 150,0" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <circle cx="150" cy="100" r="2" fill="#000000"/>
+
+  <!-- =============== Thin hatched ring =============== -->
+  <!-- Outer circle: radius 60, inner circle: radius 50, same center (150,100). 
+       fill-rule="evenodd" 'punches out' the inner circle -->
+  <path fill-rule="evenodd" fill="url(#hatch)"
+        d="M 150,100
+           m -60,0
+           a 60,60 0 1,0 120,0
+           a 60,60 0 1,0 -120,0
+           Z
+           M 150,100
+           m -50,0
+           a 50,50 0 1,1 100,0
+           a 50,50 0 1,1 -100,0
+           Z"/>
+  
+  <!-- =============== Circle (domain) =============== -->
+  <circle cx="150" cy="100" r="50" stroke="black" fill="none" />
+  
+  <!-- =============== Radius line and label =============== -->
+  <!-- Diagonal radius: (150,100) --> (180,60) is exactly 50 units (a 3-4-5 triangle). -->
+  <line x1="150" y1="100" x2="180" y2="60" stroke="black" marker-end="url(#arrowhead)"/>
+  <text x="160" y="75" font-size="13">ρ</text>
+  
+  <!-- =============== Boundary label =============== -->
+  <!-- Place Γ near the diagonal arrow's endpoint -->
+  <text x="185" y="55" font-size="13">Γ</text>
+  
+  <!-- =============== Axis labels =============== -->
+  <text x="237" y="110" font-size="10">x</text>
+  <text x="155" y="15"  font-size="10">y</text>
+</svg>

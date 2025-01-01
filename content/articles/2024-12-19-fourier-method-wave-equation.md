@@ -563,6 +563,38 @@ $$
 
 ## Circular Membrane
 
+Let's assume we have a circular membrane with radius of length $\rho$. Let's also assume it is fastened along the edges. A visaulisation can be seen below.
+
+<center>
+![Rectangular Membrane](./images/2024-12-19-fourier-method-wave-equation/circular_membrane.svg){width=50%}
+</center>
+
+... the polar change of coordinates
+
+$$
+\left\{\begin{align*}
+x = \rho \cos{(\varphi)}, \\
+y = \rho \sin{(\varphi)}.
+\end{align*}\right.
+$$
+
+...
+
+$$
+\frac{\partial^2 u}{\partial t^2} = a^2 \Delta{u} = a^2\left(\frac{\partial^2 u}{\partial^2 x^2} + \frac{\partial^2 u}{\partial y^2}\right)
+$$
+
+$$
+x^2 + y^2 = \rho^2 (\cos^2{(\varphi)} + \sin^2{(\varphi)}) = \rho^2, \\
+\rho = \sqrt{x^2 + y^2}
+$$
+
+and
+
+$$
+
+$$
+
 <center>
 ![Rectangular Membrane](./images/2024-12-19-fourier-method-wave-equation/polar_change.svg){width=50%}
 </center>
