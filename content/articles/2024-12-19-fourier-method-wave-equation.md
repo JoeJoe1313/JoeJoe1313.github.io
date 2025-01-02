@@ -592,8 +592,62 @@ $$
 and
 
 $$
+\frac{y}{x} = \frac{\rho \sin{(\varphi)}}{\rho \cos{(\varphi)}} = \tan{(\varphi)}, \\
+\varphi = \arctan{\left(\frac{y}{x}\right)}
+$$
 
 $$
+u = u(x, y, t) \quad \text{becomes} \quad u(\rho(x, y), \varphi(x, y), t)
+$$
+
+First partial derivative, Chain rule
+
+$$
+\frac{\partial u}{\partial x} = \frac{\partial u}{\partial \rho} \frac{\partial \rho}{\partial x} + \frac{\partial u}{\partial \varphi} \frac{\partial \varphi}{\partial x},
+$$
+
+and
+
+$$
+\frac{\partial u}{\partial y} = \frac{\partial u}{\partial \rho} \frac{\partial \rho}{\partial y} + \frac{\partial u}{\partial \varphi} \frac{\partial \varphi}{\partial y}.
+$$
+
+Now, for $\rho$
+
+$$
+\frac{\partial \rho}{\partial x} = \frac{1}{2} \frac{1}{\sqrt{(x^2 + y^2)}} (2x) = \frac{x}{\rho} = \cos{(\varphi)},
+$$
+
+$$
+\frac{\partial \rho}{\partial y} = \frac{1}{2} \frac{1}{\sqrt{(x^2 + y^2)}} (2y) = \frac{y}{\rho} = \sin{(\varphi)},
+$$
+
+and for $\varphi$
+
+$$
+\frac{\partial \varphi}{\partial x} = \frac{1}{1 + \left(\frac{y}{x}\right)^2} y \left(-\frac{1}{x^2}\right) = -\frac{y}{x^2 + y^2} = - \frac{\rho \sin{(\varphi)}}{\rho^2} = - \frac{\sin{(\varphi)}}{\rho},
+$$
+
+$$
+\frac{\partial \varphi}{\partial y} = \frac{1}{1 + \left(\frac{y}{x}\right)^2} \left(\frac{1}{x}\right) = \frac{x}{x^2 + y^2} = \frac{\rho \cos{(\varphi)}}{\rho^2} = \frac{\cos{(\varphi)}}{\rho}.
+$$
+
+Therefore,
+
+$$
+\frac{\partial u}{\partial x} = \cos{(\varphi)} \frac{\partial u}{\partial \rho}  - \frac{\sin{(\varphi)}}{\rho} \frac{\partial u}{\partial \varphi},
+$$
+
+$$
+\frac{\partial u}{\partial y} = \sin{(\varphi)} \frac{\partial u}{\partial \rho} + \frac{\cos{(\varphi)}}{\rho} \frac{\partial u}{\partial \varphi}.
+$$
+
+Second order derivatives
+
+$$
+\frac{\partial^2 u}{\partial x^2} = \cos{(\varphi)} \frac{\partial u}{\partial \rho}  - \frac{\sin{(\varphi)}}{\rho} \frac{\partial u}{\partial \varphi},
+$$
+
 
 <center>
 ![Rectangular Membrane](./images/2024-12-19-fourier-method-wave-equation/polar_change.svg){width=50%}
