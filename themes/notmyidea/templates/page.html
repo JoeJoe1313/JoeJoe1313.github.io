@@ -18,26 +18,30 @@
   </section>
 
   {% if GOODREADS_ACTIVITY_FEED %}
-  <section id="content" class="body">
-    <h1>{{ goodreads_activity.currently_reading.shelf_title }}</h1>
-    {% for book in goodreads_activity.currently_reading.books %}
-        <img src="{{book.s_cover}}"/>
-        <header>{{book.title}}<small> by {{book.author}}</small></header>
-        <article>{{book.description|truncate(end='')}}
-        <a href={{book.link}} target="_blank">...more</a></article>
-    {% endfor %}
-  </section>
+    {% if goodreads_activity.currently_reading %}
+      <section id="content" class="body">
+        <h1>{{ goodreads_activity.currently_reading.shelf_title }}</h1>
+        {% for book in goodreads_activity.currently_reading.books %}
+            <img src="{{book.s_cover}}"/>
+            <header>{{book.title}}<small> by {{book.author}}</small></header>
+            <article>{{book.description|truncate(end='')}}
+            <a href={{book.link}} target="_blank">...more</a></article>
+        {% endfor %}
+      </section>
+    {% endif %}
   {% endif %}
 
   {% if GOODREADS_ACTIVITY_FEED %}
-  <section id="content" class="body">
-    <h1>{{ goodreads_activity.mathematics.shelf_title }}</h1>
-    {% for book in goodreads_activity.mathematics.books %}
-        <img src="{{book.s_cover}}"/>
-        <header>{{book.title}}<small> by {{book.author}}</small></header>
-        <article>{{book.description|truncate(end='')}}
-        <a href={{book.link}} target="_blank">...more</a></article>
-    {% endfor %}
-  </section>
+    {% if goodreads_activity.mathematics %}
+      <section id="content" class="body">
+        <h1>{{ goodreads_activity.mathematics.shelf_title }}</h1>
+        {% for book in goodreads_activity.mathematics.books %}
+            <img src="{{book.s_cover}}"/>
+            <header>{{book.title}}<small> by {{book.author}}</small></header>
+            <article>{{book.description|truncate(end='')}}
+            <a href={{book.link}} target="_blank">...more</a></article>
+        {% endfor %}
+      </section>
+    {% endif %}
   {% endif %}
 {% endblock %}
