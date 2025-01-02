@@ -56,6 +56,7 @@ PLUGINS = [
     "plugins.render_math",
     "plugins.liquid_tags.include_code",
     "plugins.liquid_tags.include_code_collapsible",
+    "plugins.goodreads_activity",
 ]
 SUMMARY_USE_FIRST_PARAGRAPH = True
 WITH_FUTURE_DATES = False
@@ -65,3 +66,8 @@ MATH_JAX = {
 
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
+
+GOODREADS_ACTIVITY_FEED = {
+    "currently_reading": "https://www.goodreads.com/review/list_rss/109326321?key=3I5TuNfj-aUSty_wg0vzJhR3GxSlg6BKJdcqnhIF5wEZ8xuH&shelf=currently-reading",
+    "mathematics": "https://www.goodreads.com/review/list_rss/109326321?key=3I5TuNfj-aUSty_wg0vzJhR3GxSlg6BKJdcqnhIF5wEZ8xuH&shelf=mathematics",
+}
