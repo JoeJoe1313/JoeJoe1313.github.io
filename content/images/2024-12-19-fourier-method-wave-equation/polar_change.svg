@@ -23,8 +23,8 @@
 
 <!-- Arrow -->
 <g transform="translate(300,150)">
-<line x1="-20" y1="0" x2="20" y2="0" stroke="#475569" stroke-width="1.5"/>
-<path d="M 10,-10 L 20,0 L 10,10" fill="none" stroke="#475569" stroke-width="1.5"/>
+<line x1="-20" y1="0" x2="15" y2="0" stroke="#475569" stroke-width="1.5"/>
+<path d="M 1,-5 L 15,0 L 1,5" fill="none" stroke="#475569" stroke-width="1.5"/>
 <text x="0" y="18" text-anchor="middle" fill="#0f172a" font-size="10">x = ρ cos(φ)</text>
 <text x="0" y="28" text-anchor="middle" fill="#0f172a" font-size="10">y = ρ sin(φ)</text>
 </g>

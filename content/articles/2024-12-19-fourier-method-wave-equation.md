@@ -578,7 +578,13 @@ y = \rho \sin{(\varphi)}.
 \end{align*}\right.
 $$
 
-...
+A visualisation of the polar change can be seen below.
+
+<center>
+![Rectangular Membrane](./images/2024-12-19-fourier-method-wave-equation/polar_change.svg){width=75%}
+</center>
+
+Now, let's ...
 
 $$
 \frac{\partial^2 u}{\partial t^2} = a^2 \Delta{u} = a^2\left(\frac{\partial^2 u}{\partial^2 x^2} + \frac{\partial^2 u}{\partial y^2}\right)
@@ -645,10 +651,5 @@ $$
 Second order derivatives
 
 $$
-\frac{\partial^2 u}{\partial x^2} = \cos{(\varphi)} \frac{\partial u}{\partial \rho}  - \frac{\sin{(\varphi)}}{\rho} \frac{\partial u}{\partial \varphi},
+\frac{\partial^2 u}{\partial x^2} = ...
 $$
-
-
-<center>
-![Rectangular Membrane](./images/2024-12-19-fourier-method-wave-equation/polar_change.svg){width=50%}
-</center>
