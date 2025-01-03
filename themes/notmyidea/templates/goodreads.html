@@ -1,0 +1,24 @@
+{% macro render_bookshelf(shelf) %}
+  {% if shelf %}
+  <section id="content" class="body">
+    <h1>{{ shelf.shelf_title }}</h1>
+    {% for book in shelf.books %}
+      <div class="book-item">
+        <img src="{{book.s_cover}}" class="book-cover"/>
+        <div class="book-details">
+          <header>{{book.title}}<small> by {{book.author}}</small></header>
+          <article>{{book.description|truncate(end='')}}
+          <a href={{book.link}} target="_blank">...more</a></article>
+        </div>
+      </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+{% endmacro %}
+
+{% if GOODREADS_ACTIVITY_FEED %}
+  {% set shelves = GOODREADS_ACTIVITY_FEED.keys() %}
+  {% for shelf_name in shelves %}
+    {{ render_bookshelf(goodreads_activity[shelf_name]) }}
+  {% endfor %}
+{% endif %}

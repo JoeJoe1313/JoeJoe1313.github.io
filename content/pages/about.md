@@ -2,29 +2,5 @@
 Title: About
 ---
 
-<!--
-**JoeJoe1313/JoeJoe1313** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-
-Here are some ideas to get you started:
-
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
-
-🎓 Education:
+🤷‍♀️
 ---
-   - MSc Machine Learning and Data Science @ Imperial College London
-      - Thesis: Probabilistic Sequential Matrix Factorisation for 12-Lead ECG Data
-      - Portfolio: ...
-   - BSc Applied Mathematics @ Sofia University
-   - Sofia High School of Mathematics
-
-📫 How to reach me:
----
-   - [LinkedIn](https://www.linkedin.com/in/joana-levtcheva-479844164/)
