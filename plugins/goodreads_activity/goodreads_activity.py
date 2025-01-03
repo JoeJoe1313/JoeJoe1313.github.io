@@ -1,13 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Goodreads Activity
-==================
-
-A Pelican plugin to lists books from your Goodreads shelves.
-
-Copyright (c) Talha Mansoor
-"""
-
 from __future__ import unicode_literals
 
 import logging
@@ -58,11 +48,11 @@ class GoodreadsActivity:
 
 def fetch_goodreads_activity(gen, metadata):
     if "GOODREADS_ACTIVITY_FEED" in gen.settings:
-        gen.context["goodreads_activity"] = gen.goodreads.fetch()
+        gen.context["goodreads_activity"] = gen.goodreads_activity.fetch()
 
 
 def initialize_feedparser(generator):
-    generator.goodreads = GoodreadsActivity(generator)
+    generator.goodreads_activity = GoodreadsActivity(generator)
 
 
 def register():

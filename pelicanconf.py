@@ -57,6 +57,7 @@ PLUGINS = [
     "plugins.liquid_tags.include_code",
     "plugins.liquid_tags.include_code_collapsible",
     "plugins.goodreads_activity",
+    "plugins.goodreads_quotes",
 ]
 SUMMARY_USE_FIRST_PARAGRAPH = True
 WITH_FUTURE_DATES = False
@@ -71,3 +72,4 @@ GOODREADS_ACTIVITY_FEED = {
     "currently_reading": "https://www.goodreads.com/review/list_rss/109326321?key=3I5TuNfj-aUSty_wg0vzJhR3GxSlg6BKJdcqnhIF5wEZ8xuH&shelf=currently-reading",
     "mathematics": "https://www.goodreads.com/review/list_rss/109326321?key=3I5TuNfj-aUSty_wg0vzJhR3GxSlg6BKJdcqnhIF5wEZ8xuH&shelf=mathematics",
 }
+GOODREADS_QUOTES = "https://www.goodreads.com/quotes/list_rss/109326321-joana"
