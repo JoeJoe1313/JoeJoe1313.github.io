@@ -381,7 +381,7 @@ $$
 A visualisation of the problem can be seen below.
 
 <center>
-![Rectangular Membrane 3D](./images/2024-12-19-fourier-method-wave-equation/rectangular_membrane_t0_custom_axes.svg){width=50%}
+![Rectangular Membrane 3D](./images/2024-12-19-fourier-method-wave-equation/rectangular_membrane_3d.svg){width=50%}
 </center>
 
 As in the 1D wave equation, we are going to apply the Fourier method, meaning we are looking for a solution of the form
@@ -566,7 +566,7 @@ $$
 Let's assume we have a circular membrane with radius of length $\rho$. Let's also assume it is fastened along the edges. A visaulisation can be seen below.
 
 <center>
-![Rectangular Membrane](./images/2024-12-19-fourier-method-wave-equation/circular_membrane.svg){width=50%}
+![Circular Membrane](./images/2024-12-19-fourier-method-wave-equation/circular_membrane.svg){width=50%}
 </center>
 
 ... the polar change of coordinates
@@ -581,7 +581,7 @@ $$
 A visualisation of the polar change can be seen below.
 
 <center>
-![Rectangular Membrane](./images/2024-12-19-fourier-method-wave-equation/polar_change.svg){width=75%}
+![Polar Change](./images/2024-12-19-fourier-method-wave-equation/polar_change.svg){width=75%}
 </center>
 
 Now, let's ...
@@ -653,3 +653,13 @@ Second order derivatives
 $$
 \frac{\partial^2 u}{\partial x^2} = ...
 $$
+
+...
+
+A visualisation of the problem can be seen below.
+
+<center>
+![Circular Membrane 3D](./images/2024-12-19-fourier-method-wave-equation/circular_membrane_3d.svg){width=50%}
+</center>
+
+...
