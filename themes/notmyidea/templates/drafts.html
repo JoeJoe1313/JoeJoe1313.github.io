@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{{ SITENAME|striptags }} - Drafts{% endblock %}
+
+{% block content %}
+    {% for article in drafts if article.status == 'draft' %}
+        <section id="content" class="body">
+            <article>
+                <header>
+                    <h1><a href="{{ SITEURL }}/{{ article.url }}" rel="bookmark"
+                        title="Permalink to {{ article.title|striptags }}">{{ article.title }}</a></h1>
+                </header>
+                <div class="entry-content">
+                    {% include 'article_infos.html' %}
+                    {{ article.summary }}
+                    {% include 'comments.html' %}
+                </div>
+            </article>
+        </section>
+    {% else %}
+        <p>No drafts available.</p>
+    {% endfor %}
+{% endblock %}

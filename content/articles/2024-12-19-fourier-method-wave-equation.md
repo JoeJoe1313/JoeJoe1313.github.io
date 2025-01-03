@@ -1,9 +1,10 @@
 ---
 Title: Fourier Method for the Wave Equation
 Date: 2024-12-19 07:00
-Category: Drafts
-Tags: mathematics, draft
+Category: Mathematics
+Tags: mathematics
 Slug: 2024-12-19-fourier-method-wave-equation
+Status: draft
 ---
 
 In this post we are going to explore the Fourier method for solving the 1D and 2D wave equations. The method is more known under the name of the method of separation of variables. For the 1D wave equation we are going to show the application of the method to a fixed string, and for the 2D wave equation we are going to apply the method to a rectangular membrane and a circular membrane. We are also going to attempt to outline the physical interpretations of all scenarios.
@@ -32,7 +33,7 @@ u(0, t) = u(l, t) = 0.
 A visualisation of the string can be seen in the figure below.
 
 <center>
-![Fixed String](./images/2024-12-19-fourier-method-wave-equation/fixed_string.svg){width=60%}
+![Fixed String](/images/2024-12-19-fourier-method-wave-equation/fixed_string.svg){width=60%}
 </center>
 
 We start solving the equation by taking into account only the boundary conditions $u(0, t) = u(l, t) = 0$. The idea is to find solution $u(x, t)$ of the form
@@ -271,7 +272,7 @@ convergres. Therefore, in order for all the majorzing series to converge it is e
 Finally, we should note a few things about the expansion of $\varphi_1(x)$ and $\varphi_2(x)$ into sine series. We have to note that in order to do that the function needs to be continued as an odd function which my lead to loss of the regularity of the lower derivatives. Let $\tilde{\varphi}_1(x)$ be the continuation of $\varphi_1(x)$ as an odd function (see the Figure below) defined as
 
 <center>
-![Odd continuation of a function](./images/2024-12-19-fourier-method-wave-equation/odd_continuation.png){width=50%}
+![Odd continuation of a function](/images/2024-12-19-fourier-method-wave-equation/odd_continuation.png){width=50%}
 </center>
 
 $$
@@ -340,7 +341,7 @@ The $u_k(x, t)$ waves are called **standing-waves**. Depending on the values of 
 These motionless points are called **nodes** of the standing wave. In general, $u_k(x, t)$ has $(k + 1)$ nodes located ate $0, \frac{1}{k}l, \frac{2}{k}l, ..., \frac{k-1}{k}l, l$. The maximum amplitude is achieved in the middle points between two nodes. These points are called **crests**. The fundamental tone, or the lowest tone, has frequency of $\omega_1 = \frac{a\pi}{l}$. The frequencies $\omega_k$ are called **harmonics**, while the higher tones corresponding to $\omega_k$, $k = 2, 3, ...$ are called **overtones**. It is quite natural to notice that the higher the value of $k$ the rapidly lower the amplitude of $u_k(x, t)$ becomes. Meaning, the effect from the higher harmonics all combined influences the quality of the sound. The below figure shows the harmonics for $k = 1, 2, 3$.
 
 <center>
-![Fixed Strings](./images/2024-12-19-fourier-method-wave-equation/harmonics.svg){width=70%}
+![Fixed Strings](/images/2024-12-19-fourier-method-wave-equation/harmonics.svg){width=70%}
 </center>
 
 # 2D Wave Equation
@@ -356,7 +357,7 @@ $$
 Let's assume we have a rectangular membrane with sides of length $l_1$ and $l_2$. Let's also assume it is fastened along the edges. A visaulisation can be seen below.
 
 <center>
-![Rectangular Membrane](./images/2024-12-19-fourier-method-wave-equation/rectangular_membrane.svg){width=50%}
+![Rectangular Membrane](/images/2024-12-19-fourier-method-wave-equation/rectangular_membrane.svg){width=50%}
 </center>
 
 We can describe the problem via the model
@@ -381,7 +382,7 @@ $$
 A visualisation of the problem can be seen below.
 
 <center>
-![Rectangular Membrane 3D](./images/2024-12-19-fourier-method-wave-equation/rectangular_membrane_3d.svg){width=50%}
+![Rectangular Membrane 3D](/images/2024-12-19-fourier-method-wave-equation/rectangular_membrane_3d.svg){width=50%}
 </center>
 
 As in the 1D wave equation, we are going to apply the Fourier method, meaning we are looking for a solution of the form
@@ -566,7 +567,7 @@ $$
 Let's assume we have a circular membrane with radius of length $\rho$. Let's also assume it is fastened along the edges. A visaulisation can be seen below.
 
 <center>
-![Circular Membrane](./images/2024-12-19-fourier-method-wave-equation/circular_membrane.svg){width=50%}
+![Circular Membrane](/images/2024-12-19-fourier-method-wave-equation/circular_membrane.svg){width=50%}
 </center>
 
 ... the polar change of coordinates
@@ -581,7 +582,7 @@ $$
 A visualisation of the polar change can be seen below.
 
 <center>
-![Polar Change](./images/2024-12-19-fourier-method-wave-equation/polar_change.svg){width=75%}
+![Polar Change](/images/2024-12-19-fourier-method-wave-equation/polar_change.svg){width=75%}
 </center>
 
 Now, let's ...
@@ -659,7 +660,7 @@ $$
 A visualisation of the problem can be seen below.
 
 <center>
-![Circular Membrane 3D](./images/2024-12-19-fourier-method-wave-equation/circular_membrane_3d.svg){width=50%}
+![Circular Membrane 3D](/images/2024-12-19-fourier-method-wave-equation/circular_membrane_3d.svg){width=50%}
 </center>
 
 ...

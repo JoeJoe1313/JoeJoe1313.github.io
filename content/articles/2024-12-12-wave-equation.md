@@ -1,9 +1,10 @@
 ---
 Title: Wave Equation
 Date: 2024-12-12 13:15
-Category: Drafts
-Tags: mathematics, python, draft
+Category: Mathematics
+Tags: mathematics, python
 Slug: 2024-12-12-wave-equation
+Status: draft
 ---
 
 Partial differential equations...
@@ -52,15 +53,15 @@ for $t \in [0, 30]$. Using the $100$-th partial Fourier sum, $L = \pi \sqrt{5}$,
 
 Animation:
 
-![Fixed String](./images/2024-12-12-wave-equation/string_vibration_animation.gif)
+![Fixed String](/images/2024-12-12-wave-equation/string_vibration_animation.gif)
 
 {% include_code_collapsible 2024-12-12-wave-equation/fixed_string.py lang:python :hideall: %}
 
 Snapshots:
 
-![t0](./images/2024-12-12-wave-equation/string_snapshot_t0.png)
-![t20](./images/2024-12-12-wave-equation/string_snapshot_t20.png)
-![t30](./images/2024-12-12-wave-equation/string_snapshot_t30.png)
+![t0](/images/2024-12-12-wave-equation/string_snapshot_t0.png)
+![t20](/images/2024-12-12-wave-equation/string_snapshot_t20.png)
+![t30](/images/2024-12-12-wave-equation/string_snapshot_t30.png)
 
 # Rectangular Membrane
 
@@ -260,7 +261,7 @@ Snapshots:
   <img src="/images/2024-12-12-wave-equation/circular_membrane_t30.png" alt="t4.5" style="width: 33%;"/>
 </div>
 
-![t0](./images/2024-12-12-wave-equation/circular_membrane_t0.png){width=33%}![t10](./images/2024-12-12-wave-equation/circular_membrane_t10.png){width=33%}![t30](./images/2024-12-12-wave-equation/circular_membrane_t30.png){width=33%}
+![t0](/images/2024-12-12-wave-equation/circular_membrane_t0.png){width=33%}![t10](/images/2024-12-12-wave-equation/circular_membrane_t10.png){width=33%}![t30](/images/2024-12-12-wave-equation/circular_membrane_t30.png){width=33%}
 
 # References
 
