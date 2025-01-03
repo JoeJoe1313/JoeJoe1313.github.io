@@ -1,7 +1,7 @@
 ---
 Title: Wave Equation
 Date: 2024-12-12 13:15
-Category: Mathematics
+Category: Drafts
 Tags: mathematics, python, draft
 Slug: 2024-12-12-wave-equation
 ---
