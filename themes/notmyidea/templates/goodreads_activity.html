@@ -4,7 +4,7 @@
     <h1>{{ shelf.shelf_title }}</h1>
     {% for book in shelf.books %}
       <div class="book-item">
-        <img src="{{book.m_cover}}" class="book-cover"/>
+        <img src="{{book.l_cover}}" class="book-cover"/>
         <div class="book-details">
           <header>{{book.title}}<small> by {{book.author}}</small></header>
           <article>{{book.description|truncate(end='')}}
