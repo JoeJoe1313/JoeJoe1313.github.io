@@ -16,11 +16,13 @@ class GoodreadsQuotes:
     def fetch(self):
         goodreads_quotes = {"shelf_title": "Quotes", "quotes": []}
         for entry in self.quotes["entries"]:
+            content, author = entry["summary"].split(" -- ", 1)
             quote = {
                 "id": entry["id"],
                 "published": entry["published_parsed"],
                 "title": entry["title"],
-                "summary": entry["summary"],
+                "quote": content,
+                "author": "-- " + author,
             }
             goodreads_quotes["quotes"].append(quote)
 

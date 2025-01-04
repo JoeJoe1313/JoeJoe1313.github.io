@@ -2,7 +2,10 @@
 <section id="content" class="body">
     <h2>{{ goodreads_quotes.shelf_title }}</h2>
     {% for quote in goodreads_quotes.quotes %}
-        <header>{{quote.summary}}</header>
+        <div class="quote-wrapper">
+            <div class="quote-content">{{ quote.quote }}</div>
+            <div class="quote-author">{{ quote.author }}</div>
+        </div>
     {% endfor %}
 </section>
 {% endif %}
