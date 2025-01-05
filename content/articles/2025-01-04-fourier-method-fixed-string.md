@@ -370,6 +370,4 @@ Animation:
 
 Snapshots:
 
-![t0](/images/2025-01-04-fourier-method-fixed-string/string_snapshot_t0.png)
-![t20](/images/2025-01-04-fourier-method-fixed-string/string_snapshot_t20.png)
-![t30](/images/2025-01-04-fourier-method-fixed-string/string_snapshot_t30.png)
+<iframe src="code/2025-01-04-fourier-method-fixed-string/string_vibration_slider.html" width="100%" height="300px" frameborder="0"></iframe>

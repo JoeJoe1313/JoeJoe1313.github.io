@@ -6,8 +6,8 @@ from matplotlib.animation import FuncAnimation
 L = np.pi * np.sqrt(5)
 a = 2 / 3
 tmax = 30
-x = np.linspace(0, L, 101)
-t = np.linspace(0, tmax, 200)
+x = np.linspace(0, L, 501)
+t = np.linspace(0, tmax, 31)
 
 
 # Define the initial condition phi(x)
@@ -63,6 +63,10 @@ def update(frame):
 
 # Create the animation
 anim = FuncAnimation(fig, update, frames=len(t), init_func=init, blit=True)
-anim.save("string_vibration_animation.gif", writer="pillow", fps=20)
+anim.save(
+    "content/images/2025-01-04-fourier-method-fixed-string/string_vibration_animation.gif",
+    writer="pillow",
+    fps=20,
+)
 
 plt.show()
