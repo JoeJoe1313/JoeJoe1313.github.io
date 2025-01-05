@@ -1,4 +1,4 @@
-name: Pelican site CI
+name: Pelican CI
 
 on:
   push:
@@ -13,7 +13,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Pelican Action
-        uses: nelsonjchen/gh-pages-pelican-action@0.2.0
+
+      - name: Build and Deploy
+        uses: ./.github/actions
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
