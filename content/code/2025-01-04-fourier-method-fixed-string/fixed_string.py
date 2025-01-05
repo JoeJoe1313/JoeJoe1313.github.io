@@ -50,8 +50,8 @@ fig = px.line(
     animation_frame="t",
     # title="String Motion",
     labels={"x": "x", "y": "u(x, t)"},
-    range_x=[0, L],
-    range_y=[-1, 1],
+    range_x=[-0.06, L + 0.06],
+    range_y=[-1.1, 1.1],
     color_discrete_sequence=["red"],
 )
 
