@@ -1,13 +1,13 @@
-import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.animation import FuncAnimation
+import pandas as pd
+import plotly.express as px
 
 # Define constants
 L = np.pi * np.sqrt(5)
 a = 2 / 3
 tmax = 30
-x = np.linspace(0, L, 501)
-t = np.linspace(0, tmax, 31)
+x = np.linspace(0, L, 101)
+t = np.linspace(0, tmax, 31)  # Fewer points for smoother interaction
 
 
 # Define the initial condition phi(x)
@@ -34,39 +34,129 @@ def fourier_u(x, t):
     return y
 
 
-# Set up the figure for animation
-fig, ax = plt.subplots(figsize=(16, 2))
-ax.set_xlim(0, L)
-ax.set_ylim(-1, 1)
-ax.set_xlabel("x")
-ax.set_ylabel("u(x, t)")
-ax.set_title("String Vibration")
-(line,) = ax.plot([], [], lw=2, color="r")
-(marker_left,) = ax.plot([], [], "ko", markerfacecolor="k")
-(marker_right,) = ax.plot([], [], "ko", markerfacecolor="k")
+# Create animation data
+data = []
+for t_val in t:
+    y = fourier_u(x, t_val)
+    for x_val, y_val in zip(x, y):
+        data.append({"x": x_val, "y": y_val, "t": f"t = {t_val:.2f}"})
 
-
-def init():
-    line.set_data([], [])
-    marker_left.set_data([], [])
-    marker_right.set_data([], [])
-    return line, marker_left, marker_right
-
-
-def update(frame):
-    y = fourier_u(x, frame)
-    line.set_data(x, y)
-    marker_left.set_data([0], [y[0]])
-    marker_right.set_data([L], [y[-1]])
-    return line, marker_left, marker_right
-
-
-# Create the animation
-anim = FuncAnimation(fig, update, frames=len(t), init_func=init, blit=True)
-anim.save(
-    "content/images/2025-01-04-fourier-method-fixed-string/string_vibration_animation.gif",
-    writer="pillow",
-    fps=20,
+# Create DataFrame and plot
+df = pd.DataFrame(data)
+fig = px.line(
+    df,
+    x="x",
+    y="y",
+    animation_frame="t",
+    # title="String Motion",
+    labels={"x": "x", "y": "u(x, t)"},
+    range_x=[0, L],
+    range_y=[-1, 1],
+    color_discrete_sequence=["red"],
 )
 
-plt.show()
+# Add fixed points as black dots
+fixed_points = pd.DataFrame(
+    {
+        "x": [0, L],
+        "y": [0, 0],
+    }
+)
+
+fig.add_scatter(
+    x=fixed_points["x"],
+    y=fixed_points["y"],
+    mode="markers",
+    marker=dict(color="black", size=10),
+    showlegend=False,
+)
+
+fig.update_layout(
+    showlegend=False,
+    height=280,
+    margin=dict(l=10, r=30, t=30, b=10),
+    updatemenus=[
+        {
+            "buttons": [
+                {
+                    "args": [
+                        None,
+                        {
+                            "frame": {"duration": 200, "redraw": True},
+                            "fromcurrent": True,
+                            "mode": "immediate",
+                            "transition": {"duration": 0},
+                        },
+                    ],
+                    "label": "Play",
+                    "method": "animate",
+                },
+                {
+                    "args": [
+                        [None],
+                        {
+                            "frame": {"duration": 0, "redraw": True},
+                            "mode": "immediate",
+                            "transition": {"duration": 0},
+                        },
+                    ],
+                    "label": "Pause",
+                    "method": "animate",
+                },
+            ],
+            "type": "buttons",
+            "direction": "left",
+            "showactive": True,
+            "x": 0.1,
+            "y": 0,
+            "xanchor": "right",
+            "yanchor": "top",
+        }
+    ],
+    sliders=[
+        {
+            "active": 0,
+            "yanchor": "top",
+            "xanchor": "left",
+            "currentvalue": {"font": {"size": 16}, "visible": True, "xanchor": "right"},
+            "transition": {"duration": 500, "easing": "cubic-in-out"},
+            "pad": {"b": 10, "t": 50},
+            "len": 0.9,
+            "x": 0.1,
+            "y": 0,
+            "steps": [
+                {
+                    "args": [
+                        [f"t = {t:.2f}"],
+                        {
+                            "frame": {
+                                "duration": 500,
+                                "easing": "cubic-in-out",
+                                "redraw": True,
+                            },
+                            "mode": "immediate",
+                            "transition": {"duration": 0},
+                        },
+                    ],
+                    "label": f"{t:.0f}",
+                    "method": "animate",
+                }
+                for t in t
+            ],
+        }
+    ],
+)
+
+config = {
+    "displayModeBar": True,  # Show the toolbar
+    # "modeBarButtonsToRemove": ["lasso2d", "select2d"],  # Remove unused buttons
+    "displaylogo": False,
+    "toImageButtonOptions": {"height": 500, "width": 800},  # Image export size
+}
+fig.write_html(
+    "content/code/2025-01-04-fourier-method-fixed-string/fixed_string_animation.html",
+    include_plotlyjs=True,
+    full_html=True,
+    auto_play=False,
+    config=config,
+)

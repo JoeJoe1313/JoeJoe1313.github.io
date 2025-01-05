@@ -364,10 +364,6 @@ for $t \in [0, 30]$. Using the $100$-th partial Fourier sum, $L = \pi \sqrt{5}$,
 
 Animation:
 
-![Fixed String](/images/2025-01-04-fourier-method-fixed-string/string_vibration_animation.gif)
-
 {% include_code_collapsible 2025-01-04-fourier-method-fixed-string/fixed_string.py lang:python :hideall: %}
 
-Snapshots:
-
-<iframe src="code/2025-01-04-fourier-method-fixed-string/string_vibration_slider.html" width="100%" height="300px" frameborder="0"></iframe>
+<iframe src="code/2025-01-04-fourier-method-fixed-string/fixed_string_animation.html" width="100%" height="300px" frameborder="0"></iframe>
