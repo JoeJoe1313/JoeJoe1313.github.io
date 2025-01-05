@@ -107,8 +107,8 @@ fig.update_layout(
             "type": "buttons",
             "direction": "left",
             "showactive": True,
-            "x": 0.1,
-            "y": 0,
+            "x": 0.2,
+            "y": 0.3,
             "xanchor": "right",
             "yanchor": "top",
         }
@@ -121,8 +121,8 @@ fig.update_layout(
             "currentvalue": {"font": {"size": 16}, "visible": True, "xanchor": "right"},
             "transition": {"duration": 500, "easing": "cubic-in-out"},
             "pad": {"b": 10, "t": 50},
-            "len": 0.9,
-            "x": 0.1,
+            "len": 1,
+            "x": 0,
             "y": 0,
             "steps": [
                 {
