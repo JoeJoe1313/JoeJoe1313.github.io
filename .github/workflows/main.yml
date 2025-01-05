@@ -31,21 +31,14 @@ jobs:
 
       - name: Deploy to GitHub Pages
         run: |
-          echo 'Publishing to GitHub Pages 📤'
-          cd output
-          git init
-          git remote add deploy "https://github.com/${GITHUB_REPOSITORY}.git"
-          git checkout gh-pages || git checkout --orphan gh-pages
-          git config user.name "${GITHUB_ACTOR}"
-          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          if [ -n "${{ inputs.cname || '' }}" ]; then
-            echo "${{ inputs.cname }}" > CNAME
-          fi
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git checkout --orphan gh-pages
+          git rm -rf .
+          mv output/* .
+          rm -rf output
           git add .
-          echo -n 'Files to Commit:' && ls -l | wc -l
-          git commit -m "[ci skip] Automated deployment to GitHub Pages on $(date +%s%3N)"
-          git push deploy gh-pages --force
-          cd ..
-          rm -rf output/.git
+          git commit -m "Deploy to GitHub Pages"
+          git push -f origin gh-pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
