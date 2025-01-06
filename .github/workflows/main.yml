@@ -26,6 +26,8 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Generate Animation
         run: |
+          echo "Current directory:"
+          pwd
           python content/code/2025-01-04-fourier-method-fixed-string/fixed_string.py
 
       - name: Build site
