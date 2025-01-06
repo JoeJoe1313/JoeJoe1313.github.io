@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Just Info
+        run: |
+          echo "Current directory:"
+          pwd
       - name: Checkout
         uses: actions/checkout@v4
 
