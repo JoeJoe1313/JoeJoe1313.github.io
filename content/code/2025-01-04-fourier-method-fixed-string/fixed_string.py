@@ -154,7 +154,7 @@ config = {
     "toImageButtonOptions": {"height": 500, "width": 800},  # Image export size
 }
 fig.write_html(
-    "./code/2025-01-04-fourier-method-fixed-string/fixed_string_animation.html",
+    "content/code/2025-01-04-fourier-method-fixed-string/fixed_string_animation.html",
     include_plotlyjs=True,
     full_html=True,
     auto_play=False,
