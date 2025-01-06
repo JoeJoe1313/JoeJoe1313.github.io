@@ -61,7 +61,17 @@ x & 1 & 0 & \dots & 0 \\
 \end{bmatrix}.
 $$
 
+Below is a visualisation of some of the polynomials up to degree $6$.
+
+![alt text](../code/2025-01-06-chebyshev-polynomials/Untitled_4.png)
+
+Because they are periodic it is possible to plot them around a cylinder as shown below.
+
+![alt text](../code/2025-01-06-chebyshev-polynomials/Untitled_6.png)
+
 # Chebyshev Polynomials of the Second Kind
+
+
 
 # Chebyshev Nodes of the First Kind
 
@@ -71,7 +81,7 @@ Code
 
 Plots
 
-...
+![alt text](../code/2025-01-06-chebyshev-polynomials/Untitled_3.png){ width=45% }![alt text](../code/2025-01-06-chebyshev-polynomials/Untitled_5.png){ width=45% }
 
 # Plots
 
@@ -81,5 +91,5 @@ Code
 
 Plots:
 
-![alt text](/code/2025-01-06-chebyshev-polynomials/Untitled.png){width=45%}![alt text](/code/2025-01-06-chebyshev-polynomials/Untitled-2.png){width=45%}
+![alt text](../code/2025-01-06-chebyshev-polynomials/Untitled.png){width=45%}![alt text](../code/2025-01-06-chebyshev-polynomials/Untitled-2.png){width=45%}
 
