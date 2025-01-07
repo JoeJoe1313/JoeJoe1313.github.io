@@ -65,10 +65,6 @@ Below is a visualisation of some of the polynomials up to degree $6$.
 
 ![alt text](../code/2025-01-06-chebyshev-polynomials/Untitled_4.png)
 
-Because they are periodic it is possible to plot them around a cylinder as shown below.
-
-![alt text](../code/2025-01-06-chebyshev-polynomials/Untitled_6.png)
-
 ## Symmetry
 
 If we return to the polynomials reprsented as functions of $x$ adn write the first $7$ polynomials 
