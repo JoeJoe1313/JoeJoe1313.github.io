@@ -11,43 +11,57 @@ Chebyshev polynomials are a sequence of orthogonal polynomials that play a centr
 
 # Chebyshev Polynomials of the First Kind
 
-One of the ways to define the Chebyshev polynomial of the first kind is
+There are many different ways to define the Chebyshev polynomials of the first kind. The one that seems most logical to me and most useful in terms of outlining various properties of the polynomials is
 
-$$
-T_{n}\left(\cos{\theta}\right) = \cos{(n \theta)}.
-$$
-
-From here, for $n = 0$ we have
-
-$$
-T_{0}(\cos{\theta}) = 1, \quad \text{hence} \quad T_{0}(x) = 1,
+$$\label{eq:1}
+T_{n}(x) = \cos{\left(n \arccos{x}\right)}.\tag{1}
 $$
 
-for $n = 1$ we have
+Looking at \eqref{eq:1} it is not obvious why $T_{n}(x)$ would be a polynomial. In order to show it is indeed a polynomial let's recall the de Moivre's formula
 
 $$
-T_{1}(\cos{\theta}) = \cos{\theta}, \quad \text{hence} \quad T_{1}(x) = x,
+\cos{(n \theta)} + i\sin{(n \theta)} = (\cos(\theta) + i \sin{\theta})^n.
 $$
 
-for $n = 2$
+We can apply binomial expansion and take the real part from it to obatin
 
-$$
-T_{2}(\cos{\theta}) = \cos(2\theta) = 2 \cos^2{\theta} - 1,
-$$
-
-or 
-
-$$
-T_{2}(x) = 2x^2 - 1 = 2xT_{1}(x) - T_{0}(x),
+$$\label{eq:2}
+\cos(n \theta) = \sum_{k = 0}^{\frac{n}{2}} C(n, 2k) (-1)^k \cos^{n - 2k}\theta \sin^{2k}{\theta}. \tag{2}
 $$
 
-and so on. The above expressions build the intutuion behind why one of the other ways to define these polynomials is with the recurrence relation
+where 
 
 $$
-T_{0}(x) = 1, \\
-T_{1}(x) = x, \\
-T_{n + 1}(x) = 2xT_{n}(x) - T_{n - 1}(x).
+C(n, 2k) = \frac{n!}{(2k)!(n-2k)!}, \quad n \geq 2k, k \in N, n \in N
+$$ 
+
+denotes the binomal coefficient. We can also notice that
+
 $$
+\sin^{2k}\theta = (\sin^2{\theta})^k = (1 - \cos^2{\theta})^k,
+$$
+
+showing that \eqref{eq:2} is a polynomial of $\cos{\theta}$ of degree $n$. Now, let
+
+$$
+\theta = \arccos{x},
+$$
+
+and by utilising $\cos{\left(\arccos{x}\right)} = x$ we get
+
+$$
+x = \cos{\theta}.
+$$
+
+This transforms \eqref{eq:1} to 
+
+$$\label{eq:3}
+T_{n}(\cos{\theta}) = \cos{\left(n \theta\right)} \tag{3}
+$$
+
+which we already showed is a polynomial of degree $n$.
+
+---
 
 An interesting way to represent this relation is via the determinant
 
