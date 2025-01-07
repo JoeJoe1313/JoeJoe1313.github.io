@@ -2,7 +2,7 @@
 Title: Chebyshev Polynomials
 Date: 2025-01-06 07:00
 Category: Mathematics
-Tags: mathematics, polynomials, numerical, python
+Tags: mathematics, python
 Slug: 2025-01-06-chebyshev-polynomials
 Status: draft
 ---
