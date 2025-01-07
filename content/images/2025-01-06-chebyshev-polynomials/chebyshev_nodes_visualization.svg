@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="260" viewBox="0 0 400 260">
     <!-- Draw the unit circle -->
     <path d="M 50 230 A 150 150 0 0 1 350 230" fill="none" stroke="lightgray"/>    
     <!-- Axes -->

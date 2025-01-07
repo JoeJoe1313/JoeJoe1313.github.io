@@ -61,6 +61,18 @@ $$
 
 which we already showed is a polynomial of degree $n$.
 
+<center>
+![alt text](/images/2025-01-06-chebyshev-polynomials/unit_circle.svg)
+</center>
+
+This transforms \eqref{eq:1} to 
+
+<center>
+![alt text](/images/2025-01-06-chebyshev-polynomials/chebyshev_nodes_visualization.svg)
+</center>
+
+This transforms \eqref{eq:1} to 
+
 ---
 
 An interesting way to represent this relation is via the determinant

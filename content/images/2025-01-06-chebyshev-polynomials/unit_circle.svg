@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="180" viewBox="180 0 200 260">
     <defs>
         <!-- Path for curved text matching blue arc -->
         <path id="blueArc" d="M 319.9066664678467 133.58185854701912 A 150 150 0 0 1 355 230" fill="none"/>
