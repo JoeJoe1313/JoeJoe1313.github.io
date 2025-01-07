@@ -2,7 +2,7 @@
 Title: Chebyshev Polynomials
 Date: 2025-01-06 07:00
 Category: Mathematics
-Tags: mathematics, python
+Tags: mathematics, polynomials, numerical, python
 Slug: 2025-01-06-chebyshev-polynomials
 Status: draft
 ---
@@ -68,6 +68,23 @@ Below is a visualisation of some of the polynomials up to degree $6$.
 Because they are periodic it is possible to plot them around a cylinder as shown below.
 
 ![alt text](../code/2025-01-06-chebyshev-polynomials/Untitled_6.png)
+
+## Symmetry
+
+If we return to the polynomials reprsented as functions of $x$ adn write the first $7$ polynomials 
+
+we can notice that Chebyshev polynomials of even order have even symmetry and therefore contain only even powers of x, and ... odd order have odd symmetry and therefore contain only odd powers of x. Or, formally written
+
+$$
+T_{n}(-x) = (-1)^n T_{n}(x) = \left\{\begin{align*}
+T_{n}(x), \quad \text{for} \quad n \quad \text{even}, \\
+-T_{n}(x) \quad \text{for} \quad n \quad \text{odd}.
+\end{align*}\right.
+$$
+
+## Roots
+
+
 
 # Chebyshev Polynomials of the Second Kind
 
