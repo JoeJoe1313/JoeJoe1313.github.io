@@ -121,13 +121,21 @@ $$
 
 is needed. From the cosine properties we can also note that the nodes are symmetric with respect to the midpoint of the interval, and that the extrema of $T_n(x)$ over the interval $[-1, 1]$ alternate between $-1$ and $1$. Also, a very useful fact is that these nodes are used in polynomial interpolation to minimize the **Runge phenomenon**.
 
-In the figure below we have shown the roots of $T_{8}(x)$ in blue.
+In the figure below we have shown the roots of $T_{6}(x)$ in blue. We have also built the perpendiculars from the roots to their interesction with the upper half of the unit circle, and marked these points in red.
 
 <center>
 ![alt text](../images/2025-01-06-chebyshev-polynomials/chebyshev_nodes_visualization.svg)
 </center>
 
-We have also built the perpendiculars from the roots to their interesction with the upper half of the unit circle, and marked these points in red.
+Looking at the figure we can notice that the arc lengths between the red points seem to be of the same length. Let's show that this is indeed the truth.
+
+We showed the roots are the cosine functions $\cos{\left(\frac{2k - 1}{2n}\pi\right)}, n \in N, k = 1, 2, ...n$. Thus, in the unit circle we have that the length of the corresponding arcs are equal to $\left( \frac{2k - 1}{2n}\pi \right), n \in N, k = 1, 2, ...n$. Let's take two red points which are direct neighbours, or in other words let's take two red points corresponding to the randomly chosen $m$ and $m + 1$ roots, $m \in k = \{1, 2, ..., n\}$. If we subtract them we are going to determine the length of the arc between them. We have
+
+$$
+\frac{2(m + 1) - 1}{2n}\pi - \frac{2m - 1}{2n}\pi = \frac{\pi}{n},
+$$
+
+meaning that between every two nodes the arc length is equal and has a value of $\frac{\pi}{n}$.
 
 ---
 

@@ -6,63 +6,63 @@
     <line x1="200" y1="0" x2="200" y2="230" stroke="black" stroke-width="1"/>
 
     <!-- Line from circle point to origin -->
-    <line x1="200" y1="230" x2="340.95389311788625" y2="178.6969785011497" stroke="green" stroke-dasharray="4" stroke-width="1"/>
+    <!-- <line x1="200" y1="230" x2="340.95389311788625" y2="178.6969785011497" stroke="green" stroke-dasharray="4" stroke-width="1"/> -->
     <!-- Vertical projection line -->
-    <line x1="340.95389311788625" y1="178.6969785011497" x2="340.95389311788625" y2="230" stroke="gray" stroke-dasharray="2" stroke-width="1"/>
+    <!-- <line x1="340.95389311788625" y1="178.6969785011497" x2="340.95389311788625" y2="230" stroke="gray" stroke-dasharray="2" stroke-width="1"/> -->
     <!-- Circle point -->
-    <circle cx="340.95389311788625" cy="178.6969785011497" r="3" fill="red"/>
+    <!-- <circle cx="340.95389311788625" cy="178.6969785011497" r="3" fill="red"/> -->
     
     <!-- Line from circle point to origin -->
-    <line x1="200" y1="230" x2="314.9066664678467" y2="133.58185854701912" stroke="green" stroke-dasharray="4" stroke-width="1"/>
+    <line x1="200" y1="230" x2="314.9066664678467" y2="133.58185854701912" stroke="green" stroke-dasharray="2" stroke-width="1"/>
     <!-- Vertical projection line -->
-    <line x1="314.9066664678467" y1="133.58185854701912" x2="314.9066664678467" y2="230" stroke="gray" stroke-dasharray="2" stroke-width="1"/>
+    <line x1="314.9066664678467" y1="133.58185854701912" x2="314.9066664678467" y2="230" stroke="gray" stroke-dasharray="4" stroke-width="1"/>
     <!-- Circle point -->
     <circle cx="314.9066664678467" cy="133.58185854701912" r="3" fill="red"/>
     
     <!-- Line from circle point to origin -->
-    <line x1="200" y1="230" x2="275.0" y2="100.09618943233423" stroke="green" stroke-dasharray="4" stroke-width="1"/>
+    <line x1="200" y1="230" x2="275.0" y2="100.09618943233423" stroke="green" stroke-dasharray="2" stroke-width="1"/>
     <!-- Vertical projection line -->
-    <line x1="275.0" y1="100.09618943233423" x2="275.0" y2="230" stroke="gray" stroke-dasharray="2" stroke-width="1"/>
+    <line x1="275.0" y1="100.09618943233423" x2="275.0" y2="230" stroke="gray" stroke-dasharray="4" stroke-width="1"/>
     <!-- Circle point -->
     <circle cx="275.0" cy="100.09618943233423" r="3" fill="red"/>
     
     <!-- Line from circle point to origin -->
-    <line x1="200" y1="230" x2="226.04722665003956" y2="82.27883704816881" stroke="green" stroke-dasharray="4" stroke-width="1"/>
+    <line x1="200" y1="230" x2="226.04722665003956" y2="82.27883704816881" stroke="green" stroke-dasharray="2" stroke-width="1"/>
     <!-- Vertical projection line -->
-    <line x1="226.04722665003956" y1="82.27883704816881" x2="226.04722665003956" y2="230" stroke="gray" stroke-dasharray="2" stroke-width="1"/>
+    <line x1="226.04722665003956" y1="82.27883704816881" x2="226.04722665003956" y2="230" stroke="gray" stroke-dasharray="4" stroke-width="1"/>
     <!-- Circle point -->
     <circle cx="226.04722665003956" cy="82.27883704816881" r="3" fill="red"/>
     
     <!-- Line from circle point to origin -->
-    <line x1="200" y1="230" x2="173.95277334996044" y2="82.27883704816878" stroke="green" stroke-dasharray="4" stroke-width="1"/>
+    <line x1="200" y1="230" x2="173.95277334996044" y2="82.27883704816878" stroke="green" stroke-dasharray="2" stroke-width="1"/>
     <!-- Vertical projection line -->
-    <line x1="173.95277334996044" y1="82.27883704816878" x2="173.95277334996044" y2="230" stroke="gray" stroke-dasharray="2" stroke-width="1"/>
+    <line x1="173.95277334996044" y1="82.27883704816878" x2="173.95277334996044" y2="230" stroke="gray" stroke-dasharray="4" stroke-width="1"/>
     <!-- Circle point -->
     <circle cx="173.95277334996044" cy="82.27883704816878" r="3" fill="red"/>
     
     <!-- Line from circle point to origin -->
-    <line x1="200" y1="230" x2="125.00000000000004" y2="100.0961894323342" stroke="green" stroke-dasharray="4" stroke-width="1"/>
+    <line x1="200" y1="230" x2="125.00000000000004" y2="100.0961894323342" stroke="green" stroke-dasharray="2" stroke-width="1"/>
     <!-- Vertical projection line -->
-    <line x1="125.00000000000004" y1="100.0961894323342" x2="125.00000000000004" y2="230" stroke="gray" stroke-dasharray="2" stroke-width="1"/>
+    <line x1="125.00000000000004" y1="100.0961894323342" x2="125.00000000000004" y2="230" stroke="gray" stroke-dasharray="4" stroke-width="1"/>
     <!-- Circle point -->
     <circle cx="125.00000000000004" cy="100.0961894323342" r="3" fill="red"/>
     
     <!-- Line from circle point to origin -->
-    <line x1="200" y1="230" x2="85.0933335321533" y2="133.58185854701907" stroke="green" stroke-dasharray="4" stroke-width="1"/>
+    <line x1="200" y1="230" x2="85.0933335321533" y2="133.58185854701907" stroke="green" stroke-dasharray="2" stroke-width="1"/>
     <!-- Vertical projection line -->
-    <line x1="85.0933335321533" y1="133.58185854701907" x2="85.0933335321533" y2="230" stroke="gray" stroke-dasharray="2" stroke-width="1"/>
+    <line x1="85.0933335321533" y1="133.58185854701907" x2="85.0933335321533" y2="230" stroke="gray" stroke-dasharray="4" stroke-width="1"/>
     <!-- Circle point -->
     <circle cx="85.0933335321533" cy="133.58185854701907" r="3" fill="red"/>
     
     <!-- Line from circle point to origin -->
-    <line x1="200" y1="230" x2="59.04610688211375" y2="178.69697850114966" stroke="green" stroke-dasharray="4" stroke-width="1"/>
+    <!-- <line x1="200" y1="230" x2="59.04610688211375" y2="178.69697850114966" stroke="green" stroke-dasharray="4" stroke-width="1"/> -->
     <!-- Vertical projection line -->
-    <line x1="59.04610688211375" y1="178.69697850114966" x2="59.04610688211375" y2="230" stroke="gray" stroke-dasharray="2" stroke-width="1"/>
+    <!-- <line x1="59.04610688211375" y1="178.69697850114966" x2="59.04610688211375" y2="230" stroke="gray" stroke-dasharray="2" stroke-width="1"/> -->
     <!-- Circle point -->
-    <circle cx="59.04610688211375" cy="178.69697850114966" r="3" fill="red"/>
+    <!-- <circle cx="59.04610688211375" cy="178.69697850114966" r="3" fill="red"/> -->
 
     <!-- Chebyshev node -->
-    <circle cx="340.95389311788625" cy="230" r="3" fill="blue"/>
+    <!-- <circle cx="340.95389311788625" cy="230" r="3" fill="blue"/> -->
     
     <!-- Chebyshev node -->
     <circle cx="314.9066664678467" cy="230" r="3" fill="blue"/>
@@ -83,7 +83,7 @@
     <circle cx="85.0933335321533" cy="230" r="3" fill="blue"/>
     
     <!-- Chebyshev node -->
-    <circle cx="59.04610688211375" cy="230" r="3" fill="blue"/>
+    <!-- <circle cx="59.04610688211375" cy="230" r="3" fill="blue"/> -->
     
     <!-- <text x="340.95389311788625" y="245" font-size="10" text-anchor="middle" fill="black">0.94</text>
     
