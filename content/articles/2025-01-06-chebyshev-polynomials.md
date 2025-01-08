@@ -14,7 +14,7 @@ Chebyshev polynomials are a sequence of orthogonal polynomials that play a centr
 There are many different ways to define the Chebyshev polynomials of the first kind. The one that seems most logical to me and most useful in terms of outlining various properties of the polynomials is
 
 $$\label{eq:1}
-T_{n}(x) = \cos{\left(n \arccos{x}\right)}.\tag{1}
+T_{n}(x) = \cos{\left(n \arccos{x}\right)}, \quad x \in [-1, 1].\tag{1}
 $$
 
 Looking at \eqref{eq:1} it is not obvious why $T_{n}(x)$ would be a polynomial. In order to show it is indeed a polynomial let's recall the de Moivre's formula
@@ -65,7 +65,9 @@ $$
 T_{n}(x) = T_{-n}(x) = T_{|n|}(x.)
 $$
 
-## Chebyshev Nodes
+From \eqref{eq:3} it is also obvious that the values of $T_n$ in the interval $[-1, 1]$ are bounded in $[-1, 1]$ because of the cosine.
+
+## Chebyshev Nodes of the First Kind
 
 Before we continue with exploring the roots of the polynomials, let's recall some trigonometry. 
 
@@ -111,11 +113,21 @@ $$
 x_k = \cos{\left(\frac{2k - 1}{2n}\pi\right)}, n \in N, k = 1, 2, ...n.
 $$
 
-These roots are known as the **Chebyshev nodes**.
+These roots are known as the **Chebyshev nodes of the first kind**, or the **Chebyshev zeros**. If we are working with an arbitrary interval $(a, b)$ the affine transformation 
+
+$$
+x_k = \frac{a + b}{2} + \frac{b - a}{2}\cos{\left(\frac{2k - 1}{2n}\pi\right)}, n \in N, k = 1, 2, ...n
+$$
+
+is needed. From the cosine properties we can also note that the nodes are symmetric with respect to the midpoint of the interval, and that the extrema of $T_n(x)$ over the interval $[-1, 1]$ alternate between $-1$ and $1$. Also, a very useful fact is that these nodes are used in polynomial interpolation to minimize the **Runge phenomenon**.
+
+In the figure below we have shown the roots of $T_{8}(x)$ in blue.
 
 <center>
-![alt text](/images/2025-01-06-chebyshev-polynomials/chebyshev_nodes_visualization.svg)
+![alt text](../images/2025-01-06-chebyshev-polynomials/chebyshev_nodes_visualization.svg)
 </center>
+
+We have also built the perpendiculars from the roots to their interesction with the upper half of the unit circle, and marked these points in red.
 
 ---
 
