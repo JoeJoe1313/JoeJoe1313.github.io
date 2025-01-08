@@ -59,7 +59,11 @@ $$\label{eq:3}
 T_{n}(\cos{\theta}) = \cos{\left(n \theta\right)} \tag{3}
 $$
 
-which we already showed is a polynomial of degree $n$.
+which we already showed is a polynomial of degree $n$. From here, because $\cos(.)$ is an even function, we can note that
+
+$$
+T_{n}(x) = T_{-n}(x) = T_{|n|}(x.)
+$$
 
 ## Chebyshev Nodes
 
