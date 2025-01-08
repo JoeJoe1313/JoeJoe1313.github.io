@@ -61,17 +61,57 @@ $$
 
 which we already showed is a polynomial of degree $n$.
 
+## Chebyshev Nodes
+
+Before we continue with exploring the roots of the polynomials, let's recall some trigonometry. 
+
+---
+
+The **unit circle** is a circle with a radius of 1, centered at the origin of the Cartesian coordinate system. Below is shown part of the unit circle corresponding to the region from $0$ to $\frac{\pi}{2}$.
+
 <center>
-![alt text](/images/2025-01-06-chebyshev-polynomials/unit_circle.svg)
+![alt text](../images/2025-01-06-chebyshev-polynomials/unit_circle.svg)
 </center>
 
-This transforms \eqref{eq:1} to 
+The cosine of an angle $\theta$ corresponds to the $x$-coordinate of the point where the terminal side of the angle (measured counterclockwise from the positive $x$-axis) intersects the unit circle. In other words, $\cos(\theta)$ gives the horizontal distance from the origin to this intersection point. 
+
+The **arccosine** is the inverse function of cosine, and it maps a cosine value back to its corresponding angle in the range $[0, \pi]$ radians. For a given $x$-coordinate on the unit circle, the arccosine gives the angle $\theta$ such that $\cos(\theta) = x$, meaning
+
+$$
+\arccos(x) = \theta, \quad \text{where } \theta \in [0, \pi].
+$$
+
+Moreover, a **radian** is defined as the angle subtended at the center of a circle by an arc whose length is equal to the radius of the circle. For any circle, the length of an arc $s$ is given by
+
+$$
+s = r \cdot \theta,
+$$
+
+where $r$ is the radius of the circle, $\theta$ is the angle subtended by the arc at the center. This means that on the unit circle the length of the arc equals the measure of the angle in radians because $r = 1$, and hence
+
+$$
+s = \theta.
+$$
+
+---
+
+Now, let's find the roots of the polynomial $T_{n}(x)$. If we take the definition in \eqref{eq:1} we have to solve
+
+$$
+\cos{\left(n \arccos{x}\right)} = 0, k \in N.
+$$
+
+The solutions in the interval $(-1, 1)$ are given by
+
+$$
+x_k = \cos{\left(\frac{2k - 1}{2n}\pi\right)}, n \in N, k = 1, 2, ...n.
+$$
+
+These roots are known as the **Chebyshev nodes**.
 
 <center>
 ![alt text](/images/2025-01-06-chebyshev-polynomials/chebyshev_nodes_visualization.svg)
 </center>
-
-This transforms \eqref{eq:1} to 
 
 ---
 
