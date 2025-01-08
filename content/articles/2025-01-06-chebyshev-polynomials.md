@@ -121,10 +121,10 @@ $$
 
 is needed. From the cosine properties we can also note that the nodes are symmetric with respect to the midpoint of the interval, and that the extrema of $T_n(x)$ over the interval $[-1, 1]$ alternate between $-1$ and $1$. Also, a very useful fact is that these nodes are used in polynomial interpolation to minimize the **Runge phenomenon**.
 
-In the figure below we have shown the roots of $T_{6}(x)$ in blue. We have also built the perpendiculars from the roots to their interesction with the upper half of the unit circle, and marked these points in red.
+In the figure below we have shown the roots of $T_{8}(x)$ in blue. We have also built the perpendiculars from the roots to their interesction with the upper half of the unit circle, and marked these points in red.
 
 <center>
-![alt text](../images/2025-01-06-chebyshev-polynomials/chebyshev_nodes_visualization.svg)
+![alt text](../images/2025-01-06-chebyshev-polynomials/chebyshev_nodes_visualization.svg){ width=50% }
 </center>
 
 Looking at the figure we can notice that the arc lengths between the red points seem to be of the same length. Let's show that this is indeed the truth.
@@ -136,6 +136,52 @@ $$
 $$
 
 meaning that between every two nodes the arc length is equal and has a value of $\frac{\pi}{n}$.
+
+## Recurrence relation
+
+This is probably a bit out of nowhere, but let's take a look at the following trigonometric identity
+
+$$\label{eq:4}
+\cos{\left((n + 1)\theta\right)} + \cos{\left((n - 1)\theta\right)} = 2 \cos{(\theta)} \cos{(n\theta)},\tag{4}
+$$
+
+and show that the left side indeed is equal to the right one. We are going to need the following two fundamental formulas of angle addition in trigonometry
+
+$$
+\cos{(\alpha + \beta)} = \cos{\alpha} \cos{\beta} - \sin{\alpha} \sin{\beta},
+$$
+
+and
+
+$$
+\cos{(\alpha - \beta)} = \cos{\alpha} \cos{\beta} + \sin{\alpha} \sin{\beta}.
+$$
+
+In our case we have
+
+$$
+\cos{\left((n + 1)\theta\right)} = \cos{\left(n\theta + \theta\right)} = \cos{(n\theta)} \cos{\theta} - \sin{(n\theta)} \sin{\theta},
+$$
+
+and
+
+$$
+\cos{\left((n - 1)\theta\right)} = \cos{\left(n\theta - \theta\right)} = \cos{(n\theta)} \cos{\theta} + \sin{(n\theta)} \sin{\theta}.
+$$
+
+Adding the above equations leads to the wanted result.
+
+Now, we can see that the terms of \eqref{eq:4} are exactly in the form of the right side of \eqref{eq:1}, \eqref{eq:3}, hence we get
+
+$$
+T_{n + 1}(x) + T_{n - 1}(x) = 2T_{n}(x)T_{1}(x),
+$$
+
+or we get the useful **recurrence relation** and another way of defining the polynomials
+
+$$
+T_{n + 1}(x) - 2xT_{n}(x) + T_{n - 1}(x) = 0.
+$$
 
 ---
 
@@ -168,15 +214,9 @@ T_{n}(x), \quad \text{for} \quad n \quad \text{even}, \\
 \end{align*}\right.
 $$
 
-## Roots
-
-
-
 # Chebyshev Polynomials of the Second Kind
 
-
-
-# Chebyshev Nodes of the First Kind
+# Chebyshev Nodes of the Second Kind
 
 Code
 
