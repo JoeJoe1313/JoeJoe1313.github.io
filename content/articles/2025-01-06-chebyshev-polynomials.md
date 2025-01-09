@@ -197,7 +197,7 @@ T_{n + 1}(x) - 2xT_{n}(x) + T_{n - 1}(x) = 0.
 \end{align*}\right.\label{eq:6}\tag{6}
 $$
 
-Let's write the first $5$ polynomials by using \eqref{eq:6}:
+Let's write the first $6$ polynomials by using \eqref{eq:6}:
 
 $$
 \left\{\begin{align*}
