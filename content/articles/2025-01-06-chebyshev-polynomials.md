@@ -119,7 +119,7 @@ $$
 x_k = \frac{a + b}{2} + \frac{b - a}{2}\cos{\left(\frac{2k - 1}{2n}\pi\right)}, n \in N, k = 1, 2, ...n
 $$
 
-is needed. From the cosine properties we can also note that the nodes are symmetric with respect to the midpoint of the interval, and that the extrema of $T_n(x)$ over the interval $[-1, 1]$ alternate between $-1$ and $1$. The symmetry  Also, a very useful fact is that these nodes are used in polynomial interpolation to minimize the **Runge phenomenon**.
+is needed. From the cosine properties we can also note that the nodes are symmetric with respect to the midpoint of the interval, and that the extrema of $T_n(x)$ over the interval $[-1, 1]$ alternate between $-1$ and $1$. Also, a very useful fact is that these nodes are used in polynomial interpolation to minimize the **Runge phenomenon**.
 
 In the figure below we have shown the roots of $T_{8}(x)$ in blue. We have also built the perpendiculars from the roots to their interesction with the upper half of the unit circle, and marked these points in red.
 
