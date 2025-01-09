@@ -124,7 +124,7 @@ is needed. From the cosine properties we can also note that the nodes are symmet
 In the figure below we have shown the roots of $T_{8}(x)$ in blue. We have also built the perpendiculars from the roots to their interesction with the upper half of the unit circle, and marked these points in red.
 
 <center>
-![alt text](../images/2025-01-06-chebyshev-polynomials/chebyshev_nodes_visualization.svg){ width=50% }
+![alt text](/images/2025-01-06-chebyshev-polynomials/chebyshev_nodes_visualization.svg){ width=50% }
 </center>
 
 Looking at the figure we can notice that the arc lengths between the red points seem to be of the same length. Let's show that this is indeed the truth.
@@ -135,7 +135,11 @@ $$
 \frac{2(m + 1) - 1}{2n}\pi - \frac{2m - 1}{2n}\pi = \frac{\pi}{n},
 $$
 
-meaning that between every two nodes the arc length is equal and has a value of $\frac{\pi}{n}$.
+meaning that between every two nodes the arc length is equal and has a value of $\frac{\pi}{n}$. A polynomial of degree $n$ has $n$ roots, which in our case are in the open interval $(-1, 1)$, meaning the arcs corresponding to every two neighbouring roots are $n - 1$, and the two arcs between the $x$-axis and the first and last roots due to the symmetry of roots have lenghts of
+
+$$
+\frac{1}{2}\left(\pi - \frac{n-1}{n}\pi\right) = \frac{\pi}{2n}.
+$$
 
 ## Recurrence relation
 
@@ -177,11 +181,13 @@ $$
 T_{n + 1}(x) + T_{n - 1}(x) = 2T_{n}(x)T_{1}(x),
 $$
 
-or we get the useful **recurrence relation** and another way of defining the polynomials
+or we get the useful **recurrence relation**
 
 $$
 T_{n + 1}(x) - 2xT_{n}(x) + T_{n - 1}(x) = 0.
 $$
+
+This relation along with adding $T_{0}(x) = 1$ and $T_{1}(x) = x$ is another famous way to define the Chebyshev polynomials of the first kind.
 
 ---
 
