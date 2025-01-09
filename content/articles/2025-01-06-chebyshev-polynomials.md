@@ -119,7 +119,7 @@ $$
 x_k = \frac{a + b}{2} + \frac{b - a}{2}\cos{\left(\frac{2k - 1}{2n}\pi\right)}, n \in N, k = 1, 2, ...n
 $$
 
-is needed. From the cosine properties we can also note that the nodes are symmetric with respect to the midpoint of the interval, and that the extrema of $T_n(x)$ over the interval $[-1, 1]$ alternate between $-1$ and $1$. Also, a very useful fact is that these nodes are used in polynomial interpolation to minimize the **Runge phenomenon**.
+is needed. From the cosine properties we can also note that the nodes are symmetric with respect to the midpoint of the interval, and that the extrema of $T_n(x)$ over the interval $[-1, 1]$ alternate between $-1$ and $1$. The symmetry  Also, a very useful fact is that these nodes are used in polynomial interpolation to minimize the **Runge phenomenon**.
 
 In the figure below we have shown the roots of $T_{8}(x)$ in blue. We have also built the perpendiculars from the roots to their interesction with the upper half of the unit circle, and marked these points in red.
 
@@ -183,15 +183,42 @@ $$
 
 or we get the useful **recurrence relation**
 
+$$\label{eq:5}
+T_{n + 1}(x) - 2xT_{n}(x) + T_{n - 1}(x) = 0.\tag{5}
 $$
+
+This relation along with adding $T_{0}(x) = 1$ and $T_{1}(x) = x$ is another famous way to define the Chebyshev polynomials of the first kind, or
+
+$$
+\left\{\begin{align*}
+T_{0}(x) = 1, \\
+T_{1}(x) = x, \\
 T_{n + 1}(x) - 2xT_{n}(x) + T_{n - 1}(x) = 0.
+\end{align*}\right.\label{eq:6}\tag{6}
 $$
 
-This relation along with adding $T_{0}(x) = 1$ and $T_{1}(x) = x$ is another famous way to define the Chebyshev polynomials of the first kind.
+Let's write the first $5$ polynomials by using \eqref{eq:6}:
 
----
+$$
+\left\{\begin{align*}
+T_{0}(x) = 1, \quad \text{(even)}\\
+T_{1}(x) = x, \quad \text{(odd)}\\
+T_{2}(x) = 2x^2 - 1, \quad \text{(even)}\\
+T_{3}(x) = 4x^3 - 3x, \quad \text{(odd)}\\
+T_{4}(x) = 8x^4 - 8x^2 + 1, \quad \text{(even)}\\
+T_{5}(x) = 16x^5 - 20x^3 + 5x. \quad \text{(odd)}
+\end{align*}\right.
+$$
 
-An interesting way to represent this relation is via the determinant
+We can notice that
+
+$$
+T_{k}(x) = 2^{k-1}x^k + ...,
+$$
+
+and $T_{k}(x)$ is alternating between an even and an odd polynomial depending on whether $k$ is even or odd respectively.
+
+Before we continue some visualisations and more facts, let's mention that an interesting way to represent the recurrence relation \eqref{eq:5} is via the determinant
 
 $$
 T_{k}(x) = \det \begin{bmatrix}
@@ -203,22 +230,13 @@ x & 1 & 0 & \dots & 0 \\
 \end{bmatrix}.
 $$
 
-Below is a visualisation of some of the polynomials up to degree $6$.
+Now, let's visualise the first $8$ polynomials.
 
-![alt text](../code/2025-01-06-chebyshev-polynomials/Untitled_4.png)
+![Chebyshev Polynomials](/images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials.png)
 
-## Symmetry
+But what can we notice if we stack them together?
 
-If we return to the polynomials reprsented as functions of $x$ adn write the first $7$ polynomials 
-
-we can notice that Chebyshev polynomials of even order have even symmetry and therefore contain only even powers of x, and ... odd order have odd symmetry and therefore contain only odd powers of x. Or, formally written
-
-$$
-T_{n}(-x) = (-1)^n T_{n}(x) = \left\{\begin{align*}
-T_{n}(x), \quad \text{for} \quad n \quad \text{even}, \\
--T_{n}(x) \quad \text{for} \quad n \quad \text{odd}.
-\end{align*}\right.
-$$
+![Chebyshev Polynomials Stacked](/images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_stacked.png)
 
 # Chebyshev Polynomials of the Second Kind
 
