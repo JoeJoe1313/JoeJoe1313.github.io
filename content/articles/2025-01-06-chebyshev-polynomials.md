@@ -274,6 +274,8 @@ We can safely say that any higher-order Chebyshev polynomial $T_{N}(x)$ can be r
 
 The horizontal axis represents the order of Chebyshev polynomials, and the blue wavy line represents a "folded ribbon". Think of it as taking the sequence of polynomial orders and folding it back and forth. This folding happens at specific points where higher-order polynomials can be reduced to lower-order ones, which are the red **x** marks showing the sample points: the roots of $T_n(x)$. The key insight is that at these special sample points, we don't need to work with the higher-order polynomials because we can use equivalent lower-order ones instead. This is incredibly useful in numerical computations as it can help reduce computational complexity, and makes the Chebyshev polynomials very computationally efficient.
 
+![alt text](../images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_stacked_roots.png)
+
 # Chebyshev Polynomials of the Second Kind
 
 # Chebyshev Nodes of the Second Kind
