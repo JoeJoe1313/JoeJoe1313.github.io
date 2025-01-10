@@ -218,7 +218,7 @@ $$
 
 and $T_{k}(x)$ is alternating between an even and an odd polynomial depending on whether $k$ is even or odd respectively.
 
-Before we continue some visualisations and more facts, let's mention that an interesting way to represent the recurrence relation \eqref{eq:5} is via the determinant
+Before we continue with some visualisations and more facts, let's mention that an interesting way to represent the recurrence relation \eqref{eq:5} is via the determinant
 
 $$
 T_{k}(x) = \det \begin{bmatrix}
@@ -232,11 +232,47 @@ $$
 
 Now, let's visualise the first $8$ polynomials.
 
-![Chebyshev Polynomials](/images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials.png)
+![Chebyshev Polynomials](../images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials.png)
 
 But what can we notice if we stack them together?
 
-![Chebyshev Polynomials Stacked](/images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_stacked.png)
+![Chebyshev Polynomials Stacked](../images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_stacked.png)
+
+It is quite obvious that at the roots of the $N$-th Chebyshev polynomial there is an **aliasing** effect, meaning higher order polynomials look like lower order ones. We can formally show it by fixing $N$, at the roots $x_k$ of $T_{N}(x) = 0$, and using the Chebyshev identity
+
+$$
+\cos{\left((m + N)\theta\right)} + \cos{\left((m - N)\theta\right)} = 2\cos{(m\theta)}\cos{(N\theta)},
+$$
+
+or equivalently
+
+$$
+T_{m + N}(x) + T_{m - N}(x) = 2T_{m}(x)T_{N}(x).
+$$
+
+Now, having $T_{N}(x) = 0$ leads to
+
+$$
+T_{m + N}(x) = -T_{m - N}(x).
+$$
+
+If we consecutevly set $m = N$, $m = 2N$, ..., $m = 6N$, etc. we would get
+
+$$
+\left\{\begin{align*}
+T_{2N}(x_k) = -T_{0}(x_k) = -1, \\
+T_{3N}(x_k) = 0, \\
+T_{4N}(x_k) = 1, \\
+T_{5N}(x_k) = 0, \\
+T_{6N}(x_k) = -1.
+\end{align*}\right.
+$$
+
+We can safely say that any higher-order Chebyshev polynomial $T_{N}(x)$ can be reduced to a lower-order $j, 0 \leq j \leq N$ Chebyshev polynomial at the sample points $x_k$ which are the roots of $T_{N}(x)$. In the figure below we attempt to visualise this statement.
+
+![alt text](../images/2025-01-06-chebyshev-polynomials/reduction.svg)
+
+The horizontal axis represents the order of Chebyshev polynomials, and the blue wavy line represents a "folded ribbon". Think of it as taking the sequence of polynomial orders and folding it back and forth. This folding happens at specific points where higher-order polynomials can be reduced to lower-order ones, which are the red **x** marks showing the sample points: the roots of $T_n(x)$. The key insight is that at these special sample points, we don't need to work with the higher-order polynomials because we can use equivalent lower-order ones instead. This is incredibly useful in numerical computations as it can help reduce computational complexity, and makes the Chebyshev polynomials very computationally efficient.
 
 # Chebyshev Polynomials of the Second Kind
 
@@ -248,7 +284,7 @@ Code
 
 Plots
 
-![alt text](../code/2025-01-06-chebyshev-polynomials/Untitled_3.png){ width=45% }![alt text](../code/2025-01-06-chebyshev-polynomials/Untitled_5.png){ width=45% }
+![alt text](../code/2025-01-06-chebyshev-polynomials/Untitled_5.png){ width=45% }
 
 # Plots
 
