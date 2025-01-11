@@ -289,6 +289,8 @@ $$
 
 In the figure below we can see the even polynomials and that indeed $T_{10}(x)$ behaves like $-T_{6}(x)$ which behaves like $T_{2}(x)$ at the roots having value $0$, $T_{8}(x)$ behaves like $-T_{4}(x)$ at the roots with value $1$ as in $T_{0}(x)$, $T_{6}(x)$ behaves like $-T_{2}(x)$ with value $0$, and $T_{4}(x)$ behaves like $-T_{0}(x)$ with value $-1$.
 
+{% include_code_collapsible 2025-01-06-chebyshev-polynomials/chebyshev_polynomials_aliasing_even.py lang:python :hideall: %}
+
 ![alt text](/images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_aliasing_even.png)
 
 For odd $m$ we have
@@ -303,6 +305,8 @@ T_{9}(x_k) = - T_{7}(x_k) = x, \\
 $$
 
 In the figure below we can see the odd polynomials and the aliasing as in the previous example.
+
+{% include_code_collapsible 2025-01-06-chebyshev-polynomials/chebyshev_polynomials_aliasing_odd.py lang:python :hideall: %}
 
 ![alt text](/images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_aliasing_odd.png)
 
