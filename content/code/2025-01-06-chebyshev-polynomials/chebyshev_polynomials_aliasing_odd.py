@@ -46,7 +46,8 @@ if __name__ == "__main__":
 
     x = np.linspace(-1, 1, 1000)
     plt.figure(figsize=(12, 6))
-    for n in [2, 4, 6, 8, 10]:
+    plt.plot(x, -chebyshev_polynomial(1, x), "--", label=f"-T_{1}(x)", alpha=0.5)
+    for n in [1, 2, 3, 5, 7, 9]:
         y = chebyshev_polynomial(n, x)
         plt.plot(x, y, label=f"T_{n}(x)")
 
@@ -69,6 +70,6 @@ if __name__ == "__main__":
     plt.ylim(-1.1, 1.1)
     plt.axhline(y=0, color="k", linestyle="-", alpha=0.7)
     plt.savefig(
-        "content/images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_aliasing.png"
+        "content/images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_aliasing_odd.png"
     )
     plt.show()
