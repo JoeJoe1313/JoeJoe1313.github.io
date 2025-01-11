@@ -124,7 +124,7 @@ is needed. From the cosine properties we can also note that the nodes are symmet
 In the figure below we have shown the roots of $T_{8}(x)$ in blue. We have also built the perpendiculars from the roots to their interesction with the upper half of the unit circle, and marked these points in red.
 
 <center>
-![alt text](/images/2025-01-06-chebyshev-polynomials/chebyshev_nodes_visualization.svg){ width=50% }
+![alt text](../images/2025-01-06-chebyshev-polynomials/chebyshev_nodes_visualization.svg){ width=45% }![alt text](../images/2025-01-06-chebyshev-polynomials/chebyshev_nodes.png){ width=45% }
 </center>
 
 Looking at the figure we can notice that the arc lengths between the red points seem to be of the same length. Let's show that this is indeed the truth.
@@ -309,14 +309,6 @@ In the figure below we can see the odd polynomials and the aliasing as in the pr
 # Chebyshev Polynomials of the Second Kind
 
 # Chebyshev Nodes of the Second Kind
-
-Code
-
-...
-
-Plots
-
-![alt text](../code/2025-01-06-chebyshev-polynomials/Untitled_5.png){ width=45% }
 
 # Plots
 
