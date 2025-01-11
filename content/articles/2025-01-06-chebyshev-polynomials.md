@@ -4,7 +4,7 @@ Date: 2025-01-06 07:00
 Category: Mathematics
 Tags: mathematics, python
 Slug: 2025-01-06-chebyshev-polynomials
-Status: draft
+Status: published
 ---
 
 Chebyshev polynomials are a sequence of orthogonal polynomials that play a central role in numerical analysis, approximation theory, and applied mathematics. They are named after the Russian mathematician Pafnuty Chebyshev and come in two primary types: Chebyshev polynomials of the first kind ($T_n(x)$) and Chebyshev polynomials of the second kind ($U_n(x)$).
@@ -76,7 +76,7 @@ Before we continue with exploring the roots of the polynomials, let's recall som
 The **unit circle** is a circle with a radius of 1, centered at the origin of the Cartesian coordinate system. Below is shown part of the unit circle corresponding to the region from $0$ to $\frac{\pi}{2}$.
 
 <center>
-![alt text](../images/2025-01-06-chebyshev-polynomials/unit_circle.svg)
+![alt text](/images/2025-01-06-chebyshev-polynomials/unit_circle.svg)
 </center>
 
 The cosine of an angle $\theta$ corresponds to the $x$-coordinate of the point where the terminal side of the angle (measured counterclockwise from the positive $x$-axis) intersects the unit circle. In other words, $\cos(\theta)$ gives the horizontal distance from the origin to this intersection point. 
@@ -124,7 +124,7 @@ is needed. From the cosine properties we can also note that the nodes are symmet
 In the figure below we have shown the roots of $T_{8}(x)$ in blue. We have also built the perpendiculars from the roots to their interesction with the upper half of the unit circle, and marked these points in red.
 
 <center>
-![alt text](../images/2025-01-06-chebyshev-polynomials/chebyshev_nodes_visualization.svg){ width=45% }![alt text](../images/2025-01-06-chebyshev-polynomials/chebyshev_nodes.png){ width=45% }
+![alt text](/images/2025-01-06-chebyshev-polynomials/chebyshev_nodes_visualization.svg){ width=45% }![alt text](/images/2025-01-06-chebyshev-polynomials/chebyshev_nodes.png){ width=45% }
 </center>
 
 Looking at the figure we can notice that the arc lengths between the red points seem to be of the same length. Let's show that this is indeed the truth.
@@ -232,11 +232,11 @@ $$
 
 Now, let's visualise the first $8$ polynomials.
 
-![Chebyshev Polynomials](../images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials.png)
+![Chebyshev Polynomials](/images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials.png)
 
 But what can we notice if we stack them together?
 
-![Chebyshev Polynomials Stacked](../images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_stacked.png)
+![Chebyshev Polynomials Stacked](/images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_stacked.png)
 
 It is quite obvious that at the roots of the $N$-th Chebyshev polynomial there is an **aliasing** effect, meaning higher order polynomials look like lower order ones. We can formally show it by fixing $N$, at the roots $x_k$ of $T_{N}(x) = 0$, and using the Chebyshev identity
 
@@ -271,7 +271,7 @@ $$
 
 We can safely say that any higher-order Chebyshev polynomial $T_{N}(x)$ can be reduced to a lower-order $j, 0 \leq j \leq N$ Chebyshev polynomial at the sample points $x_k$ which are the roots of $T_{N}(x)$. In the figure below we attempt to visualise this statement.
 
-![alt text](../images/2025-01-06-chebyshev-polynomials/reduction.svg)
+![alt text](/images/2025-01-06-chebyshev-polynomials/reduction.svg)
 
 The horizontal axis represents the order of Chebyshev polynomials, and the blue wavy line represents a "folded ribbon". Think of it as taking the sequence of polynomial orders and folding it back and forth. This folding happens at specific points where higher-order polynomials can be reduced to lower-order ones, which are the red **x** marks showing the sample points: the roots of $T_n(x)$. The key insight is that at these special sample points, we don't need to work with the higher-order polynomials because we can use equivalent lower-order ones instead. This is incredibly useful in numerical computations as it can help reduce computational complexity, and makes the Chebyshev polynomials very computationally efficient.
 
@@ -289,7 +289,7 @@ $$
 
 In the figure below we can see the even polynomials and that indeed $T_{10}(x)$ behaves like $-T_{6}(x)$ which behaves like $T_{2}(x)$ at the roots having value $0$, $T_{8}(x)$ behaves like $-T_{4}(x)$ at the roots with value $1$ as in $T_{0}(x)$, $T_{6}(x)$ behaves like $-T_{2}(x)$ with value $0$, and $T_{4}(x)$ behaves like $-T_{0}(x)$ with value $-1$.
 
-![alt text](../images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_aliasing_even.png)
+![alt text](/images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_aliasing_even.png)
 
 For odd $m$ we have
 $$
@@ -304,19 +304,24 @@ $$
 
 In the figure below we can see the odd polynomials and the aliasing as in the previous example.
 
-![alt text](../images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_aliasing_odd.png)
+![alt text](/images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_aliasing_odd.png)
+
+## Radial Plots
+
+An interesting plot can be observed by plotting $T_n(x)$ radially. This means that instead of evaluating the polynomials over $[-1, 1]$ in a Cartesian plane we are evaluating them at $\frac{\theta}{\pi} - 1$, and plotting $r = n + T_n(\frac{\theta}{\pi} - 1)$ on polar axes. In other words, the input domain has been shifted and extended, and the results are drawn as radial distances $r$ around a circle defined by $\theta$. This creates a polar visualization where each $n$ produces a distinct spiral-like ornament. We are also filling in the areas between the curves for a visual effect.
+
+{% include_code_collapsible 2025-01-06-chebyshev-polynomials/polar_plot.py lang:python :hideall: %}
+
+![alt text](/images/2025-01-06-chebyshev-polynomials/polar_init_1.png){ width=50% }![alt text](/images/2025-01-06-chebyshev-polynomials/polar_init_2.png){ width=41% }
+
+More visualusations can be achieved by doing other domain changes. They can be seen below.
+
+![alt text](/images/2025-01-06-chebyshev-polynomials/polar_0.png){ width=25% }![alt text](/images/2025-01-06-chebyshev-polynomials/polar_1.png){ width=25% }![alt text](/images/2025-01-06-chebyshev-polynomials/polar_2.png){ width=25% }![alt text](/images/2025-01-06-chebyshev-polynomials/polar_3.png){ width=25% }
+
+![alt text](/images/2025-01-06-chebyshev-polynomials/polar_4.png){ width=25% }![alt text](/images/2025-01-06-chebyshev-polynomials/polar_5.png){ width=25% }![alt text](/images/2025-01-06-chebyshev-polynomials/polar_6.png){ width=25% }![alt text](/images/2025-01-06-chebyshev-polynomials/polar_7.png){ width=25% }
+
+![alt text](/images/2025-01-06-chebyshev-polynomials/polar_8.png){ width=25% }![alt text](/images/2025-01-06-chebyshev-polynomials/polar_9.png){ width=25% }![alt text](/images/2025-01-06-chebyshev-polynomials/polar_10.png){ width=25% }![alt text](/images/2025-01-06-chebyshev-polynomials/polar_11.png){ width=25% }
 
 # Chebyshev Polynomials of the Second Kind
 
 # Chebyshev Nodes of the Second Kind
-
-# Plots
-
-Code
-
-...
-
-Plots:
-
-![alt text](../code/2025-01-06-chebyshev-polynomials/Untitled.png){width=45%}![alt text](../code/2025-01-06-chebyshev-polynomials/Untitled-2.png){width=45%}
-
