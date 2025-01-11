@@ -264,8 +264,9 @@ T_{2N}(x_k) = -T_{0}(x_k) = -1, \\
 T_{3N}(x_k) = 0, \\
 T_{4N}(x_k) = 1, \\
 T_{5N}(x_k) = 0, \\
-T_{6N}(x_k) = -1.
-\end{align*}\right.
+T_{6N}(x_k) = -1, \\
+\text{etc}.
+\end{align*}\right.\label{eq:7}\tag{7}
 $$
 
 We can safely say that any higher-order Chebyshev polynomial $T_{N}(x)$ can be reduced to a lower-order $j, 0 \leq j \leq N$ Chebyshev polynomial at the sample points $x_k$ which are the roots of $T_{N}(x)$. In the figure below we attempt to visualise this statement.
@@ -274,7 +275,23 @@ We can safely say that any higher-order Chebyshev polynomial $T_{N}(x)$ can be r
 
 The horizontal axis represents the order of Chebyshev polynomials, and the blue wavy line represents a "folded ribbon". Think of it as taking the sequence of polynomial orders and folding it back and forth. This folding happens at specific points where higher-order polynomials can be reduced to lower-order ones, which are the red **x** marks showing the sample points: the roots of $T_n(x)$. The key insight is that at these special sample points, we don't need to work with the higher-order polynomials because we can use equivalent lower-order ones instead. This is incredibly useful in numerical computations as it can help reduce computational complexity, and makes the Chebyshev polynomials very computationally efficient.
 
-![alt text](../images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_stacked_roots.png)
+Let's illustarte this with a simple example. Let $N = 2$, then \eqref{eq:7} would become
+
+$$
+\left\{\begin{align*}
+T_{4}(x_k) = -1, \\
+T_{6}(x_k) = 0, \\
+T_{8}(x_k) = 1, \\
+T_{10}(x_k) = 0,  \\
+\text{etc}.
+\end{align*}\right.
+$$
+
+![alt text](../images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_aliasing.png)
+
+{% include_code_collapsible 2025-01-06-chebyshev-polynomials/chebyshev_polynomials_aliasing.py lang:python :hideall: %}
+
+From the figure above we can see that indeed $T_{10}(x)$ behaves like $T_{2}(x)$ at the roots having value $0$, $T_{8}(x)$ behaves like $T_{0}(x)$ at the roots with value $1$, $T_{6}(x)$ behaves like $T_{2}(x)$ with value $0$, and $T_{4}(x)$ behaves like $-T_{0}(x)$ with value $-1$.
 
 # Chebyshev Polynomials of the Second Kind
 
