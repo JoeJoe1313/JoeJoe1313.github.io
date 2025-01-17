@@ -61,6 +61,7 @@ PLUGINS = [
     "plugins.liquid_tags.include_code_collapsible",
     "plugins.goodreads_activity",
     "plugins.goodreads_quotes",
+    "plugins.definition",
 ]
 SUMMARY_USE_FIRST_PARAGRAPH = True
 WITH_FUTURE_DATES = False
