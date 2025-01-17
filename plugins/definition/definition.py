@@ -58,11 +58,13 @@ class TheoremPreprocessor(Preprocessor):
                 # Create environment header
                 if current_env == "proof":
                     new_lines.append(f'<div class="{env_class}">')
-                    new_lines.append(f'<span class="env-name">{env_title}</span>')
+                    new_lines.append(
+                        f'<span class="env-name"><strong>{env_title}</strong></span>'
+                    )
                 else:
                     new_lines.append(f'<div class="{env_class}">')
                     new_lines.append(
-                        f'<span class="env-name">{env_title} {env_number}</span>'
+                        f'<span class="env-name"><strong>{env_title} {env_number}</strong></span>'
                     )
                 continue
 
@@ -94,38 +96,41 @@ def add_theorem_styles(generator):
 
     css = """
     <style>
-        .theorem-style, .definition-style, .proof-style {
+        .theorem, .definition, .lemma, .corollary {
             margin: 1em 0;
             padding: 0.5em 1em;
-            border: 1px solid #ddd;
+            border-left: 3px solid #4a5568;
+            background-color: #f8f9fa;
         }
         
         .env-name {
-            font-weight: bold;
-            font-style: italic;
-            margin-right: 0.5em;
+            display: block;
+            margin-bottom: 0.5em;
+            color: #1a202c;
         }
         
-        .definition-style .env-name {
-            font-style: normal;
+        .env-name strong {
+            font-weight: 800;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
         
-        .proof-style .env-name {
+        .theorem p, .lemma p, .corollary p {
             font-style: italic;
-            font-weight: normal;
+            margin: 0;
+        }
+        
+        .proof {
+            margin: 1em 0;
+            padding: 0.5em 1em;
+        }
+        
+        .proof .env-name {
+            font-style: italic;
         }
         
         .qed {
             float: right;
             margin-top: 0.5em;
-        }
-        
-        .theorem-style {
-            background-color: #f8f9fa;
-        }
-        
-        .definition-style {
-            background-color: #f8f9fa;
         }
     </style>
     """
