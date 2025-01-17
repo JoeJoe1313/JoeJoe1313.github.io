@@ -59,12 +59,12 @@ class TheoremPreprocessor(Preprocessor):
                 if current_env == "proof":
                     new_lines.append(f'<div class="{env_class}">')
                     new_lines.append(
-                        f'<span class="env-name"><strong>{env_title}</strong></span>'
+                        f'<span class="env-name"><strong>{env_title}.</strong></span>'
                     )
                 else:
                     new_lines.append(f'<div class="{env_class}">')
                     new_lines.append(
-                        f'<span class="env-name"><strong>{env_title} {env_number}</strong></span>'
+                        f'<span class="env-name"><strong>{env_title} {env_number}.</strong></span>'
                     )
                 continue
 
