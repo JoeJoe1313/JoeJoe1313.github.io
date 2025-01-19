@@ -4,7 +4,7 @@ Date: 2025-01-17 07:00
 Category: Mathematics
 Tags: mathematics, python
 Slug: 2025-01-17-orthogonal-functions
-Status: draft
+Status: published
 ---
 
 In this post we are going to explore the so called orthogonal functions, followed by orthogonal polynomials and some of their properties. We are also going to show that these orthogonal functions (polynomials) are closely related to the least-squares approximation method. This alternative to the least-suqares approximation can be helpful in certain cases when the least-squares produces a hard to solve linear system.
@@ -239,6 +239,8 @@ where no subset of these $N$ functions $g_j(x_m)$ can be linearly dependant.
 
 Finally, we are at the point of showing that the least-squares method is closely connected to orthogonality.
 
+---
+
 <b>Theorem 1.</b> <i>The Fourier coefficients $a_j$ give the best leas-squares approximation when the function $F(x)$ is expanded over an orthogonal system of functions $g_j(x)$.</i>
 
 In order to prove the theorem we have to minimize the arbitrary expansion 
@@ -251,3 +253,41 @@ m = \int_{a}^{b} w(x) \left[F(x) - \sum_{j=0}^{M} c_j g_j(x) \right]^2 \mathrm{d
 $$
 
 The above equation achieves its minimum only when $c_i = a_i$, which is what we wanted.
+
+---
+
+It is useful to note that regarding the best approximation with orthogonal functions every coefficient $a_i$ is determined independently of the others. Thus, if we dedcide to change the amount of the used functions $g_i(x)$ there is no need to reevaluate the coefficients we have already evaluated. This motivates us to explore the next problem.
+
+If the coefficients $c_i$ of the function $F(x)$ when approximating with the least-squares method via the system $\mu_i(x)$ do not change when we change the number of used functions $\mu_i(x)$, then the functions $\mu_i(x)$ are orthogonal. Let
+
+$$
+g(c_0, c_1, ..., c_n) = \int_a^b w(x) \left[F(x) - \sum_{i=0}^{M}c_i\mu_i(x)\right]^2 \mathrm{d}x.
+$$
+
+Once again, we have to minimze $g$. Thus,
+
+$$
+\frac{\partial{g}}{\partial{c_i}} = 0 = -2 \int_a^b w(x) \left[F(x) - \sum_{i=0}^{M}c_i \mu_i(x)\right] \mu_j(x) \mathrm{d}x,
+$$
+
+or
+
+$$
+\int_a^b w(x) F(x) \mu_j(x) \mathrm{d}x = \sum_{i=0}^{M} c_i \int_a^b w(x) \mu_i(x) \mu_j(x) \mathrm{d}x.
+$$
+
+If the above property is true for all $M$, then it should be true for $M+1$ as well:
+
+$$
+\int_a^b w(x) F(x) \mu_j(x) dx = \sum_{i=0}^{M+1} c_i \int_a^b w(x) \mu_i(x) \mu_j(x) \mathrm{d}x, \quad c_{M+1} \neq 0.
+$$
+
+Now, after subtracting it from the previous equation, we get
+
+$$
+c_{M+1} \int_a^b w(x) \mu_{M+1}(x) \mathrm{d}x = 0, 
+$$
+
+for every $j$. Simply said, $\mu_j(x)$ is orthogonal to $\mu_{M+1}$ for an arbitrary $M$.
+
+To summarise, we saw that the orthogonal functions, the Fourier coefficients, and the approxiamtion via the least-squares method are closely connected.
