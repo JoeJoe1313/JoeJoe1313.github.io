@@ -4,6 +4,7 @@ Date: 2025-01-04 07:00
 Category: Mathematics
 Tags: mathematics
 Slug: 2025-01-04-fourier-method-fixed-string
+Status: published
 ---
 
 In this post we are going to explore the Fourier method for solving the 1D and 2D wave equations. The method is more known under the name of the method of separation of variables. For the 1D wave equation we are going to show the application of the method to a fixed string, and for the 2D wave equation we are going to apply the method to a rectangular membrane and a circular membrane. We are also going to attempt to outline the physical interpretations of all scenarios.
@@ -20,14 +21,14 @@ $$
 
 First, let's take a look at the model of a string with length $l$ which is also fixed at both ends:
 
-\begin{equation}
+$$
 \left\{\begin{aligned}
 u_{tt} = a^2 u_{xx}, \\ 
 u(x, 0) = \varphi_1(x),\\
 u_t(x, 0) = \varphi_2(x), \\
 u(0, t) = u(l, t) = 0.
 \end{aligned}\right.
-\end{equation}
+$$
 
 A visualisation of the string can be seen in the figure below.
 
@@ -343,26 +344,23 @@ These motionless points are called **nodes** of the standing wave. In general, $
 ![Fixed Strings](/images/2025-01-04-fourier-method-fixed-string/harmonics.svg){width=70%}
 </center>
 
-## Practice
+### Example
 
-...
+Here, we are going to show an example of a fixed string. We are going to show an animated solution with the help of Python. The fixed string problem is given by
 
 $$
-\varphi(x) := \left\{\begin{align*}
+\left\{\begin{aligned}
+u_{tt} = \left(\frac{2}{3}\right)^2 u_{xx}, \\ 
+u(x, 0) = \left\{\begin{align*}
 \sin^3{(\pi x)}, \quad 1 \leq x \leq3, \\
 0, \quad x \in R \backslash [1, 3],
-\end{align*}\right.
+\end{align*}\right.,\\
+u_t(x, 0) = 0, \\
+u(0, t) = u(\pi \sqrt{5}, t) = 0.
+\end{aligned}\right.
 $$
 
-and
-
-$$
-\psi(x) \equiv 0,
-$$
-
-for $t \in [0, 30]$. Using the $100$-th partial Fourier sum, $L = \pi \sqrt{5}$, $a = \frac{2}{3}$...
-
-Animation:
+Using the $100$-th partial Fourier sum, below is shown the animated solution for $t \in [0, 30]$.
 
 {% include_code_collapsible 2025-01-04-fourier-method-fixed-string/fixed_string.py lang:python :hideall: %}
 
