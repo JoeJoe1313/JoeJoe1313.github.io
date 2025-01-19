@@ -69,7 +69,9 @@ $$
 
 Part of the family is visualised below.
 
-![Orthogonal Functions Example](/images/2025-01-17-orthogonal-functions/orthogonal_functions_example.svg)
+<center>
+![Orthogonal Functions Example](/images/2025-01-17-orthogonal-functions/orthogonal_functions_example.svg){ width=75% }
+</center>
 
 We can easily show that the functions are orthogonal over the interval $0 \leq x \leq 2\pi$ because the following equations hold (by using a fundamental trigonometric formulas)
 
