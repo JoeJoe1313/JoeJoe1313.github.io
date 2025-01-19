@@ -67,4 +67,50 @@ $$
 1, \cos{(x)}, \sin{(x)}, \cos{(2x)}, \sin{(2x)}, \cos{(3x)}, ...
 $$
 
-We can show that the functions are orthogonal over the interval $0 \leq x \leq 2\pi$.
+We can easily show that the functions are orthogonal over the interval $0 \leq x \leq 2\pi$ because the following equations hold (by using a fundamental trigonometric formulas)
+
+$$
+\int_{0}^{2\pi} \cos{(mx)} \cos{(nx)} \mathrm{d}x = \left\{
+\begin{align*}
+2\pi, \quad m = n = 0 \\
+\pi, \quad m = n \neq 0 \\
+0, \quad m \neq n
+\end{align*}
+\right.
+,
+$$
+
+$$
+\int_{0}^{2\pi} \cos{(mx)} \sin{(nx)} \mathrm{d}x = 0,
+$$
+
+and
+
+$$
+\int_{0}^{2\pi} \sin{(mx)} \sin{(nx)} \mathrm{d}x = \left\{
+\begin{align*}
+\pi, \quad m = n \neq 0 \\
+0, \quad m \neq n
+\end{align*}
+\right.
+.
+$$
+
+Now, let's take a look at one possible application of these orthogonal functions. Let's assume that for a function $F(x)$, $0 \leq x \leq 2\pi$ we have
+
+$$\label{eq:2}
+F(x) = \frac{a_0}{2} + a_1 \cos{(x)} + b_1 \sin{(x)} + a_2 \cos{(2x)} + b_2 \sin{(2x)} + ... = \\
+= \frac{a_0}{2} + \sum_{k = 1}^{\infty} (a_k \cos{(kx)} + b_k \sin{(kx)}).\tag{2}
+$$
+
+If we multiply \eqref{eq:2} with $\cos{(mx)}$ and integrate over the range of $x$, we get
+
+$$
+\int_{0}^{2\pi} F(x)\cos{(mx)} \mathrm{d}x = \pi a_m, \quad m = 0, 1, ...
+$$
+
+If we multiply \eqref{eq:2} with $\sin{(mx)}$ and integrate over the range of $x$, we get
+
+$$
+\int_{0}^{2\pi} F(x)\sin{(mx)} \mathrm{d}x = \pi b_m, \quad m = 1, 2, ...
+$$
