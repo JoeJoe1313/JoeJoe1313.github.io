@@ -235,4 +235,19 @@ $$
 
 where no subset of these $N$ functions $g_j(x_m)$ can be linearly dependant.
 
-# Orthogonal Polynomials
+# Least Squares and the Fourier Coefficients
+
+Finally, we are at the point of showing that the least-squares method is closely connected to orthogonality.
+
+<b>Theorem 1.</b> <i>The Fourier coefficients $a_j$ give the best leas-squares approximation when the function $F(x)$ is expanded over an orthogonal system of functions $g_j(x)$.</i>
+
+In order to prove the theorem we have to minimize the arbitrary expansion 
+
+$$
+m = \int_{a}^{b} w(x) \left[F(x) - \sum_{j=0}^{M} c_j g_j(x) \right]^2 \mathrm{d}x = \\
+= \int_a^b w(x) F^2(x) \mathrm{d}x - 2 \sum_{j=0}^{M} c_j \int_{a}^{b} w(x) F(x) g_j(x) \mathrm{d}x + \sum_{i=0}^{M} \sum_{j=0}^{M} c_j c_i \int_{a}^{b} w(x) g_i(x) g_j(x) \mathrm{d}x = \\
+= \int_{a}^{b} w(x) F^2(x) \mathrm{d}x - 2\sum_{i=0}^{M}c_i a_i + \sum_{i=0}^{M} c_i^2 = \\
+= \int_{a}^{b} w(x) F^2(x) \mathrm{d}x - \sum_{i=0}^{M} a_i^2 + \sum_{i=0}^{M} (a_i - c_i)^2.
+$$
+
+The above equation achieves its minimum only when $c_i = a_i$, which is what we wanted.
