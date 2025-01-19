@@ -7,7 +7,7 @@ Slug: 2025-01-17-orthogonal-functions
 Status: draft
 ---
 
-In this post we are going to explore the so called orthogonal functions, followed by orthogonal polynomials and some of their properties. We are also going to show that these orthogonal functions (polynomials) are closely related to the least-squares approximation method. This alternative to the least-suqares approximation can be helpful in certain cases when the leas-squares produces a hard to solve linear system.
+In this post we are going to explore the so called orthogonal functions, followed by orthogonal polynomials and some of their properties. We are also going to show that these orthogonal functions (polynomials) are closely related to the least-squares approximation method. This alternative to the least-suqares approximation can be helpful in certain cases when the least-squares produces a hard to solve linear system.
 
 # Orthogonal Functions
 
@@ -105,12 +105,38 @@ $$
 
 If we multiply \eqref{eq:2} with $\cos{(mx)}$ and integrate over the range of $x$, we get
 
-$$
-\int_{0}^{2\pi} F(x)\cos{(mx)} \mathrm{d}x = \pi a_m, \quad m = 0, 1, ...
+$$\label{eq:3}
+\int_{0}^{2\pi} F(x)\cos{(mx)} \mathrm{d}x = \pi a_m, \quad m = 0, 1, ...\tag{3}
 $$
 
 If we multiply \eqref{eq:2} with $\sin{(mx)}$ and integrate over the range of $x$, we get
 
+$$\label{eq:4}
+\int_{0}^{2\pi} F(x)\sin{(mx)} \mathrm{d}x = \pi b_m, \quad m = 1, 2, ...\tag{4}
 $$
-\int_{0}^{2\pi} F(x)\sin{(mx)} \mathrm{d}x = \pi b_m, \quad m = 1, 2, ...
+
+But why did we even mention that? In fact, with \eqref{eq:3} and \eqref{eq:4} we can compute the coefficients in the function expansion. Moreover, this way of computing the $a_m$ and $b_m$ coefficients gives them the name **Fourier coefficeints**. This is also valid for the general case of a system of orthogonal functions, meaning
+
 $$
+\int_{a}^{b} w(x) f_{i}(x) f_{j}(x) \mathrm{d}x = \left\{
+\begin{align*}
+0, \quad i \neq j \\
+\lambda_i, \quad i = j
+\end{align*}
+\right.
+.
+$$
+
+If we have the function expansion
+
+$$
+F(x) = \sum_{i = 0}^{\infty} a_i f_{i}(x),
+$$
+
+then the coefficients
+
+$$
+a_j = \frac{1}{\lambda_j} \int_{a}^{b} w(x) F(x) f_{j}(x) \mathrm{d}x
+$$
+
+are the Fourier coefficients.
