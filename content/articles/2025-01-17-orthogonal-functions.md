@@ -2,12 +2,12 @@
 Title: Orthogonal Functions
 Date: 2025-01-17 07:00
 Category: Mathematics
-Tags: mathematics, python
+Tags: mathematics
 Slug: 2025-01-17-orthogonal-functions
 Status: published
 ---
 
-In this post we are going to explore the so called orthogonal functions, followed by orthogonal polynomials and some of their properties. We are also going to show that these orthogonal functions (polynomials) are closely related to the least-squares approximation method. This alternative to the least-suqares approximation can be helpful in certain cases when the least-squares produces a hard to solve linear system.
+In this post we are going to explore the so called orthogonal functions, and some of their properties. We are also going to show that these orthogonal functions are closely related to the least-squares approximation method. This alternative to the least-squares method can be helpful in certain cases when the least-squares produces a hard to solve linear system.
 
 # Orthogonal Functions
 

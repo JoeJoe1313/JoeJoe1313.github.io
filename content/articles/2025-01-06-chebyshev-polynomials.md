@@ -1,13 +1,13 @@
 ---
-Title: Chebyshev Polynomials
+Title: Chebyshev Polynomials: Part 1
 Date: 2025-01-06 07:00
 Category: Mathematics
-Tags: mathematics, python
+Tags: mathematics, polynomials
 Slug: 2025-01-06-chebyshev-polynomials
 Status: published
 ---
 
-Chebyshev polynomials are a sequence of orthogonal polynomials that play a central role in numerical analysis, approximation theory, and applied mathematics. They are named after the Russian mathematician Pafnuty Chebyshev and come in two primary types: Chebyshev polynomials of the first kind ($T_n(x)$) and Chebyshev polynomials of the second kind ($U_n(x)$).
+Chebyshev polynomials are a sequence of orthogonal polynomials that play a central role in numerical analysis, approximation theory, and applied mathematics. They are named after the Russian mathematician Pafnuty Chebyshev and come in two primary types: Chebyshev polynomials of the first kind ($T_n(x)$) and Chebyshev polynomials of the second kind ($U_n(x)$). In this post we are going to focus on the Chebyshev polynomials of the first kind.
 
 # Chebyshev Polynomials of the First Kind
 
@@ -326,6 +326,4 @@ More visualusations can be achieved by doing other domain changes. They can be s
 
 ![alt text](/images/2025-01-06-chebyshev-polynomials/polar_8.png){ width=25% }![alt text](/images/2025-01-06-chebyshev-polynomials/polar_9.png){ width=25% }![alt text](/images/2025-01-06-chebyshev-polynomials/polar_10.png){ width=25% }![alt text](/images/2025-01-06-chebyshev-polynomials/polar_11.png){ width=25% }
 
-# Chebyshev Polynomials of the Second Kind
-
-# Chebyshev Nodes of the Second Kind
+In a separate post, Chebyshev Polynomials, Part 2, we are going to explore the Chebyshev polynomials of the second kind, and their relations to the polynomials of the first kind.

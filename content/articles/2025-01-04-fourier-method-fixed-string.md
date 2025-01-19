@@ -2,12 +2,12 @@
 Title: Fourier Method for the 1D Wave Equation: Fixed String
 Date: 2025-01-04 07:00
 Category: Mathematics
-Tags: mathematics
+Tags: mathematics, pde
 Slug: 2025-01-04-fourier-method-fixed-string
 Status: published
 ---
 
-In this post we are going to explore the Fourier method for solving the 1D and 2D wave equations. The method is more known under the name of the method of separation of variables. For the 1D wave equation we are going to show the application of the method to a fixed string, and for the 2D wave equation we are going to apply the method to a rectangular membrane and a circular membrane. We are also going to attempt to outline the physical interpretations of all scenarios.
+In this post we are going to explore the Fourier method for solving the 1D wave equation. The method is more known under the name of the **method of separation of variables**. For the 1D wave equation we are going to show the application of the method to a fixed string. We are also going to attempt to outline some of the physical interpretations of the fixed string.
 
 # 1D Wave Equation
 
