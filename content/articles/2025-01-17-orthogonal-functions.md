@@ -201,4 +201,11 @@ $$
 \int_{a}^{b} w(x) F_j(x) g_j(x) \mathrm{d}x = 0, \quad 0 \leq i \leq j-1.
 $$
 
+From the definition of $F_j(x)$ the above equation becomes
+
+$$
+a_i + \int_{a}^{b} w(x) g_i(x) f_j(x) \mathrm{d}x = 0.
+$$
+
+
 # Orthogonal Polynomials
