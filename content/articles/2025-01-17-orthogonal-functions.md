@@ -207,5 +207,32 @@ $$
 a_i + \int_{a}^{b} w(x) g_i(x) f_j(x) \mathrm{d}x = 0.
 $$
 
+From here we can determine $a_i$, and hence $F_j(x)$ as well. We have to "norm" $F_j(x)$ so we have to compute
+
+$$
+\int_{a}^{b} w(x) F_j^2(x) \mathrm{d}x = \lambda_j > 0, \quad w(x) \geq 0,
+$$
+
+and let
+
+$$
+g_j(x) = \frac{F_j(x)}{\sqrt{\lambda_j}}.
+$$
+
+This ends the induction step.
+
+If we have a finite number $N$ of nodes $x_m$, there exist at least $N$ linearly independent functions $f_j(x_m)$. But these $N$ functions exist because of the following system
+
+$$
+g_j(x_m) = \left\{
+\begin{align*}
+0, \quad m \neq j \\
+1, \quad m = j
+\end{align*}
+\right.
+, \quad j = 1, 2, ..., N,
+$$
+
+where no subset of these $N$ functions $g_j(x_m)$ can be linearly dependant.
 
 # Orthogonal Polynomials
