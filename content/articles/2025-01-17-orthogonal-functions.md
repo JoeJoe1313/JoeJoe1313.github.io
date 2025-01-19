@@ -160,7 +160,45 @@ $$
 for some $c_j \neq 0$. Then, we multiply with $w(x) f_j(x)$, $w(x) \geq 0$ and integrate over the interval and get
 
 $$
-c_1 \int_a^b w(x) f_1(x) f_j(x) + c_2 \int_a^b w(x) f_2(x) f_j(x) + ... + c_N \int_a^b w(x) f_N(x) f_j(x) = 0
+c_1 \int_a^b w(x) f_1(x) f_j(x) \mathrm{d}x + c_2 \int_a^b w(x) f_2(x) f_j(x) \mathrm{d}x + ... + c_N \int_a^b w(x) f_N(x) f_j(x) \mathrm{d}x = 0
+$$
+
+From the orthogonal properties it follows
+
+$$
+c_j \int_{a}^{b} w(x) f_{j}^{2}(x) \mathrm{d}x = c_j \lambda_j = 0,
+$$
+
+meaning $c_j = 0$ for every $j$. Thus, the assumed relation doesn't exist, and the functions are independent.
+
+We are left with proving the opposite, that from a system of linearly independent functions we can construct an orthogonal system. We can do this with the help of the **Schmidt process**. Let $f_i(x)$ be the set of linearly independent functions. We have
+
+$$
+\int_{a}^{b} w(x) f_{0}^2(x) \mathrm{d}x = \lambda_0 > 0, \quad w(x) > 0.
+$$
+
+Then
+
+$$
+g_{0} = \frac{f_{0}(x)}{\sqrt{\lambda_0}}
+$$
+
+would be our first orthonormal function. By induction, we can assume we have constructed the first $j$ orthonormal functions $g_{i}(x)$, $i = 0, 1, ..., j-1$. Let
+
+$$
+F_{j}(x) = a_{0} g_{0}(x) + a_{1} g_{1}(x) + ... + a_{j-1} g_{j-1}(x) + f_j.
+$$
+
+We have that the functions $f_i(x)$ are linearly independent, and that every $g_{i}(x)$ is a linear combination of $f_{k}(x)$, $k \leq i$, thus
+
+$$
+F_j(x) \not\equiv 0.
+$$
+
+We need
+
+$$
+\int_{a}^{b} w(x) F_j(x) g_j(x) \mathrm{d}x = 0, \quad 0 \leq i \leq j-1.
 $$
 
 # Orthogonal Polynomials
