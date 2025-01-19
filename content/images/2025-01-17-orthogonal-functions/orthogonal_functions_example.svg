@@ -1,0 +1,82 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background -->
+    <rect width="800" height="500" fill="#ffffff"/>
+    
+    <!-- Grid lines -->
+    <path d="M 50 250 L 750 250" stroke="#cccccc" stroke-width="1"/>
+    <path d="M 50 150 L 750 150" stroke="#cccccc" stroke-width="0.5" stroke-dasharray="5,5"/>
+    <path d="M 50 350 L 750 350" stroke="#cccccc" stroke-width="0.5" stroke-dasharray="5,5"/>
+    
+    <!-- Y-axis -->
+    <path d="M 50 50 L 50 450" stroke="#cccccc" stroke-width="1"/>
+    
+    <!-- X-axis labels -->
+    <text x="50" y="270" fill="#666666" font-size="12">0</text>
+    <text x="260" y="270" fill="#666666" font-size="12">π</text>
+    <text x="470" y="270" fill="#666666" font-size="12">2π</text>
+    <text x="680" y="270" fill="#666666" font-size="12">3π</text>
+    
+    <!-- Y-axis labels -->
+    <text x="30" y="155" fill="#666666" font-size="12">1</text>
+    <text x="30" y="255" fill="#666666" font-size="12">0</text>
+    <text x="30" y="355" fill="#666666" font-size="12">-1</text>
+    
+    <!-- Y-axis ticks -->
+    <path d="M 45 150 L 55 150" stroke="#666666" stroke-width="1"/>
+    <path d="M 45 250 L 55 250" stroke="#666666" stroke-width="1"/>
+    <path d="M 45 350 L 55 350" stroke="#666666" stroke-width="1"/>
+    
+    <!-- 1 (constant function) -->
+    <path d="M 50 150 L 750 150" stroke="#000000" stroke-width="2"/>
+    
+    <!-- cos(x) -->
+    <path d="M 50 150
+             C 120 250, 190 250, 260 150
+             C 330 50, 400 50, 470 150
+             C 540 250, 610 250, 680 150"
+          fill="none" stroke="#2196F3" stroke-width="2"/>
+    
+    <!-- sin(x) -->
+    <path d="M 50 250 
+             C 120 150, 190 150, 260 250
+             C 330 350, 400 350, 470 250
+             C 540 150, 610 150, 680 250"
+          fill="none" stroke="#FF4081" stroke-width="2"/>
+    
+    <!-- cos(2x) -->
+    <path d="M 50 150
+             C 85 250, 120 250, 155 150
+             C 190 50, 225 50, 260 150
+             C 295 250, 330 250, 365 150
+             C 400 50, 435 50, 470 150
+             C 505 250, 540 250, 575 150
+             C 610 50, 645 50, 680 150"
+          fill="none" stroke="#4CAF50" stroke-width="2"/>
+    
+    <!-- sin(2x) -->
+    <path d="M 50 250
+             C 85 150, 120 150, 155 250
+             C 190 350, 225 350, 260 250
+             C 295 150, 330 150, 365 250
+             C 400 350, 435 350, 470 250
+             C 505 150, 540 150, 575 250
+             C 610 350, 645 350, 680 250"
+          fill="none" stroke="#FFA000" stroke-width="2"/>
+    
+    <!-- Legend (horizontal in lower right) -->
+    <rect x="350" y="430" width="400" height="40" fill="#ffffff" fill-opacity="0.9"/>
+    <rect x="360" y="445" width="15" height="2" fill="#000000"/>
+    <text x="380" y="448" fill="#666666" font-size="12">1</text>
+    
+    <rect x="420" y="445" width="15" height="2" fill="#2196F3"/>
+    <text x="440" y="448" fill="#666666" font-size="12">cos(x)</text>
+    
+    <rect x="500" y="445" width="15" height="2" fill="#FF4081"/>
+    <text x="520" y="448" fill="#666666" font-size="12">sin(x)</text>
+    
+    <rect x="580" y="445" width="15" height="2" fill="#4CAF50"/>
+    <text x="600" y="448" fill="#666666" font-size="12">cos(2x)</text>
+    
+    <rect x="660" y="445" width="15" height="2" fill="#FFA000"/>
+    <text x="680" y="448" fill="#666666" font-size="12">sin(2x)</text>
+</svg>

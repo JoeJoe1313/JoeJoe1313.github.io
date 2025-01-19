@@ -67,6 +67,10 @@ $$
 1, \cos{(x)}, \sin{(x)}, \cos{(2x)}, \sin{(2x)}, \cos{(3x)}, ...
 $$
 
+Part of the family is visualised below.
+
+![Orthogonal Functions Example](/images/2025-01-17-orthogonal-functions/orthogonal_functions_example.svg)
+
 We can easily show that the functions are orthogonal over the interval $0 \leq x \leq 2\pi$ because the following equations hold (by using a fundamental trigonometric formulas)
 
 $$
@@ -140,3 +144,21 @@ a_j = \frac{1}{\lambda_j} \int_{a}^{b} w(x) F(x) f_{j}(x) \mathrm{d}x
 $$
 
 are the Fourier coefficients.
+
+# Linear Independence and Orthogonality: Connection
+
+Here, we are going to show that linear independence and orthogonality are closely connected. For this purpose the first thing we have to show is that a system of orthogonal functions $f_i(x)$ is linearly independent over the interval of interest.
+
+Let's assume there exists a linear dependence between the functions $f_i(x)$ with non-zero coefficients, or
+
+$$
+c_1 f_1(x) + c_2 f_2(x) + ... + c_N f_N(x) = 0
+$$
+
+for some $c_j \neq 0$. Then, we multiply with $w(x) f_j(x)$, $w(x) \geq 0$ and integrate over the interval and get
+
+$$
+c_1 \int_a^b w(x) f_1(x) f_j(x) + c_2 \int_a^b w(x) f_2(x) f_j(x) + ... + c_N \int_a^b w(x) f_N(x) f_j(x) = 0
+$$
+
+# Orthogonal Polynomials
