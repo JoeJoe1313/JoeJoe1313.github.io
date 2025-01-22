@@ -364,4 +364,4 @@ Using the $100$-th partial Fourier sum, below is shown the animated solution for
 
 {% include_code_collapsible 2025-01-04-fourier-method-fixed-string/fixed_string.py lang:python :hideall: %}
 
-<iframe src="code/2025-01-04-fourier-method-fixed-string/fixed_string_animation.html" width="100%" height="300px" frameborder="0"></iframe>
+<iframe src="{static}/code/2025-01-04-fourier-method-fixed-string/fixed_string_animation.html" width="100%" height="300px" frameborder="0"></iframe>

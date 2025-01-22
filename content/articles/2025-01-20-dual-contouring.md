@@ -21,7 +21,7 @@ Octree:
 
 TBD
 
-Marching Cubes vs Dual Contouring (2D):
+Marching Cubes vs Dual Contouring (2D Circle):
 
 <!-- <div style="display: flex; justify-content: center; gap: 40px; align-items: center;">
     <img src="../images/2025-01-20-dual-contouring/example_mc.svg" width="35%" alt="Marching Cubes Example">
@@ -34,7 +34,21 @@ Marching Cubes vs Dual Contouring (2D):
         <p style="margin-top: 10px;">Marching Cubes</p>
     </div>
     <div style="text-align: center;">
-        <img src="../images/2025-01-20-dual-contouring/example.svg" width="95%" alt="Dual Contouring Example">
+        <img src="../images/2025-01-20-dual-contouring/example_dc.svg" width="95%" alt="Dual Contouring Example">
         <p style="margin-top: 10px;">Dual Contouring</p>
     </div>
+</div>
+
+Marching Cubes vs Dual Contouring (3D Sphere):
+
+<div style="display: flex; gap: 20px; margin: 20px 0;">
+    <iframe src="{static}/code/2025-01-20-dual-contouring/sphere_mc.html" 
+            style="width: 50%; height: 600px;" 
+            frameborder="10">
+    </iframe>
+    
+    <iframe src="{static}/code/2025-01-20-dual-contouring/sphere_dc.html" 
+            style="width: 50%; height: 600px;" 
+            frameborder="10">
+    </iframe>
 </div>
