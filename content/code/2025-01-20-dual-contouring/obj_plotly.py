@@ -70,7 +70,7 @@ def plot_two_obj(obj_path1, obj_path2, title1="Mesh 1", title2="Mesh 2"):
     )
 
     fig.update_layout(
-        title="Mesh Comparison",
+        # title="Mesh Comparison",
         scene=dict(
             aspectmode="data",
             camera=camera,
