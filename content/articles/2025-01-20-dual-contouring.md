@@ -41,14 +41,4 @@ Marching Cubes vs Dual Contouring (2D Circle):
 
 Marching Cubes vs Dual Contouring (3D Sphere):
 
-<div style="display: flex; gap: 20px; margin: 20px 0;">
-    <iframe src="{static}/code/2025-01-20-dual-contouring/sphere_mc.html" 
-            style="width: 50%; height: 600px;" 
-            frameborder="10">
-    </iframe>
-    
-    <iframe src="{static}/code/2025-01-20-dual-contouring/sphere_dc.html" 
-            style="width: 50%; height: 600px;" 
-            frameborder="10">
-    </iframe>
-</div>
+<iframe src="{static}/code/2025-01-20-dual-contouring/comparison.html" width="100%" height="600px" frameborder="10"></iframe>
