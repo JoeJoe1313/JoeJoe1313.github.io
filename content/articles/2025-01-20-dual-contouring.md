@@ -20,3 +20,21 @@ Octree:
 ![Octree](../images/2025-01-20-dual-contouring/octree.jpg){ width=50% style="display: block; margin: 0 auto"}
 
 TBD
+
+Marching Cubes vs Dual Contouring (2D):
+
+<!-- <div style="display: flex; justify-content: center; gap: 40px; align-items: center;">
+    <img src="../images/2025-01-20-dual-contouring/example_mc.svg" width="35%" alt="Marching Cubes Example">
+    <img src="../images/2025-01-20-dual-contouring/example.svg" width="35%" alt="Dual Contouring Example">
+</div> -->
+
+<div style="display: flex; justify-content: center; gap: 40px; align-items: center;">
+    <div style="text-align: center;">
+        <img src="../images/2025-01-20-dual-contouring/example_mc.svg" width="95%" alt="Marching Cubes Example">
+        <p style="margin-top: 10px;">Marching Cubes</p>
+    </div>
+    <div style="text-align: center;">
+        <img src="../images/2025-01-20-dual-contouring/example.svg" width="95%" alt="Dual Contouring Example">
+        <p style="margin-top: 10px;">Dual Contouring</p>
+    </div>
+</div>

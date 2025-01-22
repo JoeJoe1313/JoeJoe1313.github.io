@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg version='1.1' xmlns='http://www.w3.org/2000/svg' viewBox='-150 -150 300 300'>
+<g transform='scale(50)'>
+<rect x='-3' y='-3' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-3' y='-2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-3' y='-1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-3' y='0' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-3' y='1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-3' y='2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-2' y='-3' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-2' y='-2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-2' y='-1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-2' y='0' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-2' y='1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-2' y='2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-1' y='-3' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-1' y='-2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-1' y='-1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-1' y='0' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-1' y='1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-1' y='2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='0' y='-3' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='0' y='-2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='0' y='-1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='0' y='0' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='0' y='1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='0' y='2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='1' y='-3' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='1' y='-2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='1' y='-1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='1' y='0' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='1' y='1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='1' y='2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='2' y='-3' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='2' y='-2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='2' y='-1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='2' y='0' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='2' y='1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='2' y='2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<circle cx='-3' cy='-3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-3' cy='-2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-3' cy='-1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-3' cy='0' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-3' cy='1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-3' cy='2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-3' cy='3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-2' cy='-3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-2' cy='-2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-2' cy='-1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='-2' cy='0' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='-2' cy='1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='-2' cy='2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-2' cy='3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-1' cy='-3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-1' cy='-2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='-1' cy='-1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='-1' cy='0' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='-1' cy='1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='-1' cy='2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='-1' cy='3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='0' cy='-3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='0' cy='-2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='0' cy='-1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='0' cy='0' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='0' cy='1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='0' cy='2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='0' cy='3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='1' cy='-3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='1' cy='-2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='1' cy='-1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='1' cy='0' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='1' cy='1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='1' cy='2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='1' cy='3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='2' cy='-3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='2' cy='-2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='2' cy='-1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='2' cy='0' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='2' cy='1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='2' cy='2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='2' cy='3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='3' cy='-3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='3' cy='-2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='3' cy='-1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='3' cy='0' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='3' cy='1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='3' cy='2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='3' cy='3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<line x1='-2.284959256460989' y1='-1' x2='-2' y2='-1.4455608117593965' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='-2.5' y1='0' x2='-2.284959256460989' y2='-1' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='-2.284959256460989' y1='1' x2='-2.5' y2='0' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='-2' y1='1.4455608117593968' x2='-2.284959256460989' y2='1' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='-1.4455608117593965' y1='-2' x2='-1' y2='-2.284959256460989' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='-2' y1='-1.4455608117593965' x2='-1.4455608117593965' y2='-2' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='-1.4455608117593965' y1='2' x2='-2' y2='1.4455608117593968' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='-1' y1='2.284959256460989' x2='-1.4455608117593965' y2='2' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='-1' y1='-2.284959256460989' x2='0' y2='-2.5' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='0' y1='2.5' x2='-1' y2='2.284959256460989' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='0' y1='-2.5' x2='1' y2='-2.284959256460989' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='1' y1='2.284959256460989' x2='0' y2='2.5' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='1' y1='-2.284959256460989' x2='1.4455608117593968' y2='-2' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='1.4455608117593968' y1='-2' x2='2' y2='-1.4455608117593965' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='2' y1='1.4455608117593968' x2='1.4455608117593968' y2='2' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='1.4455608117593968' y1='2' x2='1' y2='2.284959256460989' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='2' y1='-1.4455608117593965' x2='2.284959256460989' y2='-1' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='2.284959256460989' y1='-1' x2='2.5' y2='0' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='2.5' y1='0' x2='2.284959256460989' y2='1' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='2.284959256460989' y1='1' x2='2' y2='1.4455608117593968' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<rect x='-2.334959256460989' y='-1.05' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-2.05' y='-1.4955608117593966' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-2.55' y='-0.05' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-2.334959256460989' y='-1.05' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-2.334959256460989' y='0.95' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-2.55' y='-0.05' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-2.05' y='1.3955608117593967' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-2.334959256460989' y='0.95' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-1.4955608117593966' y='-2.05' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-1.05' y='-2.334959256460989' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-2.05' y='-1.4955608117593966' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-1.4955608117593966' y='-2.05' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-1.4955608117593966' y='1.95' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-2.05' y='1.3955608117593967' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-1.05' y='2.2349592564609893' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-1.4955608117593966' y='1.95' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-1.05' y='-2.334959256460989' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-0.05' y='-2.55' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-0.05' y='2.45' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-1.05' y='2.2349592564609893' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-0.05' y='-2.55' width='0.1' height='0.1' style='fill: red'/>
+<rect x='0.95' y='-2.334959256460989' width='0.1' height='0.1' style='fill: red'/>
+<rect x='0.95' y='2.2349592564609893' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-0.05' y='2.45' width='0.1' height='0.1' style='fill: red'/>
+<rect x='0.95' y='-2.334959256460989' width='0.1' height='0.1' style='fill: red'/>
+<rect x='1.3955608117593967' y='-2.05' width='0.1' height='0.1' style='fill: red'/>
+<rect x='1.3955608117593967' y='-2.05' width='0.1' height='0.1' style='fill: red'/>
+<rect x='1.95' y='-1.4955608117593966' width='0.1' height='0.1' style='fill: red'/>
+<rect x='1.95' y='1.3955608117593967' width='0.1' height='0.1' style='fill: red'/>
+<rect x='1.3955608117593967' y='1.95' width='0.1' height='0.1' style='fill: red'/>
+<rect x='1.3955608117593967' y='1.95' width='0.1' height='0.1' style='fill: red'/>
+<rect x='0.95' y='2.2349592564609893' width='0.1' height='0.1' style='fill: red'/>
+<rect x='1.95' y='-1.4955608117593966' width='0.1' height='0.1' style='fill: red'/>
+<rect x='2.2349592564609893' y='-1.05' width='0.1' height='0.1' style='fill: red'/>
+<rect x='2.2349592564609893' y='-1.05' width='0.1' height='0.1' style='fill: red'/>
+<rect x='2.45' y='-0.05' width='0.1' height='0.1' style='fill: red'/>
+<rect x='2.45' y='-0.05' width='0.1' height='0.1' style='fill: red'/>
+<rect x='2.2349592564609893' y='0.95' width='0.1' height='0.1' style='fill: red'/>
+<rect x='2.2349592564609893' y='0.95' width='0.1' height='0.1' style='fill: red'/>
+<rect x='1.95' y='1.3955608117593967' width='0.1' height='0.1' style='fill: red'/>
+</g>
+</svg>
