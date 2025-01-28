@@ -8,10 +8,6 @@ This section contains papers I have explored and/or find interesting.
 
 - [Large-Scale Simultaneous Hypothesis Testing: The Choice of a Null Hypothesis](https://www.stat.cmu.edu/~jiashun/Teaching/F08STAT756/Lectures/Efron.pdf)
 
-- [Neural discrete representation learning](https://proceedings.neurips.cc/paper_files/paper/2017/file/7a98af17e63a0ac09ce2e96d03992fbc-Paper.pdf)
-
-- [Generating Diverse High-Fidelity Images with VQ-VAE-2](https://arxiv.org/pdf/1906.00446)
-
 - [Inference for a Bernoulli Process (A Bayesian View)](https://www.jstor.org/stable/2683855)
 
 - [Approximate Models and Robust Decisions](https://www.jstor.org/stable/26408074)
@@ -19,10 +15,6 @@ This section contains papers I have explored and/or find interesting.
 - [Bayesian Analysis of the Weibull Process with Unknown Scale Parameter and Its Application to Acceptance Sampling](https://ieeexplore.ieee.org/document/5217520)
 
 - [Online Updating of Statistical Inference in the Big Data Setting](https://pubmed.ncbi.nlm.nih.gov/28018007/)
-
-- [A layered grammar of graphics](https://vita.had.co.nz/papers/layered-grammar.html)
-
-- [Visualizing Data using t-SNE](https://www.jmlr.org/papers/volume9/vandermaaten08a/vandermaaten08a.pdf)
 
 - [The Moral Machine experiment](https://www.nature.com/articles/s41586-018-0637-6)
 
@@ -36,10 +28,44 @@ This section contains papers I have explored and/or find interesting.
 
 - [A Disentangled Recognition and Nonlinear Dynamics Model for Unsupervised Learning](https://arxiv.org/pdf/1710.05741)
 
+## Deep Learning
+
+- [Neural discrete representation learning](https://proceedings.neurips.cc/paper_files/paper/2017/file/7a98af17e63a0ac09ce2e96d03992fbc-Paper.pdf)
+
+- [Generating Diverse High-Fidelity Images with VQ-VAE-2](https://arxiv.org/pdf/1906.00446)
+
+## Visualisation
+
+- [A layered grammar of graphics](https://vita.had.co.nz/papers/layered-grammar.html)
+
+- [Visualizing Data using t-SNE](https://www.jmlr.org/papers/volume9/vandermaaten08a/vandermaaten08a.pdf)
+
+## Probabilistic Modelling
+
 - [Probabilistic Sequential Matrix Factorization](https://arxiv.org/pdf/1910.03906)
 
 - [Dictionary filtering: a probabilistic approach to online matrix factorisation](https://link.springer.com/article/10.1007/s11760-018-1403-9)
 
+## Computer Vision & Geometry
+
 - [Dual Contouring of Hermite Data](https://www.cs.rice.edu/~jwarren/papers/dualcontour.pdf)
 
 - [Dual Contouring: "The Secret Sauce"](https://people.eecs.berkeley.edu/~jrs/meshpapers/SchaeferWarren2.pdf)
+
+- [Neural Dual Contouring](https://arxiv.org/pdf/2202.01999) and [code and data](https://github.com/czq142857/NDC)
+
+- [Real-time Photorealistic Dynamic Scene Representation and Rendering with 4D Gaussian Splatting](https://arxiv.org/pdf/2310.10642) and [Project Page](https://fudan-zvg.github.io/4d-gaussian-splatting/)
+
+## LLMs:
+
+- [LoRA: Low-Rank Adaptation of Large Language Models](https://arxiv.org/pdf/2106.09685)
+
+- [A Survey on LLM-as-a-Judge](https://arxiv.org/pdf/2411.15594)
+
+- [Foundations of Large Language Models](https://arxiv.org/pdf/2501.09223)
+
+- [Agents (Google's whitepaper)](https://www.kaggle.com/whitepaper-agents)
+
+- [DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning](https://arxiv.org/pdf/2501.12948)
+
+- [Janus-Pro: Unified Multimodal Understanding and Generation with Data and Model Scaling](https://github.com/deepseek-ai/Janus/blob/main/janus_pro_tech_report.pdf)
