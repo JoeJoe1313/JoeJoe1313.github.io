@@ -75,3 +75,5 @@ This section contains papers I have explored and/or find interesting.
 - [FrontierMath: A Benchmark for Evaluating Advanced Mathematical Reasoning in AI](https://arxiv.org/pdf/2411.04872)
 
 - [ARC Prize 2024: Technical Report](https://arxiv.org/pdf/2412.04604)
+
+- [Chain-of-Retrieval Augmented Generation](https://arxiv.org/pdf/2501.14342)
