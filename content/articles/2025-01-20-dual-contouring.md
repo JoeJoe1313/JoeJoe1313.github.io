@@ -7,7 +7,7 @@ Slug: 2025-01-20-dual-contouring
 Status: draft
 ---
 
-This post is going to cover the so called **dual contouring**.
+This post is going to cover the so called **dual contouring** introduced [here](https://www.cs.rice.edu/~jwarren/papers/dualcontour.pdf).
 
 # Octree
 
