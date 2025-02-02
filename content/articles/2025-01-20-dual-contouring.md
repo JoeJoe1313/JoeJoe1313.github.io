@@ -19,7 +19,7 @@ Traditional methods like **Marching Cubes** compute the intersection of an isosu
 
 This approach not only results in a lower polygon count but is also more adept at preserving sharp features (edges and corners) inherent in the underlying surface.
 
-![DC vs MC](../code/2025-01-20-dual-contouring/dc_tee_comparison.svg){ style="display: block; margin: 0 auto"}
+![DC vs MC](../images/2025-01-20-dual-contouring/dc_tee_comparison.svg){ style="display: block; margin: 0 auto"}
 
 # Octree
 
