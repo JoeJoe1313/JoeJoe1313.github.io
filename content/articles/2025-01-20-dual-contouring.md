@@ -7,7 +7,19 @@ Slug: 2025-01-20-dual-contouring
 Status: draft
 ---
 
-This post is going to cover the so called **dual contouring** introduced [here](https://www.cs.rice.edu/~jwarren/papers/dualcontour.pdf).
+This post is going to cover the so called **Dual Contouring** introduced [here](https://www.cs.rice.edu/~jwarren/papers/dualcontour.pdf). Dual Contouring is a surface extraction technique that builds on ideas from methods like Marching Cubes but uses “dual” grid information to place vertices in cells based on Hermite data (i.e. both the intersection points of the isosurface with grid edges and the corresponding normals). The algorithm is particularly good at capturing sharp features and generating crack‐free meshes. In what follows, we are goig to walk through the main ideas and steps in detail.
+
+# Introduction
+
+Traditional methods like **Marching Cubes** compute the intersection of an isosurface with the edges of a uniform grid and then connect these intersection points based on a lookup table. In contrast, dual contouring:
+
+- Collects **Hermite data** along cell edges—this data consists of both the point where the isosurface intersects an edge and the surface normal (the gradient) at that point.
+- Places a vertex per cell (the “dual” vertex) by optimally fitting these intersection constraints via minimization of a **quadratic error function** (QEF).
+- Constructs the mesh by connecting these vertices in the dual grid, ensuring that adjacent cells yield coherent connectivity.
+
+This approach not only results in a lower polygon count but is also more adept at preserving sharp features (edges and corners) inherent in the underlying surface.
+
+![DC vs MC](../code/2025-01-20-dual-contouring/dc_tee_comparison.svg){ style="display: block; margin: 0 auto"}
 
 # Octree
 
@@ -18,6 +30,8 @@ What is an octree?
 Octree:
 
 ![Octree](../images/2025-01-20-dual-contouring/octree.jpg){ width=50% style="display: block; margin: 0 auto"}
+
+![Octree](../images/2025-01-20-dual-contouring/octree_p.png){ width=50% style="display: block; margin: 0 auto"}
 
 TBD
 
