@@ -1,6 +1,9 @@
+from io import open
+
 # AUTHOR = "Joana"
 SITENAME = "JoJo's Blog"
 SITEURL = ""
+EXTRA_HEADER = open("_nb_header.html", encoding="utf-8").read()
 
 PATH = "content"
 ARTICLE_PATHS = ["articles"]
@@ -59,6 +62,7 @@ PLUGINS = [
     "plugins.render_math",
     "plugins.liquid_tags.include_code",
     "plugins.liquid_tags.include_code_collapsible",
+    "plugins.liquid_tags.notebook",
     "plugins.goodreads_activity",
     "plugins.goodreads_quotes",
 ]

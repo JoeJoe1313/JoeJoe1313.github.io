@@ -2,7 +2,7 @@
 Title: Fine-Tuning LLMs with LoRA and MLX-LM
 Date: 2025-02-06 07:00
 Category: Machine Learning
-Tags: ai, ml
+Tags: ai, ml, llm
 Slug: 2025-02-06-fine-tuning-lora-mlx
 Status: published
 ---
@@ -24,7 +24,7 @@ First, we have to load the needed packages.
 import json
 from pathlib import Path
 
-```
+```python
 import matplotlib.pyplot as plt
 import mlx.optimizers as optim
 from mlx.utils import tree_flatten
@@ -36,14 +36,14 @@ from mlx_utils import load_hf_dataset
 
 Then, we should load the model and tokenizer.
 
-```
+```python
 model_path = "mlx-community/Mistral-7B-Instruct-v0.3-4bit"
 model, tokenizer = load(model_path)
 ```
 
 Let's see ...
 
-```
+```python
 prompt = "What is under-fitting and overfitting in machine learning?"
 messages = [{"role": "user", "content": prompt}]
 prompt = tokenizer.apply_chat_template(
@@ -53,7 +53,7 @@ prompt = tokenizer.apply_chat_template(
 
 The output is
 
-```
+```text
 Under-fitting and overfitting are two common problems that can occur when training machine learning models.
 
 1. Under-fitting: This occurs when a model is too simple to learn the underlying pattern in the data. In other words, the model is not complex enough to capture the relationship between the input and output variables. As a result, the model's performance on both the training and test data is poor. This can happen when the model has too few parameters, or when the model is not trained for long enough.
@@ -62,3 +62,5 @@ Under-fitting and overfitting are two common problems that can occur when traini
 
 The goal in machine learning is to find a balance between under-fitting and overfitting, where the model is complex enough to capture the underlying pattern in the data, but not so complex that it starts
 ```
+
+{% notebook 2025-02-07-qwen2_5-vl/qwen2_5_vl.ipynb %}
