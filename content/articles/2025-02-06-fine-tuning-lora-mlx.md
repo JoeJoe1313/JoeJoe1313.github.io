@@ -12,55 +12,12 @@ Medium draft post can be found [here](https://medium.com/@levchevajoana/fine-tun
 
 # Introduction
 
-MLX is an array framework tailored for efficient machine learning research on Apple silicon. Its biggest strength is that it leverages the unified memory architecture of Apple devices and offers a familiar, NumPy-like API. Apple has also developed a package for LLM text generation, fine-tuning, etc. called MLX LM.
+[MLX](https://opensource.apple.com/projects/mlx/) is an array framework tailored for efficient machine learning research on Apple silicon. Its biggest strength is that it leverages the unified memory architecture of Apple devices and offers a familiar, NumPy-like API. Apple has also developed a package for LLM text generation, fine-tuning, etc. called [MLX LM](https://github.com/ml-explore/mlx-examples/blob/main/llms/README.md).
 
-Overall,mlx-lm supports many of Hugging Face format LLMs. With mlx-lm it is also very easy to directly load models from the Hugging Face MLX Community. This is a place for mlx model pre-converted weights that run on Apple Silicon, hosting many ready-to-use models with the framework. The framework also supports parameter efficient fine-tuning with LoRA and QLoRA. You can find more information about LoRA in the paper.
+Overall, `mlx-lm` supports many of Hugging Face format LLMs. With `mlx-lm` it is also very easy to directly load models from the Hugging Face [MLX Community](https://huggingface.co/mlx-community). This is a place for mlx model pre-converted weights that run on Apple Silicon, hosting many ready-to-use models with the framework. The framework also supports parameter efficient fine-tuning with [LoRA and QLoRA](https://github.com/ml-explore/mlx-examples/tree/main/lora). You can find more information about LoRA in the following [paper](https://arxiv.org/abs/2106.09685).
 
-In this tutorial, with the help of the `mlx-lm` package, we are going to load the `Mistral-7B-Instruct-v0.3–4bit` model from the MLX Community space, and attempt to fine-tune it with LoRA and the dataset win-wang/Machine_Learning_QA_Collection. Let's begin.
+In this tutorial, with the help of the `mlx-lm` package, we are going to load the [Mistral-7B-Instruct-v0.3–4bit](https://medium.com/r/?url=https%3A%2F%2Fhuggingface.co%2Fmlx-community%2FMistral-7B-Instruct-v0.3-4bit) model from the MLX Community space, and attempt to fine-tune it with LoRA and the dataset [win-wang/Machine_Learning_QA_Collection](https://medium.com/r/?url=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Fwin-wang%2FMachine_Learning_QA_Collection). Let's begin.
 
 # Tutorial
 
-First, we have to load the needed packages.
-import json
-from pathlib import Path
-
-```python
-import matplotlib.pyplot as plt
-import mlx.optimizers as optim
-from mlx.utils import tree_flatten
-from mlx_lm import generate, load
-from mlx_lm.tuner import TrainingArgs, linear_to_lora_layers, train
-
-from mlx_utils import load_hf_dataset
-```
-
-Then, we should load the model and tokenizer.
-
-```python
-model_path = "mlx-community/Mistral-7B-Instruct-v0.3-4bit"
-model, tokenizer = load(model_path)
-```
-
-Let's see ...
-
-```python
-prompt = "What is under-fitting and overfitting in machine learning?"
-messages = [{"role": "user", "content": prompt}]
-prompt = tokenizer.apply_chat_template(
-    messages, tokenize=False, add_generation_prompt=True
-)
-```
-
-The output is
-
-```text
-Under-fitting and overfitting are two common problems that can occur when training machine learning models.
-
-1. Under-fitting: This occurs when a model is too simple to learn the underlying pattern in the data. In other words, the model is not complex enough to capture the relationship between the input and output variables. As a result, the model's performance on both the training and test data is poor. This can happen when the model has too few parameters, or when the model is not trained for long enough.
-
-2. Overfitting: This occurs when a model is too complex and starts to fit the noise in the data instead of the underlying pattern. In other words, the model is learning the idiosyncrasies of the training data rather than the general pattern that applies to new, unseen data. As a result, the model performs well on the training data but poorly on the test data. This can happen when the model has too many parameters, or when the model is trained for too long.
-
-The goal in machine learning is to find a balance between under-fitting and overfitting, where the model is complex enough to capture the underlying pattern in the data, but not so complex that it starts
-```
-
-{% notebook 2025-02-07-qwen2_5-vl/qwen2_5_vl.ipynb %}
+{% notebook 2025-02-06-fine-tuning-lora-mlx/simple_fine_tune_lora_mlx.ipynb %}
