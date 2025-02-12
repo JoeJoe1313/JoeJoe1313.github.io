@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>Chebyshev Polynomials: Part 1</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+                                
+<style type="text/css">
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: var(--jp-cell-editor-active-background) }
+.highlight { background: var(--jp-cell-editor-background); color: var(--jp-mirror-editor-variable-color) }
+.highlight .c { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment */
+.highlight .err { color: var(--jp-mirror-editor-error-color) } /* Error */
+.highlight .k { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword */
+.highlight .o { color: var(--jp-mirror-editor-operator-color); font-weight: bold } /* Operator */
+.highlight .p { color: var(--jp-mirror-editor-punctuation-color) } /* Punctuation */
+.highlight .ch { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Preproc */
+.highlight .cpf { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Single */
+.highlight .cs { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Special */
+.highlight .kc { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Pseudo */
+.highlight .kr { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Type */
+.highlight .m { color: var(--jp-mirror-editor-number-color) } /* Literal.Number */
+.highlight .s { color: var(--jp-mirror-editor-string-color) } /* Literal.String */
+.highlight .ow { color: var(--jp-mirror-editor-operator-color); font-weight: bold } /* Operator.Word */
+.highlight .pm { color: var(--jp-mirror-editor-punctuation-color) } /* Punctuation.Marker */
+.highlight .w { color: var(--jp-mirror-editor-variable-color) } /* Text.Whitespace */
+.highlight .mb { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Bin */
+.highlight .mf { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Float */
+.highlight .mh { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Hex */
+.highlight .mi { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Integer */
+.highlight .mo { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Oct */
+.highlight .sa { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Affix */
+.highlight .sb { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Backtick */
+.highlight .sc { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Char */
+.highlight .dl { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Delimiter */
+.highlight .sd { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Doc */
+.highlight .s2 { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Double */
+.highlight .se { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Escape */
+.highlight .sh { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Heredoc */
+.highlight .si { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Interpol */
+.highlight .sx { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Other */
+.highlight .sr { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Regex */
+.highlight .s1 { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Single */
+.highlight .ss { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Symbol */
+.highlight .il { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Integer.Long */
+</style>
+
+<style type="text/css">
+/* Overrides of notebook CSS for static HTML export */
+div.entry-content {
+  overflow: visible;
+  padding: 8px;
+}
+.input_area {
+  padding: 0.2em;
+}
+
+a.heading-anchor {
+ white-space: normal;
+}
+
+.rendered_html
+code {
+ font-size: .8em;
+}
+
+pre.ipynb {
+  color: black;
+  background: #f7f7f7;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 0;
+  padding: 0;
+  margin: 0px;
+  font-size: 13px;
+}
+
+/* remove the prompt div from text cells */
+div.text_cell .prompt {
+    display: none;
+}
+
+/* remove horizontal padding from text cells, */
+/* so it aligns with outer body text */
+div.text_cell_render {
+    padding: 0.5em 0em;
+}
+
+img.anim_icon{padding:0; border:0; vertical-align:middle; -webkit-box-shadow:none; -box-shadow:none}
+
+div.collapseheader {
+    width=100%;
+    background-color:#d3d3d3;
+    padding: 2px;
+    cursor: pointer;
+    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+</style>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        displayMath: [['$$','$$'], ["\\[","\\]"]]
+    }
+});
+</script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    $("div.collapseheader").click(function () {
+    $header = $(this).children("span").first();
+    $codearea = $(this).children(".input_area");
+    console.log($(this).children());
+    $codearea.slideToggle(500, function () {
+        $header.text(function () {
+            return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+        });
+    });
+});
+});
+</script>
+
+
+    <meta name="description" content="Chebyshev polynomials are a sequence of orthogonal polynomials that play a central role in numerical analysis, approximation theory, and applied..." />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li><a href="/books.html">Books</a></li>
+                                                <li><a href="/papers.html">Papers</a></li>
+                                                <li><a href="/category/machine-learning.html">Machine Learning</a></li>
+                                                <li class="active"><a href="/category/mathematics.html">Mathematics</a></li>
+                                <li><a href="/drafts.html">Drafts</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="/2025-01-06-chebyshev-polynomials.html" rel="bookmark"
+             title="Permalink to Chebyshev Polynomials: Part 1">Chebyshev Polynomials: Part 1</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2025-01-06T07:00:00+02:00">
+            Published: Mon 06 January 2025
+    </abbr>
+
+    <p>In <a href="/category/mathematics.html">Mathematics</a>.</p>
+<p>tags: <a href="/tag/mathematics.html">mathematics</a> <a href="/tag/polynomials.html">polynomials</a> </p>    
+</footer><!-- /.post-info -->        <p>Chebyshev polynomials are a sequence of orthogonal polynomials that play a central role in numerical analysis, approximation theory, and applied mathematics. They are named after the Russian mathematician Pafnuty Chebyshev and come in two primary types: Chebyshev polynomials of the first kind (<span class="math">\(T_n(x)\)</span>) and Chebyshev polynomials of the second kind (<span class="math">\(U_n(x)\)</span>). In this post we are going to focus on the Chebyshev polynomials of the first kind.</p>
+<h1>Chebyshev Polynomials of the First Kind</h1>
+<p>There are many different ways to define the Chebyshev polynomials of the first kind. The one that seems most logical to me and most useful in terms of outlining various properties of the polynomials is</p>
+<div class="math">$$\label{eq:1}
+T_{n}(x) = \cos{\left(n \arccos{x}\right)}, \quad x \in [-1, 1].\tag{1}
+$$</div>
+<p>Looking at \eqref{eq:1} it is not obvious why <span class="math">\(T_{n}(x)\)</span> would be a polynomial. In order to show it is indeed a polynomial let's recall the de Moivre's formula</p>
+<div class="math">$$
+\cos{(n \theta)} + i\sin{(n \theta)} = (\cos(\theta) + i \sin{\theta})^n.
+$$</div>
+<p>We can apply binomial expansion and take the real part from it to obatin</p>
+<div class="math">$$\label{eq:2}
+\cos(n \theta) = \sum_{k = 0}^{\frac{n}{2}} C(n, 2k) (-1)^k \cos^{n - 2k}\theta \sin^{2k}{\theta}. \tag{2}
+$$</div>
+<p>where </p>
+<div class="math">$$
+C(n, 2k) = \frac{n!}{(2k)!(n-2k)!}, \quad n \geq 2k, k \in N, n \in N
+$$</div>
+<p>denotes the binomal coefficient. We can also notice that</p>
+<div class="math">$$
+\sin^{2k}\theta = (\sin^2{\theta})^k = (1 - \cos^2{\theta})^k,
+$$</div>
+<p>showing that \eqref{eq:2} is a polynomial of <span class="math">\(\cos{\theta}\)</span> of degree <span class="math">\(n\)</span>. Now, let</p>
+<div class="math">$$
+\theta = \arccos{x},
+$$</div>
+<p>and by utilising <span class="math">\(\cos{\left(\arccos{x}\right)} = x\)</span> we get</p>
+<div class="math">$$
+x = \cos{\theta}.
+$$</div>
+<p>This transforms \eqref{eq:1} to </p>
+<div class="math">$$\label{eq:3}
+T_{n}(\cos{\theta}) = \cos{\left(n \theta\right)} \tag{3}
+$$</div>
+<p>which we already showed is a polynomial of degree <span class="math">\(n\)</span>. From here, because <span class="math">\(\cos(.)\)</span> is an even function, we can note that</p>
+<div class="math">$$
+T_{n}(x) = T_{-n}(x) = T_{|n|}(x.)
+$$</div>
+<p>From \eqref{eq:3} it is also obvious that the values of <span class="math">\(T_n\)</span> in the interval <span class="math">\([-1, 1]\)</span> are bounded in <span class="math">\([-1, 1]\)</span> because of the cosine.</p>
+<h2>Chebyshev Nodes of the First Kind</h2>
+<p>Before we continue with exploring the roots of the polynomials, let's recall some trigonometry. </p>
+<hr>
+<p>The <strong>unit circle</strong> is a circle with a radius of 1, centered at the origin of the Cartesian coordinate system. Below is shown part of the unit circle corresponding to the region from <span class="math">\(0\)</span> to <span class="math">\(\frac{\pi}{2}\)</span>.</p>
+<p><center>
+<img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/unit_circle.svg">
+</center></p>
+<p>The cosine of an angle <span class="math">\(\theta\)</span> corresponds to the <span class="math">\(x\)</span>-coordinate of the point where the terminal side of the angle (measured counterclockwise from the positive <span class="math">\(x\)</span>-axis) intersects the unit circle. In other words, <span class="math">\(\cos(\theta)\)</span> gives the horizontal distance from the origin to this intersection point. </p>
+<p>The <strong>arccosine</strong> is the inverse function of cosine, and it maps a cosine value back to its corresponding angle in the range <span class="math">\([0, \pi]\)</span> radians. For a given <span class="math">\(x\)</span>-coordinate on the unit circle, the arccosine gives the angle <span class="math">\(\theta\)</span> such that <span class="math">\(\cos(\theta) = x\)</span>, meaning</p>
+<div class="math">$$
+\arccos(x) = \theta, \quad \text{where } \theta \in [0, \pi].
+$$</div>
+<p>Moreover, a <strong>radian</strong> is defined as the angle subtended at the center of a circle by an arc whose length is equal to the radius of the circle. For any circle, the length of an arc <span class="math">\(s\)</span> is given by</p>
+<div class="math">$$
+s = r \cdot \theta,
+$$</div>
+<p>where <span class="math">\(r\)</span> is the radius of the circle, <span class="math">\(\theta\)</span> is the angle subtended by the arc at the center. This means that on the unit circle the length of the arc equals the measure of the angle in radians because <span class="math">\(r = 1\)</span>, and hence</p>
+<div class="math">$$
+s = \theta.
+$$</div>
+<hr>
+<p>Now, let's find the roots of the polynomial <span class="math">\(T_{n}(x)\)</span>. If we take the definition in \eqref{eq:1} we have to solve</p>
+<div class="math">$$
+\cos{\left(n \arccos{x}\right)} = 0, k \in N.
+$$</div>
+<p>The solutions in the interval <span class="math">\((-1, 1)\)</span> are given by</p>
+<div class="math">$$
+x_k = \cos{\left(\frac{2k - 1}{2n}\pi\right)}, n \in N, k = 1, 2, ...n.
+$$</div>
+<p>These roots are known as the <strong>Chebyshev nodes of the first kind</strong>, or the <strong>Chebyshev zeros</strong>. If we are working with an arbitrary interval <span class="math">\((a, b)\)</span> the affine transformation </p>
+<div class="math">$$
+x_k = \frac{a + b}{2} + \frac{b - a}{2}\cos{\left(\frac{2k - 1}{2n}\pi\right)}, n \in N, k = 1, 2, ...n
+$$</div>
+<p>is needed. From the cosine properties we can also note that the nodes are symmetric with respect to the midpoint of the interval, and that the extrema of <span class="math">\(T_n(x)\)</span> over the interval <span class="math">\([-1, 1]\)</span> alternate between <span class="math">\(-1\)</span> and <span class="math">\(1\)</span>. Also, a very useful fact is that these nodes are used in polynomial interpolation to minimize the <strong>Runge phenomenon</strong>.</p>
+<p>In the figure below we have shown the roots of <span class="math">\(T_{8}(x)\)</span> in blue. We have also built the perpendiculars from the roots to their interesction with the upper half of the unit circle, and marked these points in red.</p>
+<p><center>
+<img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/chebyshev_nodes_visualization.svg" width="45%"><img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/chebyshev_nodes.png" width="45%">
+</center></p>
+<p>Looking at the figure we can notice that the arc lengths between the red points seem to be of the same length. Let's show that this is indeed the truth.</p>
+<p>We showed the roots are the cosine functions <span class="math">\(\cos{\left(\frac{2k - 1}{2n}\pi\right)}, n \in N, k = 1, 2, ...n\)</span>. Thus, in the unit circle we have that the length of the corresponding arcs are equal to <span class="math">\(\left( \frac{2k - 1}{2n}\pi \right), n \in N, k = 1, 2, ...n\)</span>. Let's take two red points which are direct neighbours, or in other words let's take two red points corresponding to the randomly chosen <span class="math">\(m\)</span> and <span class="math">\(m + 1\)</span> roots, <span class="math">\(m \in k = \{1, 2, ..., n\}\)</span>. If we subtract them we are going to determine the length of the arc between them. We have</p>
+<div class="math">$$
+\frac{2(m + 1) - 1}{2n}\pi - \frac{2m - 1}{2n}\pi = \frac{\pi}{n},
+$$</div>
+<p>meaning that between every two nodes the arc length is equal and has a value of <span class="math">\(\frac{\pi}{n}\)</span>. A polynomial of degree <span class="math">\(n\)</span> has <span class="math">\(n\)</span> roots, which in our case are in the open interval <span class="math">\((-1, 1)\)</span>, meaning the arcs corresponding to every two neighbouring roots are <span class="math">\(n - 1\)</span>, and the two arcs between the <span class="math">\(x\)</span>-axis and the first and last roots due to the symmetry of roots have lenghts of</p>
+<div class="math">$$
+\frac{1}{2}\left(\pi - \frac{n-1}{n}\pi\right) = \frac{\pi}{2n}.
+$$</div>
+<h2>Recurrence relation</h2>
+<p>This is probably a bit out of nowhere, but let's take a look at the following trigonometric identity</p>
+<div class="math">$$\label{eq:4}
+\cos{\left((n + 1)\theta\right)} + \cos{\left((n - 1)\theta\right)} = 2 \cos{(\theta)} \cos{(n\theta)},\tag{4}
+$$</div>
+<p>and show that the left side indeed is equal to the right one. We are going to need the following two fundamental formulas of angle addition in trigonometry</p>
+<div class="math">$$
+\cos{(\alpha + \beta)} = \cos{\alpha} \cos{\beta} - \sin{\alpha} \sin{\beta},
+$$</div>
+<p>and</p>
+<div class="math">$$
+\cos{(\alpha - \beta)} = \cos{\alpha} \cos{\beta} + \sin{\alpha} \sin{\beta}.
+$$</div>
+<p>In our case we have</p>
+<div class="math">$$
+\cos{\left((n + 1)\theta\right)} = \cos{\left(n\theta + \theta\right)} = \cos{(n\theta)} \cos{\theta} - \sin{(n\theta)} \sin{\theta},
+$$</div>
+<p>and</p>
+<div class="math">$$
+\cos{\left((n - 1)\theta\right)} = \cos{\left(n\theta - \theta\right)} = \cos{(n\theta)} \cos{\theta} + \sin{(n\theta)} \sin{\theta}.
+$$</div>
+<p>Adding the above equations leads to the wanted result.</p>
+<p>Now, we can see that the terms of \eqref{eq:4} are exactly in the form of the right side of \eqref{eq:1}, \eqref{eq:3}, hence we get</p>
+<div class="math">$$
+T_{n + 1}(x) + T_{n - 1}(x) = 2T_{n}(x)T_{1}(x),
+$$</div>
+<p>or we get the useful <strong>recurrence relation</strong></p>
+<div class="math">$$\label{eq:5}
+T_{n + 1}(x) - 2xT_{n}(x) + T_{n - 1}(x) = 0.\tag{5}
+$$</div>
+<p>This relation along with adding <span class="math">\(T_{0}(x) = 1\)</span> and <span class="math">\(T_{1}(x) = x\)</span> is another famous way to define the Chebyshev polynomials of the first kind, or</p>
+<div class="math">$$
+\left\{\begin{align*}
+T_{0}(x) = 1, \\
+T_{1}(x) = x, \\
+T_{n + 1}(x) - 2xT_{n}(x) + T_{n - 1}(x) = 0.
+\end{align*}\right.\label{eq:6}\tag{6}
+$$</div>
+<p>Let's write the first <span class="math">\(6\)</span> polynomials by using \eqref{eq:6}:</p>
+<div class="math">$$
+\left\{\begin{align*}
+T_{0}(x) = 1, \quad \text{(even)}\\
+T_{1}(x) = x, \quad \text{(odd)}\\
+T_{2}(x) = 2x^2 - 1, \quad \text{(even)}\\
+T_{3}(x) = 4x^3 - 3x, \quad \text{(odd)}\\
+T_{4}(x) = 8x^4 - 8x^2 + 1, \quad \text{(even)}\\
+T_{5}(x) = 16x^5 - 20x^3 + 5x. \quad \text{(odd)}
+\end{align*}\right.
+$$</div>
+<p>We can notice that</p>
+<div class="math">$$
+T_{k}(x) = 2^{k-1}x^k + ...,
+$$</div>
+<p>and <span class="math">\(T_{k}(x)\)</span> is alternating between an even and an odd polynomial depending on whether <span class="math">\(k\)</span> is even or odd respectively.</p>
+<p>Before we continue with some visualisations and more facts, let's mention that an interesting way to represent the recurrence relation \eqref{eq:5} is via the determinant</p>
+<div class="math">$$
+T_{k}(x) = \det \begin{bmatrix}
+x &amp; 1 &amp; 0 &amp; \dots &amp; 0 \\
+1 &amp; 2x &amp; 1 &amp; \ddots &amp; \vdots \\
+0 &amp; 1 &amp; 2x &amp; \ddots &amp; 0 \\
+\vdots &amp; \ddots &amp; \ddots &amp; \ddots &amp; 1 \\
+0 &amp; \dots &amp; 0 &amp; 1 &amp; 2x
+\end{bmatrix}.
+$$</div>
+<p>Now, let's visualise the first <span class="math">\(8\)</span> polynomials.</p>
+<p><img alt="Chebyshev Polynomials" src="/images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials.png"></p>
+<p>But what can we notice if we stack them together?</p>
+<p><img alt="Chebyshev Polynomials Stacked" src="/images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_stacked.png"></p>
+<p>It is quite obvious that at the roots of the <span class="math">\(N\)</span>-th Chebyshev polynomial there is an <strong>aliasing</strong> effect, meaning higher order polynomials look like lower order ones. We can formally show it by fixing <span class="math">\(N\)</span>, at the roots <span class="math">\(x_k\)</span> of <span class="math">\(T_{N}(x) = 0\)</span>, and using the Chebyshev identity</p>
+<div class="math">$$
+\cos{\left((m + N)\theta\right)} + \cos{\left((m - N)\theta\right)} = 2\cos{(m\theta)}\cos{(N\theta)},
+$$</div>
+<p>or equivalently</p>
+<div class="math">$$
+T_{m + N}(x) + T_{m - N}(x) = 2T_{m}(x)T_{N}(x).
+$$</div>
+<p>Now, having <span class="math">\(T_{N}(x) = 0\)</span> leads to</p>
+<div class="math">$$
+T_{m + N}(x) = -T_{m - N}(x).
+$$</div>
+<p>If we consecutevly set <span class="math">\(m = N\)</span>, <span class="math">\(m = 2N\)</span>, ..., <span class="math">\(m = 6N\)</span>, etc. we would get</p>
+<div class="math">$$
+\left\{\begin{align*}
+T_{2N}(x_k) = -T_{0}(x_k) = -1, \\
+T_{3N}(x_k) = 0, \\
+T_{4N}(x_k) = 1, \\
+T_{5N}(x_k) = 0, \\
+T_{6N}(x_k) = -1, \\
+\text{etc}.
+\end{align*}\right.
+$$</div>
+<p>We can safely say that any higher-order Chebyshev polynomial <span class="math">\(T_{N}(x)\)</span> can be reduced to a lower-order <span class="math">\(j, 0 \leq j \leq N\)</span> Chebyshev polynomial at the sample points <span class="math">\(x_k\)</span> which are the roots of <span class="math">\(T_{N}(x)\)</span>. In the figure below we attempt to visualise this statement.</p>
+<p><img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/reduction.svg"></p>
+<p>The horizontal axis represents the order of Chebyshev polynomials, and the blue wavy line represents a "folded ribbon". Think of it as taking the sequence of polynomial orders and folding it back and forth. This folding happens at specific points where higher-order polynomials can be reduced to lower-order ones, which are the red <strong>x</strong> marks showing the sample points: the roots of <span class="math">\(T_n(x)\)</span>. The key insight is that at these special sample points, we don't need to work with the higher-order polynomials because we can use equivalent lower-order ones instead. This is incredibly useful in numerical computations as it can help reduce computational complexity, and makes the Chebyshev polynomials very computationally efficient.</p>
+<p>Let's illustarte this with a simple example. Let <span class="math">\(N = 2\)</span>, then for even <span class="math">\(m\)</span> we have</p>
+<div class="math">$$
+\left\{\begin{align*}
+T_{4}(x_k) = -T_{0}(x_k) = -1, \\
+T_{6}(x_k) = - T_{2}(x_k) = 0, \\
+T_{8}(x_k) = - T_{4}(x_k) = 1, \\
+T_{10}(x_k) = -T_{6}(x_k) = 0,  \\
+\text{etc}.
+\end{align*}\right.
+$$</div>
+<p>In the figure below we can see the even polynomials and that indeed <span class="math">\(T_{10}(x)\)</span> behaves like <span class="math">\(-T_{6}(x)\)</span> which behaves like <span class="math">\(T_{2}(x)\)</span> at the roots having value <span class="math">\(0\)</span>, <span class="math">\(T_{8}(x)\)</span> behaves like <span class="math">\(-T_{4}(x)\)</span> at the roots with value <span class="math">\(1\)</span> as in <span class="math">\(T_{0}(x)\)</span>, <span class="math">\(T_{6}(x)\)</span> behaves like <span class="math">\(-T_{2}(x)\)</span> with value <span class="math">\(0\)</span>, and <span class="math">\(T_{4}(x)\)</span> behaves like <span class="math">\(-T_{0}(x)\)</span> with value <span class="math">\(-1\)</span>.</p>
+<details>
+<summary>Click to expand code</summary>
+<figure class='code'>
+
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">chebyshev_polynomial</span><span class="p">(</span>
+    <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate nth Chebyshev polynomial of the first kind T_n(x).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        n: Order of polynomial (non-negative integer)</span>
+<span class="sd">        x: Point(s) at which to evaluate polynomial</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Value of T_n(x)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Order must be non-negative&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">t_prev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># T_0</span>
+        <span class="n">t_curr</span> <span class="o">=</span> <span class="n">x</span>  <span class="c1"># T_1</span>
+
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">t_next</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="n">t_curr</span> <span class="o">-</span> <span class="n">t_prev</span>
+            <span class="n">t_prev</span> <span class="o">=</span> <span class="n">t_curr</span>
+            <span class="n">t_curr</span> <span class="o">=</span> <span class="n">t_next</span>
+
+        <span class="k">return</span> <span class="n">t_curr</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">chebyshev_nodes</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate n Chebyshev nodes in [-1,1]&quot;&quot;&quot;</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">n</span><span class="p">))</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">chebyshev_polynomial</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;-T_</span><span class="si">{</span><span class="mi">0</span><span class="si">}</span><span class="s2">(x)&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">]:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">chebyshev_polynomial</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;T_</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">(x)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># plot nodes for n = 2</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">nodes</span> <span class="o">=</span> <span class="n">chebyshev_nodes</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">y_nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">nodes</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">nodes</span><span class="p">),</span> <span class="s2">&quot;bo&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;T_2(x) roots&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">node</span><span class="p">,</span> <span class="n">node</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+    <span class="c1"># plt.grid(True)</span>
+    <span class="c1"># Set aspect ratio to be equal</span>
+    <span class="c1"># plt.gca().set_aspect(&#39;equal&#39;, adjustable=&#39;box&#39;)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;T_n(x)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Chebyshev Polynomials Aliasing&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;center left&quot;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
+        <span class="s2">&quot;content/images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_aliasing_even.png&quot;</span>
+    <span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+</figure>
+</details>
+<p><img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_aliasing_even.png"></p>
+<p>For odd <span class="math">\(m\)</span> we have
+</p>
+<div class="math">$$
+\left\{\begin{align*}
+T_{3}(x_k) = - T_{1}(x_k) = - x\\
+T_{5}(x_k) = - T_{3}(x_k) = x\\
+T_{7}(x_k) = - T_{5}(x_k) = -x, \\
+T_{9}(x_k) = - T_{7}(x_k) = x, \\
+\text{etc}.
+\end{align*}\right.
+$$</div>
+<p>In the figure below we can see the odd polynomials and the aliasing as in the previous example.</p>
+<details>
+<summary>Click to expand code</summary>
+<figure class='code'>
+
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">chebyshev_polynomial</span><span class="p">(</span>
+    <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate nth Chebyshev polynomial of the first kind T_n(x).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        n: Order of polynomial (non-negative integer)</span>
+<span class="sd">        x: Point(s) at which to evaluate polynomial</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Value of T_n(x)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Order must be non-negative&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">t_prev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># T_0</span>
+        <span class="n">t_curr</span> <span class="o">=</span> <span class="n">x</span>  <span class="c1"># T_1</span>
+
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">t_next</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="n">t_curr</span> <span class="o">-</span> <span class="n">t_prev</span>
+            <span class="n">t_prev</span> <span class="o">=</span> <span class="n">t_curr</span>
+            <span class="n">t_curr</span> <span class="o">=</span> <span class="n">t_next</span>
+
+        <span class="k">return</span> <span class="n">t_curr</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">chebyshev_nodes</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate n Chebyshev nodes in [-1,1]&quot;&quot;&quot;</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">n</span><span class="p">))</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">chebyshev_polynomial</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;-T_</span><span class="si">{</span><span class="mi">1</span><span class="si">}</span><span class="s2">(x)&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">]:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">chebyshev_polynomial</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;T_</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">(x)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># plot nodes for n = 2</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">nodes</span> <span class="o">=</span> <span class="n">chebyshev_nodes</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">y_nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">nodes</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">nodes</span><span class="p">),</span> <span class="s2">&quot;bo&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;T_2(x) roots&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">node</span><span class="p">,</span> <span class="n">node</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+    <span class="c1"># plt.grid(True)</span>
+    <span class="c1"># Set aspect ratio to be equal</span>
+    <span class="c1"># plt.gca().set_aspect(&#39;equal&#39;, adjustable=&#39;box&#39;)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;T_n(x)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Chebyshev Polynomials Aliasing&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;center left&quot;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
+        <span class="s2">&quot;content/images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_aliasing_odd.png&quot;</span>
+    <span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+</figure>
+</details>
+<p><img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/chebyshev_polynomials_aliasing_odd.png"></p>
+<h2>Radial Plots</h2>
+<p>An interesting plot can be observed by plotting <span class="math">\(T_n(x)\)</span> radially. This means that instead of evaluating the polynomials over <span class="math">\([-1, 1]\)</span> in a Cartesian plane we are evaluating them at <span class="math">\(\frac{\theta}{\pi} - 1\)</span>, and plotting <span class="math">\(r = n + T_n(\frac{\theta}{\pi} - 1)\)</span> on polar axes. In other words, the input domain has been shifted and extended, and the results are drawn as radial distances <span class="math">\(r\)</span> around a circle defined by <span class="math">\(\theta\)</span>. This creates a polar visualization where each <span class="math">\(n\)</span> produces a distinct spiral-like ornament. We are also filling in the areas between the curves for a visual effect.</p>
+<details>
+<summary>Click to expand code</summary>
+<figure class='code'>
+
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.polynomial.chebyshev</span><span class="w"> </span><span class="kn">import</span> <span class="n">Chebyshev</span>
+
+<span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;projection&quot;</span><span class="p">:</span> <span class="s2">&quot;polar&quot;</span><span class="p">})</span>
+
+<span class="c1"># Generate and fill between consecutive curves</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">19</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="n">r1</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="n">Chebyshev</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span><span class="p">])(</span><span class="n">theta</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">r2</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">Chebyshev</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span><span class="p">])(</span><span class="n">theta</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Create black and white alternating pattern</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;x = t/π - 1&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+</figure>
+</details>
+<p><img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/polar_init_1.png" width="50%"><img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/polar_init_2.png" width="41%"></p>
+<p>More visualusations can be achieved by doing other domain changes. They can be seen below.</p>
+<p><img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/polar_0.png" width="25%"><img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/polar_1.png" width="25%"><img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/polar_2.png" width="25%"><img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/polar_3.png" width="25%"></p>
+<p><img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/polar_4.png" width="25%"><img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/polar_5.png" width="25%"><img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/polar_6.png" width="25%"><img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/polar_7.png" width="25%"></p>
+<p><img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/polar_8.png" width="25%"><img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/polar_9.png" width="25%"><img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/polar_10.png" width="25%"><img alt="alt text" src="/images/2025-01-06-chebyshev-polynomials/polar_11.png" width="25%"></p>
+<p>In a separate post, Chebyshev Polynomials, Part 2, we are going to explore the Chebyshev polynomials of the second kind, and their relations to the polynomials of the first kind.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "true";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+        </body>
+</html>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+  <!-- Coordinate axes -->
+  <path d="M 30 150 L 300 150" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <path d="M 50 170 L 50 10" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
+  
+  <!-- Arrow definitions -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="black"/>
+    </marker>
+  </defs>
+  
+  <!-- Rectangle -->
+  <path d="M 50 150 L 250 150 L 250 50 L 50 50 Z" stroke="black" fill="none" stroke-width="1"/>
+  
+  <!-- Hatching patterns -->
+  <pattern id="hatch" patternUnits="userSpaceOnUse" width="4" height="4" patternTransform="rotate(45)">
+    <line x1="0" y1="0" x2="0" y2="4" stroke="black" stroke-width="1"/>
+  </pattern>
+  
+  <!-- Extended hatched borders -->
+  <rect x="40" y="50" width="10" height="110" fill="url(#hatch)"/>
+  <rect x="250" y="50" width="10" height="110" fill="url(#hatch)"/>
+  <rect x="40" y="40" width="220" height="10" fill="url(#hatch)"/>
+  <rect x="40" y="150" width="220" height="10" fill="url(#hatch)"/>
+  
+  <!-- Labels -->
+  <text x="285" y="160" font-size="10">x</text>
+  <text x="40" y="20" font-size="10">y</text>
+  <text x="28" y="100" font-size="13">l₂</text>
+  <text x="150" y="175" font-size="13">l₁</text>
+  <text x="270" y="100" font-size="13">Γ</text>
+</svg>

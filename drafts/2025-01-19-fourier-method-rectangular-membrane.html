@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>Fourier Method for the 2D Wave Equation: Rectangular Membrane</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+                                
+<style type="text/css">
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: var(--jp-cell-editor-active-background) }
+.highlight { background: var(--jp-cell-editor-background); color: var(--jp-mirror-editor-variable-color) }
+.highlight .c { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment */
+.highlight .err { color: var(--jp-mirror-editor-error-color) } /* Error */
+.highlight .k { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword */
+.highlight .o { color: var(--jp-mirror-editor-operator-color); font-weight: bold } /* Operator */
+.highlight .p { color: var(--jp-mirror-editor-punctuation-color) } /* Punctuation */
+.highlight .ch { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Preproc */
+.highlight .cpf { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Single */
+.highlight .cs { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Special */
+.highlight .kc { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Pseudo */
+.highlight .kr { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Type */
+.highlight .m { color: var(--jp-mirror-editor-number-color) } /* Literal.Number */
+.highlight .s { color: var(--jp-mirror-editor-string-color) } /* Literal.String */
+.highlight .ow { color: var(--jp-mirror-editor-operator-color); font-weight: bold } /* Operator.Word */
+.highlight .pm { color: var(--jp-mirror-editor-punctuation-color) } /* Punctuation.Marker */
+.highlight .w { color: var(--jp-mirror-editor-variable-color) } /* Text.Whitespace */
+.highlight .mb { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Bin */
+.highlight .mf { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Float */
+.highlight .mh { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Hex */
+.highlight .mi { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Integer */
+.highlight .mo { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Oct */
+.highlight .sa { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Affix */
+.highlight .sb { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Backtick */
+.highlight .sc { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Char */
+.highlight .dl { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Delimiter */
+.highlight .sd { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Doc */
+.highlight .s2 { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Double */
+.highlight .se { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Escape */
+.highlight .sh { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Heredoc */
+.highlight .si { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Interpol */
+.highlight .sx { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Other */
+.highlight .sr { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Regex */
+.highlight .s1 { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Single */
+.highlight .ss { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Symbol */
+.highlight .il { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Integer.Long */
+</style>
+
+<style type="text/css">
+/* Overrides of notebook CSS for static HTML export */
+div.entry-content {
+  overflow: visible;
+  padding: 8px;
+}
+.input_area {
+  padding: 0.2em;
+}
+
+a.heading-anchor {
+ white-space: normal;
+}
+
+.rendered_html
+code {
+ font-size: .8em;
+}
+
+pre.ipynb {
+  color: black;
+  background: #f7f7f7;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 0;
+  padding: 0;
+  margin: 0px;
+  font-size: 13px;
+}
+
+/* remove the prompt div from text cells */
+div.text_cell .prompt {
+    display: none;
+}
+
+/* remove horizontal padding from text cells, */
+/* so it aligns with outer body text */
+div.text_cell_render {
+    padding: 0.5em 0em;
+}
+
+img.anim_icon{padding:0; border:0; vertical-align:middle; -webkit-box-shadow:none; -box-shadow:none}
+
+div.collapseheader {
+    width=100%;
+    background-color:#d3d3d3;
+    padding: 2px;
+    cursor: pointer;
+    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+</style>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        displayMath: [['$$','$$'], ["\\[","\\]"]]
+    }
+});
+</script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    $("div.collapseheader").click(function () {
+    $header = $(this).children("span").first();
+    $codearea = $(this).children(".input_area");
+    console.log($(this).children());
+    $codearea.slideToggle(500, function () {
+        $header.text(function () {
+            return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+        });
+    });
+});
+});
+</script>
+
+
+    <meta name="description" content="In this post we are going to explore the Fourier method for solving the 2D wave equation. For the 2D wave equation we are going to show the..." />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li><a href="/books.html">Books</a></li>
+                                                <li><a href="/papers.html">Papers</a></li>
+                                                <li><a href="/category/machine-learning.html">Machine Learning</a></li>
+                                                <li><a href="/category/mathematics.html">Mathematics</a></li>
+                                <li class="active"><a href="/drafts.html">Drafts</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="/drafts/2025-01-19-fourier-method-rectangular-membrane.html" rel="bookmark"
+             title="Permalink to Fourier Method for the 2D Wave Equation: Rectangular Membrane">Fourier Method for the 2D Wave Equation: Rectangular Membrane</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2025-01-19T07:00:00+02:00">
+            Published: Sun 19 January 2025
+    </abbr>
+
+    <p>In <a href="/category/mathematics.html">Mathematics</a>.</p>
+<p>tags: <a href="/tag/mathematics.html">mathematics</a> <a href="/tag/pde.html">pde</a> </p>    
+</footer><!-- /.post-info -->        <p>In this post we are going to explore the Fourier method for solving the 2D wave equation. For the 2D wave equation we are going to show the application of the method to a rectangular membrane. We are also going to attempt to outline some of the physical interpretations of the rectangular membrane.</p>
+<h1>2D Wave Equation</h1>
+<p>The 2D wave equation is of the form</p>
+<div class="math">$$\label{eq:tdwave}
+\frac{\partial^2 u}{\partial t^2} = a^2 \Delta{u} = a^2\left(\frac{\partial^2 u}{\partial^2 x^2} + \frac{\partial^2 u}{\partial y^2}\right). \tag{1}
+$$</div>
+<h2>Rectangular Membrane</h2>
+<p>Let's assume we have a rectangular membrane with sides of length <span class="math">\(l_1\)</span> and <span class="math">\(l_2\)</span>. Let's also assume it is fastened along the edges. A visaulisation can be seen below.</p>
+<p><center>
+<img alt="Rectangular Membrane" src="/images/2024-12-19-fourier-method-wave-equation/rectangular_membrane.svg" width="50%">
+</center></p>
+<p>We can describe the problem via the model</p>
+<div class="math">$$
+\left\{\begin{align*}
+\frac{\partial^2 u}{\partial t^2} = a^2 \Delta{u} = a^2\left(\frac{\partial^2 u}{\partial^2 x^2} + \frac{\partial^2 u}{\partial y^2}\right), \quad 0 &lt; x &lt; l_1, \quad 0 &lt; y &lt; l_2, \\
+u|_{\Gamma} = 0, \\
+u|_{t=0} = \varphi(x, y), u_t|_{t=0} = \psi(x, y),
+\end{align*}\right.
+$$</div>
+<p>also with boundary conditions coming from the rectangular boundary <span class="math">\(\Gamma\)</span></p>
+<div class="math">$$
+\left\{\begin{align*}
+u(0, y, t) = 0, \quad u(x, 0, t) = 0, \\
+u(l_1, y, t) = 0, \quad u(x, l_2, t) = 0.
+\end{align*}\right.
+$$</div>
+<p>A visualisation of the problem can be seen below.</p>
+<p><center>
+<img alt="Rectangular Membrane 3D" src="/images/2024-12-19-fourier-method-wave-equation/rectangular_membrane_3d.svg" width="50%">
+</center></p>
+<p>As in the 1D wave equation, we are going to apply the Fourier method, meaning we are looking for a solution of the form</p>
+<div class="math">$$
+U(x, y, t) = T(t)W(x, y).
+$$</div>
+<p>Substituting into the 2D wave equation <span class="math">\(\eqref{eq:tdwave}\)</span> we get</p>
+<div class="math">$$
+T^{\prime\prime}W = a^2 T \Delta{W}.
+$$</div>
+<p>Then, we divide by <span class="math">\(a^2TW\)</span> and get</p>
+<div class="math">$$
+\frac{T^{\prime\prime}}{a^2T} = \frac{\Delta{W}}{W} = - \lambda^2,
+$$</div>
+<p>leading to the following equations</p>
+<div class="math">$$
+T^{\prime\prime} + \lambda^2 a^2 T = 0
+$$</div>
+<p>and</p>
+<div class="math">$$
+\Delta{W} + \lambda^2 W = 0. \quad \text{(Helmholtz equation)}
+$$</div>
+<p>Now, we should do the same and apply the Fourier method to the Helmoltz equation. We are looking for a solution of the form</p>
+<div class="math">$$
+W(x, y) = X(x) Y(y).
+$$</div>
+<p>Substitution leads to</p>
+<div class="math">$$
+X^{\prime\prime}Y + XY^{\prime\prime} + \lambda^2 XY = 0.
+$$</div>
+<p>Further, dividing by <span class="math">\(XY\)</span> gives</p>
+<div class="math">$$
+-\frac{X^{\prime\prime}}{X} = \frac{Y^{\prime\prime}}{Y} + \lambda^2 = \alpha^2.
+$$</div>
+<p>Once again, we obtain the following to equations</p>
+<div class="math">$$
+X^{\prime\prime} + \alpha^2 X = 0,
+$$</div>
+<p>and</p>
+<div class="math">$$
+Y^{\prime\prime} + \beta^2Y = 0,
+$$</div>
+<p>where</p>
+<div class="math">$$
+\lambda^2 = \alpha^2 + \beta^2.
+$$</div>
+<p>Now, the boundary conditions take the forms</p>
+<div class="math">$$
+X(0) Y(y) T(t) = 0, \quad \text{and} \quad X(l_1) Y(y) T(t) = 0,
+$$</div>
+<p>and because we are looking for non-trivial solutions meaning <span class="math">\(T(t) \neq 0\)</span> and <span class="math">\(Y(y) \neq 0\)</span> identically, it follows</p>
+<div class="math">$$
+X(0) = X(l_1) = 0.
+$$</div>
+<p>Now, with the same logic first we have the boundary conditions</p>
+<div class="math">$$
+X(x)Y(0)T(t) = 0, \quad \text{and} \quad X(x)Y(l_2)T(t) = 0,
+$$</div>
+<p>then since <span class="math">\(X(x) \neq 0\)</span>, and <span class="math">\(T(t) \neq 0\)</span> it follows</p>
+<div class="math">$$
+Y(0) = Y(l_2) = 0.
+$$</div>
+<p>We obtain the following Sturm-Liouville problms</p>
+<div class="math">$$
+\left\{\begin{align*}
+X^{\prime\prime} + \alpha^2 X = 0, \\
+X(0) = X(l_1) = 0,
+\end{align*}\right.
+$$</div>
+<p>and</p>
+<div class="math">$$
+\left\{\begin{align*}
+Y^{\prime\prime} + \beta^2Y = 0, \\
+Y(0) = Y(l_2) = 0,
+\end{align*}\right.
+$$</div>
+<p>with eigenvalues and corresponing eigenfunctions, respectively,</p>
+<div class="math">$$
+\alpha_k = \frac{k\pi}{l_1}, k = 1,2,..., \quad X_k(x) = \sin{\left(\frac{k\pi}{l_1}x\right)}
+$$</div>
+<p>and</p>
+<div class="math">$$
+\beta_k = \frac{n\pi}{l_2}, n = 1,2,..., \quad Y_n(y) = \sin{\left(\frac{n\pi}{l_2}y\right)}.
+$$</div>
+<p>As defined earlier, to every pair <span class="math">\(\alpha_k\)</span>, <span class="math">\(\beta_k\)</span> there is a corresponding <span class="math">\(\lambda_{kn}^2 = \alpha_k^2 + \beta_k^2\)</span>. This is a Dirichlet eigenvalue of the Laplacian in our rectangular membrane. For each <span class="math">\(\lambda_{kn}\)</span> we have</p>
+<div class="math">$$
+\lambda_{kn} = \sqrt{\alpha_k^2 + \beta_k^2} = \pi \sqrt{\frac{k^2}{l_1^2} + \frac{n^2}{l_2^2}}
+$$</div>
+<p>and hence the corresponding general solution of <span class="math">\(T^{\prime\prime} + \lambda_{kn}^2 a^2 T = 0\)</span> is</p>
+<div class="math">$$
+T_{kn}(t) = A_{kn}\cos{(a\lambda_{kn}t)} + B_{kn}\sin{(a\lambda_{kn}t)}.
+$$</div>
+<p>Again, by the superposition principle, the solution of our 2D wave equation on rectangular membrane is sought in the form</p>
+<div class="math">$$
+u(x, y, t) = \sum_{k,n=1}^{\infty}\left(A_{kn}\cos{(a\lambda_{kn}t)} + B_{kn}\sin{(a\lambda_{kn}t)}\right)\sin{\left(\frac{k\pi}{l_1}x\right)}\sin{\left(\frac{n\pi}{l_2}y\right)}.
+$$</div>
+<p>...</p>
+<div class="math">$$
+u(x, y, 0) = \sum_{k,n=1}^{\infty}A_{kn}\sin{\left(\frac{k\pi}{l_1}x\right)}\sin{\left(\frac{n\pi}{l_2}y\right)} = \varphi(x, y),
+$$</div>
+<p>and</p>
+<div class="math">$$
+u_t(x, y, 0) = \sum_{k,n=1}^{\infty}B_{kn}a\lambda_{kn}\sin{\left(\frac{k\pi}{l_1}x\right)}\sin{\left(\frac{n\pi}{l_2}y\right)} = \psi(x, y).
+$$</div>
+<p>...</p>
+<div class="math">$$
+\omega_{kn}(x, y) := \sin{\left(\frac{k\pi}{l_1}x\right)}\sin{\left(\frac{n\pi}{l_2}y\right)}
+$$</div>
+<p>...</p>
+<div class="math">$$
+\int_0^{l_1} \int_0^{l_2} \omega_{kn}(x, y) \omega_{rs}(x, y) \mathrm{d}x \mathrm{d}y = \left\{\begin{align*}
+0, \quad k \neq r \quad \text{or} \quad n \neq s, \\
+\frac{l_1 l_2}{4}, \quad k = r \quad \text{and} \quad n = s.
+\end{align*}\right.
+$$</div>
+<p>...</p>
+<div class="math">$$
+A_{kn} = \frac{4}{l_1 l_2} \int_0^{l_1} \int_0^{l_2} \varphi(x, y) \sin{\left(\frac{k\pi}{l_1}x\right)} \sin{\left(\frac{n\pi}{l_2}y\right)} \mathrm{d}x \mathrm{d}y,
+$$</div>
+<p>and</p>
+<div class="math">$$
+B_{kn} = \frac{4}{l_1 l_2 a \lambda_{kn}} \int_0^{l_1} \int_0^{l_2} \psi(x, y) \sin{\left(\frac{k\pi}{l_1}x\right)} \sin{\left(\frac{n\pi}{l_2}y\right)} \mathrm{d}x \mathrm{d}y.
+$$</div>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "true";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+        </body>
+</html>

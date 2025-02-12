@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>Papers</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+                                
+<style type="text/css">
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: var(--jp-cell-editor-active-background) }
+.highlight { background: var(--jp-cell-editor-background); color: var(--jp-mirror-editor-variable-color) }
+.highlight .c { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment */
+.highlight .err { color: var(--jp-mirror-editor-error-color) } /* Error */
+.highlight .k { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword */
+.highlight .o { color: var(--jp-mirror-editor-operator-color); font-weight: bold } /* Operator */
+.highlight .p { color: var(--jp-mirror-editor-punctuation-color) } /* Punctuation */
+.highlight .ch { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Preproc */
+.highlight .cpf { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Single */
+.highlight .cs { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Special */
+.highlight .kc { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Pseudo */
+.highlight .kr { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Type */
+.highlight .m { color: var(--jp-mirror-editor-number-color) } /* Literal.Number */
+.highlight .s { color: var(--jp-mirror-editor-string-color) } /* Literal.String */
+.highlight .ow { color: var(--jp-mirror-editor-operator-color); font-weight: bold } /* Operator.Word */
+.highlight .pm { color: var(--jp-mirror-editor-punctuation-color) } /* Punctuation.Marker */
+.highlight .w { color: var(--jp-mirror-editor-variable-color) } /* Text.Whitespace */
+.highlight .mb { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Bin */
+.highlight .mf { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Float */
+.highlight .mh { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Hex */
+.highlight .mi { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Integer */
+.highlight .mo { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Oct */
+.highlight .sa { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Affix */
+.highlight .sb { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Backtick */
+.highlight .sc { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Char */
+.highlight .dl { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Delimiter */
+.highlight .sd { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Doc */
+.highlight .s2 { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Double */
+.highlight .se { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Escape */
+.highlight .sh { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Heredoc */
+.highlight .si { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Interpol */
+.highlight .sx { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Other */
+.highlight .sr { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Regex */
+.highlight .s1 { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Single */
+.highlight .ss { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Symbol */
+.highlight .il { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Integer.Long */
+</style>
+
+<style type="text/css">
+/* Overrides of notebook CSS for static HTML export */
+div.entry-content {
+  overflow: visible;
+  padding: 8px;
+}
+.input_area {
+  padding: 0.2em;
+}
+
+a.heading-anchor {
+ white-space: normal;
+}
+
+.rendered_html
+code {
+ font-size: .8em;
+}
+
+pre.ipynb {
+  color: black;
+  background: #f7f7f7;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 0;
+  padding: 0;
+  margin: 0px;
+  font-size: 13px;
+}
+
+/* remove the prompt div from text cells */
+div.text_cell .prompt {
+    display: none;
+}
+
+/* remove horizontal padding from text cells, */
+/* so it aligns with outer body text */
+div.text_cell_render {
+    padding: 0.5em 0em;
+}
+
+img.anim_icon{padding:0; border:0; vertical-align:middle; -webkit-box-shadow:none; -box-shadow:none}
+
+div.collapseheader {
+    width=100%;
+    background-color:#d3d3d3;
+    padding: 2px;
+    cursor: pointer;
+    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+</style>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        displayMath: [['$$','$$'], ["\\[","\\]"]]
+    }
+});
+</script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    $("div.collapseheader").click(function () {
+    $header = $(this).children("span").first();
+    $codearea = $(this).children(".input_area");
+    console.log($(this).children());
+    $codearea.slideToggle(500, function () {
+        $header.text(function () {
+            return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+        });
+    });
+});
+});
+</script>
+
+
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li><a href="/books.html">Books</a></li>
+                                                <li class="active"><a href="/papers.html">Papers</a></li>
+                                                <li><a href="/category/machine-learning.html">Machine Learning</a></li>
+                                                <li><a href="/category/mathematics.html">Mathematics</a></li>
+                                <li><a href="/drafts.html">Drafts</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <h1 class="entry-title">Papers</h1>
+    
+    <p>This section contains papers I have explored and/or find interesting.</p>
+<ul>
+<li>
+<p><a href="https://projecteuclid.org/journals/statistical-science/volume-23/issue-1/Microarrays-Empirical-Bayes-and-the-Two-Groups-Model/10.1214/07-STS236.full">Microarrays, Empirical Bayes and the Two-Groups Model</a></p>
+</li>
+<li>
+<p><a href="https://www.stat.cmu.edu/~jiashun/Teaching/F08STAT756/Lectures/Efron.pdf">Large-Scale Simultaneous Hypothesis Testing: The Choice of a Null Hypothesis</a></p>
+</li>
+<li>
+<p><a href="https://www.jstor.org/stable/2683855">Inference for a Bernoulli Process (A Bayesian View)</a></p>
+</li>
+<li>
+<p><a href="https://www.jstor.org/stable/26408074">Approximate Models and Robust Decisions</a></p>
+</li>
+<li>
+<p><a href="https://ieeexplore.ieee.org/document/5217520">Bayesian Analysis of the Weibull Process with Unknown Scale Parameter and Its Application to Acceptance Sampling</a></p>
+</li>
+<li>
+<p><a href="https://pubmed.ncbi.nlm.nih.gov/28018007/">Online Updating of Statistical Inference in the Big Data Setting</a></p>
+</li>
+<li>
+<p><a href="https://www.nature.com/articles/s41586-018-0637-6">The Moral Machine experiment</a></p>
+</li>
+<li>
+<p><a href="https://www.jstor.org/stable/4495239">A Primer on Interpreting Regression Models</a></p>
+</li>
+<li>
+<p><a href="https://www.jstor.org/stable/4537441">Interpretation of Interaction: A Review</a></p>
+</li>
+<li>
+<p><a href="https://www.cambridge.org/core/books/abs/trustworthy-online-controlled-experiments/ethics-in-controlled-experiments/9BE9EE3E28378CED9B95EFA8521038A7">Ethics in Controlled Experiments</a></p>
+</li>
+<li>
+<p><a href="https://bmcmedgenomics.biomedcentral.com/articles/10.1186/s12920-018-0397-z">Logistic regression over encrypted data from fully homomorphic encryption</a></p>
+</li>
+<li>
+<p><a href="https://arxiv.org/pdf/1710.05741">A Disentangled Recognition and Nonlinear Dynamics Model for Unsupervised Learning</a></p>
+</li>
+</ul>
+<h2>Deep Learning</h2>
+<ul>
+<li>
+<p><a href="https://proceedings.neurips.cc/paper_files/paper/2017/file/7a98af17e63a0ac09ce2e96d03992fbc-Paper.pdf">Neural discrete representation learning</a></p>
+</li>
+<li>
+<p><a href="https://arxiv.org/pdf/1906.00446">Generating Diverse High-Fidelity Images with VQ-VAE-2</a></p>
+</li>
+</ul>
+<h2>Visualisation</h2>
+<ul>
+<li>
+<p><a href="https://vita.had.co.nz/papers/layered-grammar.html">A layered grammar of graphics</a></p>
+</li>
+<li>
+<p><a href="https://www.jmlr.org/papers/volume9/vandermaaten08a/vandermaaten08a.pdf">Visualizing Data using t-SNE</a></p>
+</li>
+</ul>
+<h2>Probabilistic Modelling</h2>
+<ul>
+<li>
+<p><a href="https://arxiv.org/pdf/1910.03906">Probabilistic Sequential Matrix Factorization</a></p>
+</li>
+<li>
+<p><a href="https://link.springer.com/article/10.1007/s11760-018-1403-9">Dictionary filtering: a probabilistic approach to online matrix factorisation</a></p>
+</li>
+</ul>
+<h2>Computer Vision &amp; Geometry</h2>
+<ul>
+<li>
+<p><a href="https://www.cs.rice.edu/~jwarren/papers/dualcontour.pdf">Dual Contouring of Hermite Data</a></p>
+</li>
+<li>
+<p><a href="https://people.eecs.berkeley.edu/~jrs/meshpapers/SchaeferWarren2.pdf">Dual Contouring: "The Secret Sauce"</a></p>
+</li>
+<li>
+<p><a href="https://arxiv.org/pdf/2202.01999">Neural Dual Contouring</a> and <a href="https://github.com/czq142857/NDC">code and data</a></p>
+</li>
+<li>
+<p><a href="https://arxiv.org/pdf/2310.10642">Real-time Photorealistic Dynamic Scene Representation and Rendering with 4D Gaussian Splatting</a> and <a href="https://fudan-zvg.github.io/4d-gaussian-splatting/">Project Page</a></p>
+</li>
+</ul>
+<h2>LLMs:</h2>
+<ul>
+<li>
+<p><a href="https://arxiv.org/pdf/2106.09685">LoRA: Low-Rank Adaptation of Large Language Models</a></p>
+</li>
+<li>
+<p><a href="https://arxiv.org/pdf/2411.15594">A Survey on LLM-as-a-Judge</a></p>
+</li>
+<li>
+<p><a href="https://arxiv.org/pdf/2501.09223">Foundations of Large Language Models</a></p>
+</li>
+<li>
+<p><a href="https://www.kaggle.com/whitepaper-agents">Agents (Google's whitepaper)</a></p>
+</li>
+<li>
+<p><a href="https://arxiv.org/pdf/2501.12948">DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning</a></p>
+</li>
+<li>
+<p><a href="https://arxiv.org/pdf/2402.03300">DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models</a></p>
+</li>
+<li>
+<p><a href="https://github.com/deepseek-ai/Janus/blob/main/janus_pro_tech_report.pdf">Janus-Pro: Unified Multimodal Understanding and Generation with Data and Model Scaling</a></p>
+</li>
+<li>
+<p><a href="https://arxiv.org/pdf/2411.04872">FrontierMath: A Benchmark for Evaluating Advanced Mathematical Reasoning in AI</a></p>
+</li>
+<li>
+<p><a href="https://arxiv.org/pdf/2412.04604">ARC Prize 2024: Technical Report</a></p>
+</li>
+<li>
+<p><a href="https://arxiv.org/pdf/2501.14342">Chain-of-Retrieval Augmented Generation</a></p>
+</li>
+</ul>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+        </body>
+</html>
