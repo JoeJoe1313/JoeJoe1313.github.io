@@ -4,7 +4,7 @@ Date: 2025-02-07 07:00
 Category: Machine Learning
 Tags: ai, ml, vlm, mlx-vlm
 Slug: 2025-02-07-qwen2_5-vl-mlx-lm
-Status: published
+Status: draft
 ---
 
 This blog post is going to be a tutorial on how to ...
