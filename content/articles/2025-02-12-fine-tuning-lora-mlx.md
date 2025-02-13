@@ -1,9 +1,9 @@
 ---
 Title: Fine-Tuning LLMs with LoRA and MLX-LM
-Date: 2025-02-06 07:00
+Date: 2025-02-12 07:00
 Category: Machine Learning
 Tags: ai, ml, llm, mlx-lm, mlx
-Slug: 2025-02-06-fine-tuning-lora-mlx
+Slug: 2025-02-12-fine-tuning-lora-mlx
 Status: published
 ---
 
@@ -208,7 +208,7 @@ plt.show()
 
 For example, one of the trainings performed resulted in the following losses.
 
-![Train & Validation Loss](../images/2025-02-06-fine-tuning-lora-mlx/lora.jpg.png)
+![Train & Validation Loss](../images/2025-02-12-fine-tuning-lora-mlx/lora.jpg)
 
 ## Test the model_lora
 
