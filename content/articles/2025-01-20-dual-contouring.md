@@ -302,5 +302,3 @@ The dual contouring algorithm proceeds as follows:
 ## 9. Concluding Remarks
 
 Dual contouring of Hermite data provides a robust framework for isosurface extraction that is both mathematically sound and computationally efficient. By minimizing a well-defined quadratic error function derived from local tangent plane constraints, the method ensures that the extracted vertex optimally represents the underlying geometry—even in the presence of sharp features. The dual grid paradigm further simplifies the connectivity determination and facilitates the extension to adaptive spatial discretizations.
-
-This scientific formulation of dual contouring highlights its theoretical underpinnings and demonstrates how the combination of Hermite data and QEF minimization results in high-quality surface reconstructions from volumetric data.
