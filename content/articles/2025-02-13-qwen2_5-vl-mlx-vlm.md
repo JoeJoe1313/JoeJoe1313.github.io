@@ -312,7 +312,7 @@ In the end of their cookbook they mention that the above examples were based on 
 
 - bbox-format: JSON
 
-```json
+```python
 {"bbox_2d": [x1, y1, x2, y2], "label": "object name/description"}
 ```
 
@@ -330,7 +330,7 @@ x1,y1,x2,y2 object_name/description
 
 - point-format: JSON
 
-```json
+```python
 {"point_2d": [x, y], "label": "object name/description"}
 ```
 
