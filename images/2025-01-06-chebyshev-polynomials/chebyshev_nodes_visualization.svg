@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+    <!-- Draw the unit circle -->
+    <path d="M 50 230 A 150 150 0 0 1 350 230" fill="none" stroke="lightgray"/>    
+    <!-- Axes -->
+    <line x1="0" y1="230" x2="400" y2="230" stroke="black" stroke-width="1"/>
+    <line x1="200" y1="0" x2="200" y2="230" stroke="black" stroke-width="1"/>
+
+    <!-- Point 1 (rightmost) -->
+    <line x1="200" y1="230" x2="347.117792" y2="207.736452" stroke="green" stroke-dasharray="4"/>
+    <line x1="347.117792" y1="207.736452" x2="347.117792" y2="230" stroke="gray" stroke-dasharray="2"/>
+    <circle cx="347.117792" cy="207.736452" r="3" fill="red"/>
+    <circle cx="347.117792" cy="230" r="3" fill="blue"/>
+
+    <!-- Point 2 -->
+    <line x1="200" y1="230" x2="324.720442" y2="146.664465" stroke="green" stroke-dasharray="4"/>
+    <line x1="324.720442" y1="146.664465" x2="324.720442" y2="230" stroke="gray" stroke-dasharray="2"/>
+    <circle cx="324.720442" cy="146.664465" r="3" fill="red"/>
+    <circle cx="324.720442" cy="230" r="3" fill="blue"/>
+
+    <!-- Point 3 -->
+    <line x1="200" y1="230" x2="283.335534" y2="105.279558" stroke="green" stroke-dasharray="4"/>
+    <line x1="283.335534" y1="105.279558" x2="283.335534" y2="230" stroke="gray" stroke-dasharray="2"/>
+    <circle cx="283.335534" cy="105.279558" r="3" fill="red"/>
+    <circle cx="283.335534" cy="230" r="3" fill="blue"/>
+
+    <!-- Point 4 -->
+    <line x1="200" y1="230" x2="229.263548" y2="82.882208" stroke="green" stroke-dasharray="4"/>
+    <line x1="229.263548" y1="82.882208" x2="229.263548" y2="230" stroke="gray" stroke-dasharray="2"/>
+    <circle cx="229.263548" cy="82.882208" r="3" fill="red"/>
+    <circle cx="229.263548" cy="230" r="3" fill="blue"/>
+
+    <!-- Point 5 -->
+    <line x1="200" y1="230" x2="170.736452" y2="82.882208" stroke="green" stroke-dasharray="4"/>
+    <line x1="170.736452" y1="82.882208" x2="170.736452" y2="230" stroke="gray" stroke-dasharray="2"/>
+    <circle cx="170.736452" cy="82.882208" r="3" fill="red"/>
+    <circle cx="170.736452" cy="230" r="3" fill="blue"/>
+
+    <!-- Point 6 -->
+    <line x1="200" y1="230" x2="116.664466" y2="105.279558" stroke="green" stroke-dasharray="4"/>
+    <line x1="116.664466" y1="105.279558" x2="116.664466" y2="230" stroke="gray" stroke-dasharray="2"/>
+    <circle cx="116.664466" cy="105.279558" r="3" fill="red"/>
+    <circle cx="116.664466" cy="230" r="3" fill="blue"/>
+
+    <!-- Point 7 -->
+    <line x1="200" y1="230" x2="75.279558" y2="146.664465" stroke="green" stroke-dasharray="4"/>
+    <line x1="75.279558" y1="146.664465" x2="75.279558" y2="230" stroke="gray" stroke-dasharray="2"/>
+    <circle cx="75.279558" cy="146.664465" r="3" fill="red"/>
+    <circle cx="75.279558" cy="230" r="3" fill="blue"/>
+
+    <!-- Point 8 (leftmost) -->
+    <line x1="200" y1="230" x2="52.882208" y2="207.736452" stroke="green" stroke-dasharray="4"/>
+    <line x1="52.882208" y1="207.736452" x2="52.882208" y2="230" stroke="gray" stroke-dasharray="2"/>
+    <circle cx="52.882208" cy="207.736452" r="3" fill="red"/>
+    <circle cx="52.882208" cy="230" r="3" fill="blue"/>
+</svg>
