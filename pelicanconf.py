@@ -62,7 +62,6 @@ PLUGINS = [
     "plugins.render_math",
     "plugins.liquid_tags.include_code",
     "plugins.liquid_tags.include_code_collapsible",
-    "plugins.liquid_tags.notebook",
     "plugins.goodreads_activity",
     "plugins.goodreads_quotes",
 ]
