@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg version='1.1' xmlns='http://www.w3.org/2000/svg' viewBox='-150 -150 300 300'>
+<g transform='scale(50)'>
+<rect x='-3' y='-3' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-3' y='-2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-3' y='-1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-3' y='0' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-3' y='1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-3' y='2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-2' y='-3' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-2' y='-2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-2' y='-1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-2' y='0' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-2' y='1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-2' y='2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-1' y='-3' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-1' y='-2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-1' y='-1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-1' y='0' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-1' y='1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='-1' y='2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='0' y='-3' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='0' y='-2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='0' y='-1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='0' y='0' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='0' y='1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='0' y='2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='1' y='-3' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='1' y='-2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='1' y='-1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='1' y='0' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='1' y='1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='1' y='2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='2' y='-3' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='2' y='-2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='2' y='-1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='2' y='0' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='2' y='1' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<rect x='2' y='2' width='1' height='1' style='stroke: grey; stroke-width: 0.02; fill: none'/>
+<circle cx='-3' cy='-3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-3' cy='-2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-3' cy='-1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-3' cy='0' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-3' cy='1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-3' cy='2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-3' cy='3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-2' cy='-3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-2' cy='-2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-2' cy='-1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='-2' cy='0' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='-2' cy='1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='-2' cy='2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-2' cy='3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-1' cy='-3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='-1' cy='-2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='-1' cy='-1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='-1' cy='0' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='-1' cy='1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='-1' cy='2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='-1' cy='3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='0' cy='-3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='0' cy='-2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='0' cy='-1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='0' cy='0' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='0' cy='1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='0' cy='2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='0' cy='3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='1' cy='-3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='1' cy='-2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='1' cy='-1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='1' cy='0' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='1' cy='1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='1' cy='2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='1' cy='3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='2' cy='-3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='2' cy='-2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='2' cy='-1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='2' cy='0' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='2' cy='1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: black'/>
+<circle cx='2' cy='2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='2' cy='3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='3' cy='-3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='3' cy='-2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='3' cy='-1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='3' cy='0' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='3' cy='1' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='3' cy='2' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<circle cx='3' cy='3' r='0.05' style='stroke: black; stroke-width: 0.02; fill: white'/>
+<line x1='-2.227772129791749' y1='-1.1305232992323322' x2='-1.7673866489463868' y2='-1.7673866489463876' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='-1.7673866489463868' y1='1.767386648946388' x2='-2.2277721297917483' y2='1.1305232992323324' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='-1.130523299232332' y1='-2.2277721297917483' x2='-0.5086553250064134' y2='-2.499991226546668' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='-0.5086553250064134' y1='2.499991226546668' x2='-1.130523299232332' y2='2.2277721297917483' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='-0.5086553250064134' y1='-2.499991226546668' x2='0.5086553250064134' y2='-2.4999912265466673' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='0.5086553250064134' y1='2.4999912265466673' x2='-0.5086553250064134' y2='2.499991226546668' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='0.5086553250064134' y1='-2.4999912265466673' x2='1.1305232992323364' y2='-2.227772129791747' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='1.1305232992323364' y1='2.227772129791747' x2='0.5086553250064134' y2='2.4999912265466673' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='1.7673866489463883' y1='-1.7673866489463874' x2='2.227772129791749' y2='-1.1305232992323322' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='2.2277721297917483' y1='1.1305232992323324' x2='1.7673866489463872' y2='1.7673866489463872' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='-1.130523299232332' y1='-2.2277721297917483' x2='-1.7673866489463868' y2='-1.7673866489463876' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='1.7673866489463883' y1='-1.7673866489463874' x2='1.1305232992323364' y2='-2.227772129791747' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='-2.227772129791749' y1='-1.1305232992323322' x2='-2.4999912265466664' y2='-0.508655325006415' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='2.4999912265466664' y1='-0.508655325006415' x2='2.227772129791749' y2='-1.1305232992323322' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='-2.4999912265466664' y1='-0.508655325006415' x2='-2.499991226546668' y2='0.5086553250064124' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='2.499991226546668' y1='0.5086553250064124' x2='2.4999912265466664' y2='-0.508655325006415' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='-2.499991226546668' y1='0.5086553250064124' x2='-2.2277721297917483' y2='1.1305232992323324' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='2.2277721297917483' y1='1.1305232992323324' x2='2.499991226546668' y2='0.5086553250064124' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='-1.7673866489463868' y1='1.767386648946388' x2='-1.130523299232332' y2='2.2277721297917483' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<line x1='1.1305232992323364' y1='2.227772129791747' x2='1.7673866489463872' y2='1.7673866489463872' style='stroke:rgb(255,0,0);stroke-width:0.04'/>
+<rect x='-2.277772129791749' y='-1.1805232992323322' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-1.8173866489463868' y='-1.8173866489463877' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-1.8173866489463868' y='1.717386648946388' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-2.277772129791748' y='1.0805232992323324' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-1.180523299232332' y='-2.277772129791748' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-0.5586553250064135' y='-2.549991226546668' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-0.5586553250064135' y='2.4499912265466683' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-1.180523299232332' y='2.1777721297917485' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-0.5586553250064135' y='-2.549991226546668' width='0.1' height='0.1' style='fill: red'/>
+<rect x='0.45865532500641343' y='-2.549991226546667' width='0.1' height='0.1' style='fill: red'/>
+<rect x='0.45865532500641343' y='2.4499912265466675' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-0.5586553250064135' y='2.4499912265466683' width='0.1' height='0.1' style='fill: red'/>
+<rect x='0.45865532500641343' y='-2.549991226546667' width='0.1' height='0.1' style='fill: red'/>
+<rect x='1.0805232992323364' y='-2.277772129791747' width='0.1' height='0.1' style='fill: red'/>
+<rect x='1.0805232992323364' y='2.177772129791747' width='0.1' height='0.1' style='fill: red'/>
+<rect x='0.45865532500641343' y='2.4499912265466675' width='0.1' height='0.1' style='fill: red'/>
+<rect x='1.7173866489463883' y='-1.8173866489463875' width='0.1' height='0.1' style='fill: red'/>
+<rect x='2.1777721297917494' y='-1.1805232992323322' width='0.1' height='0.1' style='fill: red'/>
+<rect x='2.1777721297917485' y='1.0805232992323324' width='0.1' height='0.1' style='fill: red'/>
+<rect x='1.7173866489463872' y='1.7173866489463872' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-1.180523299232332' y='-2.277772129791748' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-1.8173866489463868' y='-1.8173866489463877' width='0.1' height='0.1' style='fill: red'/>
+<rect x='1.7173866489463883' y='-1.8173866489463875' width='0.1' height='0.1' style='fill: red'/>
+<rect x='1.0805232992323364' y='-2.277772129791747' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-2.277772129791749' y='-1.1805232992323322' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-2.549991226546666' y='-0.558655325006415' width='0.1' height='0.1' style='fill: red'/>
+<rect x='2.4499912265466666' y='-0.558655325006415' width='0.1' height='0.1' style='fill: red'/>
+<rect x='2.1777721297917494' y='-1.1805232992323322' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-2.549991226546666' y='-0.558655325006415' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-2.549991226546668' y='0.45865532500641243' width='0.1' height='0.1' style='fill: red'/>
+<rect x='2.4499912265466683' y='0.45865532500641243' width='0.1' height='0.1' style='fill: red'/>
+<rect x='2.4499912265466666' y='-0.558655325006415' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-2.549991226546668' y='0.45865532500641243' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-2.277772129791748' y='1.0805232992323324' width='0.1' height='0.1' style='fill: red'/>
+<rect x='2.1777721297917485' y='1.0805232992323324' width='0.1' height='0.1' style='fill: red'/>
+<rect x='2.4499912265466683' y='0.45865532500641243' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-1.8173866489463868' y='1.717386648946388' width='0.1' height='0.1' style='fill: red'/>
+<rect x='-1.180523299232332' y='2.1777721297917485' width='0.1' height='0.1' style='fill: red'/>
+<rect x='1.0805232992323364' y='2.177772129791747' width='0.1' height='0.1' style='fill: red'/>
+<rect x='1.7173866489463872' y='1.7173866489463872' width='0.1' height='0.1' style='fill: red'/>
+</g>
+</svg>
