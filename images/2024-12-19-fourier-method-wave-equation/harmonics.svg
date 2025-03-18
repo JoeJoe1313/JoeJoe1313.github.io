@@ -1,0 +1,227 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <!-- Background -->
+  <rect width="800" height="600" fill="white"/>
+  
+  <!-- Title -->
+  <text x="400" y="40" 
+        font-family="Arial" 
+        font-size="20" 
+        text-anchor="middle" 
+        font-weight="bold">Harmonics</text>
+
+  <!-- k=1 (First harmonic) -->
+  <g transform="translate(0,0)">
+    <text x="50" y="90" font-family="Arial" font-size="14" fill="#555">
+      First Harmonic
+    </text>
+    <!-- Axis -->
+    <line x1="100" y1="120" x2="700" y2="120" 
+          stroke="black" 
+          stroke-width="1"/>
+    <text x="50" y="125" 
+          font-family="Arial" 
+          font-size="16">k=1</text>
+    
+    <!-- Standing wave at t=0 -->
+    <path d="M 100 120 Q 400 50, 700 120" 
+          stroke="#2196F3" 
+          stroke-width="2" 
+          fill="none"/>
+    <!-- Standing wave at t=T/2 (dashed) -->
+    <path d="M 100 120 Q 400 190, 700 120" 
+          stroke="#2196F3" 
+          stroke-width="1.5" 
+          fill="none"
+          stroke-dasharray="5,5"/>
+    
+    <!-- Nodes -->
+    <circle cx="100" cy="120" r="4" fill="#F44336"/>
+    <circle cx="700" cy="120" r="4" fill="#F44336"/>
+    
+    <!-- Crest -->
+    <circle cx="400" cy="85" r="4" fill="#4CAF50"/>
+    <text x="400" y="75" 
+          font-family="Arial" 
+          font-size="14" 
+          fill="#4CAF50"
+          text-anchor="middle">Crest</text>
+
+    <!-- Arrow for oscillation -->
+    <line x1="400" y1="89" x2="400" y2="155" 
+          stroke="gray" 
+          stroke-width="1"
+          stroke-dasharray="5,2"/>
+    <polygon points="397,99 400,89 403,99" fill="gray"/>
+    <polygon points="397,145 400,155 403,145" fill="gray"/>
+  </g>
+
+  <!-- k=2 (Second harmonic) -->
+  <g transform="translate(0,140)">
+    <text x="50" y="90" font-family="Arial" font-size="14" fill="#555">
+      Second Harmonic
+    </text>
+    <!-- Axis -->
+    <line x1="100" y1="120" x2="700" y2="120" 
+          stroke="black" 
+          stroke-width="1"/>
+    <text x="50" y="125" 
+          font-family="Arial" 
+          font-size="16">k=2</text>
+    
+    <!-- Standing wave at t=0 -->
+    <path d="M 100 120 Q 250 50, 400 120 Q 550 190, 700 120" 
+          stroke="#2196F3" 
+          stroke-width="2" 
+          fill="none"/>
+    <!-- Standing wave at t=T/2 (dashed) -->
+    <path d="M 100 120 Q 250 190, 400 120 Q 550 50, 700 120" 
+          stroke="#2196F3" 
+          stroke-width="1.5" 
+          fill="none"
+          stroke-dasharray="5,5"/>
+    
+    <!-- Nodes -->
+    <circle cx="100" cy="120" r="4" fill="#F44336"/>
+    <circle cx="400" cy="120" r="4" fill="#F44336"/>
+    <circle cx="700" cy="120" r="4" fill="#F44336"/>
+    
+    <!-- Crests -->
+    <circle cx="250" cy="85" r="4" fill="#4CAF50"/>
+    <circle cx="550" cy="155" r="4" fill="#4CAF50"/>
+    <text x="250" y="75" 
+          font-family="Arial" 
+          font-size="14" 
+          fill="#4CAF50"
+          text-anchor="middle">Crest</text>
+    <text x="550" y="180" 
+          font-family="Arial" 
+          font-size="14" 
+          fill="#4CAF50"
+          text-anchor="middle">Trough</text>
+    
+    <!-- Arrow for oscillation -->
+    <line x1="250" y1="89" x2="250" y2="155" 
+          stroke="gray" 
+          stroke-width="1"
+          stroke-dasharray="5,2"/>
+    <polygon points="247,99 250,89 253,99" fill="gray"/>
+    <polygon points="247,145 250,155 253,145" fill="gray"/>
+    <line x1="550" y1="85" x2="550" y2="150" 
+          stroke="gray" 
+          stroke-width="1"
+          stroke-dasharray="5,2"/>
+    <polygon points="547,95 550,85 553,95" fill="gray"/>
+    <polygon points="547,142 550,152 553,142" fill="gray"/>
+  </g>
+
+  <!-- k=3 (Third harmonic) -->
+  <g transform="translate(0,280)">
+    <text x="50" y="90" font-family="Arial" font-size="14" fill="#555">
+      Third Harmonic
+    </text>
+    <!-- Axis -->
+    <line x1="100" y1="120" x2="700" y2="120" 
+          stroke="black" 
+          stroke-width="1"/>
+    <text x="50" y="125" 
+          font-family="Arial" 
+          font-size="16">k=3</text>
+    
+    <!-- Standing wave at t=0 -->
+    <path d="M 100 120 Q 200 50, 300 120 Q 400 190, 500 120 Q 600 50, 700 120" 
+          stroke="#2196F3" 
+          stroke-width="2" 
+          fill="none"/>
+    <!-- Standing wave at t=T/2 (dashed) -->
+    <path d="M 100 120 Q 200 190, 300 120 Q 400 50, 500 120 Q 600 190, 700 120" 
+          stroke="#2196F3" 
+          stroke-width="1.5" 
+          fill="none"
+          stroke-dasharray="5,5"/>
+    
+    <!-- Nodes -->
+    <circle cx="100" cy="120" r="4" fill="#F44336"/>
+    <circle cx="300" cy="120" r="4" fill="#F44336"/>
+    <circle cx="500" cy="120" r="4" fill="#F44336"/>
+    <circle cx="700" cy="120" r="4" fill="#F44336"/>
+    
+    <!-- Crests -->
+    <circle cx="200" cy="85" r="4" fill="#4CAF50"/>
+    <circle cx="400" cy="155" r="4" fill="#4CAF50"/>
+    <circle cx="600" cy="85" r="4" fill="#4CAF50"/>
+    <text x="200" y="75" 
+          font-family="Arial" 
+          font-size="14" 
+          fill="#4CAF50"
+          text-anchor="middle">Crest</text>
+    <text x="400" y="180" 
+          font-family="Arial" 
+          font-size="14" 
+          fill="#4CAF50"
+          text-anchor="middle">Trough</text>
+    <text x="600" y="75" 
+          font-family="Arial" 
+          font-size="14" 
+          fill="#4CAF50"
+          text-anchor="middle">Crest</text>
+    
+    <!-- Arrow for oscillation -->
+    <line x1="200" y1="89" x2="200" y2="155" 
+          stroke="gray" 
+          stroke-width="1"
+          stroke-dasharray="5,2"/>
+    <polygon points="197,99 200,89 203,99" fill="gray"/>
+    <polygon points="197,145 200,155 203,145" fill="gray"/>
+    <line x1="400" y1="85" x2="400" y2="150" 
+          stroke="gray" 
+          stroke-width="1"
+          stroke-dasharray="5,2"/>
+    <polygon points="397,95 400,85 403,95" fill="gray"/>
+    <polygon points="397,142 400,152 403,142" fill="gray"/>
+    <line x1="600" y1="89" x2="600" y2="155" 
+          stroke="gray" 
+          stroke-width="1"
+          stroke-dasharray="5,2"/>
+    <polygon points="597,99 600,89 603,99" fill="gray"/>
+    <polygon points="597,145 600,155 603,145" fill="gray"/>
+  </g>
+
+  <!-- Legend -->
+  <rect x="320" y="500" width="450" height="40" 
+        fill="white" 
+        stroke="#CCCCCC" 
+        stroke-width="1"
+        rx="5"/>
+        
+  <!-- Legend items -->
+  <g transform="translate(120,520)">
+    <!-- Wave at t=0 -->
+    <line x1="220" y1="0" x2="260" y2="0" 
+          stroke="#2196F3" 
+          stroke-width="2"/>
+    <text x="270" y="5" 
+          font-family="Arial" 
+          font-size="14">Wave at t=0</text>
+          
+    <!-- Wave at t=T/2 -->
+    <line x1="380" y1="0" x2="420" y2="0" 
+          stroke="#2196F3" 
+          stroke-width="1.5"
+          stroke-dasharray="5,5"/>
+    <text x="430" y="5" 
+          font-family="Arial" 
+          font-size="14">Wave at t=T/2</text>
+          
+    <!-- Nodes -->
+    <circle cx="560" cy="0" r="4" fill="#F44336"/>
+    <text x="580" y="5" 
+          font-family="Arial" 
+          font-size="14">Nodes</text>
+          
+    <!-- Crests -->
+    <!-- <circle cx="440" cy="0" r="4" fill="#4CAF50"/>
+    <text x="460" y="5" 
+          font-family="Arial" 
+          font-size="14">Crests</text> -->
+  </g>
+</svg>
