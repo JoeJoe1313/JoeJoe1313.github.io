@@ -4,7 +4,7 @@ Date: 2025-03-18 07:00
 Category: Mathematics
 Tags: mathematics, python
 Slug: 2025-03-18-lissajous-curves
-Status: published
+Status: draft
 ---
 
 Lissajous (/ˈlɪsəʒuː/) curves or also Lissajous figures or even Bowditch curves are the family of curves described by the following parametric equations
@@ -29,4 +29,10 @@ Lissajous curves find applications in physics, astronomy, and other sciences.
 
 ## Padua Points
 
-# Lissajous Curves and ECG
+# Lissajous Knots
+
+# Spherical Lissajous Curves
+
+# Aerial Search Patterns
+
+# Planning Multi-Agent Trajectories
