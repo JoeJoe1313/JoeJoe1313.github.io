@@ -104,9 +104,13 @@ Now that we’ve defined the bounding box by its coordinates, let’s zoom in on
 
 Figure 3 | Mapping the 64x64 mask to the bounding box
 Once resized, the mask is aligned to fit within the bounding box. To overlay this mask on the original image, we create an empty array matching the dimensions of the input image and then replace the array values corresponding to the bounding box coordinates with those from the interpolated segmentation mask.
-MLX
+
+# MLX
+
 Finally, it’s time to dive into the coding section of this blog and focus specifically on the mlx components. The code can be found in GitHub.
 We begin by importing the necessary libraries and modules,
+
+```python
 import argparse
 import functools
 import logging
@@ -121,18 +125,32 @@ import numpy as np
 from mlx_vlm import apply_chat_template, generate, load
 from mlx_vlm.utils import load_image
 from tensorflow.io import gfile
+```
+
 then, we establish the paths for the models and image resources. The MODEL_PATH points to the specific PaliGemma model that we are going to use for segmentation tasks. The IMAGE_PATH is the location of the image that we will process, and the _KNOWN_MODELS dictionary provides a reference to the VAE checkpoint needed for mask reconstruction.
+
+```python
 MODEL_PATH = "mlx-community/paligemma2-10b-mix-448-8bit"
 IMAGE_PATH = "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/transformers/tasks/car.jpg"
 _KNOWN_MODELS = {"oi": "gs://big_vision/paligemma/vae-oid.npz"}
+```
+
 Before diving into the core functionality, we set up logging to keep track of the execution flow and for debugging purposes. The following snippet initializes Python’s built-in logging system:
+
+```python
 logging.basicConfig()
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
+```
+
 The ResBlock class implements a basic residual block typical for convolutional architectures. It comprises three convolution layers:
-Two 3×3 convolutions with ReLU activations, which process the input.
-One 1×1 convolution to adjust dimensions if needed.
+
+- Two `3x3` convolutions with ReLU activations, which process the input.
+- One `1x1` convolution to adjust dimensions if needed.
+
 The output of the block is computed by summing the result of the convolutions with the original input. This residual connection helps maintain gradient flow during training and preserves information across layers.
+
+```python
 class ResBlock(nn.Module):
     def __init__(self, features: int):
         super().__init__()
@@ -152,11 +170,16 @@ class ResBlock(nn.Module):
         x = nn.relu(self.conv2(x))
         x = self.conv3(x)
         return x + original_x
+```
+
 The Decoder class takes quantized vectors (obtained from segmentation tokens) and upscales them to produce a mask:
-An initial convolution reduces the channel dimension.
-A series of configurable residual blocks further process the features.
+
+- An initial convolution reduces the channel dimension.
+- A series of configurable residual blocks further process the features.
 Multiple transpose convolution layers (upsample layers) scale the feature maps until the desired resolution is reached.
-A final convolution produces the output mask.
+- A final convolution produces the output mask.
+
+```python
 class Decoder(nn.Module):
     """Decoder that upscales quantized vectors to produce a mask.
     The architecture is parameterized to avoid hardcoded layer definitions.
@@ -206,10 +229,13 @@ class Decoder(nn.Module):
             x = nn.relu(layer(x))
 
         return self.conv_out(x)
+```
+
 The helper function _get_params is designed to convert a PyTorch checkpoint into a format that MLX can work with. It does so by
-Transposing kernel weights to match the expected output format: from PyTorch’s format to MLX’s (Out, H, W, In) format.
-Organizing the parameters into a structured dictionary that reflects the architecture of the decoder, including the convolutional layers, residual blocks, and upsample layers.
+Transposing kernel weights to match the expected output format: from PyTorch’s format to MLX’s (Out, H, W, In) format. Organizing the parameters into a structured dictionary that reflects the architecture of the decoder, including the convolutional layers, residual blocks, and upsample layers.
 This organized set of parameters is then used to initialize the decoder network.
+
+```python
 def _get_params(checkpoint: dict) -> dict:
     """Converts PyTorch checkpoint to MLX params (nested dict).
     Uses transpositions yielding (Out, H, W, In) format weights."""
@@ -258,7 +284,11 @@ def _get_params(checkpoint: dict) -> dict:
     }
 
     return params
-The function _quantized_values_from_codebook_indices takes the segmentation tokens (represented as codebook indices) and uses the embeddings from the codebook to retrieve the corresponding encoded representations. These values are reshaped to fit the expected dimensions (batch, height, width, channels) so that they are ready for processing by the decoder.
+```
+
+The function `_quantized_values_from_codebook_indices` takes the segmentation tokens (represented as codebook indices) and uses the embeddings from the codebook to retrieve the corresponding encoded representations. These values are reshaped to fit the expected dimensions (batch, height, width, channels) so that they are ready for processing by the decoder.
+
+```python
 def _quantized_values_from_codebook_indices(
     codebook_indices: mx.array, embeddings: mx.array
 ) -> mx.array:
@@ -270,7 +300,11 @@ def _quantized_values_from_codebook_indices(
     encodings = mx.take(embeddings, codebook_indices.reshape((-1,)), axis=0)
 
     return encodings.reshape((batch_size, 4, 4, embeddings.shape[1]))
-The get_reconstruct_masks function loads the VAE checkpoint and initializes the decoder with the appropriate parameters. By extracting and setting up the necessary embeddings and decoder weights, this function returns another function (reconstruct_masks) that, when given segmentation tokens, decodes them into a binary segmentation mask.
+```
+
+The `get_reconstruct_masks` function loads the VAE checkpoint and initializes the decoder with the appropriate parameters. By extracting and setting up the necessary embeddings and decoder weights, this function returns another function (reconstruct_masks) that, when given segmentation tokens, decodes them into a binary segmentation mask.
+
+```python
 @functools.cache
 def get_reconstruct_masks(model: str) -> Callable[[mx.array], mx.array]:
     """Loads the checkpoint and returns a function that reconstructs masks
@@ -294,7 +328,11 @@ def get_reconstruct_masks(model: str) -> Callable[[mx.array], mx.array]:
         return decoder(quantized)
 
     return reconstruct_masks
-The function extract_and_create_arrays parses a given string pattern for segmentation tokens. It extracts these token numbers, converts them into integers, and then wraps them in MLX arrays for further mask reconstruction processing.
+```
+
+The function `extract_and_create_arrays` parses a given string pattern for segmentation tokens. It extracts these token numbers, converts them into integers, and then wraps them in MLX arrays for further mask reconstruction processing.
+
+```python
 def extract_and_create_arrays(pattern: str) -> List[mx.array]:
     """Extracts segmentation tokens from each object in the pattern and returns a list of MLX arrays."""
     object_strings = [obj.strip() for obj in pattern.split(";") if obj.strip()]
@@ -307,7 +345,11 @@ def extract_and_create_arrays(pattern: str) -> List[mx.array]:
             seg_tokens_arrays.append(mx.array(seg_numbers))
 
     return seg_tokens_arrays
-The parse_bbox function interprets the model's output string to extract bounding box coordinates. Each detected object's location is denoted by a string format (<loc1234>). This function finds four numbers per object, corresponding to the box boundaries, and aggregates them into a list of bounding boxes.
+```
+
+The parse_bbox function interprets the model's output string to extract bounding box coordinates. Each detected object's location is denoted by a string format (`<loc1234>`). This function finds four numbers per object, corresponding to the box boundaries, and aggregates them into a list of bounding boxes.
+
+```python
 def parse_bbox(model_output: str):
     entries = model_output.split(";")
 
@@ -320,11 +362,16 @@ def parse_bbox(model_output: str):
             results.append(bbox)
 
     return results
+```
+
 The gather_masks function combines the reconstruction and bounding box parsing steps. For each object:
-It reconstructs the mask from its codebook indices.
-It obtains the corresponding bounding box coordinates.
-It normalizes these coordinates relative to a target image resolution (448×448 in this example).
-Each mask is then paired with its coordinates and stored in a list, making it straightforward to later overlay these onto the original image.
+
+- It reconstructs the mask from its codebook indices.
+- It obtains the corresponding bounding box coordinates.
+- It normalizes these coordinates relative to a target image resolution (448×448 in this example).
+- Each mask is then paired with its coordinates and stored in a list, making it straightforward to later overlay these onto the original image.
+
+```python
 def gather_masks(output, codes_list, reconstruct_fn):
     masks_list = []
 
@@ -348,10 +395,16 @@ def gather_masks(output, codes_list, reconstruct_fn):
         )
 
     return masks_list
-The function plot_masks handles the visualization of the segmentation outcomes. It loads the original image and processes it for display. Two types of visualizations are provided:
-Composite Overlay: All masks are combined and overlaid on the original image.
-Reconstructed Mask: Each reconstructed mask is plotted next to the composite overlay.
+```
+
+The function `plot_masks` handles the visualization of the segmentation outcomes. It loads the original image and processes it for display. Two types of visualizations are provided:
+
+- Composite Overlay: All masks are combined and overlaid on the original image.
+- Reconstructed Mask: Each reconstructed mask is plotted next to the composite overlay.
+
 Using OpenCV for mask resizing and Matplotlib for plotting, the function creates a series of subplots to clearly display both composite and individual mask overlays.
+
+```python
 def plot_masks(args, processor, masks_list):
 
     image = load_image(args.image_path)
@@ -389,13 +442,19 @@ def plot_masks(args, processor, masks_list):
 
     plt.tight_layout()
     plt.show()
+```
+
 The main function ties all the pieces together. It performs the following steps:
-Loading: Reads the specified PaliGemma model and image.
-Setup: Initializes the VAE checkpoint and extracts the reconstruction function.
-Prompting: Formats the prompt using the processor and generates a segmentation output via the model.
-Processing: Extracts segmentation tokens, reconstructs masks, and parses bounding box coordinates.
-Visualization: Finally, it calls the plotting function to display the results.
+
+- Loading: Reads the specified PaliGemma model and image.
+- Setup: Initializes the VAE checkpoint and extracts the reconstruction function.
+- Prompting: Formats the prompt using the processor and generates a segmentation output via the model.
+- Processing: Extracts segmentation tokens, reconstructs masks, and parses bounding box coordinates.
+- Visualization: Finally, it calls the plotting function to display the results.
+
 This function serves as the central point where data processing, model inference, mask reconstruction, and visualization are integrated into one complete pipeline.
+
+```python
 def main(args) -> None:
     log.info(f"Loading PaliGemma model: {args.model_path}")
     model, processor = load(args.model_path)
@@ -423,7 +482,11 @@ def main(args) -> None:
 
     log.info("Plotting masks...")
     plot_masks(processor, masks_list)
+```
+
 Finally, the script includes an entry point that parses command-line arguments. Users can specify the image path, the prompt for the segmentation task, the model path, and the VAE checkpoint path. Once these are provided via argparse, the main function is invoked to start the processing pipeline.
+
+```python
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Vision tasks using PaliGemma 2 mix.")
     parser.add_argument(
@@ -441,56 +504,101 @@ if __name__ == "__main__":
 
     cli_args = parser.parse_args()
     main(cli_args)
-Results
+```
+
+# Results
+
 Let’s take a look at some examples and the segmentations we obtained from the model.
-Single Object Segmentation
+
+## Single Object Segmentation
+
 In this section, we are going to show to examples of single object segmentation.
+
 Prompt:
+
 “segment cow”
+
 Image:
 
 Original image of size 400x400
+
 Model output:
+
+```text
 <loc0410><loc0528><loc0884><loc1023><seg072><seg055><seg062><seg079><seg104><seg009><seg104><seg096><seg068><seg041><seg103><seg019><seg100><seg004><seg091><seg067>
+```
+
 Mask overlay and reconstructed mask:
 
 Left: mask overlay onto the input image of size 448x448 | Right: reconstructed mask of size 64x64
+
 Observation:
+
 Based on the overlay image, the model manages to detect the precise location of the cow but struggles a bit with the detailed outlines of the cow. Looking only at the reconstructed mask would not persuade me that this is a cow.
+
+---
+
 Prompt:
+
 “segment cat”
+
 Image:
 
 Original image of size 400x400
+
 Model output:
+
+```text
 <loc0060><loc0000><loc0920><loc0879><seg039><seg107><seg018><seg006><seg056><seg120><seg058><seg042><seg079><seg094><seg009><seg099><seg074><seg010><seg078><seg012>
+```
+
 Mask overlay and reconstructed mask:
 
 Left: mask overlay onto the input image of size 448x448 | Right: reconstructed mask of size 64x64
+
 Observation:
+
 Based on the overlay image, the model manages to detect the precise location of the cat, and is generally doing a good job with the cat’s outlines.
-Multiple Object Segmentation
+
+## Multiple Object Segmentation
+
 It was tricky to find a working example for segmenting multiple objects, so there is only one example in this section. My observation is that the PaliGemma models are indeed very sensitive to the prompt formatting, and the 448–10B-8bit model might just not be powerful enough for the task of segmenting multiple objects.
+
 Prompt:
+
 “segment left wheel ; right wheel”
+
 Image:
 
 Original image of size 640x480
+
 Model output:
+
+```text
 <loc0591><loc0157><loc0794><loc0311> <seg092><seg004><seg044><seg092><seg120><seg061><seg029><seg120><seg090><seg023><seg021><seg090><seg015><seg041><seg044><seg073> right wheel ; <loc0586><loc0728><loc0794><loc0882> <seg092><seg004><seg089><seg092><seg120><seg048><seg054><seg038><seg119><seg029><seg021><seg090><seg095><seg041><seg044><seg073> right wheel
+```
+
 Mask overlay and reconstructed mask:
 
 Left: masks overlay onto the input image of size 448x448 | Right: reconstructed masks of size 64x64
+
 Observation:
+
 Looking at the model output we can see that both segmentations are labeled as right wheel. Despite this, based on the overlay image, the model manages to detect the precise location of the wheels, and their outlines.
-Conclusion
+
+# Conclusion
+
 In summary, we implemented a unified segmentation pipeline by combining Google’s PaliGemma 2 Mix model with Apple’s MLX framework. Our workflow involved formatting segmentation prompts, preprocessing images, extracting segmentation tokens and bounding box coordinates, decoding these tokens into segmentation masks, and finally overlaying the masks on the original images.
+
 For single object segmentation, the model generally performed well: it accurately localised the object areas, as evidenced by both the “cat” and the “cow” examples. However, the segmentation for the “cow” revealed some challenges with capturing fine details, indicating areas for potential refinement.
+
 The multiple object segmentation proved challenging, as we struggled to find more than one working example that produced multiple segmentations. In our single example, the model demonstrated the ability to detect the general locations of objects — successfully identifying both wheels — but it also suffered from issues such as prompt sensitivity and duplicate labelling. This difficulty may be attributed to the inherent prompt sensitivity of the model or potential limitations of the specific model variant, particularly the 448–10B-8bit configuration. These observations suggest that either refining prompt structures or exploring more powerful models may be essential for reliably handling segmentation tasks involving multiple objects.
-References
-Introducing PaliGemma 2 mix: A vision-language model for multiple tasks
-PaliGemma prompt and system instructions
-PaliGemma 2 Mix — New Instruction Vision Language Models by Google
-Welcome PaliGemma 2 — New vision language models by Google
-Introducing PaliGemma 2: Powerful Vision-Language Models, Simple Fine-Tuning
-PaliGemma 2: A Family of Versatile VLMs for Transfer
+
+# References
+
+- Introducing PaliGemma 2 mix: A vision-language model for multiple tasks
+- PaliGemma prompt and system instructions
+- PaliGemma 2 Mix — New Instruction Vision Language Models by Google
+- Welcome PaliGemma 2 — New vision language models by Google
+- Introducing PaliGemma 2: Powerful Vision-Language Models, Simple Fine-Tuning
+- PaliGemma 2: A Family of Versatile VLMs for Transfer
