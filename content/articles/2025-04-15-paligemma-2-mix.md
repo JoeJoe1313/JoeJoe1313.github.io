@@ -106,7 +106,7 @@ Now that we’ve defined the bounding box by its coordinates, let’s zoom in on
 - Next, we need to map the segmentation mask onto the bounding box that was previously defined. This is accomplished using classical interpolation techniques to scale the mask to the bounding box’s dimensions.
 
 <figure>
-  <img src="../images/2025-04-15-paligemma-2-mix/input_bb.png" alt="Mapping mask to bounding box" style="display: block; margin: 0 auto">
+  <img src="../images/2025-04-15-paligemma-2-mix/map_mask.png" alt="Mapping mask to bounding box" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 3. Mapping the 64x64 mask to the bounding box</figcaption>
 </figure>
 
