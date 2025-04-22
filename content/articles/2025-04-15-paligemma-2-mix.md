@@ -4,28 +4,27 @@ Date: 2025-04-15 07:00
 Category: Machine Learning
 Tags: ai, ml, vlm, mlx-vlm, mlx
 Slug: 2025-04-15-paligemma-2-mix
-Status: draft
+Status: published
 ---
 
-In this post, we are going to explore Google’s PaliGemma 2 mix vision-language model (VLM), and its capabilities to perform image segmentation. What’s interesting is that we are going to perform this task by only using Apple’s MLX framework, and MLX-VLM. This would eliminate the dependency of using JAX/Flax as in the original Google’s segmentation script, and would allow us to fully and seamlessly utilise Apple’s unified memory.
+In this post, we are going to explore Google’s [**PaliGemma 2 mix**](https://developers.googleblog.com/en/introducing-paligemma-2-mix/) vision-language model (VLM), and its capabilities to perform image segmentation. What’s interesting is that we are going to perform this task by only using Apple’s MLX framework, and MLX-VLM. This would eliminate the dependency of using JAX/Flax as in the original Google’s segmentation [script](https://github.com/google-research/big_vision/blob/main/big_vision/evaluators/proj/paligemma/transfers/segmentation.py), and would allow us to fully and seamlessly utilise Apple’s unified memory. Medium post can be found [here](https://medium.com/@levchevajoana/image-segmentation-with-paligemma-2-mix-and-mlx-7e69e077968b).
 
 # Introduction
 
 ## PaliGemma 2
 
-In December 2024 Google introduced the PaliGemma 2 vision-language models (VLMs). These are pre-trained (pt) models coming in three different sizes: 3B, 10B, and 28B, as well as three different input resolutions for images: 224x224, 448x448, and 896x896 pixels. These models represent the latest evolution of vision-language models developed by Google, building upon the foundation laid by its predecessor, PaliGemma. Below, we can see the architecture of the PaliGemma 2 model.
+In December 2024 Google introduced the [PaliGemma 2](https://developers.googleblog.com/en/introducing-paligemma-2-powerful-vision-language-models-simple-fine-tuning/) vision-language models (VLMs). These are pre-trained (**pt**) models coming in three different sizes: `3B`, `10B`, and `28B`, as well as three different input resolutions for images: `224x224`, `448x448`, and `896x896` pixels. These models represent the latest evolution of vision-language models developed by Google, building upon the foundation laid by its predecessor, PaliGemma. Below, we can see the architecture of the PaliGemma 2 model.
 
-![PaliGemma 2 architecture](../images/2025-04-15-paligemma-2-mix/paligemma2-architecture.png)
+<figure>
+  <img src="../images/2025-04-15-paligemma-2-mix/paligemma2-architecture.png" alt="PaliGemma 2 architecture" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 1. PaliGemma 2 Architecture Overview <span style="font-size: 0.8em;">[<a href="https://arxiv.org/pdf/2412.03555">Source</a>]</span></figcaption>
+</figure>
 
-Figure 1 | PaliGemma 2 architecture; source: https://arxiv.org/pdf/2412.03555
-
-<!-- ![Input](../images/2025-02-13-qwen2_5-vl-mlx-vlm/input.png){ style="display: block; margin: 0 auto"} -->
-
-PaliGemma 2 processes images at resolutions of 224×224, 448×448, or 896×896 pixels using a SigLIP-400m vision encoder with a patch size of 14×14 pixels. This design yields 256, 1024, or 4096 tokens, respectively. After a linear projection, the resulting image tokens are concatenated with the input text tokens, and Gemma 2 is used as a text decoder to autoregressively complete the combined prefix to generate an answer.
+PaliGemma 2 processes images at resolutions of `224×224`, `448×448`, or `896×896` pixels using a **[SigLIP-400m](https://arxiv.org/abs/2303.15343) vision encoder** with a patch size of 14×14 pixels. This design yields 256, 1024, or 4096 tokens, respectively. After a linear projection, the resulting image tokens are concatenated with the input text tokens, and [**Gemma 2**](https://blog.google/technology/developers/google-gemma-2/) is used as a **text decoder** to autoregressively complete the combined prefix to generate an answer.
 
 ## PaliGemma 2 Mix
 
-As already mentioned, PaliGemma 2 models are pre-trained models, but they are also designed to be easy to fine-tune and adapt to various specific vision-language tasks and domains. Google wanted to demonstrate the performance of a fine-tuned version of the pt PaliGemma 2 models on downstream tasks, and thus a few months later, in February 2025, they introduced PaliGemma 2 mix. These models are fine-tuned to a mixture of vision language tasks that can be used out-of-the-box for common use cases. They are available in three sizes: 3B, 10B, and 28B, and support resolutions of 224×224 and 448×448 pixels.
+As already mentioned, PaliGemma 2 models are pre-trained models, but they are also designed to be easy to fine-tune and adapt to various specific vision-language tasks and domains. Google wanted to demonstrate the performance of a fine-tuned version of the pt PaliGemma 2 models on downstream tasks, and thus a few months later, in February 2025, they introduced [**PaliGemma 2 mix**](https://developers.googleblog.com/en/introducing-paligemma-2-mix/). These models are fine-tuned to a mixture of vision language tasks that can be used out-of-the-box for common use cases. They are available in three sizes: `3B`, `10B`, and `28B`, and support resolutions of `224×224` and `448×448` pixels.
 
 ### Tasks
 
@@ -39,18 +38,18 @@ PaliGemma 2 mix can perform the following types of tasks:
 
 ### Prompting
 
-In general, the PaliGemma models are very sensitive to the prompt’s syntax and patterns. But based on the following Hugging Face article when using PaliGemma 2 mix models, open-ended prompts yield better performance than the previously required task-prefixed prompts. Earlier, task-specific prefixes were essential, like
+In general, the PaliGemma models are very sensitive to the prompt’s syntax and patterns. But based on the following Hugging Face [article](https://huggingface.co/blog/paligemma2mix) when using PaliGemma 2 mix models, open-ended prompts yield better performance than the previously required task-prefixed prompts. Earlier, task-specific prefixes were essential, like
 
-- “caption {lang}\n”: Short captions
-- “describe {lang}\n”: More descriptive captions
-- “ocr”: Optical character recognition
-- “answer {lang} {question}\n”: Question answering about the image contents
-- “question {lang} {answer}\n”: Question generation for a given answer
+- `"caption {lang}\n"`: Short captions
+- `"describe {lang}\n"`: More descriptive captions
+- `"ocr"`: Optical character recognition
+- `"answer {lang} {question}\n"`: Question answering about the image contents
+- `"question {lang} {answer}\n"`: Question generation for a given answer
 
-However, two specific tasks — object detection and image segmentation — still exclusively require task prefixes:
+However, two specific tasks - **object detection** and **image segmentation** - still exclusively require task prefixes:
 
-- "detect {object description} ; {object description} ; ...\n": Locate multiple objects in an image and return the bounding boxes for those objects
-- "segment {object description} ; {object description} ; ...\n": Locate the area occupied by multiple objects in an image to create an image segmentation for that object
+- `"detect {object description} ; {object description} ; ...\n"`: Locate multiple objects in an image and return the bounding boxes for those objects
+- `"segment {object description} ; {object description} ; ...\n"`: Locate the area occupied by multiple objects in an image to create an image segmentation for that object
 
 # Image Segmentation
 
@@ -62,17 +61,18 @@ Unlike image classification, which labels an entire image, or object detection, 
 
 ## Image Segmentation with VLMs
 
-VLMs enhance traditional image segmentation by enabling open-vocabulary segmentation through textual instructions, moving away from closed-set methods that rely on predefined categories. By merging text and image data into a common feature space, these models reduce adaptation costs and excel at tasks like referring expression segmentation. For example, a user might prompt the model to “segment the cat sitting on the chair”, and the VLM would identify and segment the pixels corresponding to that specific cat.
+VLMs enhance traditional image segmentation by enabling open-vocabulary segmentation through textual instructions, moving away from closed-set methods that rely on predefined categories. By merging text and image data into a common feature space, these models reduce adaptation costs and excel at tasks like referring expression segmentation. For example, a user might prompt the model to *“segment the cat sitting on the chair”*, and the VLM would identify and segment the pixels corresponding to that specific cat.
 
 To achieve this, VLMs harness visual features from encoders like CNNs or Vision Transformers, using cross-attention to focus on image regions relevant to the text. Some models are fine-tuned to produce bounding boxes or segmentation masks directly, and careful prompting guides them to accurately segment based on the integrated understanding of visual content and language.
 
 ## Image Segmentation the PaliGemma 2 Way
 
-Earlier, in Figure 1 we saw that PaliGemma 2’s architecture combines a Transformer decoder based on the Gemma 2 language model with a Vision Transformer image encoder initialised from SigLIP-So400m/14. The SigLIP encoder divides input images into 14x14 pixel patches to generate “soft tokens” that capture spatial relationships. Then, a linear projection layer is used to map the visual tokens into the same dimensional space as the input embeddings of the Gemma 2 language model. This projection ensures that the visual information can be seamlessly combined with textual information for processing by the language model.
+Earlier, in **Figure 1** we saw that PaliGemma 2’s architecture combines a Transformer decoder based on the Gemma 2 language model with a Vision Transformer image encoder initialised from SigLIP-So400m/14. The SigLIP encoder divides input images into `14x14` pixel patches to generate “soft tokens” that capture spatial relationships. Then, a linear projection layer is used to map the visual tokens into the same dimensional space as the input embeddings of the Gemma 2 language model. This projection ensures that the visual information can be seamlessly combined with textual information for processing by the language model.
 
-The Gemma 2 language model functions as the decoder, processing concatenated image tokens and text tokens to produce autoregressive text output, predicting one token at a time based on the preceding context. To enhance its capabilities for vision-language tasks, PaliGemma extends the vocabulary of the standard Gemma tokenizer (having 256,000 tokens) with additional special tokens. These include 1024 tokens representing coordinates in a normalised image space, denoted as <loc0000> through <loc1023>, and another 128 tokens, <seg000> through <seg127>, which are codewords used for a lightweight referring-expression segmentation vector-quantized approach.
+The Gemma 2 language model functions as the decoder, processing concatenated image tokens and text tokens to produce autoregressive text output, predicting one token at a time based on the preceding context. To enhance its capabilities for vision-language tasks, PaliGemma extends the vocabulary of the standard Gemma tokenizer (having 256,000 tokens) with additional special tokens. These include 1024 tokens representing coordinates in a normalised image space, denoted as `<loc0000>` through `<loc1023>`, and another 128 tokens, `<seg000>` through `<seg127>`, which are codewords used for a lightweight referring-expression segmentation vector-quantized approach.
 
 ### Segmentation Output
+
 When processing a segmentation prompt, PaliGemma 2 mix produces a sequence that begins with four location tokens defining the bounding box for the segmented object. These four tokens specify the bounding box coordinates in the normalized image space. This is followed by 16 segmentation tokens, which can be decoded via a learned codebook into a binary segmentation mask confined within the identified region. Below is an example output:
 
 ```text
@@ -81,33 +81,41 @@ When processing a segmentation prompt, PaliGemma 2 mix produces a sequence that 
 
 ### Segmentation Mask
 
-If we want to further process the 16 segmentation tokens to generate a binary segmentation mask within the identified bounding box, we have to decode the segmentation tokens by using the Decoder from Google’s big vision repository related to the PaliGemma models. It is available in the following script. As we can see, the script uses JAX and Flax, and it is known that the Metal plug-in for JAX is still not fully supported as stated in the Accelerated JAX on Mac article. In the next part of this post, we are going to show not only how to reconstruct the binary mask with the help of the above script, but we are also going to show how to translate JAX/Flax to mlx so that we can fully utilise the unified memory in Apple’s chips.
+If we want to further process the 16 segmentation tokens to generate a binary segmentation mask within the identified bounding box, we have to decode the segmentation tokens by using the Decoder from Google’s big vision repository related to the PaliGemma models. It is available in the following [script](https://github.com/google-research/big_vision/blob/main/big_vision/evaluators/proj/paligemma/transfers/segmentation.py). As we can see, the script uses JAX and Flax, and it is known that the Metal plug-in for JAX is still not fully supported as stated in the [Accelerated JAX on Mac](https://developer.apple.com/metal/jax/) article. In the next part of this post, we are going to show not only how to reconstruct the binary mask with the help of the above script, but we are also going to show how to translate JAX/Flax to [mlx](https://github.com/ml-explore/mlx) so that we can fully utilise the unified memory in Apple’s chips.
 
 # Tutorial
 
-In this section, we are going to generate a segmentation mask with the PaliGemma 2 mix model, specifically mlx-community/paligemma2–10b-mix-448–8bit, by using only the packages mlx-vlm and mlx. We are also going to overlay the mask on top of the image we are segmenting.
+In this section, we are going to generate a segmentation mask with the PaliGemma 2 mix model, specifically [mlx-community/paligemma2–10b-mix-448–8bit](https://huggingface.co/mlx-community/paligemma2-10b-mix-448-8bit), by using only the packages `mlx-vlm` and `mlx`. We are also going to overlay the mask on top of the image we are segmenting.
 
 ## Overview of the Process
 
-Let’s first begin by outlining the steps of the process for generating a segmentation mask. An illustrative diagram can be seen in Figure 2.
+Let’s first begin by outlining the steps of the process for generating a segmentation mask. An illustrative diagram can be seen in **Figure 2**.
 
-- We start with passing a prompt to the model of the form “segment cat\n”, and the image we want to segment. This is our original image with dimensions x_orig by y_orig.
-- Then, the model’s image processor (SiglipImageProcessor) yields to an input image with dimensions x_input by y_input. In the PaliGemma 2 mix case this would be either 224x224 or 448x448, depending on the model we have chosen to use. In our case, it would be 448x448.
-- The model generates an output with 4 location coordinates and 16 segmentation tokens. The <locXXXX><locXXXX><locXXXX><locXXXX> sequence corresponds to the y_min, x_min, y_max, x_max coordinates defining the bounding box. These coordinates should be normalised to an image size of 1024x1024 to obtain the bounding box coordinates of the object we want to segment with respect to the input image dimensions.
+- We start with passing a **prompt** to the model of the form *"segment cat\n"*, and the image we want to segment. This is our **original image** with dimensions $x_{\text{orig}}$ by $y_{\text{orig}}$.
+- Then, the model’s image processor (SiglipImageProcessor) yields to an **input image** with dimensions $x_{\text{input}}$ by $y_{\text{input}}$. In the PaliGemma 2 mix case this would be either `224x224` or `448x448`, depending on the model we have chosen to use. In our case, it would be `448x448`.
+- The model generates an output with 4 location coordinates and 16 segmentation tokens. The `<locXXXX><locXXXX><locXXXX><locXXXX>` sequence corresponds to the $y_{\text{min}}$, $x_{\text{min}}$, $y_{\text{max}}$, $x_{\text{max}}$ coordinates defining the **bounding box**. These coordinates should be normalised to an image size of `1024x1024` to obtain the bounding box coordinates of the object we want to segment with respect to the input image dimensions.
 
-Figure 2 | Model input and bounding box coordinates
+<figure>
+  <img src="../images/2025-04-15-paligemma-2-mix/input_bb.png" alt="Model input and bounding box" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 2. Model input and bounding box coordinates</figcaption>
+</figure>
 
-Now that we’ve defined the bounding box by its coordinates, let’s zoom in on its details as shown in Figure 3, and dicuss how we would overlay the segmentation mask on top of the image we are segmenting.
+Now that we’ve defined the bounding box by its coordinates, let’s zoom in on its details as shown in **Figure 3**, and dicuss how we would overlay the segmentation mask on top of the image we are segmenting.
 
-- The model has returned the 16 segmentation tokens of the form <segXXX>. After decoding them via the codebook we end up reconstructing the segmentation mask. This mask has a size of 64x64 pixels.
+- The model has returned the 16 segmentation tokens of the form `<segXXX>`. After decoding them via the codebook we end up reconstructing the **segmentation mask**. This mask has a size of `64x64` pixels.
 - Next, we need to map the segmentation mask onto the bounding box that was previously defined. This is accomplished using classical interpolation techniques to scale the mask to the bounding box’s dimensions.
 
-Figure 3 | Mapping the 64x64 mask to the bounding box
-Once resized, the mask is aligned to fit within the bounding box. To overlay this mask on the original image, we create an empty array matching the dimensions of the input image and then replace the array values corresponding to the bounding box coordinates with those from the interpolated segmentation mask.
+<figure>
+  <img src="../images/2025-04-15-paligemma-2-mix/input_bb.png" alt="Mapping mask to bounding box" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 3. Mapping the 64x64 mask to the bounding box</figcaption>
+</figure>
+
+- Once resized, the mask is aligned to fit within the bounding box. To overlay this mask on the original image, we create an empty array matching the dimensions of the input image and then replace the array values corresponding to the bounding box coordinates with those from the interpolated segmentation mask.
 
 # MLX
 
-Finally, it’s time to dive into the coding section of this blog and focus specifically on the mlx components. The code can be found in GitHub.
+Finally, it’s time to dive into the coding section of this blog and focus specifically on the `mlx` components. The code can be found in [GitHub](https://github.com/JoeJoe1313/LLMs-Journey/blob/main/VLMs/paligemma_segmentation_mlx.py).
+
 We begin by importing the necessary libraries and modules,
 
 ```python
@@ -127,7 +135,7 @@ from mlx_vlm.utils import load_image
 from tensorflow.io import gfile
 ```
 
-then, we establish the paths for the models and image resources. The MODEL_PATH points to the specific PaliGemma model that we are going to use for segmentation tasks. The IMAGE_PATH is the location of the image that we will process, and the _KNOWN_MODELS dictionary provides a reference to the VAE checkpoint needed for mask reconstruction.
+then, we establish the paths for the models and image resources. The `MODEL_PATH` points to the specific PaliGemma model that we are going to use for segmentation tasks. The `IMAGE_PATH` is the location of the image that we will process, and the `_KNOWN_MODELS` dictionary provides a reference to the VAE checkpoint needed for mask reconstruction.
 
 ```python
 MODEL_PATH = "mlx-community/paligemma2-10b-mix-448-8bit"
@@ -143,7 +151,7 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 ```
 
-The ResBlock class implements a basic residual block typical for convolutional architectures. It comprises three convolution layers:
+The `ResBlock` class implements a basic residual block typical for convolutional architectures. It comprises three convolution layers:
 
 - Two `3x3` convolutions with ReLU activations, which process the input.
 - One `1x1` convolution to adjust dimensions if needed.
@@ -172,7 +180,7 @@ class ResBlock(nn.Module):
         return x + original_x
 ```
 
-The Decoder class takes quantized vectors (obtained from segmentation tokens) and upscales them to produce a mask:
+The `Decoder` class takes quantized vectors (obtained from segmentation tokens) and upscales them to produce a mask:
 
 - An initial convolution reduces the channel dimension.
 - A series of configurable residual blocks further process the features.
@@ -231,8 +239,11 @@ class Decoder(nn.Module):
         return self.conv_out(x)
 ```
 
-The helper function _get_params is designed to convert a PyTorch checkpoint into a format that MLX can work with. It does so by
-Transposing kernel weights to match the expected output format: from PyTorch’s format to MLX’s (Out, H, W, In) format. Organizing the parameters into a structured dictionary that reflects the architecture of the decoder, including the convolutional layers, residual blocks, and upsample layers.
+The helper function `_get_params` is designed to convert a PyTorch checkpoint into a format that MLX can work with. It does so by
+
+- Transposing kernel weights to match the expected output format: from PyTorch’s format to MLX’s (Out, H, W, In) format.
+- Organizing the parameters into a structured dictionary that reflects the architecture of the decoder, including the convolutional layers, residual blocks, and upsample layers.
+
 This organized set of parameters is then used to initialize the decoder network.
 
 ```python
@@ -302,7 +313,7 @@ def _quantized_values_from_codebook_indices(
     return encodings.reshape((batch_size, 4, 4, embeddings.shape[1]))
 ```
 
-The `get_reconstruct_masks` function loads the VAE checkpoint and initializes the decoder with the appropriate parameters. By extracting and setting up the necessary embeddings and decoder weights, this function returns another function (reconstruct_masks) that, when given segmentation tokens, decodes them into a binary segmentation mask.
+The `get_reconstruct_masks` function loads the VAE checkpoint and initializes the decoder with the appropriate parameters. By extracting and setting up the necessary embeddings and decoder weights, this function returns another function (`reconstruct_masks`) that, when given segmentation tokens, decodes them into a binary segmentation mask.
 
 ```python
 @functools.cache
@@ -347,7 +358,7 @@ def extract_and_create_arrays(pattern: str) -> List[mx.array]:
     return seg_tokens_arrays
 ```
 
-The parse_bbox function interprets the model's output string to extract bounding box coordinates. Each detected object's location is denoted by a string format (`<loc1234>`). This function finds four numbers per object, corresponding to the box boundaries, and aggregates them into a list of bounding boxes.
+The `parse_bbox` function interprets the model's output string to extract bounding box coordinates. Each detected object's location is denoted by a string format (`<loc1234>`). This function finds four numbers per object, corresponding to the box boundaries, and aggregates them into a list of bounding boxes.
 
 ```python
 def parse_bbox(model_output: str):
@@ -364,12 +375,13 @@ def parse_bbox(model_output: str):
     return results
 ```
 
-The gather_masks function combines the reconstruction and bounding box parsing steps. For each object:
+The `gather_masks` function combines the reconstruction and bounding box parsing steps. For each object:
 
 - It reconstructs the mask from its codebook indices.
 - It obtains the corresponding bounding box coordinates.
 - It normalizes these coordinates relative to a target image resolution (448×448 in this example).
-- Each mask is then paired with its coordinates and stored in a list, making it straightforward to later overlay these onto the original image.
+
+Each mask is then paired with its coordinates and stored in a list, making it straightforward to later overlay these onto the original image.
 
 ```python
 def gather_masks(output, codes_list, reconstruct_fn):
@@ -399,8 +411,8 @@ def gather_masks(output, codes_list, reconstruct_fn):
 
 The function `plot_masks` handles the visualization of the segmentation outcomes. It loads the original image and processes it for display. Two types of visualizations are provided:
 
-- Composite Overlay: All masks are combined and overlaid on the original image.
-- Reconstructed Mask: Each reconstructed mask is plotted next to the composite overlay.
+- **Composite Overlay**: All masks are combined and overlaid on the original image.
+- **Reconstructed Mask**: Each reconstructed mask is plotted next to the composite overlay.
 
 Using OpenCV for mask resizing and Matplotlib for plotting, the function creates a series of subplots to clearly display both composite and individual mask overlays.
 
@@ -444,13 +456,13 @@ def plot_masks(args, processor, masks_list):
     plt.show()
 ```
 
-The main function ties all the pieces together. It performs the following steps:
+The `main` function ties all the pieces together. It performs the following steps:
 
-- Loading: Reads the specified PaliGemma model and image.
-- Setup: Initializes the VAE checkpoint and extracts the reconstruction function.
-- Prompting: Formats the prompt using the processor and generates a segmentation output via the model.
-- Processing: Extracts segmentation tokens, reconstructs masks, and parses bounding box coordinates.
-- Visualization: Finally, it calls the plotting function to display the results.
+- **Loading**: Reads the specified PaliGemma model and image.
+- **Setup**: Initializes the VAE checkpoint and extracts the reconstruction function.
+- **Prompting**: Formats the prompt using the processor and generates a segmentation output via the model.
+- **Processing**: Extracts segmentation tokens, reconstructs masks, and parses bounding box coordinates.
+- **Visualization**: Finally, it calls the plotting function to display the results.
 
 This function serves as the central point where data processing, model inference, mask reconstruction, and visualization are integrated into one complete pipeline.
 
@@ -484,7 +496,7 @@ def main(args) -> None:
     plot_masks(processor, masks_list)
 ```
 
-Finally, the script includes an entry point that parses command-line arguments. Users can specify the image path, the prompt for the segmentation task, the model path, and the VAE checkpoint path. Once these are provided via argparse, the main function is invoked to start the processing pipeline.
+Finally, the script includes an entry point that parses command-line arguments. Users can specify the image path, the prompt for the segmentation task, the model path, and the VAE checkpoint path. Once these are provided via `argparse`, the `main` function is invoked to start the processing pipeline.
 
 ```python
 if __name__ == "__main__":
@@ -514,49 +526,67 @@ Let’s take a look at some examples and the segmentations we obtained from the 
 
 In this section, we are going to show to examples of single object segmentation.
 
-Prompt:
+---
 
-“segment cow”
+**Prompt:**
 
-Image:
+```text
+"segment cow"
+```
 
-Original image of size 400x400
+**Image:**
 
-Model output:
+<figure>
+  <img src="../images/2025-04-15-paligemma-2-mix/cow_in.png" alt="Cow input" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 4. Original image of size 400x400</figcaption>
+</figure>
+
+**Model output:**
 
 ```text
 <loc0410><loc0528><loc0884><loc1023><seg072><seg055><seg062><seg079><seg104><seg009><seg104><seg096><seg068><seg041><seg103><seg019><seg100><seg004><seg091><seg067>
 ```
 
-Mask overlay and reconstructed mask:
+**Mask overlay and reconstructed mask:**
 
-Left: mask overlay onto the input image of size 448x448 | Right: reconstructed mask of size 64x64
+<figure>
+  <img src="../images/2025-04-15-paligemma-2-mix/cow_out.png" alt="Cow output" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 5. Left: mask overlay onto the input image of size 448x448 | Right: reconstructed mask of size 64x64</figcaption>
+</figure>
 
-Observation:
+**Observation:**
 
 Based on the overlay image, the model manages to detect the precise location of the cow but struggles a bit with the detailed outlines of the cow. Looking only at the reconstructed mask would not persuade me that this is a cow.
 
 ---
 
-Prompt:
+**Prompt:**
 
-“segment cat”
+```text
+"segment cat"
+```
 
-Image:
+**Image:**
 
-Original image of size 400x400
+<figure>
+  <img src="../images/2025-04-15-paligemma-2-mix/cat_in.png" alt="Cat input" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 6. Original image of size 400x400</figcaption>
+</figure>
 
-Model output:
+**Model output:**
 
 ```text
 <loc0060><loc0000><loc0920><loc0879><seg039><seg107><seg018><seg006><seg056><seg120><seg058><seg042><seg079><seg094><seg009><seg099><seg074><seg010><seg078><seg012>
 ```
 
-Mask overlay and reconstructed mask:
+**Mask overlay and reconstructed mask:**
 
-Left: mask overlay onto the input image of size 448x448 | Right: reconstructed mask of size 64x64
+<figure>
+  <img src="../images/2025-04-15-paligemma-2-mix/cat_out.png" alt="Cat output" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 7. Left: mask overlay onto the input image of size 448x448 | Right: reconstructed mask of size 64x64</figcaption>
+</figure>
 
-Observation:
+**Observation:**
 
 Based on the overlay image, the model manages to detect the precise location of the cat, and is generally doing a good job with the cat’s outlines.
 
@@ -564,25 +594,35 @@ Based on the overlay image, the model manages to detect the precise location of 
 
 It was tricky to find a working example for segmenting multiple objects, so there is only one example in this section. My observation is that the PaliGemma models are indeed very sensitive to the prompt formatting, and the 448–10B-8bit model might just not be powerful enough for the task of segmenting multiple objects.
 
-Prompt:
+---
 
-“segment left wheel ; right wheel”
+**Prompt:**
 
-Image:
+```text
+"segment left wheel ; right wheel"
+```
 
-Original image of size 640x480
+**Image:**
 
-Model output:
+<figure>
+  <img src="../images/2025-04-15-paligemma-2-mix/car_in.png" alt="Car input" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 8. Original image of size 640x480</figcaption>
+</figure>
+
+**Model output:**
 
 ```text
 <loc0591><loc0157><loc0794><loc0311> <seg092><seg004><seg044><seg092><seg120><seg061><seg029><seg120><seg090><seg023><seg021><seg090><seg015><seg041><seg044><seg073> right wheel ; <loc0586><loc0728><loc0794><loc0882> <seg092><seg004><seg089><seg092><seg120><seg048><seg054><seg038><seg119><seg029><seg021><seg090><seg095><seg041><seg044><seg073> right wheel
 ```
 
-Mask overlay and reconstructed mask:
+**Mask overlay and reconstructed mask:**
 
-Left: masks overlay onto the input image of size 448x448 | Right: reconstructed masks of size 64x64
+<figure>
+  <img src="../images/2025-04-15-paligemma-2-mix/car_out.png" alt="Car output" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 9. Left: masks overlay onto the input image of size 448x448 | Right: reconstructed masks of size 64x64</figcaption>
+</figure>
 
-Observation:
+**Observation:**
 
 Looking at the model output we can see that both segmentations are labeled as right wheel. Despite this, based on the overlay image, the model manages to detect the precise location of the wheels, and their outlines.
 
@@ -596,9 +636,9 @@ The multiple object segmentation proved challenging, as we struggled to find mor
 
 # References
 
-- Introducing PaliGemma 2 mix: A vision-language model for multiple tasks
-- PaliGemma prompt and system instructions
-- PaliGemma 2 Mix — New Instruction Vision Language Models by Google
-- Welcome PaliGemma 2 — New vision language models by Google
-- Introducing PaliGemma 2: Powerful Vision-Language Models, Simple Fine-Tuning
-- PaliGemma 2: A Family of Versatile VLMs for Transfer
+- [Introducing PaliGemma 2 mix: A vision-language model for multiple tasks](https://developers.googleblog.com/en/introducing-paligemma-2-mix/)
+- [PaliGemma prompt and system instructions](https://ai.google.dev/gemma/docs/paligemma/prompt-system-instructions)
+- [PaliGemma 2 Mix — New Instruction Vision Language Models by Google](https://huggingface.co/blog/paligemma2mix)
+- [Welcome PaliGemma 2 — New vision language models by Google](https://huggingface.co/blog/paligemma2)
+- [Introducing PaliGemma 2: Powerful Vision-Language Models, Simple Fine-Tuning](https://developers.googleblog.com/en/introducing-paligemma-2-powerful-vision-language-models-simple-fine-tuning/)
+- [PaliGemma 2: A Family of Versatile VLMs for Transfer](https://arxiv.org/abs/2412.03555)
