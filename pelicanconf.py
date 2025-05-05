@@ -52,7 +52,7 @@ SOCIAL = (
     # ("Another social link", "#"),
 )
 
-DEFAULT_PAGINATION = False
+DEFAULT_PAGINATION = 5
 
 PLUGINS = [
     "plugins.summary",
