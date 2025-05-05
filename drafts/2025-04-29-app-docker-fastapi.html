@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>Build an Image Segmentation App with Docker, FastAPI, and GitHub Actions</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+    <meta name="description" content="In today's fast-paced machine learning landscape, deploying AI models efficiently is just as important as developing them. In this blog post, we..." />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li><a href="/books.html">Books</a></li>
+                                                <li><a href="/papers.html">Papers</a></li>
+                                                <li><a href="/category/machine-learning.html">Machine Learning</a></li>
+                                                <li><a href="/category/mathematics.html">Mathematics</a></li>
+                                <li class="active"><a href="/drafts.html">Drafts</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="/drafts/2025-04-29-app-docker-fastapi.html" rel="bookmark"
+             title="Permalink to Build an Image Segmentation App with Docker, FastAPI, and GitHub Actions">Build an Image Segmentation App with Docker, FastAPI, and GitHub Actions</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2025-04-29T07:00:00+03:00">
+            Published: Tue 29 April 2025
+    </abbr>
+
+    <p>In <a href="/category/machine-learning.html">Machine Learning</a>.</p>
+<p>tags: <a href="/tag/ai.html">ai</a> <a href="/tag/ml.html">ml</a> <a href="/tag/vlm.html">vlm</a> <a href="/tag/docker.html">docker</a> <a href="/tag/fastapi.html">fastapi</a> <a href="/tag/github-actions.html">github-actions</a> </p>    
+</footer><!-- /.post-info -->        <p>In today's fast-paced machine learning landscape, deploying AI models efficiently is just as important as developing them. In this blog post, we are going to explore how to create an image segmentation application using Google's PaliGemma 2 Mix model, containerized with Docker, and served through a FastAPI backend. We are also going to set up a CI/CD pipeline using GitHub Actions to automate buidling the Docker image and pushing it to Docker Hub.</p>
+<h1>Introduction</h1>
+<p>In this tutorial, we will build an image segmentation application that leverages the PaliGemma 2 Mix model for precise image segmentation. The application will be designed to take an image URL and a text prompt as input, perform segmentation, and return a base64-encoded mask along with bounding box coordinates.</p>
+<h1>Architecture</h1>
+<figure>
+  <pre class="mermaid">
+      graph LR
+      User([User]) -->|Uploads Image| Client[Client Application]
+      User -->|Provides Prompt| Client
+
+      Client -->|HTTP POST Request| API[FastAPI Service]
+      API -->|Process Image| PaliGemma[PaliGemma Model]
+      PaliGemma -->|Generate Segmentation| VAE[VAE Model]
+      VAE -->|Create Masks| API
+
+      API -->|JSON Response| Client
+      Client -->|Display Results| User
+
+      style User fill:#f9d5e5,stroke:#d64161,stroke-width:2px
+      style Client fill:#eeeeee,stroke:#333333
+      style API fill:#b5e7a0,stroke:#86af49
+      style PaliGemma fill:#b8e0d2,stroke:#6a9c89
+      style VAE fill:#d0e1f9,stroke:#7fa6bc
+  </pre>
+  <figcaption style="text-align: center">Figure 1. User workflow</figcaption>
+</figure>
+
+<figure>
+  <pre class="mermaid">
+    graph TD
+    subgraph "Docker Container"
+        subgraph "app/"
+            main[main.py
+            FastAPI Application]
+            segmentation[segmentation.py
+            Image Segmentation Logic]
+            main -->|imports| segmentation
+        end
+
+        subgraph "External Dependencies"
+            NP[numpy]
+            TR[transformers]
+            PT[PyTorch]
+            JF[JAX/Flax]
+        end
+
+        subgraph "Models"
+            PaliGemma[PaliGemma 2 mix]
+            VAE[VAE Checkpoint]
+        end
+
+        segmentation -->|uses| TR
+        segmentation -->|uses| PT
+        segmentation -->|uses| JF
+        segmentation -->|uses| NP
+
+        main -->|loads| PaliGemma
+        segmentation -->|loads| VAE
+    end
+
+    Client[Client Application] -->|HTTP Requests| main
+
+    subgraph "API Endpoints"
+        segment[POST /segment/]
+        root[GET /]
+    end
+
+    main -->|defines| segment
+    main -->|defines| root
+    Client -->|calls| segment
+    Client -->|calls| root
+
+    style Docker fill:#e7f4ff,stroke:#0078d7
+    style main fill:#c2e0ff,stroke:#0078d7
+    style segmentation fill:#c2e0ff,stroke:#0078d7
+    style Client fill:#ffd7b5,stroke:#ff8c00
+    style segment fill:#d5e8d4,stroke:#82b366
+    style root fill:#d5e8d4,stroke:#82b366
+  </pre>
+  <figcaption style="text-align: center">Figure 2. App architecture</figcaption>
+</figure>
+
+<figure>
+<pre class="mermaid">
+    graph TD
+    Client[Client] -->|HTTP Request with Image URL & Prompt| API[FastAPI Server]
+    API -->|Process Request| Model[PaliGemma 2 Mix Model]
+    Model -->|Generate Segmentation| API
+    API -->|Return JSON with Mask & Coordinates| Client
+
+    subgraph Docker Container
+    API
+    Model
+    end;
+</pre>
+<figcaption style="text-align: center">Figure 3. System Architecture</figcaption>
+</figure>
+
+<h1>Project Structure</h1>
+<div class="highlight"><pre><span></span><code>project_folder/
+├── app/
+│   ├── main.py           # FastAPI application code
+│   └── segmentation.py   # PaliGemma integration code
+├── models/
+│   └── vae-oid.npz       # Pre-trained model weights
+├── .dockerignore
+├── .gitignore
+├── Dockerfile
+├── README.md
+└── requirements.txt
+</code></pre></div>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>        </body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>JoJo's Blog</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li><a href="/books.html">Books</a></li>
+                                                <li><a href="/papers.html">Papers</a></li>
+                                                <li><a href="/category/machine-learning.html">Machine Learning</a></li>
+                                                <li><a href="/category/mathematics.html">Mathematics</a></li>
+                                <li><a href="/drafts.html">Drafts</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+            <section id="content" class="body">
+                <article>
+                    <header>
+                        <h1><a href="/2025-01-17-orthogonal-functions.html" rel="bookmark"
+                               title="Permalink to Orthogonal Functions">Orthogonal Functions</a></h1>
+                    </header>
+                    <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2025-01-17T07:00:00+02:00">
+            Published: Fri 17 January 2025
+    </abbr>
+
+    <p>In <a href="/category/mathematics.html">Mathematics</a>.</p>
+<p>tags: <a href="/tag/mathematics.html">mathematics</a> </p>    
+</footer><!-- /.post-info -->                        In this post we are going to explore the so called orthogonal functions, and some of their properties. We are also going to show that these orthogonal functions are closely related to the least-squares approximation method. This alternative to the least-squares method can be helpful in certain cases when the least-squares produces a hard to solve linear system.
+                    </div>
+                </article>
+            </section>
+            <section id="content" class="body">
+                <article>
+                    <header>
+                        <h1><a href="/2025-01-06-chebyshev-polynomials.html" rel="bookmark"
+                               title="Permalink to Chebyshev Polynomials: Part 1">Chebyshev Polynomials: Part 1</a></h1>
+                    </header>
+                    <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2025-01-06T07:00:00+02:00">
+            Published: Mon 06 January 2025
+    </abbr>
+
+    <p>In <a href="/category/mathematics.html">Mathematics</a>.</p>
+<p>tags: <a href="/tag/mathematics.html">mathematics</a> <a href="/tag/polynomials.html">polynomials</a> </p>    
+</footer><!-- /.post-info -->                        Chebyshev polynomials are a sequence of orthogonal polynomials that play a central role in numerical analysis, approximation theory, and applied mathematics. They are named after the Russian mathematician Pafnuty Chebyshev and come in two primary types: Chebyshev polynomials of the first kind (<span class="math">\(T_n(x)\)</span>) and Chebyshev polynomials of the second kind (<span class="math">\(U_n(x)\)</span>). In this post we are going to focus on the Chebyshev polynomials of the first kind.<script type='text/javascript'>if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "true";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+                    </div>
+                </article>
+            </section>
+            <section id="content" class="body">
+                <article>
+                    <header>
+                        <h1><a href="/2025-01-04-fourier-method-fixed-string.html" rel="bookmark"
+                               title="Permalink to Fourier Method for the 1D Wave Equation: Fixed String">Fourier Method for the 1D Wave Equation: Fixed String</a></h1>
+                    </header>
+                    <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2025-01-04T07:00:00+02:00">
+            Published: Sat 04 January 2025
+    </abbr>
+
+    <p>In <a href="/category/mathematics.html">Mathematics</a>.</p>
+<p>tags: <a href="/tag/mathematics.html">mathematics</a> <a href="/tag/pde.html">pde</a> </p>    
+</footer><!-- /.post-info -->                        In this post we are going to explore the Fourier method for solving the 1D wave equation. The method is more known under the name of the <strong>method of separation of variables</strong>. For the 1D wave equation we are going to show the application of the method to a fixed string. We are also going to attempt to outline some of the physical interpretations of the fixed string.
+                    </div>
+                </article>
+            </section>
+<div class="pagination">
+        <span class="prev-page">
+            <a href="/index.html">&laquo; Previous</a>
+        </span>
+    
+    <span class="current-page">
+        Page 2 of 2
+    </span>
+    
+</div>                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>        </body>
+</html>

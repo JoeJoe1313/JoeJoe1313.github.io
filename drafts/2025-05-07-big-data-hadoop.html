@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>Big Data with Hadoop</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+    <meta name="description" content="Introduction What is Apache Hadoop? flowchart TB subgraph L1 ["Processing framework layer"] direction LR MR[MapReduce] SP[Spark] end subgraph L2..." />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li><a href="/books.html">Books</a></li>
+                                                <li><a href="/papers.html">Papers</a></li>
+                                                <li><a href="/category/machine-learning.html">Machine Learning</a></li>
+                                                <li><a href="/category/mathematics.html">Mathematics</a></li>
+                                <li class="active"><a href="/drafts.html">Drafts</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="/drafts/2025-05-07-big-data-hadoop.html" rel="bookmark"
+             title="Permalink to Big Data with Hadoop">Big Data with Hadoop</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2025-05-07T07:00:00+03:00">
+            Published: Wed 07 May 2025
+    </abbr>
+
+    <p>In <a href="/category/machine-learning.html">Machine Learning</a>.</p>
+<p>tags: <a href="/tag/big-data.html">big-data</a> <a href="/tag/hadoop.html">hadoop</a> <a href="/tag/data-engineering.html">data-engineering</a> </p>    
+</footer><!-- /.post-info -->        <h1>Introduction</h1>
+<h1>What is Apache Hadoop?</h1>
+<figure>
+  <pre class="mermaid">
+      flowchart TB
+        subgraph L1 ["Processing framework layer"]
+            direction LR
+            MR[MapReduce]
+            SP[Spark]
+        end
+        subgraph L2 ["Cluster resource management layer"]
+            YARN["Yet Another Resource Negotiator"]
+        end
+        subgraph L3 ["Distributed storage layer"]
+            HDFS["Hadoop Distributed File System"]
+        end
+        subgraph L4 ["Disks and processors"]
+            direction LR
+            S1[(Server 1)]
+            S2[(Server 2)]
+            S3[(Server 3)]
+            S4[(Server 4)]
+        end
+        MR --> YARN
+        SP --> YARN
+        YARN --> HDFS
+        HDFS --> S1 & S2 & S3 & S4
+  </pre>
+  <figcaption style="text-align: center">Figure 1. Example of Hadoop architecture</figcaption>
+</figure>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>        </body>
+</html>
