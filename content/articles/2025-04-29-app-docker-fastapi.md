@@ -1,5 +1,5 @@
 ---
-Title: Build an Image Segmentation App with Docker, FastAPI, and GitHub Actions
+Title: Image Segmentation with PaliGemma 2 mix, Transformers, Docker, FastAPI, and GitHub Actions
 Date: 2025-04-29 07:00
 Category: Machine Learning
 Tags: ai, ml, vlm, docker, fastapi, github-actions
@@ -7,120 +7,79 @@ Slug: 2025-04-29-app-docker-fastapi
 Status: draft
 ---
 
-In today's fast-paced machine learning landscape, deploying AI models efficiently is just as important as developing them. In this blog post, we are going to explore how to create an image segmentation application using Google's PaliGemma 2 Mix model, containerized with Docker, and served through a FastAPI backend. We are also going to set up a CI/CD pipeline using GitHub Actions to automate buidling the Docker image and pushing it to Docker Hub.
+In today’s fast-paced machine learning landscape, deploying AI models is just as important as developing them. In this blog post, we are going to walk through an image segmentation application using Google’s **PaliGemma 2 Mix** model and **transformers**, containerized with **Docker**, and served through a **FastAPI** backend. We are also going to discuss the CI/CD pipeline using **GitHub Actions** to automate building the Docker image and pushing it to Docker Hub. Let’s explore this service, why we chose these technologies, and how you can get started and use the service yourself!
 
-# Introduction
+The complete code is available on [GitHub](https://github.com/JoeJoe1313/PaliGemma-Image-Segmentation). 
 
-In this tutorial, we will build an image segmentation application that leverages the PaliGemma 2 Mix model for precise image segmentation. The application will be designed to take an image URL and a text prompt as input, perform segmentation, and return a base64-encoded mask along with bounding box coordinates.
+# What is This Project All About?
 
-# Architecture
+At its core, this project provides a **FastAPI service** that allows you to perform image segmentation using natural language. You simply provide as input to the REST API:
 
-<figure>
-  <pre class="mermaid">
-      graph LR
-      User([User]) -->|Uploads Image| Client[Client Application]
-      User -->|Provides Prompt| Client
-      
-      Client -->|HTTP POST Request| API[FastAPI Service]
-      API -->|Process Image| PaliGemma[PaliGemma Model]
-      PaliGemma -->|Generate Segmentation| VAE[VAE Model]
-      VAE -->|Create Masks| API
-      
-      API -->|JSON Response| Client
-      Client -->|Display Results| User
-      
-      style User fill:#f9d5e5,stroke:#d64161,stroke-width:2px
-      style Client fill:#eeeeee,stroke:#333333
-      style API fill:#b5e7a0,stroke:#86af49
-      style PaliGemma fill:#b8e0d2,stroke:#6a9c89
-      style VAE fill:#d0e1f9,stroke:#7fa6bc
-  </pre>
-  <figcaption style="text-align: center">Figure 1. User workflow</figcaption>
-</figure>
+- A **text prompt** describing what to segment
+- An **image** via URL or file upload
+- The specific **PaliGemma 2 model** to perform image segmentation
 
-<figure>
-  <pre class="mermaid">
-    graph TD
-    subgraph "Docker Container"
-        subgraph "app/"
-            main[main.py
-            FastAPI Application]
-            segmentation[segmentation.py
-            Image Segmentation Logic]
-            main -->|imports| segmentation
-        end
-        
-        subgraph "External Dependencies"
-            NP[numpy]
-            TR[transformers]
-            PT[PyTorch]
-            JF[JAX/Flax]
-        end
-        
-        subgraph "Models"
-            PaliGemma[PaliGemma 2 mix]
-            VAE[VAE Checkpoint]
-        end
-        
-        segmentation -->|uses| TR
-        segmentation -->|uses| PT
-        segmentation -->|uses| JF
-        segmentation -->|uses| NP
-        
-        main -->|loads| PaliGemma
-        segmentation -->|loads| VAE
-    end
-    
-    Client[Client Application] -->|HTTP Requests| main
-    
-    subgraph "API Endpoints"
-        segment[POST /segment/]
-        root[GET /]
-    end
-    
-    main -->|defines| segment
-    main -->|defines| root
-    Client -->|calls| segment
-    Client -->|calls| root
-    
-    style Docker fill:#e7f4ff,stroke:#0078d7
-    style main fill:#c2e0ff,stroke:#0078d7
-    style segmentation fill:#c2e0ff,stroke:#0078d7
-    style Client fill:#ffd7b5,stroke:#ff8c00
-    style segment fill:#d5e8d4,stroke:#82b366
-    style root fill:#d5e8d4,stroke:#82b366
-  </pre>
-  <figcaption style="text-align: center">Figure 2. App architecture</figcaption>
-</figure>
+The service then returns:
 
-<figure>
-<pre class="mermaid">
-    graph TD
-    Client[Client] -->|HTTP Request with Image URL & Prompt| API[FastAPI Server]
-    API -->|Process Request| Model[PaliGemma 2 Mix Model]
-    Model -->|Generate Segmentation| API
-    API -->|Return JSON with Mask & Coordinates| Client
-    
-    subgraph Docker Container
-    API
-    Model
-    end;
-</pre>
-<figcaption style="text-align: center">Figure 3. System Architecture</figcaption>
-</figure>
+- The base64 encoded **model input image**
+- The base64 encoded segmentation **masks** clearly outlining the desired objects
+- The **bounding box coordinates** for each segmented object
 
-# Project Structure
+The **FastAPI** application is also containerized with **Docker** for consistent deployment across environments. A CI/CD pipeline with **GitHub Actions** is created for automated container builds and registry publishing to Docker Hub.
 
-```
+# Architectural Blueprint: How It All Works Together
+
+Understanding the flow of data and the interaction of components is key. Let’s first take a look at our project structure:
+
+```plaintext
 project_folder/
 ├── app/
-│   ├── main.py           # FastAPI application code
-│   └── segmentation.py   # PaliGemma integration code
+│   ├── __init__.py
+│   ├── main.py            # FastAPI application and endpoints
+│   └── segmentation.py    # Image segmentation logic
 ├── models/
-│   └── vae-oid.npz       # Pre-trained model weights
+│   ├── huggingface/       # Cache directory for Hugging Face models
+│   └── vae-oid.npz        # VAE model for mask generation
 ├── .dockerignore
+├── .github/
+│   └── workflows/         # GitHub Actions for Docker build and push
+│     └── docker-build.yml # Workflow to build and push Docker images
 ├── .gitignore
+├── docker-compose.yml
 ├── Dockerfile
 ├── README.md
 └── requirements.txt
 ```
+
+## User & Developer Workflow
+
+Our system is designed with both the end-user and the developer in mind.
+
+```mermaid
+graph LR
+    User([User]) -->|Provides Image & Prompt| ClientApp[Client Application]
+    ClientApp -->|POST Request| FastAPI_Service[FastAPI Service]
+    FastAPI_Service -->|Process Input| PaliGemma_Model[PaliGemma Model]
+    PaliGemma_Model -->|Generate Segmentation Tokens| VAE_Model[VAE Model]
+    VAE_Model -->|Decode Masks| FastAPI_Service
+    FastAPI_Service -->|JSON Response | ClientApp
+    ClientApp -->|Display Results| User
+
+    Developer([Developer]) -->|Push Code| GitHubRepo[GitHub Repository]
+    GitHubRepo -->|Trigger| GitHubActions[GitHub Actions]
+    GitHubActions -->|Build & Push Image| DockerRegistry[Docker Hub]
+    DockerRegistry -->|Pull Image| DeploymentEnv[Deployment Environment]
+    DeploymentEnv -.->|Runs| FastAPI_Service
+```
+<caption>Figure 1. User & Developer Workflow</caption>
+
+**Figure 1** shows the workflow:
+
+- A **User** interacts with a client application, providing an image and a text prompt, and optionally the specific PaliGemma 2 model.
+- The **Client Application** sends an HTTP POST request to our **FastAPI Service**.
+- The **FastAPI Service** preprocesses the input and feeds it to the **PaliGemma Model**.
+- PaliGemma generates segmentation tokens, which are then passed to the **VAE Model**.
+- The VAE Model decodes these into pixel-level masks and, along with bounding boxes, sends them back to the API.
+The API returns a JSON response to the client.
+
+To visualize the precise sequence of operations when a user requests an image segmentation, the following diagram details the interactions between the core components:
