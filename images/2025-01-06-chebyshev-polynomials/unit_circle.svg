@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="180" viewBox="180 0 200 260">
+    <defs>
+        <!-- Path for curved text matching blue arc -->
+        <path id="blueArc" d="M 319.9066664678467 133.58185854701912 A 150 150 0 0 1 355 230" fill="none"/>
+    </defs>
+
+    <!-- Draw first part of circle (gray) -->
+    <path d="M 200 80 A 150 150 0 0 1 314.9066664678467 133.58185854701912" fill="none" stroke="lightgray"/>
+    <!-- Draw second part of circle (light blue) -->
+    <path d="M 314.9066664678467 133.58185854701912 A 150 150 0 0 1 350 230" fill="none" stroke="#2196F3"/>
+    <!-- Axes -->
+    <line x1="200" y1="80" x2="200" y2="230" stroke="black" stroke-width="1"/>
+    <line x1="200" y1="230" x2="350" y2="230" stroke="black" stroke-width="1"/>
+
+    <!-- Text along the blue arc -->
+    <text font-size="12" fill="black">
+        <textPath href="#blueArc" startOffset="30%" fill="#2196F3">arccos(θ)</textPath>
+    </text>
+
+    <!-- Angle arc for theta -->
+    <path d="M 230 230 A 30 30 0 0 0 224 209" fill="none" stroke="#2196F3" stroke-width="1"/>
+    <text x="230" y="220" font-size="12" fill="#2196F3">θ</text>
+
+    <!-- Line from circle point to origin -->
+    <line x1="200" y1="230" x2="314.9066664678467" y2="133.58185854701912" stroke="green" stroke-dasharray="4" stroke-width="1"/>
+    <!-- Vertical projection line -->
+    <line x1="314.9066664678467" y1="133.58185854701912" x2="314.9066664678467" y2="230" stroke="green" stroke-dasharray="4" stroke-width="1"/>
+    <!-- Circle point -->
+    <circle cx="314.9066664678467" cy="133.58185854701912" r="3" fill="red"/>
+    
+    <!-- Chebyshev node -->
+    <circle cx="314.9066664678467" cy="230" r="3" fill="red"/>
+    
+    <!-- Chebyshev node -->    
+    <text x="314.9066664678467" y="245" font-size="10" text-anchor="middle" fill="black">cos(θ)</text>
+</svg>
