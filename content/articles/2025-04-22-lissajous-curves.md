@@ -37,11 +37,6 @@ Lissajous curves find applications in physics, astronomy, and other sciences.
 
 # Planning Multi-Agent Trajectories
 
-
-Great, I’ll put together a formal and comprehensive blog post on Lissajous curves. It will include theoretical explanations, mathematical derivations, connections to Chebyshev polynomials and Padua points, extensions into 3D and spherical domains, as well as applications in aerial search and multi-agent systems. I'll also include Python code examples and visual plots to illustrate the concepts clearly.
-
-I'll let you know once it's ready for review.
-
 # Lissajous Curves
 
 ## Introduction  

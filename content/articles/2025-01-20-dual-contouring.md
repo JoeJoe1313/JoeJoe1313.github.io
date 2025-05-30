@@ -1,5 +1,5 @@
 ---
-Title: Dual Contouring
+Title: Dual Contouring of Hermite Data
 Date: 2025-01-20 07:00
 Category: Mathematics
 Tags: mathematics, geometry
@@ -11,13 +11,13 @@ This post is going to cover the so called **Dual Contouring of Hermite Data** in
 
 # Introduction
 
-Traditional methods like **Marching Cubes** compute the intersection of an isosurface with the edges of a uniform grid and then connect these intersection points based on a lookup table. In contrast, dual contouring:
+Traditional methods like **Marching Cubes** compute the intersection of an isosurface with the edges of a uniform grid and then connect these intersection points based on a lookup table. In contrast, on a very high-level, dual contouring
 
-- collects **Hermite data** along cell edges which consists of both the point where the isosurface (approximately) intersects an edge and the surface normal (the gradient) at that point
+- collects **Hermite data** along cell edges which consists of both the point where the isosurface (approximately) intersects an edge and the unit surface normal (the gradient) at that point
 - places a vertex per cell (the “dual” vertex) by optimally fitting these intersection constraints via minimization of a **quadratic error function** (QEF)
 - constructs the mesh by connecting these vertices in the dual grid, ensuring that adjacent cells yield coherent connectivity
 
-This approach not only results in a lower polygon count but is also more adept at preserving sharp features (edges and corners) inherent in the underlying surface. Below we can see an example where 
+This approach not only results in a lower polygon count but is also more adept at preserving sharp features (edges and corners) inherent in the underlying surface. Below we can see a comparison between Marching Cubes and Dual Contouring in $R^2$. If we assume that the 
 
 ![DC vs MC](../images/2025-01-20-dual-contouring/dc_tee_comparison.svg){ style="display: block; margin: 0 auto"}
 
@@ -36,10 +36,13 @@ Each cell in the grid that has one or more intersected edges becomes an “activ
 # Setting Up the Quadratic Error Function (QEF)
 
 The core idea is to find, for each active cell, a point $\mathbf{x}$ that “best fits” all the local Hermite data. For each intersection constraint, the ideal condition is that $\mathbf{x}$ lies on the tangent plane defined by the intersection point and normal. That is, for a given intersection,
+
 $$
 \mathbf{n}_i \cdot (\mathbf{x} - \mathbf{p}_i) = 0.
 $$
+
 In practice, because there will be multiple intersecting edges (and because of noise or nonlinearity in the underlying surface), these constraints are not simultaneously satisfiable exactly. Instead, one minimizes the sum of squared distances of $\mathbf{x}$ from each tangent plane. This gives rise to the quadratic error function (QEF):
+
 $$
 Q(\mathbf{x}) = \sum_{i} \left( \mathbf{n}_i \cdot (\mathbf{x} - \mathbf{p}_i) \right)^2.
 $$
