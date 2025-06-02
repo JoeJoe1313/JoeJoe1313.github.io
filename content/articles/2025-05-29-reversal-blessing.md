@@ -73,13 +73,12 @@ During training, the model sees the entire sequence but uses causal masking to e
 
 For the sequence _"The cat sat."_:
 
-
 | Step $t$ | Context $x_{<t}$      | Model outputs distribution over next token    |     Picked token    |
-| :------: | :--------------------: | :-------------------------------------------- | :-----------------: |
-|     1    | ( )                   | $P(\text{“The”})=0.4,\ P(\text{“A”})=0.3,\ …$ |        “The”        |       |
-|     2    | (“The”)               | $P(\text{“cat”}\mid   \text{“The”})=0.5,\ …$   | “cat” |
-|     3    | (“The”, “cat”)        | $P(\text{“sat”}\mid \text{“The cat”})=0.6,\ …$ | “sat” |
-|     4    | (“The”, “cat”, “sat”) | $P(\text{“.”}\mid…)=0.8,\ …$     | “.”   |
+| :------: | :-------------------- | :-------------------------------------------- | :-----------------: |
+|     1    | ( )                   | $P(\text{“The”})=0.4,\ P(\text{“A”})=0.3,\dots$ |        “The”        |       |
+|     2    | (“The”)               | $P(\text{“cat”}\mid   \text{“The”})=0.5,\dots$   | “cat” |
+|     3    | (“The”, “cat”)        | $P(\text{“sat”}\mid \text{“The cat”})=0.6,\dots$ | “sat” |
+|     4    | (“The”, “cat”, “sat”) | $P(\text{“.”}\mid…)=0.8,\dots$     | “.”   |
 
 # Right‐to‐left (R2L) Autoregressive Factorization
 
@@ -122,8 +121,8 @@ Although both L2R and R2L factorizations represent the same distribution $p(x)$ 
 ## Example
 
 | Step $t$ |   Context $x_{>t}$  | Model outputs distribution over $x_t$    | Picked token |
-| :----------------: | :-----------------: | :--------------------------------------- | :----------: |
-|          4         |         ( )         | $P(\text{“.”})=0.7,\ …$                  |      “.”     |
-|          3         |        (“.”)        | $P(\text{“sat”}\mid “.”)=0.6,\ …$        |     “sat”    |
-|          2         |     (“sat”, “.”)    | $P(\text{“cat”}\mid “sat.”)=0.5,\ …$     |     “cat”    |
-|          1         | (“cat”, “sat”, “.”) | $P(\text{“The”}\mid “cat sat.”)=0.4,\ …$ |     “The”    |
+| :----------------: | :----------------- | :--------------------------------------- | :----------: |
+|          4         |         ( )         | $P(\text{“.”})=0.7,\dots$                  |      “.”     |
+|          3         |        (“.”)        | $P(\text{“sat”}\mid “.”)=0.6,\dots$        |     “sat”    |
+|          2         |     (“sat”, “.”)    | $P(\text{“cat”}\mid\text{“sat.”})=0.5,\dots$     |     “cat”    |
+|          1         | (“cat”, “sat”, “.”) | $P(\text{“The”}\mid\text{“cat sat.”})=0.4,\dots$ |     “The”    |
