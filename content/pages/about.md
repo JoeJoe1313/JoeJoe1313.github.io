@@ -25,3 +25,5 @@ Title: About
 - GP-UCB
 - Hermite interpolation
 - ⁠Docker model runner
+- Circuit tracing
+- QAT
