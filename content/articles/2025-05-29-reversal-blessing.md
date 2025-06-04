@@ -27,7 +27,8 @@ $$
 p(x_1,x_2,...,x_n) = \prod_{i=1}^n p(x_i∣x_1,...,x_{i−1})
 $$
 
-The key insight is that we model each token's probability as dependent only on the tokens that came before it (hence "left-to-right"). This creates a causal dependency structure where future tokens cannot influence past tokens.
+The key insight is that we model each token's probability as dependent only on the tokens that came before it (hence "left-to-right"). This creates a causal dependency structure where future tokens cannot influence past tokens. Unfortunately, this approach can introduce inductive biases, errors compounding at each step, and may not be optimal for all reasoning or knowledge‐retrieval tasks 
+
 
 Now, let's formally define the L2R factorization with the notation we are going to use throughout the post. For any sequence $x = (x_1, x_2, ..., x_T)$, we can express the joint probability as
 
@@ -126,3 +127,91 @@ Although both L2R and R2L factorizations represent the same distribution $p(x)$ 
 |          3         |        (“.”)        | $P(\text{“sat”}\mid “.”)=0.6,\dots$        |     “sat”    |
 |          2         |     (“sat”, “.”)    | $P(\text{“cat”}\mid\text{“sat.”})=0.5,\dots$     |     “cat”    |
 |          1         | (“cat”, “sat”, “.”) | $P(\text{“The”}\mid\text{“cat sat.”})=0.4,\dots$ |     “The”    |
+
+# Key Questions
+
+The paper investigates the following three questions:
+
+- How to evaluate R2L models on knowledge extraction and basic reasoning tasks? 
+- Can R2L factorization match or surpass L2R’s capabilities in knowledge extraction and reasoning for downstream tasks?
+- What are underlying factors determining the preference of L2R or R2L factorizations?
+
+# Multiple‐Choice Questions
+
+Multiple‐choice questions (MCQs) are a common benchmark for evaluating an LLM’s knowledge, reasoning, and calibration. As we can see in **Figure 1**, in their simplest form, an MCQ comprises:
+
+- A **question** $q$
+- A set of $n$ **candidate answers** $a_1, \dots, a_n$
+- Exactly **one correct answer** $a^{*}$ among these $n$ choices
+
+<figure>
+  <img src="../images/2025-05-29-reversal-blessing/mcq_fig.jpeg" alt="MCQ figure" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 1. MCQ</figcaption>
+</figure>
+
+Most L2R‐based LLMs approach MCQs by computing, for each candidate $a_i$, the conditional log‐probability:
+
+$$
+\log p_{L2R}(a_i \mid ​q) = \sum_{l=1}^{\mid a_i \mid} \log p_{L2R}(a_i^l \mid q, a_i^{<l}).
+$$
+
+Normalizing by answer length $|a_i|$, we obtain the **forward‐thinking score**
+
+$$
+s_i^{(L2R)} = \frac{1}{|a_i|} \log p_{L2R}(a_i \mid ​q),
+$$
+
+and the predicted answer is
+
+$$
+\hat{i} = \arg \max_i s_i^{(L2R)}.
+$$
+
+However, L2R forward thinking can suffer from **surface‐form competition** and calibration issues. For example, if two semantically equivalent answers (“dog” vs. “puppy”) each capture only a portion of the probability mass, the true answer may be penalized just because its mass is split.
+
+The alternative, **reverse thinking**, leverages an R2L model. By Bayes’ rule, for each candidate $a_i$
+
+$$
+\log p(a_i \mid q) = \log p(q \mid a_i) + \log p(a_i) - \log p(q).
+$$
+
+Since $\log p(q)$ is constant across candidates, we can define an **unnormalized reverse score**:
+
+$$
+\tilde{s}_i^{(R2L)} = \log p_{R2L}(q \mid a_i) + \log p_{R2L}(a_i).
+$$
+
+or, if one enforces a uniform prior over answers (i.e.\ discards $\log p(a_i)$), simply:
+
+$$
+s_i^{(R2L)} = \log p_{R2L}(q \mid a_i).
+$$
+
+Crucially, reverse thinking bypasses surface‐form competition among answer strings, because all candidates condition on the same question $q$ thus, the model only needs to evaluate $p(q \mid a_i)$.
+
+# Mathematical Formulation: L2R vs. R2L on MCQs
+
+## L2R on MCQs
+
+Given a question $q$ answer candidates $\{a_1, a_2, \dots, a_n\}$, aan L2R model computes, for each $i$,
+
+$$\log p_{L2R}(a_i \mid q) = \sum_{l=1}^{N_i} \log p_{L2R}(a_i^l \mid q, a_i^{<l}),
+$$
+
+where $N_i = |a_i|$ is the token length of answer $a_i$. To normalize for varying lengths, define
+
+$$
+s_i^{(L2R)} = \frac{1}{N_i} \log p_{L2R}(a_i \mid q).
+$$
+
+The chosen answer index is
+
+$$
+\hat{i} = \arg \max_{i \in \{1, \dots, n\}} s_i^{(L2R)}.
+$$
+
+Because the model is trained to maximize $\log p(x)$ in the L2R direction, it is inherently good at predicting a short correct answer string next given a fixed question prefix. However, if the correct answer has multiple valid encodings (e.g., synonyms, morphological variants), the probability mass $p_{L2R}(a_i \mid q)$ may be spread across these variants, reducing the normalized score $s_i^{(L2R)}$.
+
+## R2L on MCQs
+
+
