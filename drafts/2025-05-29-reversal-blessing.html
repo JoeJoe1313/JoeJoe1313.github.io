@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>Thinking Backwards: The "Reversal Blessing" in LLM Multiple-Choice Reasoning</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+    <meta name="description" content="Most modern languages are written from left to right, thus we assume that thinking from left to right is the most natural way to process..." />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li><a href="/books.html">Books</a></li>
+                                                <li><a href="/papers.html">Papers</a></li>
+                                                <li><a href="/category/machine-learning.html">Machine Learning</a></li>
+                                                <li><a href="/category/mathematics.html">Mathematics</a></li>
+                                <li class="active"><a href="/drafts.html">Drafts</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="/drafts/2025-05-29-reversal-blessing.html" rel="bookmark"
+             title="Permalink to Thinking Backwards: The "Reversal Blessing" in LLM Multiple-Choice Reasoning">Thinking Backwards: The "Reversal Blessing" in LLM Multiple-Choice Reasoning</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2025-05-29T07:00:00+03:00">
+            Published: Thu 29 May 2025
+    </abbr>
+
+    <p>In <a href="/category/machine-learning.html">Machine Learning</a>.</p>
+<p>tags: <a href="/tag/ai.html">ai</a> <a href="/tag/ml.html">ml</a> <a href="/tag/llm.html">llm</a> </p>    
+</footer><!-- /.post-info -->        <p>Most modern languages are written from left to right, thus we assume that thinking from left to right is the most natural way to process information expressed with these languages. This is particularly true for <strong>Large Language Models (LLMs)</strong> which are typically trained to predict the next word in a sequence, known as <strong>left-to-right (L2R)</strong> language models. But what if, for certain tasks, thinking backward could actually be better? A recent paper from Apple researchers, titled <strong><em>"Reversal Blessing: Thinking Backward May Outpace Thinking Forward in Multi-choice Questions"</em></strong>, explores a counterintuitive approach to data augmentation: training LLMs on "reversed" sequences. It delves into the potential of <strong>right-to-left (R2L)</strong> language models, and their effectiveness in tackling some tasks such as <strong>multiple-choice questions (MCQs)</strong>. The paper can be found <a href="https://arxiv.org/abs/2502.18435v2">here</a>, and the supporting code can be found in the GitHub repository <a href="https://github.com/apple/ml-reversal-blessing?tab=readme-ov-file">here</a>.</p>
+<h1>Left‐to‐right (L2R) Autoregressive Factorization</h1>
+<p>Most LLMs are trained to predict text in a strictly left‐to‐right order. Left-to-right autoregressive (<strong>L2R</strong>) factorization is the fundamental mathematical principle underlying how large language models generate text. It's based on decomposing the probability of a sequence into conditional probabilities. </p>
+<h2>The Theory</h2>
+<p>Given a sequence of tokens <span class="math">\(x_1,x_2, ... , x_n\)</span>​, the joint probability can be factorized using the chain rule of probability:</p>
+<div class="math">$$
+p(x_1,x_2,...,x_n) = p(x_1)p(x_2∣x_1)p(x_3∣x_1,x_2)...p(x_n∣x_1,...,x_{n−1})
+$$</div>
+<p>This can be written more compactly as:</p>
+<div class="math">$$
+p(x_1,x_2,...,x_n) = \prod_{i=1}^n p(x_i∣x_1,...,x_{i−1})
+$$</div>
+<p>The key insight is that we model each token's probability as dependent only on the tokens that came before it (hence "left-to-right"). This creates a causal dependency structure where future tokens cannot influence past tokens. Unfortunately, this approach can introduce inductive biases, errors compounding at each step, and may not be optimal for all reasoning or knowledge‐retrieval tasks </p>
+<p>Now, let's formally define the L2R factorization with the notation we are going to use throughout the post. For any sequence <span class="math">\(x = (x_1, x_2, ..., x_T)\)</span>, we can express the joint probability as</p>
+<div class="math">$$
+\fbox{
+    $p_{L2R}(x) = \prod_{t=1}^{T} p_{L2R}(x_{t}\mid x_{&lt;t})$,
+}
+$$</div>
+<p>where <span class="math">\(x_{&lt;t} = (x_{1}, x_{2}, ..., x_{t-1})\)</span>. At each timestep <span class="math">\(t\)</span>, the model predicts the next token <span class="math">\(x_t\)</span> given the full prefix <span class="math">\(x_{&lt;t}.\)</span> This factorization is not unique, any valid factorization of the joint probability yields the same marginal <span class="math">\(p(x)\)</span>.</p>
+<p>We are also going to need the log-lokielhood of the sequence, which is</p>
+<div class="math">$$
+\fbox{
+    $\log p_{L2R}(x) = \sum_{t=1}^{T} \log p_{L2R}(x_{t}\mid x_{&lt;t})$.
+}
+$$</div>
+<p>You might wonder why we are going to use the log-likelihood. The most straightforward reasons are:</p>
+<ul>
+<li><strong>Numerical stability</strong>: Multiplying many small probabilities leads to underflow, whereas adding logs is stable</li>
+<li><strong>Training objective</strong>: LLMs minimize negative log-likelihood (cross-entropy loss)</li>
+<li><strong>Easier optimization</strong>: Sums are easier to differentiate than products</li>
+</ul>
+<p>For <em>"The cat sat."</em> we would have:</p>
+<div class="math">$$
+\log p = \log p(\text{The}) + \log p(\text{cat}|\text{The}) + \log p(\text{sat}|\text{The, cat}) + \log p(\text{.}|\text{The, cat, sat})
+$$</div>
+<h2>How LLMs Implement This</h2>
+<p>Language models learn to approximate each conditional probability <span class="math">\(P(x_i | x_1, ..., x_{i-1})\)</span> through:</p>
+<ul>
+<li><strong>Encoder layers</strong> that build rich contextual representations of the preceding tokens</li>
+<li><strong>Attention mechanisms</strong> that allow each position to attend to all previous positions (but not future ones via causal masking)</li>
+<li><strong>Output layer</strong> that converts the contextual representation into a probability distribution over the vocabulary</li>
+</ul>
+<p>During training, the model sees the entire sequence but uses causal masking to ensure position <span class="math">\(i\)</span> only sees tokens <span class="math">\(1\)</span> through <span class="math">\(i-1\)</span>. During inference, generation happens token by token, with each new token sampled from the predicted distribution.</p>
+<h2>Example</h2>
+<p>For the sequence <em>"The cat sat."</em>:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Step <span class="math">\(t\)</span></th>
+<th style="text-align: left;">Context <span class="math">\(x_{&lt;t}\)</span></th>
+<th style="text-align: left;">Model outputs distribution over next token</th>
+<th style="text-align: center;">Picked token</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">( )</td>
+<td style="text-align: left;"><span class="math">\(P(\text{“The”})=0.4,\ P(\text{“A”})=0.3,\dots\)</span></td>
+<td style="text-align: center;">“The”</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">(“The”)</td>
+<td style="text-align: left;"><span class="math">\(P(\text{“cat”}\mid   \text{“The”})=0.5,\dots\)</span></td>
+<td style="text-align: center;">“cat”</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">(“The”, “cat”)</td>
+<td style="text-align: left;"><span class="math">\(P(\text{“sat”}\mid \text{“The cat”})=0.6,\dots\)</span></td>
+<td style="text-align: center;">“sat”</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">(“The”, “cat”, “sat”)</td>
+<td style="text-align: left;"><span class="math">\(P(\text{“.”}\mid…)=0.8,\dots\)</span></td>
+<td style="text-align: center;">“.”</td>
+</tr>
+</tbody>
+</table>
+<h1>Right‐to‐left (R2L) Autoregressive Factorization</h1>
+<p>Right-to-left autoregressive factorization is the mathematical "mirror image" of left-to-right, where we factorize the probability by conditioning each token on all the tokens that come after it instead of before.</p>
+<h2>The Theory</h2>
+<p>Given a sequence of tokens <span class="math">\(x_1, x_2, ..., x_n\)</span>​, we can factorize using the chain rule in reverse order:</p>
+<div class="math">$$
+P(x_1, x_2, ..., x_n) = P(x_n) P(x_{n-1}|x_n) P(x_{n-2}|x_{n-1}, x_n)...P(x_1|x_2, ..., x_n)
+$$</div>
+<p>This can be written as:</p>
+<div class="math">$$
+P(x_1, x_2, ..., x_n) = \prod_{i=1}^{n} P(x_i | x_{i+1}, ..., x_n)
+$$</div>
+<p>This is a bit strange to say it like that, but now each token's probability depends on all the tokens that come after it in the sequence. In simple words, R2L is predicting earlier tokens given later ones. You probably immediately asked "But how?", and later you are going ot see the answer is "With the help of Bayes' rule".</p>
+<p>Now, let's also formally define the R2L factorization. For any sequence <span class="math">\(x = (x_1, x_2, ..., x_T)\)</span>, we can express the joint probability as</p>
+<div class="math">$$
+\fbox{
+    $p_{R2L}(x) \;=\; \prod_{t=1}^{T} p_{R2L}(x_{t}\mid x_{&gt;t})$,
+}
+$$</div>
+<p>where <span class="math">\(x_{&gt;t} = (x_{t+1}, x_{t+2}, ..., x_T)\)</span>. And for the log-likelihood, we have</p>
+<div class="math">$$
+\fbox{
+    $\log p_{R2L}(x) \;=\; \sum_{t=1}^{T} \log p_{R2L}(x_{t}\mid x_{&gt;t})$.
+}
+$$</div>
+<p>Although both L2R and R2L factorizations represent the same distribution <span class="math">\(p(x)\)</span> in theory, neural approximations break symmetry: reversed factorization leads to different learned behaviors, calibration properties, and uncertainties.</p>
+<h2>Example</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Step <span class="math">\(t\)</span></th>
+<th style="text-align: left;">Context <span class="math">\(x_{&gt;t}\)</span></th>
+<th style="text-align: left;">Model outputs distribution over <span class="math">\(x_t\)</span></th>
+<th style="text-align: center;">Picked token</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">( )</td>
+<td style="text-align: left;"><span class="math">\(P(\text{“.”})=0.7,\dots\)</span></td>
+<td style="text-align: center;">“.”</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">(“.”)</td>
+<td style="text-align: left;"><span class="math">\(P(\text{“sat”}\mid “.”)=0.6,\dots\)</span></td>
+<td style="text-align: center;">“sat”</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">(“sat”, “.”)</td>
+<td style="text-align: left;"><span class="math">\(P(\text{“cat”}\mid\text{“sat.”})=0.5,\dots\)</span></td>
+<td style="text-align: center;">“cat”</td>
+</tr>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">(“cat”, “sat”, “.”)</td>
+<td style="text-align: left;"><span class="math">\(P(\text{“The”}\mid\text{“cat sat.”})=0.4,\dots\)</span></td>
+<td style="text-align: center;">“The”</td>
+</tr>
+</tbody>
+</table>
+<h1>Key Questions</h1>
+<p>The paper investigates the following three questions:</p>
+<ul>
+<li>How to evaluate R2L models on knowledge extraction and basic reasoning tasks? </li>
+<li>Can R2L factorization match or surpass L2R’s capabilities in knowledge extraction and reasoning for downstream tasks?</li>
+<li>What are underlying factors determining the preference of L2R or R2L factorizations?</li>
+</ul>
+<h1>Multiple‐Choice Questions</h1>
+<p>Multiple‐choice questions (MCQs) are a common benchmark for evaluating an LLM’s knowledge, reasoning, and calibration. As we can see in <strong>Figure 1</strong>, in their simplest form, an MCQ comprises:</p>
+<ul>
+<li>A <strong>question</strong> <span class="math">\(q\)</span></li>
+<li>A set of <span class="math">\(n\)</span> <strong>candidate answers</strong> <span class="math">\(a_1, \dots, a_n\)</span></li>
+<li>Exactly <strong>one correct answer</strong> <span class="math">\(a^{*}\)</span> among these <span class="math">\(n\)</span> choices</li>
+</ul>
+<figure>
+  <img src="../images/2025-05-29-reversal-blessing/mcq_fig.jpeg" alt="MCQ figure" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 1. MCQ</figcaption>
+</figure>
+
+<p>Most L2R‐based LLMs approach MCQs by computing, for each candidate <span class="math">\(a_i\)</span>, the conditional log‐probability:</p>
+<div class="math">$$
+\log p_{L2R}(a_i \mid ​q) = \sum_{l=1}^{\mid a_i \mid} \log p_{L2R}(a_i^l \mid q, a_i^{&lt;l}).
+$$</div>
+<p>Normalizing by answer length <span class="math">\(|a_i|\)</span>, we obtain the <strong>forward‐thinking score</strong></p>
+<div class="math">$$
+s_i^{(L2R)} = \frac{1}{|a_i|} \log p_{L2R}(a_i \mid ​q),
+$$</div>
+<p>and the predicted answer is</p>
+<div class="math">$$
+\hat{i} = \arg \max_i s_i^{(L2R)}.
+$$</div>
+<p>However, L2R forward thinking can suffer from <strong>surface‐form competition</strong> and calibration issues. For example, if two semantically equivalent answers (“dog” vs. “puppy”) each capture only a portion of the probability mass, the true answer may be penalized just because its mass is split.</p>
+<p>The alternative, <strong>reverse thinking</strong>, leverages an R2L model. By Bayes’ rule, for each candidate <span class="math">\(a_i\)</span></p>
+<div class="math">$$
+\log p(a_i \mid q) = \log p(q \mid a_i) + \log p(a_i) - \log p(q).
+$$</div>
+<p>Since <span class="math">\(\log p(q)\)</span> is constant across candidates, we can define an <strong>unnormalized reverse score</strong>:</p>
+<div class="math">$$
+\tilde{s}_i^{(R2L)} = \log p_{R2L}(q \mid a_i) + \log p_{R2L}(a_i).
+$$</div>
+<p>or, if one enforces a uniform prior over answers (i.e.\ discards <span class="math">\(\log p(a_i)\)</span>), simply:</p>
+<div class="math">$$
+s_i^{(R2L)} = \log p_{R2L}(q \mid a_i).
+$$</div>
+<p>Crucially, reverse thinking bypasses surface‐form competition among answer strings, because all candidates condition on the same question <span class="math">\(q\)</span> thus, the model only needs to evaluate <span class="math">\(p(q \mid a_i)\)</span>.</p>
+<h1>Mathematical Formulation: L2R vs. R2L on MCQs</h1>
+<h2>L2R on MCQs</h2>
+<p>Given a question <span class="math">\(q\)</span> answer candidates <span class="math">\(\{a_1, a_2, \dots, a_n\}\)</span>, aan L2R model computes, for each <span class="math">\(i\)</span>,</p>
+<div class="math">$$\log p_{L2R}(a_i \mid q) = \sum_{l=1}^{N_i} \log p_{L2R}(a_i^l \mid q, a_i^{&lt;l}),
+$$</div>
+<p>where <span class="math">\(N_i = |a_i|\)</span> is the token length of answer <span class="math">\(a_i\)</span>. To normalize for varying lengths, define</p>
+<div class="math">$$
+s_i^{(L2R)} = \frac{1}{N_i} \log p_{L2R}(a_i \mid q).
+$$</div>
+<p>The chosen answer index is</p>
+<div class="math">$$
+\hat{i} = \arg \max_{i \in \{1, \dots, n\}} s_i^{(L2R)}.
+$$</div>
+<p>Because the model is trained to maximize <span class="math">\(\log p(x)\)</span> in the L2R direction, it is inherently good at predicting a short correct answer string next given a fixed question prefix. However, if the correct answer has multiple valid encodings (e.g., synonyms, morphological variants), the probability mass <span class="math">\(p_{L2R}(a_i \mid q)\)</span> may be spread across these variants, reducing the normalized score <span class="math">\(s_i^{(L2R)}\)</span>.</p>
+<h2>R2L on MCQs</h2>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "true";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>        </body>
+</html>
