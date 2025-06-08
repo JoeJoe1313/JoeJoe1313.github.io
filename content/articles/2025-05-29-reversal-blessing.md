@@ -15,22 +15,22 @@ Most LLMs are trained to predict text in a strictly left‐to‐right order. Lef
 
 ## The Theory
 
-Given a sequence of tokens $x_1,x_2, ... , x_n$​, the joint probability can be factorized using the chain rule of probability:
+Given a sequence of tokens $x_1,x_2, \dots , x_n$​, the joint probability can be factorized using the chain rule of probability:
 
 $$
-p(x_1,x_2,...,x_n) = p(x_1)p(x_2∣x_1)p(x_3∣x_1,x_2)...p(x_n∣x_1,...,x_{n−1})
+p(x_1,x_2,\dots,x_n) = p(x_1)p(x_2∣x_1)p(x_3∣x_1,x_2) \dots p(x_n∣x_1,\dots,x_{n−1})
 $$
 
 This can be written more compactly as:
 
 $$
-p(x_1,x_2,...,x_n) = \prod_{i=1}^n p(x_i∣x_1,...,x_{i−1})
+p(x_1,x_2,\dots,x_n) = \prod_{i=1}^n p(x_i∣x_1,\dots,x_{i−1})
 $$
 
 The key insight is that we model each token's probability as dependent only on the tokens that came before it (hence "left-to-right"). This creates a causal dependency structure where future tokens cannot influence past tokens. Unfortunately, this approach can introduce inductive biases, errors compounding at each step, and may not be optimal for all reasoning or knowledge‐retrieval tasks 
 
 
-Now, let's formally define the L2R factorization with the notation we are going to use throughout the post. For any sequence $x = (x_1, x_2, ..., x_T)$, we can express the joint probability as
+Now, let's formally define the L2R factorization with the notation we are going to use throughout the post. For any sequence $x = (x_1, x_2, \dots, x_T)$, we can express the joint probability as
 
 $$
 \fbox{
@@ -38,7 +38,7 @@ $$
 }
 $$
 
-where $x_{<t} = (x_{1}, x_{2}, ..., x_{t-1})$. At each timestep $t$, the model predicts the next token $x_t$ given the full prefix $x_{<t}.$ This factorization is not unique, any valid factorization of the joint probability yields the same marginal $p(x)$.
+where $x_{<t} = (x_{1}, x_{2}, \dots, x_{t-1})$. At each timestep $t$, the model predicts the next token $x_t$ given the full prefix $x_{<t}.$ This factorization is not unique, any valid factorization of the joint probability yields the same marginal $p(x)$.
 
 We are also going to need the log-lokielhood of the sequence, which is
 
@@ -62,7 +62,7 @@ $$
 
 ## How LLMs Implement This
 
-Language models learn to approximate each conditional probability $P(x_i | x_1, ..., x_{i-1})$ through:
+Language models learn to approximate each conditional probability $P(x_i | x_1, \dots, x_{i-1})$ through:
 
 - **Encoder layers** that build rich contextual representations of the preceding tokens
 - **Attention mechanisms** that allow each position to attend to all previous positions (but not future ones via causal masking)
@@ -76,10 +76,10 @@ For the sequence _"The cat sat."_:
 
 | Step $t$ | Context $x_{<t}$      | Model outputs distribution over next token    |     Picked token    |
 | :------: | :-------------------- | :-------------------------------------------- | :-----------------: |
-|     1    | ( )                   | $P(\text{“The”})=0.4,\ P(\text{“A”})=0.3,\dots$ |        “The”        |       |
-|     2    | (“The”)               | $P(\text{“cat”}\mid   \text{“The”})=0.5,\dots$   | “cat” |
-|     3    | (“The”, “cat”)        | $P(\text{“sat”}\mid \text{“The cat”})=0.6,\dots$ | “sat” |
-|     4    | (“The”, “cat”, “sat”) | $P(\text{“.”}\mid…)=0.8,\dots$     | “.”   |
+|     1    | ( )                   | $P(\text{The})=0.4,\ P(\text{A})=0.3,\dots$ |        The        |       |
+|     2    | (The)               | $P(\text{cat}\mid   \text{The})=0.5,\dots$   | cat |
+|     3    | (The, cat)        | $P(\text{sat}\mid \text{The cat})=0.6,\dots$ | sat |
+|     4    | (The, cat, sat) | $P(\text{.}\mid…)=0.8,\dots$     | .   |
 
 # Right‐to‐left (R2L) Autoregressive Factorization
 
@@ -87,21 +87,21 @@ Right-to-left autoregressive factorization is the mathematical "mirror image" of
 
 ## The Theory
 
-Given a sequence of tokens $x_1, x_2, ..., x_n$​, we can factorize using the chain rule in reverse order:
+Given a sequence of tokens $x_1, x_2, \dots, x_n$​, we can factorize using the chain rule in reverse order:
 
 $$
-P(x_1, x_2, ..., x_n) = P(x_n) P(x_{n-1}|x_n) P(x_{n-2}|x_{n-1}, x_n)...P(x_1|x_2, ..., x_n)
+P(x_1, x_2, \dots, x_n) = P(x_n) P(x_{n-1}|x_n) P(x_{n-2}|x_{n-1}, x_n) \dots P(x_1|x_2, \dots, x_n)
 $$
 
 This can be written as:
 
 $$
-P(x_1, x_2, ..., x_n) = \prod_{i=1}^{n} P(x_i | x_{i+1}, ..., x_n)
+P(x_1, x_2, \dots, x_n) = \prod_{i=1}^{n} P(x_i | x_{i+1}, \dots, x_n)
 $$
 
 This is a bit strange to say it like that, but now each token's probability depends on all the tokens that come after it in the sequence. In simple words, R2L is predicting earlier tokens given later ones. You probably immediately asked "But how?", and later you are going ot see the answer is "With the help of Bayes' rule".
 
-Now, let's also formally define the R2L factorization. For any sequence $x = (x_1, x_2, ..., x_T)$, we can express the joint probability as
+Now, let's also formally define the R2L factorization. For any sequence $x = (x_1, x_2, \dots, x_T)$, we can express the joint probability as
 
 $$
 \fbox{
@@ -109,7 +109,7 @@ $$
 }
 $$
 
-where $x_{>t} = (x_{t+1}, x_{t+2}, ..., x_T)$. And for the log-likelihood, we have
+where $x_{>t} = (x_{t+1}, x_{t+2}, \dots, x_T)$. And for the log-likelihood, we have
 
 $$
 \fbox{
@@ -123,10 +123,10 @@ Although both L2R and R2L factorizations represent the same distribution $p(x)$ 
 
 | Step $t$ |   Context $x_{>t}$  | Model outputs distribution over $x_t$    | Picked token |
 | :----------------: | :----------------- | :--------------------------------------- | :----------: |
-|          4         |         ( )         | $P(\text{“.”})=0.7,\dots$                  |      “.”     |
-|          3         |        (“.”)        | $P(\text{“sat”}\mid “.”)=0.6,\dots$        |     “sat”    |
-|          2         |     (“sat”, “.”)    | $P(\text{“cat”}\mid\text{“sat.”})=0.5,\dots$     |     “cat”    |
-|          1         | (“cat”, “sat”, “.”) | $P(\text{“The”}\mid\text{“cat sat.”})=0.4,\dots$ |     “The”    |
+|          4         |         ( )         | $P(\text{.})=0.7,\dots$                  |      .     |
+|          3         |        (.)        | $P(\text{sat}\mid .)=0.6,\dots$        |     sat    |
+|          2         |     (sat, .)    | $P(\text{cat}\mid\text{sat.})=0.5,\dots$     |     cat    |
+|          1         | (cat, sat, .) | $P(\text{The}\mid\text{cat sat.})=0.4,\dots$ |     The    |
 
 # Key Questions
 
@@ -149,62 +149,21 @@ Multiple‐choice questions (MCQs) are a common benchmark for evaluating an LLM�
   <figcaption style="text-align: center">Figure 1. MCQ</figcaption>
 </figure>
 
-Most L2R‐based LLMs approach MCQs by computing, for each candidate $a_i$, the conditional log‐probability:
-
-$$
-\log p_{L2R}(a_i \mid ​q) = \sum_{l=1}^{\mid a_i \mid} \log p_{L2R}(a_i^l \mid q, a_i^{<l}).
-$$
-
-Normalizing by answer length $|a_i|$, we obtain the **forward‐thinking score**
-
-$$
-s_i^{(L2R)} = \frac{1}{|a_i|} \log p_{L2R}(a_i \mid ​q),
-$$
-
-and the predicted answer is
-
-$$
-\hat{i} = \arg \max_i s_i^{(L2R)}.
-$$
-
-However, L2R forward thinking can suffer from **surface‐form competition** and calibration issues. For example, if two semantically equivalent answers (“dog” vs. “puppy”) each capture only a portion of the probability mass, the true answer may be penalized just because its mass is split.
-
-The alternative, **reverse thinking**, leverages an R2L model. By Bayes’ rule, for each candidate $a_i$
-
-$$
-\log p(a_i \mid q) = \log p(q \mid a_i) + \log p(a_i) - \log p(q).
-$$
-
-Since $\log p(q)$ is constant across candidates, we can define an **unnormalized reverse score**:
-
-$$
-\tilde{s}_i^{(R2L)} = \log p_{R2L}(q \mid a_i) + \log p_{R2L}(a_i).
-$$
-
-or, if one enforces a uniform prior over answers (i.e.\ discards $\log p(a_i)$), simply:
-
-$$
-s_i^{(R2L)} = \log p_{R2L}(q \mid a_i).
-$$
-
-Crucially, reverse thinking bypasses surface‐form competition among answer strings, because all candidates condition on the same question $q$ thus, the model only needs to evaluate $p(q \mid a_i)$.
-
-# Mathematical Formulation: L2R vs. R2L on MCQs
-
 ## L2R on MCQs
 
-Given a question $q$ answer candidates $\{a_1, a_2, \dots, a_n\}$, aan L2R model computes, for each $i$,
-
-$$\log p_{L2R}(a_i \mid q) = \sum_{l=1}^{N_i} \log p_{L2R}(a_i^l \mid q, a_i^{<l}),
-$$
-
-where $N_i = |a_i|$ is the token length of answer $a_i$. To normalize for varying lengths, define
+Let $q$ be a question with answer candidates $\{a_1, a_2, \dots, a_n\}$. Most L2R‐based LLMs approach MCQs by computing, for each candidate $a_i$, the conditional log‐probability:
 
 $$
-s_i^{(L2R)} = \frac{1}{N_i} \log p_{L2R}(a_i \mid q).
+\log p_{L2R}(a_i \mid ​q) = \sum_{l=1}^{N_i} \log p_{L2R}(a_i^{(l)} \mid q, a_i^{(<l)}),
 $$
 
-The chosen answer index is
+where $N_i = |a_i|$ is the token length of answer $a_i$. Normalizing by the answer length $N_i$, we obtain the **forward‐thinking score**
+
+$$
+s_i^{(L2R)} = \frac{1}{N_i} \log p_{L2R}(a_i \mid ​q),
+$$
+
+and the chosen answer index is
 
 $$
 \hat{i} = \arg \max_{i \in \{1, \dots, n\}} s_i^{(L2R)}.
@@ -212,6 +171,51 @@ $$
 
 Because the model is trained to maximize $\log p(x)$ in the L2R direction, it is inherently good at predicting a short correct answer string next given a fixed question prefix. However, if the correct answer has multiple valid encodings (e.g., synonyms, morphological variants), the probability mass $p_{L2R}(a_i \mid q)$ may be spread across these variants, reducing the normalized score $s_i^{(L2R)}$.
 
+However, L2R forward thinking can suffer from **surface‐form competition** and calibration issues. For example, if two semantically equivalent answers (“dog” vs. “puppy”) each capture only a portion of the probability mass, the true answer may be penalized just because its mass is split.
+
 ## R2L on MCQs
 
+At inference, given a candidate answer $a_i$ and a question $q$, R2L-based LLMs score each candidate by evaluating
 
+$$
+\log p_{R2L}(q \mid ​a_i) = \sum_{l=1}^{M_i} \log p_{R2L}(q^{(l)} \mid a_i, q^{(>l)}),
+$$
+
+where we concatenate $a_i$ and $q$ into a single sequence $a_i, q$. Denote $M_i = \mid (a_i, q) \mid$, the combined token length.
+
+By Bayes’ rule, for each candidate $a_i$ it follows
+
+$$
+\log p(a_i \mid q) = \log p(q \mid a_i) + \log p(a_i) - \log p(q).
+$$
+
+
+Discarding the constant $\log p(q)$ and approximating $\log p(a_i)$ with $\log p_{R2L}(a_i)$, one can define three reverse‐thinking paradigms:
+
+- **Paradigm 1 (Normalized + Prior):**
+
+$$
+s_i^{(1)} = \frac{1}{M_i} \log p_{R2L}(q \mid a_i) + \log p_{R2L}(a_i)
+$$
+
+- **Paradigm 2 (Unnormalized + Prior):**
+
+$$
+\tilde{s}_i^{(2)} = \log p_{R2L}(q \mid a_i) + \log p_{R2L}(a_i)
+$$
+
+- **Paradigm 3 (Unnormalized, Uniform Prior):**
+
+$$
+s_i^{(3)} = \log p_{R2L}(q \mid a_i)
+$$
+
+Empirically, Paradigm 3 — which ignores $\log p(a_i)$ — consistently yields the highest MCQ accuracy across a variety of tasks. By treating all $a_i$ as equally likely apriori, it eliminates the need to estimate $\log p(a_i)$ (which can be noisy) and removes length biases.
+
+Hence, the **reverse‐thinking MCQ** predictor is:
+
+$$
+\hat{i}^{(R2L)} = \arg \max_{i \in \{1, \dots, n\}} s_i^{(3)} = \arg \max_{i \in \{1, \dots, n\}} \log p_{R2L}(q \mid a_i).
+$$
+
+In practice, one concatenates “answer choice” followed by “question” into a single sequence - each reversed internally for the R2L model—and computes the joint probability of generating the question given the answer.
