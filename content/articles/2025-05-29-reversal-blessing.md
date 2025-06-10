@@ -4,10 +4,10 @@ Date: 2025-05-29 07:00
 Category: Machine Learning
 Tags: ai, ml, llm
 Slug: 2025-05-29-reversal-blessing
-Status: draft
+Status: published
 ---
 
-Most modern languages are written from left to right, thus we assume that thinking from left to right is the most natural way to process information expressed with these languages. This is particularly true for **Large Language Models (LLMs)** which are typically trained to predict the next word in a sequence, known as **left-to-right (L2R)** language models. But what if, for certain tasks, thinking backward could actually be better? A recent paper from Apple researchers, titled **_"Reversal Blessing: Thinking Backward May Outpace Thinking Forward in Multi-choice Questions"_**, explores a counterintuitive approach to data augmentation: training LLMs on "reversed" sequences. It delves into the potential of **right-to-left (R2L)** language models, and their effectiveness in tackling some tasks such as **multiple-choice questions (MCQs)**. The paper can be found [here](https://arxiv.org/abs/2502.18435v2), and the supporting code can be found in the GitHub repository [here](https://github.com/apple/ml-reversal-blessing?tab=readme-ov-file).
+Most modern languages are written from left to right, thus we assume that thinking from left to right is the most natural way to process information expressed with these languages. This is particularly true for **Large Language Models (LLMs)** which are typically trained to predict the next word in a sequence, known as **left-to-right (L2R)** language models. But what if, for certain tasks, thinking backward could actually be better? A recent paper from Apple researchers, titled **_"Reversal Blessing: Thinking Backward May Outpace Thinking Forward in Multi-choice Questions"_**, explores a counterintuitive approach to data augmentation: training LLMs on "reversed" sequences. It delves into the potential of **right-to-left (R2L)** language models, and their effectiveness in tackling some tasks such as **multiple-choice questions (MCQs)**. The paper can be found [here](https://arxiv.org/abs/2502.18435v2), and the supporting code can be found in the GitHub repository [here](https://github.com/apple/ml-reversal-blessing?tab=readme-ov-file). In this blog post, we are going to explore some of the key ideas and findings from this paper, and where needed we are going to provide some additional theoretical beackground and explanations, and simple examples to help us better understand the concepts.
 
 # Left‐to‐right (L2R) Autoregressive Factorization
 
@@ -27,8 +27,7 @@ $$
 p(x_1,x_2,\dots,x_n) = \prod_{i=1}^n p(x_i∣x_1,\dots,x_{i−1})
 $$
 
-The key insight is that we model each token's probability as dependent only on the tokens that came before it (hence "left-to-right"). This creates a causal dependency structure where future tokens cannot influence past tokens. Unfortunately, this approach can introduce inductive biases, errors compounding at each step, and may not be optimal for all reasoning or knowledge‐retrieval tasks 
-
+The key insight is that we model each token's probability as dependent only on the tokens that came before it (hence "left-to-right"). This creates a causal dependency structure where future tokens cannot influence past tokens. Unfortunately, this approach can introduce inductive biases, errors compounding at each step, and may not be optimal for all reasoning or knowledge‐retrieval tasks. 
 
 Now, let's formally define the L2R factorization with the notation we are going to use throughout the post. For any sequence $x = (x_1, x_2, \dots, x_T)$, we can express the joint probability as
 
@@ -189,7 +188,6 @@ $$
 \log p(a_i \mid q) = \log p(q \mid a_i) + \log p(a_i) - \log p(q).
 $$
 
-
 Discarding the constant $\log p(q)$ and approximating $\log p(a_i)$ with $\log p_{R2L}(a_i)$, one can define three reverse‐thinking paradigms:
 
 - **Paradigm 1 (Normalized + Prior):**
@@ -219,3 +217,208 @@ $$
 $$
 
 In practice, one concatenates “answer choice” followed by “question” into a single sequence - each reversed internally for the R2L model—and computes the joint probability of generating the question given the answer.
+
+# Explaining the Performance: Calibration, Computability, and Conditional Entropy
+
+Why Does Reverse Thinking Work? The "3C" Hypotheses
+
+Why does reverse thinking sometimes outperform forward thinking, and vice versa? The authors explore three main hypotheses:
+
+- **Calibration** (Surface‐Form Competition)
+- **Computability** (Difficulty of Forward vs. Reverse Tasks)
+- **Conditional Entropy** (Uncertainty in Each Direction)
+
+## Calibration and Surface‐Form Competition
+
+### The Calibration Issue
+
+When an L2R model computes $\log p_{L2R}(a_i \mid q)$, it has implicitly learned how answers follow questions in training data. However, two semantically identical answers with different surface forms—say, “dog” vs. “puppy”—can each attract partial probability mass. Concretely, imagine:
+
+$$
+p_{L2R}(\text{dog} \mid q) = 0.30, \quad p_{L2R}(\text{puppy} \mid q) = 0.30, \quad p_{L2R}(\text{cat} \mid q) = 0.40.
+$$
+
+If the correct answer is conceptually “dog,” the L2R model will choose “cat” (0.40) simply because “dog”’s probability is split. Even after length normalization, this surface‐form competition can cause catastrophic mispredictions. This effect is exacerbated when answers have multiple synonyms, plurals, or morphological variants. 
+
+### Reverse Thinking as Calibration Remedy
+
+Reverse thinking (Paradigm 3) computes:
+
+$$
+s_i^{(R2L)} = \log p_{R2L}(q \mid a_i)
+$$
+
+Since each candidate $a_i$ is fixed, there is no competition among answer forms when evaluating $p(q \mid a)$. Instead, the model scores how well a given answer explains the question. Returning to the toy example, suppose:
+
+$$
+p_{R2L}(q \mid \text{dog}) = p_{R2L}(q \mid \text{puppy}) = 0.90, \quad p_{R2L}(q \mid \text{cat}) = 0.40.
+$$
+
+Reverse thinking chooses “dog” (or “puppy”) with equal priority over “cat.” By effectively treating all candidate answers with a uniform prior and focusing solely on $p(q \mid a_i)$, reverse thinking auto‐normalizes over surface forms, eliminating calibration biases.
+
+However, calibration alone does not fully explain why reverse thinking sometimes fails—especially on tasks like HellaSwag or ARC, where surface‐form competition is less pronounced. In these settings, the intrinsic “direction” of reasoning and how tightly the model has learned that direction also matter.
+
+## Computability: Forward vs. Reverse Task Difficulty
+
+A classic analogy from number theory contrasts multiplying primes (easy) with factoring their product (hard). In L2R pretraining, the model effectively learns to “multiply” pieces of text forward; reversing that process (i.e., going from output back to inputs) might be inherently more difficult or simply less represented in the data.
+
+### The Intuition
+
+- **L2R Fine‐Tuning ≈ Forward Computation**
+
+<ul>
+The model minimizes cross‐entropy loss to predict the next token given prior tokens:
+</ul>
+
+$$
+\theta_{min} = \min_{\theta} -E_{x \sim D} \left[ \sum_{t=1}^{T} \log p_{\theta}(x_t \mid x_{<t}) \right].
+$$
+
+<ul>
+In essence, it’s learning a “forward mapping” from contexts to next‐token predictions, analogous to computing a function $f(\text{context}) \rightarrow \text{next token}$.
+</ul>
+
+- **R2L Fine‐Tuning ≈ Reverse Computation**
+
+<ul>
+By reversing sequences, the model learns $p(x_t \mid x_{>t})$. Conceptually, this is akin to “inverting” the forward function. If the underlying linguistic process is non‐invertible or highly multi‐modal, R2L training may struggle.
+</ul>
+
+Consequently, if an MCQ task fundamentally requires “inverting” a reasoning process—say, inferring a premise from a conclusion—R2L might have an advantage. Conversely, if a task fits the forward generative pattern (e.g., predicting plausible continuations), L2R could be superior.
+
+### Limitations of the Computability Argument
+
+Recent evidence suggests that LLMs are not exact symbolic calculators; they don’t perform true logical inversion but rather approximate patterns seen during training (Mirzadeh et al., 2024; Kambhampati, 2024; Valmeekam et al., 2024). Consequently, the computability perspective alone cannot fully predict performance:
+
+- **MCQs are often “shallow” tasks**. They involve pattern recognition, fact recall, or heuristic reasoning rather than deep symbolic inversion.
+- **If LLMs only imitate surface patterns**, then whether a task is “forward” or “reverse” might not strictly follow the prime‐multiplication analogy.
+
+Hence, while computability considerations can help interpret why tasks like arithmetic MCQs (e.g., MathQA) favor L2R, they do not fully capture performance on more semantic tasks such as CommonsenseQA or TruthfulQA.
+
+## Conditional Entropy
+
+Building on calibration and computability, the authors propose conditional entropy as a unified criterion for choosing L2R vs. R2L. Intuitively, if the conditional distribution in one direction is “sharper” (i.e., has lower entropy), then predicting in that direction is inherently easier.
+
+<figure>
+  <img src="../images/2025-05-29-reversal-blessing/dag.jpeg" alt="MCQ figure" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 2. DAGs</figcaption>
+</figure>
+
+### Formal Definitions
+
+Let $P_T(q,a)$ denote the joint distribution of question $q$ and correct answer $a$ for a given MCQ task $T$. Define:
+
+- **L2R conditional entropy**
+
+$$
+H_{L2R}(T) = \mathbb{E}_{q \sim P_T(q)} \left[ -\sum_{a} p_{L2R}(a \mid q) \log p_{L2R}(a \mid q) \right].
+$$
+
+<ul>
+This measures the average uncertainty in the model’s distribution over answers given questions.
+</ul>
+
+- **R2L conditional entropy**
+
+$$
+H_{R2L}(T) = \mathbb{E}_{a \sim P_T(a)} \left[ -\sum_{q} p_{R2L}(q \mid a) \log p_{R2L}(q \mid a) \right].
+$$
+
+<ul>
+This measures the average uncertainty in the model’s distribution over questions given answers.
+</ul>
+
+In principle, $\min \{H_{L2R}, H_{R2L}\}$ indicates the “easier” direction: if $H_{L2R} < H_{R2L}$, forward thinking should yield higher MCQ accuracy; if $H_{L2R} > H_{R2L}$, reverse thinking should dominate.
+
+However, directly computing these entropies is intractable, since for each $q$, summing over all possible $a$ (and vice versa) is exponential. Instead, the authors estimate them via a **Monte Carlo proxy** using one‐sample “rollouts.”
+
+### One‐Sample Rollouts for Entropy Estimation
+
+For each test instance $(q,a^{∗})$ in the domain $T$, perform:
+
+1. **Estimate $\hat{H}_{L2R}$**
+
+    - Generate one candidate answer $\tilde{a}$ by sampling from the learned distribution $p_{L2R}(. \mid q)$. In practice, they generate exactly 10 tokens (without early EOS) to form a sampled answer $\tilde{a}$.
+    - Compute $- \log p_{L2R}(\tilde{a} \mid q)$
+    - Average this negative log‐probability over all test instances:
+
+$$
+\hat{H}_{L2R}(T) = \frac{1}{N_{\text{test}}} \sum_{i=1}^{N_{\text{test}}} \left[ - \log p_{L2R}(\tilde{a_i} \mid q_i) \right].
+$$
+
+2. **Estimate $\hat{H}_{R2L}$**
+
+    - For each test instance $(q,a^{∗})$, sample one “pseudo‐question” $\tilde{q}$ from $p_{R2L}(⋅\mid a^{∗})$. Again, they generate 10 tokens in reverse.
+    - Compute $- \log p_{R2L}(\tilde{q} \mid a^{∗})$
+    - Average this negative log‐probability over all test instances:
+$$
+\hat{H}_{R2L}(T) = \frac{1}{N_{\text{test}}} \sum_{i=1}^{N_{\text{test}}} \left[ - \log p_{R2L}(\tilde{q_i} \mid a^{∗}_i) \right].
+$$
+
+The choice of **exactly 10 tokens** ensures a standardized length, preventing longer generations from inflating entropy estimates.
+
+###  Correlating Entropy with MCQ Accuracy
+
+Plotting the estimated $\hat{H}_{L2R}$ and $\hat{H}_{R2L}$ against MCQ accuracy for all eleven tasks reveals a strong correlation:
+
+- If $\hat{H}_{L2R} < \hat{H}_{R2L}$, then L2R accuracy on $T$ exceeds R2L accuracy on $T$.
+- If $\hat{H}_{L2R} > \hat{H}_{R2L}$, then R2L accuracy on $T$ exceeds L2R accuracy on $T$.
+
+Two tasks, **CommonsenseQA** and **OpenbookQA**, are slight outliers (i.e., reverse thinking outperforms despite $\hat{H}_{L2R} < \hat{H}_{R2L}$), suggesting that **calibration or computability** factors also play a role. Nonetheless, **conditional entropy** explains the majority of observed results, providing a principled criterion for choosing processing direction.
+
+Figure 3 below demonstrates this alignment: tasks cluster along a diagonal line when plotting accuracy difference vs. entropy difference. 
+
+<figure>
+  <img src="../images/2025-05-29-reversal-blessing/cond_entr.jpg" alt="MCQ figure" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 3. Sth</figcaption>
+</figure>
+
+#  Controlled Simulation: 4‐Digit Multiplication
+
+To isolate calibration, computability, and entropy effects, the authors design a toy problem: **4‐digit multiplication**. They train L2R and R2L models to perform multiplication (forward) or factorization (reverse) on a dataset of all $10^8$ non‐repeating 4‐digit $\times$ 4‐digit equations.
+
+<figure>
+  <img src="../images/2025-05-29-reversal-blessing/contr_mult.jpg" alt="MCQ figure" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 4. Sth</figcaption>
+</figure>
+
+## Dataset Construction
+
+- **All pairs** $(m,n)$, where $m, n \in \{0000,0001, \dots 9999\}$, excluding trivial repeats (e.g., $(0000,0000)$). There are $10^8$ unique pairs.
+- Compute the 8‐digit product $p = m \times n$. (Leading zeros are allowed to fix string length.)
+
+Two parallel tasks:
+
+1. **Forward X (Multiplication)**
+   
+    - **Input:** Two 4‐digit factors $m$ and $n$, formatted as $m \times n =$.
+    - **Target:** 8‐digit product $p$.
+    - **Sequence format:** $[m] [\times] [n] [=] [p]$, with each digit and symbol separated by spaces (total length constant across examples).
+
+2. **Reverse X (Factorization)**
+
+    - **Input:** An 8‐digit product $p$, formatted as $p =$.
+    - **Target:** The two 4‐digit factors $m$ and $n$.
+    - **Sequence format:** $[p] [=] [m] [\times] [n]$, again with fixed token spacing.
+
+By spacing each digit and symbol uniformly, the authors ensure **no length‐based calibration** issues: every example has identical token length during training (fixed number of tokens). Thus, surface‐form competition is minimized, allowing clear investigation of **computability** and **conditional entropy**.
+
+## Model Training
+
+Both L2R and R2L models (identical `2B` architecture) are trained from scratch for one epoch on their respective datasets. Each model sees all $10^8$ unique equations exactly once, ensuring no distribution mismatch.
+
+## MCQ‐Style Testing
+
+From a held‐out set of `1000` test equations, the authors create MCQs with 4 answer choices per example:
+
+- **Forward X MCQ** (Given $(m,n)$, choose the correct product $p$ among four candidates):
+
+    - 1 correct product (true $m \times n$)
+    - 3 “hard negatives”: each formed by randomly flipping one digit of the true product to another random digit (ensuring the negative is not a valid product of two 4‐digit numbers in the training set)
+
+- Reverse X MCQ (Given $p$, choose the correct factor pair $(m,n)$ among four candidates):
+
+    - 1 correct factor pair
+    - 3 negatives: each formed by changing one digit in either $m$ or $n$ to a random digit (ensuring the negative pair yields the same or different product; some negatives may or may not correspond to $p$)
+
+For each test instance, answer choices are randomly **shuffled** and the process is repeated **10 times** to average out ordering effects.
