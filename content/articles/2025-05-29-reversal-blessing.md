@@ -4,7 +4,7 @@ Date: 2025-05-29 07:00
 Category: Machine Learning
 Tags: ai, ml, llm
 Slug: 2025-05-29-reversal-blessing
-Status: published
+Status: draft
 ---
 
 Most modern languages are written from left to right, thus we assume that thinking from left to right is the most natural way to process information expressed with these languages. This is particularly true for **Large Language Models (LLMs)** which are typically trained to predict the next word in a sequence, known as **left-to-right (L2R)** language models. But what if, for certain tasks, thinking backward could actually be better? A recent paper from Apple researchers, titled **_"Reversal Blessing: Thinking Backward May Outpace Thinking Forward in Multi-choice Questions"_**, explores a counterintuitive approach to data augmentation: training LLMs on "reversed" sequences. It delves into the potential of **right-to-left (R2L)** language models, and their effectiveness in tackling some tasks such as **multiple-choice questions (MCQs)**. The paper can be found [here](https://arxiv.org/abs/2502.18435v2), and the supporting code can be found in the GitHub repository [here](https://github.com/apple/ml-reversal-blessing?tab=readme-ov-file). In this blog post, we are going to explore some of the key ideas and findings from this paper, and where needed we are going to provide some additional theoretical beackground and explanations, and simple examples to help us better understand the concepts.
@@ -422,3 +422,20 @@ From a held‐out set of `1000` test equations, the authors create MCQs with 4 a
     - 3 negatives: each formed by changing one digit in either $m$ or $n$ to a random digit (ensuring the negative pair yields the same or different product; some negatives may or may not correspond to $p$)
 
 For each test instance, answer choices are randomly **shuffled** and the process is repeated **10 times** to average out ordering effects.
+
+## Theoretical Conditional Entropy
+
+The forward mapping $(m,n)\rightarrow p$ is **deterministic**: knowing $m$ and $n$ exactly determines $p$. Hence the oracle conditional entropy is
+
+$$
+H_{\text{oracle}}(p \mid m, n)  = 0.
+$$
+
+Conversely, the reverse mapping $p \rightarrow (m,n)$ can be **many‐to‐one**: a given product $p$ may have multiple valid factor pairs. Over all 4‐digit factors, the expected number of factor pairs for a random 8‐digit number is approximately 2. By basic entropy:
+
+$$
+H_{\text{oracle}}((m, n) \mid p) = \ln(\mathbb{E}\left[ \text{\#factor pairs} \right]) \approx \ln(2) \approx 0.69 \text{ nats}.
+$$
+
+(Using natural logarithm; if we measured in bits, it would be $\approx 1.0$ bit.) Similarly, in the Reverse X scenario, predicting $(m,n)$ from $p$ has 
+$H_{\text{oracle}}((m,n)∣p) \approx 0.69$ nats, whereas predicting $p$ from $(m, n)$ is deterministic ($H=0$).
