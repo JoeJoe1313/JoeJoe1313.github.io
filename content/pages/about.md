@@ -21,9 +21,9 @@ Title: About
 
 - ⁠Dual contouring of hermite data
 - Lissajous curves
-- Thinking Backwards: The "Reversal Blessing" in LLM Multiple-Choice Reasoning
 - GP-UCB
 - Hermite interpolation
 - ⁠Docker model runner
 - Circuit tracing
 - QAT
+- OCR models comparison (handwritten notes)
