@@ -9,7 +9,7 @@ Status: published
 
 In today’s fast-paced machine learning landscape, deploying AI models is just as important as developing them. In this blog post, we are going to walk through an image segmentation application using Google’s **PaliGemma 2 Mix** model and **transformers**, containerized with **Docker**, and served through a **FastAPI** backend. We are also going to discuss the CI/CD pipeline using **GitHub Actions** to automate building the Docker image and pushing it to Docker Hub. Let’s explore this service, why we chose these technologies, and how you can get started and use the service yourself!
 
-The complete code is available on [GitHub](https://github.com/JoeJoe1313/PaliGemma-Image-Segmentation). 
+The complete code is available on [GitHub](https://github.com/JoeJoe1313/PaliGemma-Image-Segmentation). Medium post can be found [here](https://medium.com/@levchevajoana/image-segmentation-with-paligemma-2-mix-transformers-docker-fastapi-and-github-actions-ff6d00253832).
 
 # What is This Project All About?
 

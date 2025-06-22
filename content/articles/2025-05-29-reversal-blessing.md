@@ -11,6 +11,8 @@ Most modern languages are written from left to right, thus we assume that thinki
 
 A recent paper from Apple researchers, titled **_"Reversal Blessing: Thinking Backward May Outpace Thinking Forward in Multi-choice Questions"_**, explores a counterintuitive approach to data augmentation: training LLMs on "reversed" sequences. It delves into the potential of **right-to-left (R2L)** language models, and their effectiveness in tackling some tasks such as **multiple-choice questions (MCQs)**. The paper can be found [here](https://arxiv.org/abs/2502.18435v2), and the supporting code can be found in the GitHub repository [here](https://github.com/apple/ml-reversal-blessing?tab=readme-ov-file). In this blog post, we are going to explore some of the key ideas and findings from this paper.
 
+Medium post can be found [here](https://medium.com/@levchevajoana/thinking-backwards-the-reversal-blessing-in-llm-multiple-choice-reasoning-fa71916b51e5).
+
 # Left‐to‐right (L2R) Autoregressive Factorization
 
 Most LLMs are trained to predict text in a strictly left‐to‐right order. Left-to-right autoregressive (**L2R**) factorization is the fundamental mathematical principle underlying how these models generate text, based on decomposing the probability of a sequence into a chain of conditional probabilities.
