@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>A Job Postings Tool: A Guide to MLX-LM Server and Tool Use with the OpenAI Client</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+    <meta name="description" content="Building intelligent applications that can interact with real-world data requires more than just Large Language Models (LLMs), it requires the..." />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li><a href="/books.html">Books</a></li>
+                                                <li><a href="/papers.html">Papers</a></li>
+                                                <li class="active"><a href="/category/machine-learning.html">Machine Learning</a></li>
+                                                <li><a href="/category/mathematics.html">Mathematics</a></li>
+                                <li><a href="/drafts.html">Drafts</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="/2025-06-21-tool-mlx-openai.html" rel="bookmark"
+             title="Permalink to A Job Postings Tool: A Guide to MLX-LM Server and Tool Use with the OpenAI Client">A Job Postings Tool: A Guide to MLX-LM Server and Tool Use with the OpenAI Client</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2025-06-21T07:00:00+03:00">
+            Published: Sat 21 June 2025
+    </abbr>
+
+    <p>In <a href="/category/machine-learning.html">Machine Learning</a>.</p>
+<p>tags: <a href="/tag/ai.html">ai</a> <a href="/tag/ml.html">ml</a> <a href="/tag/llm.html">llm</a> </p>    
+</footer><!-- /.post-info -->        <p>Building intelligent applications that can interact with real-world data requires more than just Large Language Models (LLMs), it requires the ability to call external functions and tools. <strong>Tool calling</strong> transforms a conversational LLM into an agent that can execute code, query APIs, and perform tasks. In this blog post, we are going to create a job search assistant using the <strong>MLX-LM Server</strong>, connect it to the <strong>OpenAI client</strong> , and utilise the <strong>Qwen3-8B</strong> model’s tool‐calling abilities. We are going to build a tool that scrapes job postings from <a href="https://dev.bg">DEV.BG</a>, a popular Bulgarian job board, and provides intelligent responses about available positions. </p>
+<p>Medium post can be found <a href="https://medium.com/@levchevajoana/a-job-postings-tool-a-guide-to-mlx-lm-server-and-tool-use-with-the-openai-client-edb9a5d75b4c">here</a>.</p>
+<blockquote>
+<p><strong>Note</strong>: The <a href="https://github.com/ml-explore/mlx-lm/pull/217">PR</a> for enabling tool use in the mlx-lm server using the openai client is still not merged.</p>
+</blockquote>
+<h1>The MLX-LM Server</h1>
+<p><code>mlx-lm</code> is a package for running and fine-tuning LLMs using MLX. One component of this library is the <code>mlx_lm.server</code>, a lightweight HTTP server designed to serve local MLX models.</p>
+<h2>Purpose of the Server</h2>
+<p>The primary purpose of <code>mlx_lm.server</code> is to expose a local LLM through an API. Crucially, this API is designed to be <strong>compatible with the OpenAI API standard</strong>. This is a very useful design choice because it allows interaction with local models using the enormous ecosystem of existing tools built for OpenAI, including their official Python client library.</p>
+<p>As we can see from the <a href="https://github.com/ml-explore/mlx-lm/blob/5820cbc5509d2ca74eccc846bccc131ed1fbe7ea/mlx_lm/server.py">source code</a>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ... server setup ...</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">APIHandler</span><span class="p">(</span><span class="n">BaseHTTPRequestHandler</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">do_POST</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;/v1/completions&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_text_completions</span><span class="p">,</span>
+            <span class="s2">&quot;/v1/chat/completions&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_chat_completions</span><span class="p">,</span>
+            <span class="c1"># ...</span>
+        <span class="p">}</span>
+<span class="c1"># ...</span>
+</code></pre></div>
+
+<p>the server sets up the endpoints <code>/v1/chat/completions</code> and <code>/v1/models</code>. When a request hits the <code>/v1/chat/completions</code> endpoint, the server processes the prompt, parameters, and, most importantly for our use case, any tool definitions. This compatibility with the OpenAI client takes away the complexity of model loading and inference, providing a clean, <strong>standardized</strong> interface for client applications.</p>
+<blockquote>
+<p><strong>Warning!</strong> <code>mlx_lm.server</code> is not recommended for production as it only implements basic security checks.</p>
+</blockquote>
+<h1>The Bridge: The OpenAI Client</h1>
+<p>As already mentioned, probably a bit counterintuitive, we are going to use the official <code>openai</code> Python library to run our <strong>local MLX model</strong>. This is possible precisely because the MLX-LM server mimics the OpenAI API.</p>
+<p>The trick is to configure the client to point to the local server’s address (<code>base_url</code>) instead of pointing it to the OpenAI’s default cloud URL.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://localhost:8080/v1&quot;</span><span class="p">,</span>  <span class="c1"># The address of our mlx_lm.server</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;not-needed&quot;</span><span class="p">,</span>  <span class="c1"># No API key is needed for local inference</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>This would redirect all API calls (such as <code>client.chat.completions.create</code>) from OpenAI’s servers to the local MLX-LM server instance. It also provides a familiar and widely used interface to run LLMs.</p>
+<h1>What is Tool Calling?</h1>
+<p><strong>Function calling</strong>, also known as <strong>tool calling</strong>, is a feature that allows LLMs to interact with external systems and APIs. Instead of being limited to text generation, models can:</p>
+<ul>
+<li>Execute predefined functions with structured parameters</li>
+<li>Receive function results and incorporate them into responses</li>
+<li>Chain multiple function calls to complete complex tasks</li>
+<li>Provide more accurate, up-to-date information</li>
+</ul>
+<h2>How Function Calling Works</h2>
+<p>The process follows a structured workflow:</p>
+<ul>
+<li><strong>Function Definition:</strong> Define available functions with detailed schemas</li>
+<li><strong>Model Reasoning:</strong> The model analyzes user requests and determines which functions to call</li>
+<li><strong>Parameter Extraction:</strong> The model extracts appropriate parameters for function calls</li>
+<li><strong>Function Execution:</strong> Your application executes the called functions</li>
+<li><strong>Result Integration:</strong> The model incorporates function results into its final response</li>
+</ul>
+<h2>Function Schema Structure</h2>
+<p>Functions are defined using JSON schemas that specify parameters, types, and descriptions:</p>
+<div class="highlight"><pre><span></span><code><span class="n">TOOLS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;get_todays_jobs&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Get the jobs posted on a given date.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The date to search for jobs. Defaults to &#39;today&#39;&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;today&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">],</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<h1>The Brains: Qwen3 and its Tool-Calling Prowess</h1>
+<p>We are going to use a model from the Qwen3 family (<code>mlx-community/Qwen3-8B-8bit</code>). The Qwen models are known for being highly capable, and they have been trained to be good at understanding when and how to use tools.</p>
+<p>The <code>mlx_lm.server</code> makes use of the specific tokenizer configuration of the model. When handling a chat completion, it checks if the model supports tool calling and uses special tokens to format the prompt correctly, signaling to the model that tools are available.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ...</span>
+<span class="c1"># This logic shows the server is aware of the model&#39;s tool-calling capabilities</span>
+<span class="k">if</span> <span class="p">(</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">has_tool_calling</span>
+    <span class="ow">and</span> <span class="n">gen_response</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">tool_call_start</span>
+<span class="p">):</span>
+    <span class="n">in_tool_call</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="c1"># ...</span>
+</code></pre></div>
+
+<p>This makes the tool-calling process seamless.</p>
+<h1>Technical Demo: The Job Postings Tool</h1>
+<p>Now, it’s time to dive into the code of our job search assistant. The goal is to create a tool named <code>get_todays_jobs</code> that can scrape job postings from <a href="https://dev.bg">DEV.BG</a>. We want an assistant that, upon user request, retrieves job postings for a given date and category.</p>
+<p>The code for the job tool can be found <a href="https://github.com/JoeJoe1313/LLMs-Journey/blob/main/Agents/mlx_agents/jobs_tool_conv.py">here</a>.</p>
+<h2>Step 1: Defining the Tool for the LLM</h2>
+<p>First, we must describe our tool in a format the LLM can understand. This is a JSON schema that details the function’s name, purpose, and parameters.</p>
+<div class="highlight"><pre><span></span><code><span class="n">TOOLS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;get_todays_jobs&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Get the jobs posted today or on a given date in a specific job category from dev.bg&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The job category (e.g., &#39;Data Science&#39;, &#39;Software Development&#39;, &#39;DevOps&#39;, etc.)&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The date to search for jobs (e.g., &#39;today&#39;, &#39;2024-06-15&#39;, &#39;yesterday&#39;). Defaults to &#39;today&#39;&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;today&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">],</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<p>This description is very important. The model uses the <code>"description"</code> fields to figure out <em>when</em> to call the function and how to extract parameters like <code>category</code> and <code>date</code> from the user's natural language query.</p>
+<h2>Step 2: The Tool’s Core Logic</h2>
+<p>Next, we should implement the Python function that does the actual work. The <code>get_todays_jobs</code> function calls <code>scrape_dev_bg_jobs</code>, which uses the <code>requests</code> and <code>BeautifulSoup</code> libraries to fetch and parse the HTML from the job site.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># From jobs_tool_conv.py</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">scrape_dev_bg_jobs</span><span class="p">(</span><span class="n">category</span><span class="p">,</span> <span class="n">target_date</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scrape jobs from dev.bg for a specific category and date&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># ... logic to map category and construct URL ...</span>
+
+        <span class="c1"># ... network request to dev.bg ...</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">base_url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
+
+        <span class="c1"># ... parsing logic to find job title, company, date, and link ...</span>
+
+        <span class="k">return</span> <span class="n">job_listings</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Error processing jobs data: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_todays_jobs</span><span class="p">(</span><span class="n">category</span><span class="p">,</span> <span class="n">date</span><span class="o">=</span><span class="s2">&quot;today&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get jobs posted today or on a given date in a specific category from dev.bg&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">target_date</span> <span class="o">=</span> <span class="n">parse_date</span><span class="p">(</span><span class="n">date</span><span class="p">)</span> <span class="c1"># Handles &#39;today&#39;, &#39;yesterday&#39;, etc.</span>
+        <span class="n">jobs</span> <span class="o">=</span> <span class="n">scrape_dev_bg_jobs</span><span class="p">(</span><span class="n">category</span><span class="p">,</span> <span class="n">target_date</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">jobs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;No jobs found for category &#39;</span><span class="si">{</span><span class="n">category</span><span class="si">}</span><span class="s2">&#39;...&quot;</span>
+
+        <span class="c1"># ... formats the list of jobs into a string ...</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Error getting jobs: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+</code></pre></div>
+
+<p>Some important components of the scraping function are:</p>
+<h3>Data Extraction Strategy</h3>
+<p>The tool uses BeautifulSoup to parse HTML and extract job information:</p>
+<div class="highlight"><pre><span></span><code><span class="n">job_containers</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span>
+    <span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;job-list-item&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">job_containers</span><span class="p">:</span>
+    <span class="n">title_elem</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;h6&quot;</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">and</span> <span class="s2">&quot;job-title&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">)</span>
+    <span class="n">company_elem</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
+        <span class="p">[</span><span class="s2">&quot;span&quot;</span><span class="p">,</span> <span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">],</span> <span class="n">class_</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;company|employer&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">date_elem</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;span&quot;</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="s2">&quot;date&quot;</span><span class="p">)</span>
+    <span class="n">link_elem</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>This approach uses flexible CSS selectors that can adapt to minor changes in the website’s structure.</p>
+<h3>Category Mapping System</h3>
+<p>The tool includes a category mapping system to handle different ways users might refer to job categories:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_category_mapping</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Map common category names to dev.bg category parameters&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;data science&quot;</span><span class="p">:</span> <span class="s2">&quot;data-science&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;machine learning&quot;</span><span class="p">:</span> <span class="s2">&quot;data-science&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="s2">&quot;data-science&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;backend development&quot;</span><span class="p">:</span> <span class="s2">&quot;back-end-development&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;python development&quot;</span><span class="p">:</span> <span class="s2">&quot;python&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+</code></pre></div>
+
+<p>This mapping allows users to use natural language terms that get converted to the website’s specific URL parameters.</p>
+<h3>Step 3: The Conversational Loop</h3>
+<p>This is where everything comes together. The main loop in <code>jobs_tool_conv.py</code> orchestrates the entire conversation.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># From jobs_tool_conv.py</span>
+
+<span class="c1"># ... client and available_functions setup ...</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="c1"># 1. Get user input</span>
+    <span class="n">user_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;You: &quot;</span><span class="p">)</span>
+    <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user_input</span><span class="p">})</span>
+
+    <span class="c1"># 2. Call the LLM with the tools</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">MODEL</span><span class="p">,</span>
+        <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
+        <span class="n">tools</span><span class="o">=</span><span class="n">TOOLS</span><span class="p">,</span>
+        <span class="n">tool_choice</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">response_message</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span>
+
+    <span class="c1"># 3. Check if the LLM wants to call a tool</span>
+    <span class="k">while</span> <span class="n">response_message</span><span class="o">.</span><span class="n">tool_calls</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">response_message</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">tool_call</span> <span class="ow">in</span> <span class="n">response_message</span><span class="o">.</span><span class="n">tool_calls</span><span class="p">:</span>
+            <span class="n">function_name</span> <span class="o">=</span> <span class="n">tool_call</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">function_to_call</span> <span class="o">=</span> <span class="n">available_functions</span><span class="p">[</span><span class="n">function_name</span><span class="p">]</span>
+            <span class="n">function_args</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">tool_call</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">arguments</span><span class="p">)</span>
+
+            <span class="c1"># 4. Execute the tool</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Assistant: Thinking... (Calling tool: </span><span class="si">{</span><span class="n">function_name</span><span class="si">}</span><span class="s2">...)&quot;</span>
+            <span class="p">)</span>
+            <span class="n">function_response</span> <span class="o">=</span> <span class="n">function_to_call</span><span class="p">(</span><span class="o">**</span><span class="n">function_args</span><span class="p">)</span>
+
+            <span class="c1"># 5. Send the result back to the LLM</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;tool_call_id&quot;</span><span class="p">:</span> <span class="n">tool_call</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;tool&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">function_name</span><span class="p">,</span>
+                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">function_response</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Re-call the LLM with the tool&#39;s output</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">MODEL</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span> <span class="n">tools</span><span class="o">=</span><span class="n">TOOLS</span><span class="p">,</span> <span class="n">tool_choice</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span>
+        <span class="p">)</span>
+        <span class="n">response_message</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span>
+
+    <span class="c1"># 6. Print the final response</span>
+    <span class="n">final_content</span> <span class="o">=</span> <span class="n">response_message</span><span class="o">.</span><span class="n">content</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Assistant: </span><span class="si">{</span><span class="n">final_content</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">final_content</span><span class="p">})</span>
+</code></pre></div>
+
+<p>As we can see, the application implements a continuous chat interface:</p>
+<div class="highlight"><pre><span></span><code><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">user_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;You: &quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">user_input</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;quit&quot;</span><span class="p">,</span> <span class="s2">&quot;exit&quot;</span><span class="p">]:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Assistant: Goodbye!&quot;</span><span class="p">)</span>
+        <span class="k">break</span>
+
+    <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user_input</span><span class="p">})</span>
+    <span class="c1"># ... process response</span>
+</code></pre></div>
+
+<p>The conversation will continue until the user write <code>quit</code> or <code>exit</code>. Also, the system maintains conversation context by storing all messages, which allows the model to reference previous questions and maintain context throughout the conversation. The application handles tool calls through a processing loop, which continues until the model no longer needs to call additional functions, ensuring complex multi-step queries can be handled effectively.</p>
+<div class="highlight"><pre><span></span><code><span class="k">while</span> <span class="n">response_message</span><span class="o">.</span><span class="n">tool_calls</span><span class="p">:</span>
+    <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">response_message</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">tool_call</span> <span class="ow">in</span> <span class="n">response_message</span><span class="o">.</span><span class="n">tool_calls</span><span class="p">:</span>
+        <span class="n">function_name</span> <span class="o">=</span> <span class="n">tool_call</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">function_to_call</span> <span class="o">=</span> <span class="n">available_functions</span><span class="p">[</span><span class="n">function_name</span><span class="p">]</span>
+        <span class="n">function_args</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">tool_call</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">arguments</span><span class="p">)</span>
+
+        <span class="n">function_response</span> <span class="o">=</span> <span class="n">function_to_call</span><span class="p">(</span><span class="o">**</span><span class="n">function_args</span><span class="p">)</span>
+
+        <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;tool_call_id&quot;</span><span class="p">:</span> <span class="n">tool_call</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;tool&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">function_name</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">function_response</span><span class="p">,</span>
+        <span class="p">})</span>
+
+    <span class="c1"># Get next response from model</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</code></pre></div>
+
+<h1>Putting It All Together: Commands and Execution</h1>
+<p>Let’s see how to run the agent.</p>
+<h2>Install Dependencies</h2>
+<p>First, ensure you have <code>mlx-lm</code> and the other required Python packages installed.</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>mlx-lm<span class="w"> </span>openai<span class="w"> </span>beautifulsoup4<span class="w"> </span>requests
+</code></pre></div>
+
+<h3>Start the MLX-LM Server</h3>
+<p>Open a terminal and run the <code>mlx_lm.server</code> command.</p>
+<div class="highlight"><pre><span></span><code>mlx_lm.server
+</code></pre></div>
+
+<p>You should see output indicating the server has started, by default on <code>127.0.0.1:8080</code>.</p>
+<figure>
+  <img src="../images/2025-06-21-tool-mlx-openai/start_mlx_server.jpg" alt="Start mlx server" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 1. Start the mlx-lm server</figcaption>
+</figure>
+
+<h3>Run the Job Tool Client</h3>
+<p>Open a <em>second</em> terminal and run the client script.</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>jobs_tool_conv.py
+</code></pre></div>
+
+<p>Now you can chat with your AI assistant.</p>
+<figure>
+  <img src="../images/2025-06-21-tool-mlx-openai/run_job_tool.jpg" alt="Run job tool" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 2. Run the job tool client</figcaption>
+</figure>
+
+<p>Try queries like:</p>
+<div class="highlight"><pre><span></span><code><span class="n">You</span><span class="o">:</span><span class="w"> </span><span class="n">Are</span><span class="w"> </span><span class="n">there</span><span class="w"> </span><span class="n">any</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="n">science</span><span class="w"> </span><span class="n">jobs</span><span class="o">?</span>
+</code></pre></div>
+
+<p>or</p>
+<div class="highlight"><pre><span></span><code>What are the jobs from today in Data Science category?
+</code></pre></div>
+
+<p>You are going to see the log messages as the assistant thinks, calls its tool, and then presents the final, formatted list of jobs it found. If jobs are not found it will inform you, and you can try a refined search. If jobs are found and presented, you can continue the conversation with other questions (which can require or not require tool calling — the decision is taken based on the question). To end the conversation you just type <code>quit</code> or <code>exit</code>. See an example below:</p>
+<figure>
+  <img src="../images/2025-06-21-tool-mlx-openai/example_conv.jpg" alt="Example conversation" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 3. Example conversation</figcaption>
+</figure>
+
+<p>If we go back to the terminal we started the server in, we can see the successful POST requests we just made.</p>
+<figure>
+  <img src="../images/2025-06-21-tool-mlx-openai/server_logs.jpg" alt="Server logs" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 4. Mlx-lm server requests logs</figcaption>
+</figure>
+
+<h1>Conclusion</h1>
+<p>By combining the MLX-LM server, the standardized OpenAI client library, and the power of function calling, along with models like Qwen3 , we can build robust, data‐driven assistants. The job postings demo illustrated how to wire together scraping logic and LLM intelligence into a seamless conversational experience.</p>
+<p><em>Happy building!</em></p>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>        </body>
+</html>
