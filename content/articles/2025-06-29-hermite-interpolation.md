@@ -86,6 +86,33 @@ Plotting the Cubic Hermite basis functions
   <figcaption style="text-align: center">Figure 2. Cubic Hermite basis functions</figcaption>
 </figure>
 
+## Examples
+
+<figure>
+  <img src="../images/2025-06-29-hermite-interpolation/chi.png" alt="Example conversation" style="display: block; margin: 0 auto; width: 50%">
+  <figcaption style="text-align: center">Figure 2. Cubic Hermite basis functions</figcaption>
+</figure>
+
+<figure>
+  <img src="../images/2025-06-29-hermite-interpolation/v1_0.png" alt="Example conversation" style="display: block; margin: 0 auto; width: 100%">
+  <figcaption style="text-align: center">Figure 2. Cubic Hermite basis functions</figcaption>
+</figure>
+
+<figure>
+  <img src="../images/2025-06-29-hermite-interpolation/v1_1.png" alt="Example conversation" style="display: block; margin: 0 auto; width: 100%">
+  <figcaption style="text-align: center">Figure 2. Cubic Hermite basis functions</figcaption>
+</figure>
+
+<figure>
+  <img src="../images/2025-06-29-hermite-interpolation/v0_v1_0.png" alt="Example conversation" style="display: block; margin: 0 auto; width: 100%">
+  <figcaption style="text-align: center">Figure 2. Cubic Hermite basis functions</figcaption>
+</figure>
+
+<figure>
+  <img src="../images/2025-06-29-hermite-interpolation/v0_v1_1.png" alt="Example conversation" style="display: block; margin: 0 auto; width: 100%">
+  <figcaption style="text-align: center">Figure 2. Cubic Hermite basis functions</figcaption>
+</figure>
+
 # Quintic Hermite Interpolation
 
 # Piecewise Curves: Building Complex Paths
@@ -96,4 +123,11 @@ Plotting the Cubic Hermite basis functions
 
 ![alt text](../images/2025-06-29-hermite-interpolation/test.png)
 
-![alt text](../images/2025-06-29-hermite-interpolation/Figure_1_ccc.png) -->
+![alt text](../images/2025-06-29-hermite-interpolation/Figure_1_ccc.png)
+
+<!-- <div id="hermite-container">
+</div> -->
+
+<iframe src="{static}/code/hermite/chi_anim.html" width="100%" height="700px" frameborder="0"></iframe>
+
+<!-- <iframe src="{static}/code/hermite/chi_anim.html" width="100%" height="300px" frameborder="0"></iframe> -->
