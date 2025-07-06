@@ -11,6 +11,8 @@
       border: 1px solid #ddd;
       border-radius: 5px;
       margin: 20px 0;
+      /* disable default touch-zoom/scroll so our pointer handling works */
+      touch-action: none;
     }
     .info-box {
       background: #e8f4f8;
@@ -118,7 +120,7 @@
         };
         Plotly.newPlot('hermite-plot', data, layout, {
           responsive:true,
-          displayModeBar:true,
+          displayModeBar:true
         });
         plotInitialized = true;
       } else {
@@ -147,29 +149,27 @@
       }
     }
 
-    // Convert mouse event to data coords
+    // Convert event to data coords
     function clientToData(e) {
       const plotDiv = document.getElementById('hermite-plot');
-      const gd = plotDiv._fullLayout ? plotDiv : Plotly.d3.select('#hermite-plot').node();
-      const margin = gd._fullLayout.margin;
+      const margin = plotDiv._fullLayout.margin;
       const bb = plotDiv.getBoundingClientRect();
       const px = e.clientX - bb.left - margin.l;
       const py = e.clientY - bb.top  - margin.t;
-      const x = gd._fullLayout.xaxis.p2l(px);
-      const y = gd._fullLayout.yaxis.p2l(py);
-      return [x,y];
+      return [
+        plotDiv._fullLayout.xaxis.p2l(px),
+        plotDiv._fullLayout.yaxis.p2l(py)
+      ];
     }
 
     function setupEventHandlers() {
       const plotDiv = document.getElementById('hermite-plot');
       const dragRect = plotDiv.querySelector('.nsewdrag');
-      let isDragging = false;
-      let target = null;
+      let isDragging = false, dragTarget = null;
 
-      // start drag
-      dragRect.addEventListener('mousedown', e => {
-        const [mx,my] = clientToData(e);
-        const tol = 0.25;
+      function onDown(e) {
+        const [mx, my] = clientToData(e);
+        const tol = 0.3;
         const d0 = Math.hypot(mx - state.p0[0], my - state.p0[1]);
         const d1 = Math.hypot(mx - state.p1[0], my - state.p1[1]);
         const v0e = [state.p0[0]+state.v0[0], state.p0[1]+state.v0[1]];
@@ -177,45 +177,43 @@
         const v1e = [state.p1[0]+state.v1[0], state.p1[1]+state.v1[1]];
         const d3 = Math.hypot(mx - v1e[0], my - v1e[1]);
 
-        if (d0<tol) target='p0';
-        else if (d1<tol) target='p1';
-        else if (d2<tol) target='v0';
-        else if (d3<tol) target='v1';
+        if (d0 < tol) dragTarget = 'p0';
+        else if (d1 < tol) dragTarget = 'p1';
+        else if (d2 < tol) dragTarget = 'v0';
+        else if (d3 < tol) dragTarget = 'v1';
 
-        if (target) {
+        if (dragTarget) {
           isDragging = true;
           plotDiv.style.cursor = 'grabbing';
           e.preventDefault();
         }
-      });
+      }
 
-      // drag
-      document.addEventListener('mousemove', e => {
+      function onMove(e) {
         if (!isDragging) return;
-        const [mx,my] = clientToData(e);
-        if (target==='p0') {
-          state.p0 = [mx,my];
-        } else if (target==='p1') {
-          state.p1 = [mx,my];
-        } else if (target==='v0') {
-          state.v0 = [mx - state.p0[0], my - state.p0[1]];
-        } else if (target==='v1') {
-          state.v1 = [mx - state.p1[0], my - state.p1[1]];
-        }
+        const [mx, my] = clientToData(e);
+        if (dragTarget === 'p0')      state.p0 = [mx,my];
+        else if (dragTarget === 'p1') state.p1 = [mx,my];
+        else if (dragTarget === 'v0') state.v0 = [mx - state.p0[0], my - state.p0[1]];
+        else if (dragTarget === 'v1') state.v1 = [mx - state.p1[0], my - state.p1[1]];
         updatePlot();
-      });
+        e.preventDefault();
+      }
 
-      // end drag
-      document.addEventListener('mouseup', () => {
+      function onUp() {
         if (isDragging) {
           isDragging = false;
-          target = null;
+          dragTarget = null;
           plotDiv.style.cursor = 'default';
         }
-      });
+      }
+
+      // use pointer events for both mouse & touch
+      dragRect.addEventListener('pointerdown', onDown);
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup',   onUp);
     }
 
-    // initialize
     document.addEventListener('DOMContentLoaded', () => {
       updatePlot();
       setupEventHandlers();
