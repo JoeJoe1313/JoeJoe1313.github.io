@@ -90,6 +90,8 @@ Plotting the Cubic Hermite basis functions
 
 <iframe src="{static}/code/hermite/chi_anim.html" width="100%" height="800px" frameborder="0"></iframe>
 
+Some text
+
 <figure>
   <img src="../images/2025-06-29-hermite-interpolation/v1_0.png" alt="Example conversation" style="display: block; margin: 0 auto; width: 100%">
   <figcaption style="text-align: center">Figure 2. Cubic Hermite basis functions</figcaption>
