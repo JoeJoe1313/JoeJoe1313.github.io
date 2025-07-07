@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>NanoNets OCR for Handwritten Notes</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+    <meta name="description" content="Q1. a)" />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li><a href="/books.html">Books</a></li>
+                                                <li><a href="/papers.html">Papers</a></li>
+                                                <li><a href="/category/machine-learning.html">Machine Learning</a></li>
+                                                <li><a href="/category/mathematics.html">Mathematics</a></li>
+                                <li class="active"><a href="/drafts.html">Drafts</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="/drafts/2025-06-24-nanonets-ocr.html" rel="bookmark"
+             title="Permalink to NanoNets OCR for Handwritten Notes">NanoNets OCR for Handwritten Notes</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2025-06-24T07:00:00+03:00">
+            Published: Tue 24 June 2025
+    </abbr>
+
+    <p>In <a href="/category/machine-learning.html">Machine Learning</a>.</p>
+<p>tags: <a href="/tag/ai.html">ai</a> <a href="/tag/ml.html">ml</a> <a href="/tag/llm.html">llm</a> </p>    
+</footer><!-- /.post-info -->        <h3>Prompt:</h3>
+<div class="highlight"><pre><span></span><code>Extract<span class="w"> </span>the<span class="w"> </span>text<span class="w"> </span>from<span class="w"> </span>the<span class="w"> </span>above<span class="w"> </span>document<span class="w"> </span>as<span class="w"> </span>if<span class="w"> </span>you<span class="w"> </span>were<span class="w"> </span>reading<span class="w"> </span>it<span class="w"> </span>naturally.<span class="w"> </span>
+
+Return<span class="w"> </span>the<span class="w"> </span>tables<span class="w"> </span>in<span class="w"> </span>html<span class="w"> </span>format.
+
+Return<span class="w"> </span>the<span class="w"> </span>equations<span class="w"> </span>in<span class="w"> </span>LaTeX<span class="w"> </span>representation.
+
+If<span class="w"> </span>there<span class="w"> </span>is<span class="w"> </span>an<span class="w"> </span>image<span class="w"> </span>in<span class="w"> </span>the<span class="w"> </span>document<span class="w"> </span>and<span class="w"> </span>image<span class="w"> </span>caption<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>present,<span class="w"> </span>add<span class="w"> </span>a<span class="w"> </span>small<span class="w"> </span>description<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>image<span class="w"> </span>inside<span class="w"> </span>the<span class="w"> </span><span class="nt">&lt;img&gt;&lt;/img&gt;</span><span class="w"> </span>tag;<span class="w"> </span>otherwise,<span class="w"> </span>add<span class="w"> </span>the<span class="w"> </span>image<span class="w"> </span>caption<span class="w"> </span>inside<span class="w"> </span><span class="nt">&lt;img&gt;&lt;/img&gt;</span>.
+
+Watermarks<span class="w"> </span>should<span class="w"> </span>be<span class="w"> </span>wrapped<span class="w"> </span>in<span class="w"> </span>brackets.<span class="w"> </span>Ex:<span class="w"> </span><span class="nt">&lt;watermark&gt;</span>OFFICIAL<span class="w"> </span>COPY<span class="nt">&lt;/watermark&gt;</span>.<span class="w"> </span>
+
+Page<span class="w"> </span>numbers<span class="w"> </span>should<span class="w"> </span>be<span class="w"> </span>wrapped<span class="w"> </span>in<span class="w"> </span>brackets.<span class="w"> </span>Ex:<span class="w"> </span><span class="nt">&lt;page_number&gt;</span>14<span class="nt">&lt;/page_number&gt;</span><span class="w"> </span>or<span class="w"> </span><span class="nt">&lt;page_number&gt;</span>9/22<span class="nt">&lt;/page_number&gt;</span>.<span class="w"> </span>
+
+Prefer<span class="w"> </span>using<span class="w"> </span>☐<span class="w"> </span>and<span class="w"> </span>☑<span class="w"> </span>for<span class="w"> </span>check<span class="w"> </span>boxes.
+</code></pre></div>
+
+<h3>Input:</h3>
+<figure>
+  <img src="../images/2025-06-24-nanonets-ocr/sc_1.png" alt="Example conversation" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 1. Input image</figcaption>
+</figure>
+
+<h3>Result:</h3>
+<h4>Rendered</h4>
+<p>Q1. a)</p>
+<div class="math">$$X = \begin{cases} \frac{1}{\mu} \log(2u), &amp; u \in (0, \frac{1}{2}] \\ -\frac{1}{\mu} \log(2-2u), &amp; u \in (\frac{1}{2}, 1) \end{cases}, \mu &gt; 0, \mu \in \mathbb{R}, u \sim \text{Uniform}(0,1)$$</div>
+<p>i) Let's first find the CDF for <span class="math">\(X\)</span>:</p>
+<ul>
+<li><strong>Case 1:</strong> <span class="math">\(u \in (0, \frac{1}{2}] \Rightarrow X \in (-\infty, 0]\)</span></li>
+</ul>
+<div class="math">$$F_X(x) = P(X \leq x) = P\left(\frac{1}{\mu} \log(2u) \leq x\right) = P\left(\log(2u) \leq \mu x\right) = P\left(e^{\log(2u)} \leq e^{\mu x}\right) =$$</div>
+<div class="math">$$= P(2u \leq e^{\mu x}) = P(u \leq \frac{e^{\mu x}}{2}) = F_U\left(\frac{e^{\mu x}}{2}\right)$$</div>
+<p>We have <span class="math">\(u \sim \text{Uniform}(0,1) \Rightarrow F_U(u) = u\)</span></p>
+<div class="math">$$\Rightarrow F_X(x) = F_U\left(\frac{e^{\mu x}}{2}\right) = \frac{e^{\mu x}}{2}, \text{ when } u \in (0, \frac{1}{2}], x \in (-\infty, 0]$$</div>
+<ul>
+<li><strong>Case 2:</strong> <span class="math">\(u \in (\frac{1}{2}, 1) \Rightarrow X \in (0, +\infty)\)</span></li>
+</ul>
+<div class="math">$$F_X(x) = P(X \leq x) = P(-\frac{1}{\mu} \log(2-2u) \leq x) = P(\log(2-2u) \geq -\mu x) =$$</div>
+<div class="math">$$= P(e^{\log(2-2u)} \geq e^{-\mu x}) = P(2-2u \geq e^{-\mu x}) = P(u \leq 1 - \frac{e^{-\mu x}}{2}) =$$</div>
+<div class="math">$$= F_U(1 - \frac{e^{-\mu x}}{2}) = 1 - \frac{e^{-\mu x}}{2}$$</div>
+<div class="math">$$\Rightarrow F_X(x) = \begin{cases} \frac{e^{\mu x}}{2}, &amp; \text{when } u \in (0, \frac{1}{2}], x \in (-\infty, 0] \\ 1 - \frac{e^{-\mu x}}{2}, &amp; \text{when } u \in (\frac{1}{2}, 1), x \in (0, +\infty) \end{cases}$$</div>
+<p>Now, let's compute the PDF for <span class="math">\(X\)</span>. At values of <span class="math">\(x\)</span> where <span class="math">\(F_X\)</span> is differentiable,</p>
+<h4>Plain Text</h4>
+<div class="highlight"><pre><span></span><code>Q1. a)
+
+<span class="sb">$$</span><span class="nb">X </span><span class="o">=</span><span class="nb"> </span><span class="nv">\begin</span><span class="nb">{cases} </span><span class="nv">\frac</span><span class="nb">{</span><span class="m">1</span><span class="nb">}{</span><span class="nv">\mu</span><span class="nb">} </span><span class="nv">\log</span><span class="o">(</span><span class="m">2</span><span class="nb">u</span><span class="o">)</span><span class="nb">, &amp; u </span><span class="nv">\in</span><span class="nb"> </span><span class="o">(</span><span class="m">0</span><span class="nb">, </span><span class="nv">\frac</span><span class="nb">{</span><span class="m">1</span><span class="nb">}{</span><span class="m">2</span><span class="nb">}</span><span class="o">]</span><span class="nb"> </span><span class="nv">\\</span><span class="nb"> </span><span class="o">-</span><span class="nv">\frac</span><span class="nb">{</span><span class="m">1</span><span class="nb">}{</span><span class="nv">\mu</span><span class="nb">} </span><span class="nv">\log</span><span class="o">(</span><span class="m">2</span><span class="o">-</span><span class="m">2</span><span class="nb">u</span><span class="o">)</span><span class="nb">, &amp; u </span><span class="nv">\in</span><span class="nb"> </span><span class="o">(</span><span class="nv">\frac</span><span class="nb">{</span><span class="m">1</span><span class="nb">}{</span><span class="m">2</span><span class="nb">}, </span><span class="m">1</span><span class="o">)</span><span class="nb"> </span><span class="nv">\end</span><span class="nb">{cases}, </span><span class="nv">\mu</span><span class="nb"> &gt; </span><span class="m">0</span><span class="nb">, </span><span class="nv">\mu</span><span class="nb"> </span><span class="nv">\in</span><span class="nb"> </span><span class="nv">\mathbb</span><span class="nb">{R}, u </span><span class="nv">\sim</span><span class="nb"> </span><span class="nv">\text</span><span class="nb">{Uniform}</span><span class="o">(</span><span class="m">0</span><span class="nb">,</span><span class="m">1</span><span class="o">)</span><span class="s">$$</span>
+
+i) Let&#39;s first find the CDF for <span class="s">$</span><span class="nb">X</span><span class="s">$</span>:
+
+- **Case 1:** <span class="s">$</span><span class="nb">u </span><span class="nv">\in</span><span class="nb"> </span><span class="o">(</span><span class="m">0</span><span class="nb">, </span><span class="nv">\frac</span><span class="nb">{</span><span class="m">1</span><span class="nb">}{</span><span class="m">2</span><span class="nb">}</span><span class="o">]</span><span class="nb"> </span><span class="nv">\Rightarrow</span><span class="nb"> X </span><span class="nv">\in</span><span class="nb"> </span><span class="o">(-</span><span class="nv">\infty</span><span class="nb">, </span><span class="m">0</span><span class="o">]</span><span class="s">$</span>
+
+<span class="sb">$$</span><span class="nb">F_X</span><span class="o">(</span><span class="nb">x</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> P</span><span class="o">(</span><span class="nb">X </span><span class="nv">\leq</span><span class="nb"> x</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> P</span><span class="nv">\left</span><span class="o">(</span><span class="nv">\frac</span><span class="nb">{</span><span class="m">1</span><span class="nb">}{</span><span class="nv">\mu</span><span class="nb">} </span><span class="nv">\log</span><span class="o">(</span><span class="m">2</span><span class="nb">u</span><span class="o">)</span><span class="nb"> </span><span class="nv">\leq</span><span class="nb"> x</span><span class="nv">\right</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> P</span><span class="nv">\left</span><span class="o">(</span><span class="nv">\log</span><span class="o">(</span><span class="m">2</span><span class="nb">u</span><span class="o">)</span><span class="nb"> </span><span class="nv">\leq</span><span class="nb"> </span><span class="nv">\mu</span><span class="nb"> x</span><span class="nv">\right</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> P</span><span class="nv">\left</span><span class="o">(</span><span class="nb">e^{</span><span class="nv">\log</span><span class="o">(</span><span class="m">2</span><span class="nb">u</span><span class="o">)</span><span class="nb">} </span><span class="nv">\leq</span><span class="nb"> e^{</span><span class="nv">\mu</span><span class="nb"> x}</span><span class="nv">\right</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="s">$$</span>
+
+<span class="sb">$$</span><span class="o">=</span><span class="nb"> P</span><span class="o">(</span><span class="m">2</span><span class="nb">u </span><span class="nv">\leq</span><span class="nb"> e^{</span><span class="nv">\mu</span><span class="nb"> x}</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> P</span><span class="o">(</span><span class="nb">u </span><span class="nv">\leq</span><span class="nb"> </span><span class="nv">\frac</span><span class="nb">{e^{</span><span class="nv">\mu</span><span class="nb"> x}}{</span><span class="m">2</span><span class="nb">}</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> F_U</span><span class="nv">\left</span><span class="o">(</span><span class="nv">\frac</span><span class="nb">{e^{</span><span class="nv">\mu</span><span class="nb"> x}}{</span><span class="m">2</span><span class="nb">}</span><span class="nv">\right</span><span class="o">)</span><span class="s">$$</span>
+
+We have <span class="s">$</span><span class="nb">u </span><span class="nv">\sim</span><span class="nb"> </span><span class="nv">\text</span><span class="nb">{Uniform}</span><span class="o">(</span><span class="m">0</span><span class="nb">,</span><span class="m">1</span><span class="o">)</span><span class="nb"> </span><span class="nv">\Rightarrow</span><span class="nb"> F_U</span><span class="o">(</span><span class="nb">u</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> u</span><span class="s">$</span>
+
+<span class="sb">$$</span><span class="nv">\Rightarrow</span><span class="nb"> F_X</span><span class="o">(</span><span class="nb">x</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> F_U</span><span class="nv">\left</span><span class="o">(</span><span class="nv">\frac</span><span class="nb">{e^{</span><span class="nv">\mu</span><span class="nb"> x}}{</span><span class="m">2</span><span class="nb">}</span><span class="nv">\right</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="nv">\frac</span><span class="nb">{e^{</span><span class="nv">\mu</span><span class="nb"> x}}{</span><span class="m">2</span><span class="nb">}, </span><span class="nv">\text</span><span class="nb">{ when } u </span><span class="nv">\in</span><span class="nb"> </span><span class="o">(</span><span class="m">0</span><span class="nb">, </span><span class="nv">\frac</span><span class="nb">{</span><span class="m">1</span><span class="nb">}{</span><span class="m">2</span><span class="nb">}</span><span class="o">]</span><span class="nb">, x </span><span class="nv">\in</span><span class="nb"> </span><span class="o">(-</span><span class="nv">\infty</span><span class="nb">, </span><span class="m">0</span><span class="o">]</span><span class="s">$$</span>
+
+- **Case 2:** <span class="s">$</span><span class="nb">u </span><span class="nv">\in</span><span class="nb"> </span><span class="o">(</span><span class="nv">\frac</span><span class="nb">{</span><span class="m">1</span><span class="nb">}{</span><span class="m">2</span><span class="nb">}, </span><span class="m">1</span><span class="o">)</span><span class="nb"> </span><span class="nv">\Rightarrow</span><span class="nb"> X </span><span class="nv">\in</span><span class="nb"> </span><span class="o">(</span><span class="m">0</span><span class="nb">, </span><span class="o">+</span><span class="nv">\infty</span><span class="o">)</span><span class="s">$</span>
+
+<span class="sb">$$</span><span class="nb">F_X</span><span class="o">(</span><span class="nb">x</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> P</span><span class="o">(</span><span class="nb">X </span><span class="nv">\leq</span><span class="nb"> x</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> P</span><span class="o">(-</span><span class="nv">\frac</span><span class="nb">{</span><span class="m">1</span><span class="nb">}{</span><span class="nv">\mu</span><span class="nb">} </span><span class="nv">\log</span><span class="o">(</span><span class="m">2</span><span class="o">-</span><span class="m">2</span><span class="nb">u</span><span class="o">)</span><span class="nb"> </span><span class="nv">\leq</span><span class="nb"> x</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> P</span><span class="o">(</span><span class="nv">\log</span><span class="o">(</span><span class="m">2</span><span class="o">-</span><span class="m">2</span><span class="nb">u</span><span class="o">)</span><span class="nb"> </span><span class="nv">\geq</span><span class="nb"> </span><span class="o">-</span><span class="nv">\mu</span><span class="nb"> x</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="s">$$</span>
+
+<span class="sb">$$</span><span class="o">=</span><span class="nb"> P</span><span class="o">(</span><span class="nb">e^{</span><span class="nv">\log</span><span class="o">(</span><span class="m">2</span><span class="o">-</span><span class="m">2</span><span class="nb">u</span><span class="o">)</span><span class="nb">} </span><span class="nv">\geq</span><span class="nb"> e^{</span><span class="o">-</span><span class="nv">\mu</span><span class="nb"> x}</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> P</span><span class="o">(</span><span class="m">2</span><span class="o">-</span><span class="m">2</span><span class="nb">u </span><span class="nv">\geq</span><span class="nb"> e^{</span><span class="o">-</span><span class="nv">\mu</span><span class="nb"> x}</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> P</span><span class="o">(</span><span class="nb">u </span><span class="nv">\leq</span><span class="nb"> </span><span class="m">1</span><span class="nb"> </span><span class="o">-</span><span class="nb"> </span><span class="nv">\frac</span><span class="nb">{e^{</span><span class="o">-</span><span class="nv">\mu</span><span class="nb"> x}}{</span><span class="m">2</span><span class="nb">}</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="s">$$</span>
+
+<span class="sb">$$</span><span class="o">=</span><span class="nb"> F_U</span><span class="o">(</span><span class="m">1</span><span class="nb"> </span><span class="o">-</span><span class="nb"> </span><span class="nv">\frac</span><span class="nb">{e^{</span><span class="o">-</span><span class="nv">\mu</span><span class="nb"> x}}{</span><span class="m">2</span><span class="nb">}</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="m">1</span><span class="nb"> </span><span class="o">-</span><span class="nb"> </span><span class="nv">\frac</span><span class="nb">{e^{</span><span class="o">-</span><span class="nv">\mu</span><span class="nb"> x}}{</span><span class="m">2</span><span class="nb">}</span><span class="s">$$</span>
+
+<span class="sb">$$</span><span class="nv">\Rightarrow</span><span class="nb"> F_X</span><span class="o">(</span><span class="nb">x</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="nv">\begin</span><span class="nb">{cases} </span><span class="nv">\frac</span><span class="nb">{e^{</span><span class="nv">\mu</span><span class="nb"> x}}{</span><span class="m">2</span><span class="nb">}, &amp; </span><span class="nv">\text</span><span class="nb">{when } u </span><span class="nv">\in</span><span class="nb"> </span><span class="o">(</span><span class="m">0</span><span class="nb">, </span><span class="nv">\frac</span><span class="nb">{</span><span class="m">1</span><span class="nb">}{</span><span class="m">2</span><span class="nb">}</span><span class="o">]</span><span class="nb">, x </span><span class="nv">\in</span><span class="nb"> </span><span class="o">(-</span><span class="nv">\infty</span><span class="nb">, </span><span class="m">0</span><span class="o">]</span><span class="nb"> </span><span class="nv">\\</span><span class="nb"> </span><span class="m">1</span><span class="nb"> </span><span class="o">-</span><span class="nb"> </span><span class="nv">\frac</span><span class="nb">{e^{</span><span class="o">-</span><span class="nv">\mu</span><span class="nb"> x}}{</span><span class="m">2</span><span class="nb">}, &amp; </span><span class="nv">\text</span><span class="nb">{when } u </span><span class="nv">\in</span><span class="nb"> </span><span class="o">(</span><span class="nv">\frac</span><span class="nb">{</span><span class="m">1</span><span class="nb">}{</span><span class="m">2</span><span class="nb">}, </span><span class="m">1</span><span class="o">)</span><span class="nb">, x </span><span class="nv">\in</span><span class="nb"> </span><span class="o">(</span><span class="m">0</span><span class="nb">, </span><span class="o">+</span><span class="nv">\infty</span><span class="o">)</span><span class="nb"> </span><span class="nv">\end</span><span class="nb">{cases}</span><span class="s">$$</span>
+
+Now, let&#39;s compute the PDF for <span class="s">$</span><span class="nb">X</span><span class="s">$</span>. At values of <span class="s">$</span><span class="nb">x</span><span class="s">$</span> where <span class="s">$</span><span class="nb">F_X</span><span class="s">$</span> is differentiable,
+</code></pre></div>
+
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "true";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>        </body>
+</html>

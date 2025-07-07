@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>Image Segmentation with PaliGemma 2 Mix and MLX</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+    <meta name="description" content="In this post, we are going to explore Google’s PaliGemma 2 mix vision-language model (VLM), and its capabilities to perform image segmentation...." />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li><a href="/books.html">Books</a></li>
+                                                <li><a href="/papers.html">Papers</a></li>
+                                                <li class="active"><a href="/category/machine-learning.html">Machine Learning</a></li>
+                                                <li><a href="/category/mathematics.html">Mathematics</a></li>
+                                <li><a href="/drafts.html">Drafts</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="/2025-04-15-paligemma-2-mix.html" rel="bookmark"
+             title="Permalink to Image Segmentation with PaliGemma 2 Mix and MLX">Image Segmentation with PaliGemma 2 Mix and MLX</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2025-04-15T07:00:00+03:00">
+            Published: Tue 15 April 2025
+    </abbr>
+
+    <p>In <a href="/category/machine-learning.html">Machine Learning</a>.</p>
+<p>tags: <a href="/tag/ai.html">ai</a> <a href="/tag/ml.html">ml</a> <a href="/tag/vlm.html">vlm</a> <a href="/tag/mlx-vlm.html">mlx-vlm</a> <a href="/tag/mlx.html">mlx</a> </p>    
+</footer><!-- /.post-info -->        <p>In this post, we are going to explore Google’s <a href="https://developers.googleblog.com/en/introducing-paligemma-2-mix/"><strong>PaliGemma 2 mix</strong></a> vision-language model (VLM), and its capabilities to perform image segmentation. What’s interesting is that we are going to perform this task by only using Apple’s MLX framework, and MLX-VLM. This would eliminate the dependency of using JAX/Flax as in the original Google’s segmentation <a href="https://github.com/google-research/big_vision/blob/main/big_vision/evaluators/proj/paligemma/transfers/segmentation.py">script</a>, and would allow us to fully and seamlessly utilise Apple’s unified memory. Medium post can be found <a href="https://medium.com/@levchevajoana/image-segmentation-with-paligemma-2-mix-and-mlx-7e69e077968b">here</a>.</p>
+<h1>Introduction</h1>
+<h2>PaliGemma 2</h2>
+<p>In December 2024 Google introduced the <a href="https://developers.googleblog.com/en/introducing-paligemma-2-powerful-vision-language-models-simple-fine-tuning/">PaliGemma 2</a> vision-language models (VLMs). These are pre-trained (<strong>pt</strong>) models coming in three different sizes: <code>3B</code>, <code>10B</code>, and <code>28B</code>, as well as three different input resolutions for images: <code>224x224</code>, <code>448x448</code>, and <code>896x896</code> pixels. These models represent the latest evolution of vision-language models developed by Google, building upon the foundation laid by its predecessor, PaliGemma. Below, we can see the architecture of the PaliGemma 2 model.</p>
+<figure>
+  <img src="../images/2025-04-15-paligemma-2-mix/paligemma2-architecture.png" alt="PaliGemma 2 architecture" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 1. PaliGemma 2 Architecture Overview <span style="font-size: 0.8em;">[<a href="https://arxiv.org/pdf/2412.03555">Source</a>]</span></figcaption>
+</figure>
+
+<p>PaliGemma 2 processes images at resolutions of <code>224×224</code>, <code>448×448</code>, or <code>896×896</code> pixels using a <strong><a href="https://arxiv.org/abs/2303.15343">SigLIP-400m</a> vision encoder</strong> with a patch size of 14×14 pixels. This design yields 256, 1024, or 4096 tokens, respectively. After a linear projection, the resulting image tokens are concatenated with the input text tokens, and <a href="https://blog.google/technology/developers/google-gemma-2/"><strong>Gemma 2</strong></a> is used as a <strong>text decoder</strong> to autoregressively complete the combined prefix to generate an answer.</p>
+<h2>PaliGemma 2 Mix</h2>
+<p>As already mentioned, PaliGemma 2 models are pre-trained models, but they are also designed to be easy to fine-tune and adapt to various specific vision-language tasks and domains. Google wanted to demonstrate the performance of a fine-tuned version of the pt PaliGemma 2 models on downstream tasks, and thus a few months later, in February 2025, they introduced <a href="https://developers.googleblog.com/en/introducing-paligemma-2-mix/"><strong>PaliGemma 2 mix</strong></a>. These models are fine-tuned to a mixture of vision language tasks that can be used out-of-the-box for common use cases. They are available in three sizes: <code>3B</code>, <code>10B</code>, and <code>28B</code>, and support resolutions of <code>224×224</code> and <code>448×448</code> pixels.</p>
+<h3>Tasks</h3>
+<p>PaliGemma 2 mix can perform the following types of tasks:</p>
+<ul>
+<li>Short and long captioning</li>
+<li>Optical character recognition (OCR)</li>
+<li>Image question answering</li>
+<li>(Multiple) object detection</li>
+<li>(Multiple) image segmentation</li>
+</ul>
+<h3>Prompting</h3>
+<p>In general, the PaliGemma models are very sensitive to the prompt’s syntax and patterns. But based on the following Hugging Face <a href="https://huggingface.co/blog/paligemma2mix">article</a> when using PaliGemma 2 mix models, open-ended prompts yield better performance than the previously required task-prefixed prompts. Earlier, task-specific prefixes were essential, like</p>
+<ul>
+<li><code>"caption {lang}\n"</code>: Short captions</li>
+<li><code>"describe {lang}\n"</code>: More descriptive captions</li>
+<li><code>"ocr"</code>: Optical character recognition</li>
+<li><code>"answer {lang} {question}\n"</code>: Question answering about the image contents</li>
+<li><code>"question {lang} {answer}\n"</code>: Question generation for a given answer</li>
+</ul>
+<p>However, two specific tasks - <strong>object detection</strong> and <strong>image segmentation</strong> - still exclusively require task prefixes:</p>
+<ul>
+<li><code>"detect {object description} ; {object description} ; ...\n"</code>: Locate multiple objects in an image and return the bounding boxes for those objects</li>
+<li><code>"segment {object description} ; {object description} ; ...\n"</code>: Locate the area occupied by multiple objects in an image to create an image segmentation for that object</li>
+</ul>
+<h1>Image Segmentation</h1>
+<h2>What is Image Segmentation?</h2>
+<p>Image segmentation is a key computer vision technique that divides an image into pixel groups, or segments, enabling tasks like object detection, scene understanding, and advanced image processing. Traditional methods use pixel features such as color, brightness, contrast, and intensity to separate objects from the background, often relying on simple heuristics or basic machine learning. Recently, deep learning models with complex neural networks have dramatically improved segmentation accuracy.</p>
+<p>Unlike image classification, which labels an entire image, or object detection, which locates objects with bounding boxes, image segmentation provides detailed pixel-level annotations. This approach assigns every pixel to a specific category, with variants including semantic segmentation (classifying pixels), instance segmentation (distinguishing between instances of the same object), and panoptic segmentation (combining both methods).</p>
+<h2>Image Segmentation with VLMs</h2>
+<p>VLMs enhance traditional image segmentation by enabling open-vocabulary segmentation through textual instructions, moving away from closed-set methods that rely on predefined categories. By merging text and image data into a common feature space, these models reduce adaptation costs and excel at tasks like referring expression segmentation. For example, a user might prompt the model to <em>“segment the cat sitting on the chair”</em>, and the VLM would identify and segment the pixels corresponding to that specific cat.</p>
+<p>To achieve this, VLMs harness visual features from encoders like CNNs or Vision Transformers, using cross-attention to focus on image regions relevant to the text. Some models are fine-tuned to produce bounding boxes or segmentation masks directly, and careful prompting guides them to accurately segment based on the integrated understanding of visual content and language.</p>
+<h2>Image Segmentation the PaliGemma 2 Way</h2>
+<p>Earlier, in <strong>Figure 1</strong> we saw that PaliGemma 2’s architecture combines a Transformer decoder based on the Gemma 2 language model with a Vision Transformer image encoder initialised from SigLIP-So400m/14. The SigLIP encoder divides input images into <code>14x14</code> pixel patches to generate “soft tokens” that capture spatial relationships. Then, a linear projection layer is used to map the visual tokens into the same dimensional space as the input embeddings of the Gemma 2 language model. This projection ensures that the visual information can be seamlessly combined with textual information for processing by the language model.</p>
+<p>The Gemma 2 language model functions as the decoder, processing concatenated image tokens and text tokens to produce autoregressive text output, predicting one token at a time based on the preceding context. To enhance its capabilities for vision-language tasks, PaliGemma extends the vocabulary of the standard Gemma tokenizer (having 256,000 tokens) with additional special tokens. These include 1024 tokens representing coordinates in a normalised image space, denoted as <code>&lt;loc0000&gt;</code> through <code>&lt;loc1023&gt;</code>, and another 128 tokens, <code>&lt;seg000&gt;</code> through <code>&lt;seg127&gt;</code>, which are codewords used for a lightweight referring-expression segmentation vector-quantized approach.</p>
+<h3>Segmentation Output</h3>
+<p>When processing a segmentation prompt, PaliGemma 2 mix produces a sequence that begins with four location tokens defining the bounding box for the segmented object. These four tokens specify the bounding box coordinates in the normalized image space. This is followed by 16 segmentation tokens, which can be decoded via a learned codebook into a binary segmentation mask confined within the identified region. Below is an example output:</p>
+<div class="highlight"><pre><span></span><code>&lt;loc0336&gt;&lt;loc0049&gt;&lt;loc0791&gt;&lt;loc0941&gt;&lt;seg106&gt;&lt;seg074&gt;&lt;seg114&gt;&lt;seg081&gt;&lt;seg082&gt;&lt;seg028&gt;&lt;seg018&gt;&lt;seg037&gt;&lt;seg120&gt;&lt;seg073&gt;&lt;seg061&gt;&lt;seg125&gt;&lt;seg045&gt;&lt;seg059&gt;&lt;seg052&gt;&lt;seg084&gt;
+</code></pre></div>
+
+<h3>Segmentation Mask</h3>
+<p>If we want to further process the 16 segmentation tokens to generate a binary segmentation mask within the identified bounding box, we have to decode the segmentation tokens by using the Decoder from Google’s big vision repository related to the PaliGemma models. It is available in the following <a href="https://github.com/google-research/big_vision/blob/main/big_vision/evaluators/proj/paligemma/transfers/segmentation.py">script</a>. As we can see, the script uses JAX and Flax, and it is known that the Metal plug-in for JAX is still not fully supported as stated in the <a href="https://developer.apple.com/metal/jax/">Accelerated JAX on Mac</a> article. In the next part of this post, we are going to show not only how to reconstruct the binary mask with the help of the above script, but we are also going to show how to translate JAX/Flax to <a href="https://github.com/ml-explore/mlx">mlx</a> so that we can fully utilise the unified memory in Apple’s chips.</p>
+<h1>Tutorial</h1>
+<p>In this section, we are going to generate a segmentation mask with the PaliGemma 2 mix model, specifically <a href="https://huggingface.co/mlx-community/paligemma2-10b-mix-448-8bit">mlx-community/paligemma2–10b-mix-448–8bit</a>, by using only the packages <code>mlx-vlm</code> and <code>mlx</code>. We are also going to overlay the mask on top of the image we are segmenting.</p>
+<h2>Overview of the Process</h2>
+<p>Let’s first begin by outlining the steps of the process for generating a segmentation mask. An illustrative diagram can be seen in <strong>Figure 2</strong>.</p>
+<ul>
+<li>We start with passing a <strong>prompt</strong> to the model of the form <em>"segment cat\n"</em>, and the image we want to segment. This is our <strong>original image</strong> with dimensions <span class="math">\(x_{\text{orig}}\)</span> by <span class="math">\(y_{\text{orig}}\)</span>.</li>
+<li>Then, the model’s image processor (SiglipImageProcessor) yields to an <strong>input image</strong> with dimensions <span class="math">\(x_{\text{input}}\)</span> by <span class="math">\(y_{\text{input}}\)</span>. In the PaliGemma 2 mix case this would be either <code>224x224</code> or <code>448x448</code>, depending on the model we have chosen to use. In our case, it would be <code>448x448</code>.</li>
+<li>The model generates an output with 4 location coordinates and 16 segmentation tokens. The <code>&lt;locXXXX&gt;&lt;locXXXX&gt;&lt;locXXXX&gt;&lt;locXXXX&gt;</code> sequence corresponds to the <span class="math">\(y_{\text{min}}\)</span>, <span class="math">\(x_{\text{min}}\)</span>, <span class="math">\(y_{\text{max}}\)</span>, <span class="math">\(x_{\text{max}}\)</span> coordinates defining the <strong>bounding box</strong>. These coordinates should be normalised to an image size of <code>1024x1024</code> to obtain the bounding box coordinates of the object we want to segment with respect to the input image dimensions.</li>
+</ul>
+<figure>
+  <img src="../images/2025-04-15-paligemma-2-mix/input_bb.png" alt="Model input and bounding box" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 2. Model input and bounding box coordinates</figcaption>
+</figure>
+
+<p>Now that we’ve defined the bounding box by its coordinates, let’s zoom in on its details as shown in <strong>Figure 3</strong>, and dicuss how we would overlay the segmentation mask on top of the image we are segmenting.</p>
+<ul>
+<li>The model has returned the 16 segmentation tokens of the form <code>&lt;segXXX&gt;</code>. After decoding them via the codebook we end up reconstructing the <strong>segmentation mask</strong>. This mask has a size of <code>64x64</code> pixels.</li>
+<li>Next, we need to map the segmentation mask onto the bounding box that was previously defined. This is accomplished using classical interpolation techniques to scale the mask to the bounding box’s dimensions.</li>
+</ul>
+<figure>
+  <img src="../images/2025-04-15-paligemma-2-mix/map_mask.png" alt="Mapping mask to bounding box" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 3. Mapping the 64x64 mask to the bounding box</figcaption>
+</figure>
+
+<ul>
+<li>Once resized, the mask is aligned to fit within the bounding box. To overlay this mask on the original image, we create an empty array matching the dimensions of the input image and then replace the array values corresponding to the bounding box coordinates with those from the interpolated segmentation mask.</li>
+</ul>
+<h1>MLX</h1>
+<p>Finally, it’s time to dive into the coding section of this blog and focus specifically on the <code>mlx</code> components. The code can be found in <a href="https://github.com/JoeJoe1313/LLMs-Journey/blob/main/VLMs/paligemma_segmentation_mlx.py">GitHub</a>.</p>
+<p>We begin by importing the necessary libraries and modules,</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mlx.core</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mlx.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_vlm</span><span class="w"> </span><span class="kn">import</span> <span class="n">apply_chat_template</span><span class="p">,</span> <span class="n">generate</span><span class="p">,</span> <span class="n">load</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_vlm.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tensorflow.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">gfile</span>
+</code></pre></div>
+
+<p>then, we establish the paths for the models and image resources. The <code>MODEL_PATH</code> points to the specific PaliGemma model that we are going to use for segmentation tasks. The <code>IMAGE_PATH</code> is the location of the image that we will process, and the <code>_KNOWN_MODELS</code> dictionary provides a reference to the VAE checkpoint needed for mask reconstruction.</p>
+<div class="highlight"><pre><span></span><code><span class="n">MODEL_PATH</span> <span class="o">=</span> <span class="s2">&quot;mlx-community/paligemma2-10b-mix-448-8bit&quot;</span>
+<span class="n">IMAGE_PATH</span> <span class="o">=</span> <span class="s2">&quot;https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/transformers/tasks/car.jpg&quot;</span>
+<span class="n">_KNOWN_MODELS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;oi&quot;</span><span class="p">:</span> <span class="s2">&quot;gs://big_vision/paligemma/vae-oid.npz&quot;</span><span class="p">}</span>
+</code></pre></div>
+
+<p>Before diving into the core functionality, we set up logging to keep track of the execution flow and for debugging purposes. The following snippet initializes Python’s built-in logging system:</p>
+<div class="highlight"><pre><span></span><code><span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">()</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">log</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+</code></pre></div>
+
+<p>The <code>ResBlock</code> class implements a basic residual block typical for convolutional architectures. It comprises three convolution layers:</p>
+<ul>
+<li>Two <code>3x3</code> convolutions with ReLU activations, which process the input.</li>
+<li>One <code>1x1</code> convolution to adjust dimensions if needed.</li>
+</ul>
+<p>The output of the block is computed by summing the result of the convolutions with the original input. This residual connection helps maintain gradient flow during training and preserves information across layers.</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ResBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">0</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="n">original_x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">original_x</span>
+</code></pre></div>
+
+<p>The <code>Decoder</code> class takes quantized vectors (obtained from segmentation tokens) and upscales them to produce a mask:</p>
+<ul>
+<li>An initial convolution reduces the channel dimension.</li>
+<li>A series of configurable residual blocks further process the features.
+Multiple transpose convolution layers (upsample layers) scale the feature maps until the desired resolution is reached.</li>
+<li>A final convolution produces the output mask.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Decoder</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decoder that upscales quantized vectors to produce a mask.</span>
+<span class="sd">    The architecture is parameterized to avoid hardcoded layer definitions.</span>
+<span class="sd">    Takes channels-last input data (B, H, W, C).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">512</span><span class="p">,</span>
+        <span class="n">res_channels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span><span class="p">,</span>
+        <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">num_res_blocks</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">upsample_channels</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv_in</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">res_channels</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">0</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">res_blocks</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">ResBlock</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="n">res_channels</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_res_blocks</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upsample_layers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">out_up_ch</span> <span class="o">=</span> <span class="n">res_channels</span>
+        <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">upsample_channels</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">upsample_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">ConvTranspose2d</span><span class="p">(</span>
+                    <span class="n">in_channels</span><span class="o">=</span><span class="n">out_up_ch</span><span class="p">,</span>
+                    <span class="n">out_channels</span><span class="o">=</span><span class="n">ch</span><span class="p">,</span>
+                    <span class="n">kernel_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                    <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                    <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">out_up_ch</span> <span class="o">=</span> <span class="n">ch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv_out</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="n">upsample_channels</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">out_channels</span><span class="o">=</span><span class="n">out_channels</span><span class="p">,</span>
+            <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">padding</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv_in</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">res_blocks</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">block</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">upsample_layers</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">layer</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv_out</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div>
+
+<p>The helper function <code>_get_params</code> is designed to convert a PyTorch checkpoint into a format that MLX can work with. It does so by</p>
+<ul>
+<li>Transposing kernel weights to match the expected output format: from PyTorch’s format to MLX’s (Out, H, W, In) format.</li>
+<li>Organizing the parameters into a structured dictionary that reflects the architecture of the decoder, including the convolutional layers, residual blocks, and upsample layers.</li>
+</ul>
+<p>This organized set of parameters is then used to initialize the decoder network.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">_get_params</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts PyTorch checkpoint to MLX params (nested dict).</span>
+<span class="sd">    Uses transpositions yielding (Out, H, W, In) format weights.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">transp</span><span class="p">(</span><span class="n">kernel</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">mx</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">kernel</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">transp_transpose</span><span class="p">(</span><span class="n">kernel</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="n">intermediate</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">kernel</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">mx</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">intermediate</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">conv</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;bias&quot;</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.bias&quot;</span><span class="p">]),</span>
+            <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="n">transp</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.weight&quot;</span><span class="p">]),</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">conv_transpose</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;bias&quot;</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.bias&quot;</span><span class="p">]),</span>
+            <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="n">transp_transpose</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.weight&quot;</span><span class="p">]),</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">resblock</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;conv1&quot;</span><span class="p">:</span> <span class="n">conv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.0&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;conv2&quot;</span><span class="p">:</span> <span class="n">conv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.2&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;conv3&quot;</span><span class="p">:</span> <span class="n">conv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.4&quot;</span><span class="p">),</span>
+        <span class="p">}</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;_embeddings&quot;</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="s2">&quot;_vq_vae._embedding&quot;</span><span class="p">]),</span>
+        <span class="s2">&quot;conv_in&quot;</span><span class="p">:</span> <span class="n">conv</span><span class="p">(</span><span class="s2">&quot;decoder.0&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;res_blocks&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="n">resblock</span><span class="p">(</span><span class="s2">&quot;decoder.2.net&quot;</span><span class="p">),</span>
+            <span class="n">resblock</span><span class="p">(</span><span class="s2">&quot;decoder.3.net&quot;</span><span class="p">),</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;upsample_layers&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="n">conv_transpose</span><span class="p">(</span><span class="s2">&quot;decoder.4&quot;</span><span class="p">),</span>
+            <span class="n">conv_transpose</span><span class="p">(</span><span class="s2">&quot;decoder.6&quot;</span><span class="p">),</span>
+            <span class="n">conv_transpose</span><span class="p">(</span><span class="s2">&quot;decoder.8&quot;</span><span class="p">),</span>
+            <span class="n">conv_transpose</span><span class="p">(</span><span class="s2">&quot;decoder.10&quot;</span><span class="p">),</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;conv_out&quot;</span><span class="p">:</span> <span class="n">conv</span><span class="p">(</span><span class="s2">&quot;decoder.12&quot;</span><span class="p">),</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">params</span>
+</code></pre></div>
+
+<p>The function <code>_quantized_values_from_codebook_indices</code> takes the segmentation tokens (represented as codebook indices) and uses the embeddings from the codebook to retrieve the corresponding encoded representations. These values are reshaped to fit the expected dimensions (batch, height, width, channels) so that they are ready for processing by the decoder.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">_quantized_values_from_codebook_indices</span><span class="p">(</span>
+    <span class="n">codebook_indices</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">embeddings</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+    <span class="n">batch_size</span><span class="p">,</span> <span class="n">num_tokens</span> <span class="o">=</span> <span class="n">codebook_indices</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">expected_tokens</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="k">if</span> <span class="n">num_tokens</span> <span class="o">!=</span> <span class="n">expected_tokens</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected </span><span class="si">{</span><span class="n">expected_tokens</span><span class="si">}</span><span class="s2"> tokens, got </span><span class="si">{</span><span class="n">codebook_indices</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">encodings</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">embeddings</span><span class="p">,</span> <span class="n">codebook_indices</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">encodings</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">embeddings</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+</code></pre></div>
+
+<p>The <code>get_reconstruct_masks</code> function loads the VAE checkpoint and initializes the decoder with the appropriate parameters. By extracting and setting up the necessary embeddings and decoder weights, this function returns another function (<code>reconstruct_masks</code>) that, when given segmentation tokens, decodes them into a binary segmentation mask.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@functools</span><span class="o">.</span><span class="n">cache</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_reconstruct_masks</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">],</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Loads the checkpoint and returns a function that reconstructs masks</span>
+<span class="sd">    from codebook indices using a preloaded MLX decoder.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">checkpoint_path</span> <span class="o">=</span> <span class="n">_KNOWN_MODELS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">gfile</span><span class="o">.</span><span class="n">GFile</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">checkpoint_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="n">_get_params</span><span class="p">(</span><span class="n">checkpoint_data</span><span class="p">)</span>
+    <span class="n">embeddings</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;_embeddings&quot;</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;VAE embedding dimension: </span><span class="si">{</span><span class="n">embeddings</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">decoder</span> <span class="o">=</span> <span class="n">Decoder</span><span class="p">()</span>
+    <span class="n">decoder</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">reconstruct_masks</span><span class="p">(</span><span class="n">codebook_indices</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="n">quantized</span> <span class="o">=</span> <span class="n">_quantized_values_from_codebook_indices</span><span class="p">(</span>
+            <span class="n">codebook_indices</span><span class="p">,</span> <span class="n">embeddings</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">decoder</span><span class="p">(</span><span class="n">quantized</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">reconstruct_masks</span>
+</code></pre></div>
+
+<p>The function <code>extract_and_create_arrays</code> parses a given string pattern for segmentation tokens. It extracts these token numbers, converts them into integers, and then wraps them in MLX arrays for further mask reconstruction processing.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">extract_and_create_arrays</span><span class="p">(</span><span class="n">pattern</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts segmentation tokens from each object in the pattern and returns a list of MLX arrays.&quot;&quot;&quot;</span>
+    <span class="n">object_strings</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">pattern</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
+
+    <span class="n">seg_tokens_arrays</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">object_strings</span><span class="p">:</span>
+        <span class="n">seg_tokens</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;seg(\d</span><span class="si">{3}</span><span class="s2">)&gt;&quot;</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">seg_tokens</span><span class="p">:</span>
+            <span class="n">seg_numbers</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">token</span><span class="p">)</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">seg_tokens</span><span class="p">]</span>
+            <span class="n">seg_tokens_arrays</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">seg_numbers</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">seg_tokens_arrays</span>
+</code></pre></div>
+
+<p>The <code>parse_bbox</code> function interprets the model's output string to extract bounding box coordinates. Each detected object's location is denoted by a string format (<code>&lt;loc1234&gt;</code>). This function finds four numbers per object, corresponding to the box boundaries, and aggregates them into a list of bounding boxes.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">parse_bbox</span><span class="p">(</span><span class="n">model_output</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">entries</span> <span class="o">=</span> <span class="n">model_output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">numbers</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;loc(\d+)&gt;&quot;</span><span class="p">,</span> <span class="n">entry</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">bbox</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">]</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bbox</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">results</span>
+</code></pre></div>
+
+<p>The <code>gather_masks</code> function combines the reconstruction and bounding box parsing steps. For each object:</p>
+<ul>
+<li>It reconstructs the mask from its codebook indices.</li>
+<li>It obtains the corresponding bounding box coordinates.</li>
+<li>It normalizes these coordinates relative to a target image resolution (448×448 in this example).</li>
+</ul>
+<p>Each mask is then paired with its coordinates and stored in a list, making it straightforward to later overlay these onto the original image.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">gather_masks</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">codes_list</span><span class="p">,</span> <span class="n">reconstruct_fn</span><span class="p">):</span>
+    <span class="n">masks_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">target_width</span><span class="p">,</span> <span class="n">target_height</span> <span class="o">=</span> <span class="mi">448</span><span class="p">,</span> <span class="mi">448</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">codes</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">codes_list</span><span class="p">):</span>
+        <span class="n">codes_batch</span> <span class="o">=</span> <span class="n">codes</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">masks</span> <span class="o">=</span> <span class="n">reconstruct_fn</span><span class="p">(</span><span class="n">codes_batch</span><span class="p">)</span>
+        <span class="n">mask_np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">masks</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">y_min</span><span class="p">,</span> <span class="n">x_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span> <span class="n">x_max</span> <span class="o">=</span> <span class="n">parse_bbox</span><span class="p">(</span><span class="n">output</span><span class="p">)[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">x_min_norm</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x_min</span> <span class="o">/</span> <span class="mi">1024</span> <span class="o">*</span> <span class="n">target_width</span><span class="p">)</span>
+        <span class="n">y_min_norm</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">y_min</span> <span class="o">/</span> <span class="mi">1024</span> <span class="o">*</span> <span class="n">target_height</span><span class="p">)</span>
+        <span class="n">x_max_norm</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x_max</span> <span class="o">/</span> <span class="mi">1024</span> <span class="o">*</span> <span class="n">target_width</span><span class="p">)</span>
+        <span class="n">y_max_norm</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">y_max</span> <span class="o">/</span> <span class="mi">1024</span> <span class="o">*</span> <span class="n">target_height</span><span class="p">)</span>
+
+        <span class="n">masks_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;mask&quot;</span><span class="p">:</span> <span class="n">mask_np</span><span class="p">,</span>
+                <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">x_min_norm</span><span class="p">,</span> <span class="n">y_min_norm</span><span class="p">,</span> <span class="n">x_max_norm</span><span class="p">,</span> <span class="n">y_max_norm</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">masks_list</span>
+</code></pre></div>
+
+<p>The function <code>plot_masks</code> handles the visualization of the segmentation outcomes. It loads the original image and processes it for display. Two types of visualizations are provided:</p>
+<ul>
+<li><strong>Composite Overlay</strong>: All masks are combined and overlaid on the original image.</li>
+<li><strong>Reconstructed Mask</strong>: Each reconstructed mask is plotted next to the composite overlay.</li>
+</ul>
+<p>Using OpenCV for mask resizing and Matplotlib for plotting, the function creates a series of subplots to clearly display both composite and individual mask overlays.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">plot_masks</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">processor</span><span class="p">,</span> <span class="n">masks_list</span><span class="p">):</span>
+
+    <span class="n">image</span> <span class="o">=</span> <span class="n">load_image</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">image_path</span><span class="p">)</span>
+    <span class="n">img_array</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">image_processor</span><span class="p">(</span><span class="n">image</span><span class="p">)[</span><span class="s2">&quot;pixel_values&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">img_array</span> <span class="o">=</span> <span class="p">(</span><span class="n">img_array</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">full</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">448</span><span class="p">,</span> <span class="mi">448</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">mask_info</span> <span class="ow">in</span> <span class="n">masks_list</span><span class="p">:</span>
+        <span class="n">mask_np</span> <span class="o">=</span> <span class="n">mask_info</span><span class="p">[</span><span class="s2">&quot;mask&quot;</span><span class="p">]</span>
+        <span class="n">x_min_norm</span><span class="p">,</span> <span class="n">y_min_norm</span><span class="p">,</span> <span class="n">x_max_norm</span><span class="p">,</span> <span class="n">y_max_norm</span> <span class="o">=</span> <span class="n">mask_info</span><span class="p">[</span><span class="s2">&quot;coordinates&quot;</span><span class="p">]</span>
+
+        <span class="n">width</span> <span class="o">=</span> <span class="n">x_max_norm</span> <span class="o">-</span> <span class="n">x_min_norm</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">y_max_norm</span> <span class="o">-</span> <span class="n">y_min_norm</span>
+
+        <span class="n">resized_mask</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span>
+            <span class="n">mask_np</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">),</span> <span class="n">interpolation</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">INTER_NEAREST</span>
+        <span class="p">)</span>
+        <span class="n">resized_mask</span> <span class="o">=</span> <span class="n">resized_mask</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="n">full</span><span class="p">[</span><span class="n">y_min_norm</span><span class="p">:</span><span class="n">y_max_norm</span><span class="p">,</span> <span class="n">x_min_norm</span><span class="p">:</span><span class="n">x_max_norm</span><span class="p">]</span> <span class="o">=</span> <span class="n">resized_mask</span>
+
+    <span class="n">n_masks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">masks_list</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_masks</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_masks</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">6</span><span class="p">))</span>
+
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img_array</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">full</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Mask Overlay&quot;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;on&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">mask_info</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">masks_list</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">mask_np</span> <span class="o">=</span> <span class="n">mask_info</span><span class="p">[</span><span class="s2">&quot;mask&quot;</span><span class="p">]</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mask_np</span><span class="p">)</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reconstructed Mask </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;on&quot;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+<p>The <code>main</code> function ties all the pieces together. It performs the following steps:</p>
+<ul>
+<li><strong>Loading</strong>: Reads the specified PaliGemma model and image.</li>
+<li><strong>Setup</strong>: Initializes the VAE checkpoint and extracts the reconstruction function.</li>
+<li><strong>Prompting</strong>: Formats the prompt using the processor and generates a segmentation output via the model.</li>
+<li><strong>Processing</strong>: Extracts segmentation tokens, reconstructs masks, and parses bounding box coordinates.</li>
+<li><strong>Visualization</strong>: Finally, it calls the plotting function to display the results.</li>
+</ul>
+<p>This function serves as the central point where data processing, model inference, mask reconstruction, and visualization are integrated into one complete pipeline.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading PaliGemma model: </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">model_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">model</span><span class="p">,</span> <span class="n">processor</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">model_path</span><span class="p">)</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">config</span>
+
+    <span class="n">image</span> <span class="o">=</span> <span class="n">load_image</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">image_path</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image size: </span><span class="si">{</span><span class="n">image</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">vae_path</span> <span class="o">=</span> <span class="n">_KNOWN_MODELS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">vae_checkpoint_path</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">vae_checkpoint_path</span><span class="p">)</span>
+    <span class="n">reconstruct_fn</span> <span class="o">=</span> <span class="n">get_reconstruct_masks</span><span class="p">(</span><span class="n">vae_path</span><span class="p">)</span>
+
+    <span class="n">prompt</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">prompt</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using prompt: &#39;</span><span class="si">{</span><span class="n">prompt</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+    <span class="n">formatted_prompt</span> <span class="o">=</span> <span class="n">apply_chat_template</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="n">num_images</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Generating segmentation output...&quot;</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">generate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">processor</span><span class="p">,</span> <span class="n">formatted_prompt</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Model output: </span><span class="si">{</span><span class="n">output</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">codes_list</span> <span class="o">=</span> <span class="n">extract_and_create_arrays</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Extracted codes: </span><span class="si">{</span><span class="n">codes_list</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Reconstructing mask from codes...&quot;</span><span class="p">)</span>
+    <span class="n">masks_list</span> <span class="o">=</span> <span class="n">gather_masks</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">codes_list</span><span class="p">,</span> <span class="n">reconstruct_fn</span><span class="p">)</span>
+
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Plotting masks...&quot;</span><span class="p">)</span>
+    <span class="n">plot_masks</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">masks_list</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Finally, the script includes an entry point that parses command-line arguments. Users can specify the image path, the prompt for the segmentation task, the model path, and the VAE checkpoint path. Once these are provided via <code>argparse</code>, the <code>main</code> function is invoked to start the processing pipeline.</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Vision tasks using PaliGemma 2 mix.&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--image_path&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">IMAGE_PATH</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to the input image.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--prompt&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Prompt for the model.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--model_path&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">MODEL_PATH</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to the mlx model.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--vae_checkpoint_path&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;oi&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to the .npz file.&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">cli_args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="n">main</span><span class="p">(</span><span class="n">cli_args</span><span class="p">)</span>
+</code></pre></div>
+
+<h1>Results</h1>
+<p>Let’s take a look at some examples and the segmentations we obtained from the model.</p>
+<h2>Single Object Segmentation</h2>
+<p>In this section, we are going to show to examples of single object segmentation.</p>
+<hr>
+<p><strong>Prompt:</strong></p>
+<div class="highlight"><pre><span></span><code>&quot;segment cow&quot;
+</code></pre></div>
+
+<p><strong>Image:</strong></p>
+<figure>
+  <img src="../images/2025-04-15-paligemma-2-mix/cow_in.png" alt="Cow input" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 4. Original image of size 400x400</figcaption>
+</figure>
+
+<p><strong>Model output:</strong></p>
+<div class="highlight"><pre><span></span><code>&lt;loc0410&gt;&lt;loc0528&gt;&lt;loc0884&gt;&lt;loc1023&gt;&lt;seg072&gt;&lt;seg055&gt;&lt;seg062&gt;&lt;seg079&gt;&lt;seg104&gt;&lt;seg009&gt;&lt;seg104&gt;&lt;seg096&gt;&lt;seg068&gt;&lt;seg041&gt;&lt;seg103&gt;&lt;seg019&gt;&lt;seg100&gt;&lt;seg004&gt;&lt;seg091&gt;&lt;seg067&gt;
+</code></pre></div>
+
+<p><strong>Mask overlay and reconstructed mask:</strong></p>
+<figure>
+  <img src="../images/2025-04-15-paligemma-2-mix/cow_out.png" alt="Cow output" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 5. Left: mask overlay onto the input image of size 448x448 | Right: reconstructed mask of size 64x64</figcaption>
+</figure>
+
+<p><strong>Observation:</strong></p>
+<p>Based on the overlay image, the model manages to detect the precise location of the cow but struggles a bit with the detailed outlines of the cow. Looking only at the reconstructed mask would not persuade me that this is a cow.</p>
+<hr>
+<p><strong>Prompt:</strong></p>
+<div class="highlight"><pre><span></span><code>&quot;segment cat&quot;
+</code></pre></div>
+
+<p><strong>Image:</strong></p>
+<figure>
+  <img src="../images/2025-04-15-paligemma-2-mix/cat_in.png" alt="Cat input" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 6. Original image of size 400x400</figcaption>
+</figure>
+
+<p><strong>Model output:</strong></p>
+<div class="highlight"><pre><span></span><code>&lt;loc0060&gt;&lt;loc0000&gt;&lt;loc0920&gt;&lt;loc0879&gt;&lt;seg039&gt;&lt;seg107&gt;&lt;seg018&gt;&lt;seg006&gt;&lt;seg056&gt;&lt;seg120&gt;&lt;seg058&gt;&lt;seg042&gt;&lt;seg079&gt;&lt;seg094&gt;&lt;seg009&gt;&lt;seg099&gt;&lt;seg074&gt;&lt;seg010&gt;&lt;seg078&gt;&lt;seg012&gt;
+</code></pre></div>
+
+<p><strong>Mask overlay and reconstructed mask:</strong></p>
+<figure>
+  <img src="../images/2025-04-15-paligemma-2-mix/cat_out.png" alt="Cat output" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 7. Left: mask overlay onto the input image of size 448x448 | Right: reconstructed mask of size 64x64</figcaption>
+</figure>
+
+<p><strong>Observation:</strong></p>
+<p>Based on the overlay image, the model manages to detect the precise location of the cat, and is generally doing a good job with the cat’s outlines.</p>
+<h2>Multiple Object Segmentation</h2>
+<p>It was tricky to find a working example for segmenting multiple objects, so there is only one example in this section. My observation is that the PaliGemma models are indeed very sensitive to the prompt formatting, and the 448–10B-8bit model might just not be powerful enough for the task of segmenting multiple objects.</p>
+<hr>
+<p><strong>Prompt:</strong></p>
+<div class="highlight"><pre><span></span><code>&quot;segment left wheel ; right wheel&quot;
+</code></pre></div>
+
+<p><strong>Image:</strong></p>
+<figure>
+  <img src="../images/2025-04-15-paligemma-2-mix/car_in.png" alt="Car input" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 8. Original image of size 640x480</figcaption>
+</figure>
+
+<p><strong>Model output:</strong></p>
+<div class="highlight"><pre><span></span><code>&lt;loc0591&gt;&lt;loc0157&gt;&lt;loc0794&gt;&lt;loc0311&gt; &lt;seg092&gt;&lt;seg004&gt;&lt;seg044&gt;&lt;seg092&gt;&lt;seg120&gt;&lt;seg061&gt;&lt;seg029&gt;&lt;seg120&gt;&lt;seg090&gt;&lt;seg023&gt;&lt;seg021&gt;&lt;seg090&gt;&lt;seg015&gt;&lt;seg041&gt;&lt;seg044&gt;&lt;seg073&gt; right wheel ; &lt;loc0586&gt;&lt;loc0728&gt;&lt;loc0794&gt;&lt;loc0882&gt; &lt;seg092&gt;&lt;seg004&gt;&lt;seg089&gt;&lt;seg092&gt;&lt;seg120&gt;&lt;seg048&gt;&lt;seg054&gt;&lt;seg038&gt;&lt;seg119&gt;&lt;seg029&gt;&lt;seg021&gt;&lt;seg090&gt;&lt;seg095&gt;&lt;seg041&gt;&lt;seg044&gt;&lt;seg073&gt; right wheel
+</code></pre></div>
+
+<p><strong>Mask overlay and reconstructed mask:</strong></p>
+<figure>
+  <img src="../images/2025-04-15-paligemma-2-mix/car_out.png" alt="Car output" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 9. Left: masks overlay onto the input image of size 448x448 | Right: reconstructed masks of size 64x64</figcaption>
+</figure>
+
+<p><strong>Observation:</strong></p>
+<p>Looking at the model output we can see that both segmentations are labeled as right wheel. Despite this, based on the overlay image, the model manages to detect the precise location of the wheels, and their outlines.</p>
+<h1>Conclusion</h1>
+<p>In summary, we implemented a unified segmentation pipeline by combining Google’s PaliGemma 2 Mix model with Apple’s MLX framework. Our workflow involved formatting segmentation prompts, preprocessing images, extracting segmentation tokens and bounding box coordinates, decoding these tokens into segmentation masks, and finally overlaying the masks on the original images.</p>
+<p>For single object segmentation, the model generally performed well: it accurately localised the object areas, as evidenced by both the “cat” and the “cow” examples. However, the segmentation for the “cow” revealed some challenges with capturing fine details, indicating areas for potential refinement.</p>
+<p>The multiple object segmentation proved challenging, as we struggled to find more than one working example that produced multiple segmentations. In our single example, the model demonstrated the ability to detect the general locations of objects — successfully identifying both wheels — but it also suffered from issues such as prompt sensitivity and duplicate labelling. This difficulty may be attributed to the inherent prompt sensitivity of the model or potential limitations of the specific model variant, particularly the 448–10B-8bit configuration. These observations suggest that either refining prompt structures or exploring more powerful models may be essential for reliably handling segmentation tasks involving multiple objects.</p>
+<h1>References</h1>
+<ul>
+<li><a href="https://developers.googleblog.com/en/introducing-paligemma-2-mix/">Introducing PaliGemma 2 mix: A vision-language model for multiple tasks</a></li>
+<li><a href="https://ai.google.dev/gemma/docs/paligemma/prompt-system-instructions">PaliGemma prompt and system instructions</a></li>
+<li><a href="https://huggingface.co/blog/paligemma2mix">PaliGemma 2 Mix — New Instruction Vision Language Models by Google</a></li>
+<li><a href="https://huggingface.co/blog/paligemma2">Welcome PaliGemma 2 — New vision language models by Google</a></li>
+<li><a href="https://developers.googleblog.com/en/introducing-paligemma-2-powerful-vision-language-models-simple-fine-tuning/">Introducing PaliGemma 2: Powerful Vision-Language Models, Simple Fine-Tuning</a></li>
+<li><a href="https://arxiv.org/abs/2412.03555">PaliGemma 2: A Family of Versatile VLMs for Transfer</a></li>
+</ul>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "true";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>        </body>
+</html>
