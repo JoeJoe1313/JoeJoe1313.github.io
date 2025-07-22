@@ -27,3 +27,7 @@ Title: About
 - Circuit tracing
 - QAT
 - OCR models comparison (handwritten notes)
+    - Putting Nanonets OCR to the Test
+    - olmOCR
+    - Mistral OCR
+- Recureence Plots - Time Series related stuff
