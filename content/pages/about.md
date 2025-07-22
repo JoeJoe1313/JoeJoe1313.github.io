@@ -2,7 +2,7 @@
 Title: About
 ---
 
-# Hi there, I'm Joana 👋
+## Hi there, I'm Joana 👋
 
 🔭 I’m currently working on gaining the latest AI knowledge. Check my [LLMs Journey](https://github.com/JoeJoe1313/LLMs-Journey).
 
@@ -17,7 +17,7 @@ Title: About
 - [Linkedin](https://www.linkedin.com/in/joana-levtcheva-479844164/)
 - [X](https://x.com/13_jo_jo_13)
 
-# Upcoming posts in random order:
+## Upcoming posts in random order:
 
 - ⁠Dual contouring of hermite data
 - Lissajous curves
