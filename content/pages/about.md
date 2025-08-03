@@ -31,3 +31,6 @@ Title: About
     - olmOCR
     - Mistral OCR
 - Recureence Plots - Time Series related stuff
+- Subliminal Learning
+- SensorLM
+- FastVLM
