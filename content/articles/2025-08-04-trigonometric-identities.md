@@ -26,9 +26,9 @@ where $i$ is the imaginary unit, defined as $i^2 = -1$. The formula has a geomet
 
 In **Figure 1**, the horizontal axis represents the real part, the vertical axis represents the imaginary part, and any complex number $z = x + i y$ is plotted as the point $(x, y)$. Euler's formula represents a point on the unit circle at angle $\theta$ from the positive real axis, where:
 
-- Real part: $\cos\theta$ (horizontal coordinate)
-- Imaginary part: $\sin\theta$ (vertical coordinate)
-- Magnitude: $|e^{i\theta}| = \sqrt{\cos^2\theta + \sin^2\theta} = 1$
+- **Real part**: $\cos\theta$ (horizontal coordinate)
+- **Imaginary part**: $\sin\theta$ (vertical coordinate)
+- **Magnitude**: $|e^{i\theta}| = \sqrt{\cos^2\theta + \sin^2\theta} = 1$
 
 As $\theta$ varies from $0$ to $2\pi$, the point $e^{i\theta}$ traces out the entire unit circle. The famous **Euler's identity** emerges naturally:
 
