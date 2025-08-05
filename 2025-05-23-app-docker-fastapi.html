@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>Image Segmentation with PaliGemma 2 mix, Transformers, Docker, FastAPI, and GitHub Actions</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+    <meta name="description" content="In today’s fast-paced machine learning landscape, deploying AI models is just as important as developing them. In this blog post, we are going to..." />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li><a href="/books.html">Books</a></li>
+                                                <li class="active"><a href="/category/machine-learning.html">Machine Learning</a></li>
+                                                <li><a href="/category/mathematics.html">Mathematics</a></li>
+                                                <li><a href="/category/quick-takes.html">Quick Takes</a></li>
+                                <li><a href="/drafts.html">Drafts</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="/2025-05-23-app-docker-fastapi.html" rel="bookmark"
+             title="Permalink to Image Segmentation with PaliGemma 2 mix, Transformers, Docker, FastAPI, and GitHub Actions">Image Segmentation with PaliGemma 2 mix, Transformers, Docker, FastAPI, and GitHub Actions</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2025-05-23T07:00:00+03:00">
+            Published: Fri 23 May 2025
+    </abbr>
+
+    <p>In <a href="/category/machine-learning.html">Machine Learning</a>.</p>
+<p>tags: <a href="/tag/ai.html">ai</a> <a href="/tag/ml.html">ml</a> <a href="/tag/vlm.html">vlm</a> <a href="/tag/docker.html">docker</a> <a href="/tag/fastapi.html">fastapi</a> <a href="/tag/github-actions.html">github-actions</a> </p>    
+</footer><!-- /.post-info -->        <p>In today’s fast-paced machine learning landscape, deploying AI models is just as important as developing them. In this blog post, we are going to walk through an image segmentation application using Google’s <strong>PaliGemma 2 Mix</strong> model and <strong>transformers</strong>, containerized with <strong>Docker</strong>, and served through a <strong>FastAPI</strong> backend. We are also going to discuss the CI/CD pipeline using <strong>GitHub Actions</strong> to automate building the Docker image and pushing it to Docker Hub. Let’s explore this service, why we chose these technologies, and how you can get started and use the service yourself!</p>
+<p>The complete code is available on <a href="https://github.com/JoeJoe1313/PaliGemma-Image-Segmentation">GitHub</a>. Medium post can be found <a href="https://medium.com/@levchevajoana/image-segmentation-with-paligemma-2-mix-transformers-docker-fastapi-and-github-actions-ff6d00253832">here</a>.</p>
+<h1>What is This Project All About?</h1>
+<p>At its core, this project provides a <strong>FastAPI service</strong> that allows you to perform image segmentation using natural language. You simply provide as input to the REST API:</p>
+<ul>
+<li>A <strong>text prompt</strong> describing what to segment</li>
+<li>An <strong>image</strong> via URL or file upload</li>
+<li>The specific <strong>PaliGemma 2 model</strong> to perform image segmentation</li>
+</ul>
+<p>The service then returns:</p>
+<ul>
+<li>The base64 encoded <strong>model input image</strong></li>
+<li>The base64 encoded segmentation <strong>masks</strong> clearly outlining the desired objects</li>
+<li>The <strong>bounding box coordinates</strong> for each segmented object</li>
+</ul>
+<p>The <strong>FastAPI</strong> application is also containerized with <strong>Docker</strong> for consistent deployment across environments. A CI/CD pipeline with <strong>GitHub Actions</strong> is created for automated container builds and registry publishing to Docker Hub.</p>
+<h1>Architectural Blueprint: How It All Works Together</h1>
+<p>Understanding the flow of data and the interaction of components is key. Let’s first take a look at our project structure:</p>
+<div class="highlight"><pre><span></span><code>project_folder/
+├── app/
+│   ├── __init__.py
+│   ├── main.py            # FastAPI application and endpoints
+│   └── segmentation.py    # Image segmentation logic
+├── models/
+│   ├── huggingface/       # Cache directory for Hugging Face models
+│   └── vae-oid.npz        # VAE model for mask generation
+├── .dockerignore
+├── .github/
+│   └── workflows/         # GitHub Actions for Docker build and push
+│     └── docker-build.yml # Workflow to build and push Docker images
+├── .gitignore
+├── docker-compose.yml
+├── Dockerfile
+├── README.md
+└── requirements.txt
+</code></pre></div>
+
+<h2>User &amp; Developer Workflow</h2>
+<p>Our system is designed with both the end-user and the developer in mind.</p>
+<figure>
+    <pre class="mermaid">
+        graph LR
+            User([User]) -->|Provides Image & Prompt| ClientApp[Client Application]
+            ClientApp -->|POST Request| FastAPI_Service[FastAPI Service]
+            FastAPI_Service -->|Process Input| PaliGemma_Model[PaliGemma Model]
+            PaliGemma_Model -->|Generate Segmentation Tokens| VAE_Model[VAE Model]
+            VAE_Model -->|Decode Masks| FastAPI_Service
+            FastAPI_Service -->|JSON Response | ClientApp
+            ClientApp -->|Display Results| User
+
+            Developer([Developer]) -->|Push Code| GitHubRepo[GitHub Repository]
+            GitHubRepo -->|Trigger| GitHubActions[GitHub Actions]
+            GitHubActions -->|Build & Push Image| DockerRegistry[Docker Hub]
+            DockerRegistry -->|Pull Image| DeploymentEnv[Deployment Environment]
+            DeploymentEnv -.->|Runs| FastAPI_Service
+</pre>
+    <figcaption style="text-align: center">Figure 1. User & Developer Workflow</figcaption>
+</figure>
+
+<p><strong>Figure 1</strong> shows the workflow:</p>
+<ul>
+<li>A <strong>User</strong> interacts with a client application, providing an image and a text prompt, and optionally the specific PaliGemma 2 model.</li>
+<li>The <strong>Client Application</strong> sends an HTTP POST request to our <strong>FastAPI Service</strong>.</li>
+<li>The <strong>FastAPI Service</strong> preprocesses the input and feeds it to the <strong>PaliGemma Model</strong>.</li>
+<li>PaliGemma generates segmentation tokens, which are then passed to the <strong>VAE Model</strong>.</li>
+<li>The VAE Model decodes these into pixel-level masks and, along with bounding boxes, sends them back to the API.
+The API returns a JSON response to the client.</li>
+</ul>
+<p>To visualize the precise sequence of operations when a user requests an image segmentation, the following diagram details the interactions between the core components:</p>
+<figure>
+    <pre class="mermaid">
+        sequenceDiagram
+            participant User
+            participant Client
+            participant FastAPI
+            participant SegmentationPy as segmentation.py
+            participant PaliGemma as PaliGemma Model
+            participant VAE as VAE Model
+
+            User->>+Client: Upload image & prompt
+            Client->>+FastAPI: POST /segment
+            FastAPI->>+SegmentationPy: call segment_image()
+            SegmentationPy->>+PaliGemma: infer with PaliGemma
+            PaliGemma-->>-SegmentationPy: (tokens/features)
+            SegmentationPy->>+VAE: generate masks
+            VAE-->>-SegmentationPy: (pixel masks)
+            SegmentationPy-->>-FastAPI: return mask & coords
+            FastAPI-->>-Client: JSON response
+            Client-->>-User: display results
+</pre>
+    <figcaption style="text-align: center">Figure 2. Segmentation process</figcaption>
+</figure>
+
+<p>This sequence highlights how FastAPI acts as the entry point, delegating the complex segmentation logic to the <code>segmentation.py</code> module, which in turn leverages the PaliGemma and VAE models to produce the desired output.</p>
+<p>For <strong>developers</strong>, pushing code to GitHub triggers <strong>GitHub Actions</strong>, which automatically builds a Docker image and pushes it to a <strong>Container Registry</strong> (Docker Hub), ready for deployment.</p>
+<h2>Inside the Application</h2>
+<p>Within the Docker container, the application is neatly structured:</p>
+<figure>
+    <pre class="mermaid">
+        graph TD
+            subgraph "Docker Container"
+                subgraph "app/"
+                    main[main.py
+                    FastAPI Application]
+                    segmentation[segmentation.py
+                    Image Segmentation Logic]
+                    main -->|imports| segmentation
+                end
+
+                subgraph "External Dependencies"
+                    NP[numpy]
+                    TR[transformers]
+                    PT[PyTorch]
+                    JF[JAX/Flax]
+                end
+
+                subgraph "Models"
+                    PaliGemma[PaliGemma 2 mix]
+                    VAE[VAE Checkpoint]
+                end
+
+                segmentation -->|uses| TR
+                segmentation -->|uses| PT
+                segmentation -->|uses| JF
+                segmentation -->|uses| NP
+
+                main -->|loads| PaliGemma
+                segmentation -->|loads| VAE
+            end
+
+            Client[Client Application] -->|HTTP Requests| main
+
+            subgraph "API Endpoints"
+                segment[POST /segment/]
+                root[GET /]
+            end
+
+            main -->|defines| segment
+            main -->|defines| root
+            Client -->|calls| segment
+            Client -->|calls| root
+
+            style main fill:#c2e0ff,stroke:#0078d7
+            style segmentation fill:#c2e0ff,stroke:#0078d7
+            style Client fill:#ffd7b5,stroke:#ff8c00
+            style segment fill:#d5e8d4,stroke:#82b366
+            style root fill:#d5e8d4,stroke:#82b366
+</pre>
+    <figcaption style="text-align: center">Figure 3. Application Architecture</figcaption>
+</figure>
+
+<ul>
+<li><code>app/main.py</code>: This is the heart of our API, built using FastAPI. It defines the API endpoints like <code>/</code> (for a welcome message) and <code>/segment</code> (for the actual segmentation).</li>
+<li><code>app/segmentation.py</code>: This module contains all the core logic for image processing, interacting with the PaliGemma and VAE models, and generating the final masks and coordinates. It uses the libraries <strong>JAX</strong>, <strong>Flax</strong> and <strong>Transformers</strong> for efficient model execution and inference.</li>
+</ul>
+<h1>Technology Stack Overview</h1>
+<p>Let’s first understand the key technologies used in the project.</p>
+<h2>PaliGemma 2 mix</h2>
+<p><a href="https://developers.googleblog.com/en/introducing-paligemma-2-mix/">PaliGemma 2 mix</a> is a state-of-the-art vision-language model from Google that can comprehend both images and text. It represents a significant advancement in multimodal AI, allowing for natural language-guided image understanding. Once PaliGemma identifies the segments (as tokens), a Variational Autoencoder (VAE) model steps in. It decodes these segmentation tokens into the detailed, pixel-level masks that you see as the output. This particular service uses a VAE checkpoint specifically <code>vae-oid.npz</code> for this task. A comprehensive overview of the image segmentation process with Paligemma 2 mix can be found in one of my previous posts <a href="https://joejoe1313.github.io/2025-04-15-paligemma-2-mix.html">here</a>.</p>
+<h2>FastAPI</h2>
+<p><a href="https://fastapi.tiangolo.com">FastAPI</a> is a web framework for building APIs with Python. We chose this framework for several compelling reasons:</p>
+<ul>
+<li>Automatic API documentation with <strong>Swagger UI</strong> and ReDoc
+Data validation and serialization through <strong>Pydantic</strong> models</li>
+<li>Asynchronous request handling with support for <code>async</code>/<code>await</code> syntax</li>
+<li>Excellent performance comparable to Node.js and Go</li>
+<li>Built-in dependency injection system</li>
+<li>Security and authentication features out of the box</li>
+<li>WebSocket support and background tasks</li>
+</ul>
+<p>In our project, <code>main.py</code> uses FastAPI to define the <code>/segment</code> endpoint which accepts form data including the prompt, and optionally an image URL or an uploaded image file, and the desired <code>model_id</code>.</p>
+<h2>Transformers</h2>
+<p><strong>Transformers</strong> is a library by <strong>Hugging Face</strong> that provides state-of-the-art pre-trained models for natural language processing and computer vision. For our project, it’s essential because:</p>
+<ul>
+<li>It provides easy access to the PaliGemma models</li>
+<li>Offers a unified API for loading and using different model architectures</li>
+<li>Handles model preprocessing and tokenization</li>
+<li>Supports efficient model inference</li>
+<li>Enables fine-tuning of models if needed</li>
+</ul>
+<h2>JAX/Flax</h2>
+<p>JAX is a high-performance numerical computing library developed by Google. Flax is a neural network library built on top of JAX. Together, they provide:</p>
+<ul>
+<li>Accelerated computation on GPUs and TPUs</li>
+<li>Just-in-time compilation for optimized performance</li>
+<li>Automatic differentiation capabilities</li>
+<li>Functional programming approach to machine learning</li>
+</ul>
+<p>In our app <strong>JAX/Flax &amp; Transformers</strong> are used for scalable model execution and inference, JAX/Flax is used for the VAE model which decodes segmentation tokens into pixel-level masks.</p>
+<h2>Docker &amp; Docker Compose</h2>
+<h3>What is Docker?</h3>
+<p>Docker is a platform that uses OS-level virtualization to deliver software in packages called <strong>containers</strong>. A container is a standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, system libraries, and settings.</p>
+<h3>Why Docker for This Project?</h3>
+<ul>
+<li><strong>Consistency</strong>: <em>“It works on my machine”</em> is a phrase Docker aims to eliminate. By packaging the application, its dependencies (like specific versions of PyTorch, JAX, Transformers), we ensure it runs identically everywhere - from a developer’s laptop to a production server.</li>
+<li><strong>Isolation</strong>: Containers run in isolation, preventing conflicts between different applications or dependencies on the same host system.</li>
+<li><strong>Simplified Deployment</strong>: Docker abstracts away the underlying infrastructure. With a simple <code>docker-compose up</code> command, anyone can get the service running without manually installing Python, various libraries, or configuring complex environments.</li>
+<li><strong>Scalability</strong>: Dockerized applications are inherently easier to scale. Orchestration tools like Kubernetes can manage multiple instances of our container to handle increased load.</li>
+<li><strong>Multi-Architecture Support</strong>: Our Docker setup supports both <code>amd64</code> (common for desktops and servers) and <code>arm64</code> (increasingly used in cloud instances and devices like Raspberry Pi) architectures, broadening its usability.</li>
+</ul>
+<h3>Key Docker Components Used:</h3>
+<ul>
+<li><strong><code>Dockerfile</code></strong></li>
+</ul>
+<p>This is the <strong>recipe for building our Docker image</strong>. It specifies the base image (e.g., a Python image), copies our application code (<code>app/</code> directory, <code>requirements.txt</code>, etc.) into the image, installs all necessary Python packages, and defines the command to run when the container starts (e.g., <code>uvicorn app.main:app</code>).</p>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.11-slim</span>
+
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+
+<span class="k">COPY</span><span class="w"> </span>requirements.txt<span class="w"> </span>.
+<span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-cache-dir<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+
+<span class="k">COPY</span><span class="w"> </span>.<span class="w"> </span>.
+
+<span class="k">ENV</span><span class="w"> </span><span class="nv">MODEL_ID</span><span class="o">=</span>google/paligemma2-3b-mix-448
+<span class="k">ENV</span><span class="w"> </span><span class="nv">MODELS_DIR</span><span class="o">=</span>/app/models
+
+<span class="k">EXPOSE</span><span class="w"> </span><span class="s">8000</span>
+
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;uvicorn&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;app.main:app&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--host&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--port&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;8000&quot;</span><span class="p">]</span>
+</code></pre></div>
+
+<ul>
+<li><strong><code>docker-compose.yml</code></strong></li>
+</ul>
+<p>While a <code>Dockerfile</code> builds a single image, Docker Compose is used to define and run multi-container Docker applications. In our case, it simplifies running our FastAPI service. It can also manage networks, volumes, and other aspects of the application stack. For this project, it handles setting up the service and importantly, the volume mounting for model persistence.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">paligemma-api</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">joejoe1313/paligemma-image-segmentation:latest</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8000:8000&quot;</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MODEL_ID=google/paligemma2-3b-mix-448</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MODELS_DIR=/app/models</span>
+<span class="w">    </span><span class="nt">secrets</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hf_token</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$HOME/.cache/huggingface/hub:/app/models/huggingface</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+
+<span class="nt">secrets</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">hf_token</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$HOME/.cache/huggingface/token</span>
+</code></pre></div>
+
+<ul>
+<li><strong><code>.dockerignore</code>:</strong></li>
+</ul>
+<p>Similar to <code>.gitignore</code>, this file lists files and directories that should not be copied into the Docker image during the build process (e.g., local virtual environments, <code>.git</code> directory). This keeps the image lean and build times faster.</p>
+<h3>Smart Model Management with Volume Mounting</h3>
+<p>Models, especially large ones like PaliGemma, take time to download. We use Docker’s <strong>volume mounting</strong> feature to map a directory on the host machine to a directory inside the container. This means:</p>
+<ul>
+<li>Models are downloaded once and <strong>persisted</strong> on your host machine.</li>
+<li>They are <strong>reused</strong> across container restarts.</li>
+<li>They can be <strong>shared</strong> if you run multiple instances.</li>
+<li>Updating models becomes easier as you can manage them directly on your host.</li>
+</ul>
+<p>The default mount point in our <code>docker-compose.yaml</code> file is <code>$HOME/.cache/huggingface/hub:/app/models/huggingface</code> which maps the local <code>$HOME/.cache/huggingface/hub</code> directory to <code>/app/models/huggingface</code> in the container.</p>
+<h2>CI/CD with GitHub Actions</h2>
+<p>GitHub Actions provides automated workflows for continuous integration and continuous delivery (CI/CD). This is crucial for modern software development, thus we have implemented a CI/CD pipeline using <strong>GitHub Actions</strong>. We can see our workflow <code>.github/workflows/docker-build.yml</code> below:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Docker Build and Push</span>
+
+<span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">build</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Login to Docker Hub</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker/login-action@v3</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ vars.DOCKERHUB_USERNAME }}</span>
+<span class="w">          </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.DOCKERHUB_TOKEN }}</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up QEMU</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker/setup-qemu-action@v3</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up Docker Buildx</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker/setup-buildx-action@v3</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build and push</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker/build-push-action@v6</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">push</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.event_name != &#39;pull_request&#39; }}</span>
+<span class="w">          </span><span class="nt">platforms</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">linux/amd64,linux/arm64</span>
+<span class="w">          </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ vars.DOCKERHUB_USERNAME }}/paligemma-image-segmentation:latest</span>
+</code></pre></div>
+
+<p><strong>What does it do?</strong></p>
+<ul>
+<li><strong>Trigger</strong>: Every time code is pushed to the <code>main</code> branch (or a pull request is made to <code>main</code>), the GitHub Actions workflow is automatically triggered.</li>
+<li><strong>Build</strong>: The workflow checks out the code and builds a multi-architecture (<code>amd64</code>/<code>arm64</code>) Docker image using the <code>Dockerfile</code>.</li>
+<li><strong>Push</strong>: The newly built image is then pushed to a container registry (like Docker Hub).</li>
+<li><strong>Tag</strong>: The image is tagged with the unique commit SHA (for traceability) and also with <code>latest</code> (for convenience).</li>
+</ul>
+<p><strong>Figure 4</strong> below shows a high level overview of the workflow:</p>
+<figure>
+    <pre class="mermaid">
+        sequenceDiagram
+            participant G as GitHub Repo
+            participant A as GitHub Actions
+            participant D as Docker Registry
+
+            G->>A: on: push / pull_request to main
+            activate A
+            A-->>A: Login to Docker Registry
+            A-->>A: Set up QEMU (for multi-arch)
+            A-->>A: Set up Docker Buildx
+            A-->>A: Build Docker image (multi-arch)
+            A-->>D: Push image (tagged with SHA & latest)
+            deactivate A
+</pre>
+    <figcaption style="text-align: center">Figure 4. GitHub Actions workflow</figcaption>
+</figure>
+
+<p><strong>How to use it in your fork</strong></p>
+<p>If you fork this repository, you can set up your own CI/CD pipeline by adding the following secrets to your GitHub repository settings:</p>
+<ul>
+<li><code>DOCKERHUB_USERNAME</code>: Your Docker Hub username.</li>
+<li><code>DOCKERHUB_TOKEN</code>: Your Docker Hub access token (not your password!).</li>
+<li>You should also update the image in docker-compose.yaml with your username: <code>{DOCKERHUB_USERNAME}/paligemma-image-segmentation:latest</code></li>
+</ul>
+<p>This automated pipeline ensures that a fresh, deployable image is always available.</p>
+<h1>Getting Started: Installation and Setup</h1>
+<p>Ready to try it yourself? Here’s how:</p>
+<h2>Prerequisites</h2>
+<ul>
+<li><strong>Docker</strong>: Ensure Docker Desktop or Docker Engine is installed and running.</li>
+<li><strong>Hugging Face Token</strong>: To access gated models like PaliGemma, you’ll need a Hugging Face token. Make sure it’s stored at <code>$HOME/.cache/huggingface/token</code> on your host machine, or adjust the path accordingly. The application will use this token when downloading models.</li>
+</ul>
+<h2>Setup with Docker Compose:</h2>
+<ul>
+<li>Clone the repository:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/JoeJoe1313/PaliGemma-Image-Segmentation.git
+<span class="nb">cd</span><span class="w"> </span>PaliGemma-Image-Segmentation
+</code></pre></div>
+
+<ul>
+<li>Ensure your <strong>Hugging Face token</strong> is in place as mentioned above. The <code>docker-compose.yml</code> is set up to mount your local Hugging Face cache, including the token.</li>
+<li>Run the application:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>docker-compose<span class="w"> </span>up<span class="w"> </span>-d
+</code></pre></div>
+
+<blockquote>
+<p><strong>Warning</strong>: It’s generally good practice to avoid running Docker commands as a root user unless necessary. Docker Compose should typically be run by a <code>user</code> in the <code>docker group</code>.</p>
+</blockquote>
+<p>This command will pull the pre-built Docker image and start the FastAPI service on <code>http://localhost:8000</code>. The <code>-dflag</code> runs it in detached mode.</p>
+<h2>Choosing Your PaliGemma Model</h2>
+<p>You have two ways to specify which PaliGemma model variant to use:</p>
+<ul>
+<li>At <strong>runtime via API</strong>: Pass the <code>model_id</code> parameter in your POST request to the <code>/segment</code> endpoint.</li>
+<li>Via <strong>Docker Environment Variable</strong>: Set the <code>MODEL_ID</code> environment variable when starting the container.</li>
+</ul>
+<blockquote>
+<p><strong>Note</strong>: If both are set, the <code>model_id</code> parameter in the API request takes precedence.</p>
+</blockquote>
+<p>If a specified model isn’t found in the local cache (<code>/app/models/huggingface</code> inside the container, which maps to your <code>$HOME/.cache/huggingface/hub</code>), the application will attempt to download it from Hugging Face. <strong>Figure 5</strong> below shows a comprehensive overview of the possible steps.</p>
+<figure style="width: 70%; margin: auto;">
+    <pre class="mermaid" style="max-width: 300px; margin: auto;">
+        flowchart TD
+            A[API Request] --> B{Check Local Cache}
+            B -->|Found| H[Load from Local Cache]
+            B -->|Not Found| C{Has HF Token?}
+
+            %% Style definitions
+            classDef process fill:#e0e0ff,stroke:#9999ff,color:black
+            classDef decision1 fill:#ffe0b0,stroke:#ffbb66,color:black
+            classDef decision2 fill:#d0f0d0,stroke:#aaddaa,color:black
+            classDef cache fill:#d0e0ff,stroke:#aabbee,color:black
+
+            %% Apply styles
+            class A,D,F,I,E,Z process
+            class B decision1
+            class C decision2
+            class G,H cache
+
+            C -->|Yes| D[Authenticate with HF]
+            C -->|No| E[Try Loading Public Model]
+            D --> F[Download Model]
+            F --> G[Save to Cache]
+            E -->|Success| G
+            E -->|Failure| Z[Auth Error]
+            G --> H
+            H --> I[Use Model]
+</pre>
+    <figcaption style="text-align: center">Figure 5. Model download scheme</figcaption>
+</figure>
+
+<h1>Examples: Putting the API to the Test</h1>
+<p>Once the service is running (default: <code>http://localhost:8000</code>):</p>
+<ul>
+<li><strong>API Docs</strong>: Visit <code>http://localhost:8000/docs</code> for interactive API documentation.</li>
+</ul>
+<h2>Health Check (GET /)</h2>
+<p>Verify the API is up and running.</p>
+<p><strong>Request:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;http://localhost:8000/&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+</code></pre></div>
+
+<p><strong>Response:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Welcome to the PaliGemma Segmentation API!&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2>Segmenting an Image (POST /segment/)</h2>
+<p>Form Parameters:</p>
+<ul>
+<li><code>prompt</code> (str, required): Text description of objects to segment (e.g., "segment the red car").</li>
+<li><code>image_url</code> (str, optional): URL of the image to segment.</li>
+<li><code>image_file</code> (UploadFile, optional): Uploaded image file to segment.</li>
+<li><code>model_id</code> (str, optional): Specific PaliGemma model ID to use.</li>
+</ul>
+<h3>Using an Image URL</h3>
+<figure>
+    <pre class="mermaid">
+        sequenceDiagram
+            participant C as Client
+            participant S as /segment Endpoint
+            C->>S: POST Request with JSON body: { "image_url": "your_image_url.jpg", "prompt": "object to segment" }
+            S-->>S: Download Image
+            S-->>S: Process with PaliGemma & VAE
+            S-->>C: JSON Response: { "image": "base64_input_image", "masks": [ { "mask": "base64_mask_data", "coordinates": [x_min,y_min,x_max,y_max] } ] }
+    </pre>
+    <figcaption style="text-align: center">Figure 6. Segment request</figcaption>
+</figure>
+
+<p><strong>Request:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="s2">&quot;segment left wheel&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;image_url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/transformers/tasks/car.jpg&quot;</span>
+<span class="p">}</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;http://localhost:8000/segment&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+</code></pre></div>
+
+<h3>Uploading an Image File</h3>
+<p><strong>Request:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+
+<span class="n">segm_url</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:8000/segment&quot;</span>
+<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;your_image.png&quot;</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">image_file</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="s2">&quot;segment the main object&quot;</span> <span class="c1"># Adjust prompt as needed</span>
+    <span class="p">}</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;image_file&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">image_path</span><span class="p">),</span> <span class="n">image_file</span><span class="p">,</span> <span class="s2">&quot;image/png&quot;</span><span class="p">)</span> <span class="c1"># Or image/jpeg</span>
+    <span class="p">}</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">segm_url</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+</code></pre></div>
+
+<h3>Expected JSON Response Structure:</h3>
+<p><strong>Response:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+  <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;base64_encoded_model_input_image_data&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;masks&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;mask&quot;</span><span class="p">:</span> <span class="s2">&quot;base64_encoded_mask_data_for_object_1&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">x_min</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">y_max</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="c1"># ...more masks if multiple instances of the prompt are found</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>See <a href="https://github.com/JoeJoe1313/PaliGemma-Image-Segmentation/blob/main/example.ipynb">example.ipynb</a> for a demonstration of the segmentation pipeline.</p>
+<h1>Conclusion</h1>
+<p>In this guide, we explored an image segmentation API using PaliGemma 2 mix, FastAPI, Transformers, and Docker. This service enables users to segment objects in images using natural language prompts, opening up a wide range of applications in computer vision, image editing, and data analysis. The containerized application provides a flexible, scalable solution that can be easily deployed across various environments. The combination of FastAPI’s performance and Docker’s portability makes this architecture ideal for production ML applications.</p>
+<p><em>Happy coding!</em></p>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>        </body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>Qwen2.5-vl with MLX-VLM</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+    <meta name="description" content="In this post, we are going to show a tutorial on using the Qwen2.5-VL model with MLX-VLM for visual understanding tasks. We are going to cover:" />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li><a href="/books.html">Books</a></li>
+                                                <li class="active"><a href="/category/machine-learning.html">Machine Learning</a></li>
+                                                <li><a href="/category/mathematics.html">Mathematics</a></li>
+                                                <li><a href="/category/quick-takes.html">Quick Takes</a></li>
+                                <li><a href="/drafts.html">Drafts</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="/2025-02-13-qwen2_5-vl-mlx-vlm.html" rel="bookmark"
+             title="Permalink to Qwen2.5-vl with MLX-VLM">Qwen2.5-vl with MLX-VLM</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2025-02-13T07:00:00+02:00">
+            Published: Thu 13 February 2025
+    </abbr>
+
+    <p>In <a href="/category/machine-learning.html">Machine Learning</a>.</p>
+<p>tags: <a href="/tag/ai.html">ai</a> <a href="/tag/ml.html">ml</a> <a href="/tag/vlm.html">vlm</a> <a href="/tag/mlx-vlm.html">mlx-vlm</a> <a href="/tag/mlx.html">mlx</a> </p>    
+</footer><!-- /.post-info -->        <p>In this post, we are going to show a tutorial on using the <a href="https://github.com/QwenLM/Qwen2.5-VL">Qwen2.5-VL</a> model with <a href="https://github.com/Blaizzy/mlx-vlm">MLX-VLM</a> for visual understanding tasks. We are going to cover:</p>
+<ul>
+<li>Loading the model and image</li>
+<li>Generating a natural language description of an image</li>
+<li>Perform object detection in different scenarios with outputing their bounding boxes in JSON format</li>
+<li>Visualizing the results</li>
+</ul>
+<p>Medium post can be found <a href="https://medium.com/@levchevajoana/qwen2-5-vl-with-mlx-vlm-c4329b40ab87">here</a> and Substack <a href="https://substack.com/home/post/p-157062287">here</a>.</p>
+<h1>Introduction</h1>
+<p><a href="https://github.com/QwenLM/Qwen2.5-VL">Qwen2.5-VL</a> is the latest flagship vision-language model from the Qwen series, representing a significant advancement over its predecessor, <a href="https://arxiv.org/abs/2409.12191">Qwen2-VL</a>. This model is designed to enhance visual understanding and interaction capabilities across various domains. Key features of Qwen2.5-VL include:</p>
+<ul>
+<li><strong>Enhanced Visual Recognition:</strong> The model excels at identifying a wide range of objects, including plants, animals, landmarks, and products. It also proficiently analyzes texts, charts, icons, graphics, and layouts within images.</li>
+<li><strong>Agentic Abilities:</strong> Qwen2.5-VL functions as a visual agent capable of reasoning and dynamically directing tools, enabling operations on devices like computers and mobile phones.</li>
+<li><strong>Advanced Video Comprehension:</strong> The model can understand lengthy videos exceeding one hour and can pinpoint specific events by identifying relevant video segments.</li>
+<li><strong>Accurate Visual Localization:</strong> It can precisely locate objects within images by generating bounding boxes or points and provides structured JSON outputs detailing absolute coordinates and attributes.</li>
+<li><strong>Structured Data Output:</strong> Qwen2.5-VL supports the generation of structured outputs from data such as scanned invoices, forms, and tables, benefiting applications in finance and commerce.</li>
+</ul>
+<p>Performance evaluations indicate that the flagship model, Qwen2.5-VL-72B-Instruct, delivers competitive results across various benchmarks, including college-level problem-solving, mathematics, document comprehension, general question answering, and video understanding. Notably, it demonstrates significant strengths in interpreting documents and diagrams and operates effectively as a visual agent without the need for task-specific fine-tuning.</p>
+<p>For developers and users interested in exploring Qwen2.5-VL, both base and instruct models are available in 3B, 7B, and 72B parameter sizes on platforms like Hugging Face. Additionally, the model can be used through <a href="https://chat.qwenlm.ai">Qwen Chat</a>.</p>
+<h1>Tutorial</h1>
+<h2>Loading Packages</h2>
+<p>We begin by importing the necessary libraries. We are going to use the <code>mlx_vlm</code> package to load and operate with our Qwen2.5-VL model. We also use libraries such as matplotlib for plotting and PIL for image processing.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">patches</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_vlm</span><span class="w"> </span><span class="kn">import</span> <span class="n">apply_chat_template</span><span class="p">,</span> <span class="n">generate</span><span class="p">,</span> <span class="n">load</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_vlm.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+</code></pre></div>
+
+<h2>Loading the Qwen2.5-VL Model and Processor</h2>
+<p>Next, we load the pre-trained <a href="https://huggingface.co/mlx-community/Qwen2.5-VL-3B-Instruct-bf16">Qwen2.5-VL-3B-Instruct-bf16</a> model from the Hugging Face <a href="https://huggingface.co/mlx-community">MLX Community</a> along with its processor using the provided model path. The processor formats and preprocesses both text and image inputs to ensure they are compatible with the model’s architecture.</p>
+<div class="highlight"><pre><span></span><code><span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;mlx-community/Qwen2.5-VL-3B-Instruct-bf16&quot;</span>
+<span class="n">model</span><span class="p">,</span> <span class="n">processor</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">config</span>
+</code></pre></div>
+
+<p>You’ll notice the loading process involves fetching several files if the model hasn’t been downloaded previously. Once completed, the model is ready to process our inputs.</p>
+<h2>Loading and Displaying the Image</h2>
+<p>For this tutorial, we use an image file (<code>person_dog.jpg</code>) which contains a person with a dog. We load the image using a helper function and then display its size.</p>
+<div class="highlight"><pre><span></span><code><span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;person_dog.jpg&quot;</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">load_image</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>  <span class="c1"># Example output: (467, 700)</span>
+</code></pre></div>
+
+<p>The input image is shown below.</p>
+<p><img alt="Input" src="../images/2025-02-13-qwen2_5-vl-mlx-vlm/input.png" style="display: block; margin: 0 auto"></p>
+<h2>Generating an Image Description</h2>
+<p>We now prepare a prompt to describe the image. The prompt is wrapped using the <code>apply_chat_template</code> function, which converts our query into the chat-based format expected by the model.</p>
+<div class="highlight"><pre><span></span><code><span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;Describe the image.&quot;</span>
+<span class="n">formatted_prompt</span> <span class="o">=</span> <span class="n">apply_chat_template</span><span class="p">(</span>
+    <span class="n">processor</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="n">num_images</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>Next, we generate the output by feeding both the formatted prompt and image into the model:</p>
+<div class="highlight"><pre><span></span><code><span class="n">output</span> <span class="o">=</span> <span class="n">generate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">processor</span><span class="p">,</span> <span class="n">formatted_prompt</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Sample Output:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="n">The</span><span class="w"> </span><span class="n">image</span><span class="w"> </span><span class="n">shows</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">person</span><span class="w"> </span><span class="n">standing</span><span class="w"> </span><span class="n">outdoors</span><span class="p">,</span><span class="w"> </span><span class="n">holding</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">small</span><span class="p">,</span><span class="w"> </span><span class="n">fluffy</span><span class="p">,</span><span class="w"> </span><span class="n">light</span><span class="o">-</span><span class="n">colored</span><span class="w"> </span><span class="n">dog</span><span class="o">.</span><span class="w"> </span><span class="n">The</span><span class="w"> </span><span class="n">person</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">wearing</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">dark</span><span class="w"> </span><span class="n">gray</span><span class="w"> </span><span class="n">hoodie</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">word</span><span class="w"> </span><span class="s2">&quot;ROX&quot;</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">blue</span><span class="w"> </span><span class="n">jeans</span><span class="o">.</span><span class="w"> </span><span class="n">The</span><span class="w"> </span><span class="n">background</span><span class="w"> </span><span class="n">features</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">garden</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="n">various</span><span class="w"> </span><span class="n">plants</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">fence</span><span class="p">,</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">there</span><span class="w"> </span><span class="n">are</span><span class="w"> </span><span class="n">some</span><span class="w"> </span><span class="n">fallen</span><span class="w"> </span><span class="n">leaves</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">ground</span><span class="o">.</span><span class="w"> </span><span class="n">The</span><span class="w"> </span><span class="n">setting</span><span class="w"> </span><span class="n">appears</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">residential</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">garden</span><span class="o">.</span>
+</code></pre></div>
+
+<p>This demonstrates how the model can effectively generate descriptive captions for images.</p>
+<h2>Object Detection with Bounding Boxes</h2>
+<p>In addition to descriptions, the Qwen2.5-VL model can help us obtain spatial details such as bounding box coordinates for detected objects. We prepare a prompt asking the model to outline each object’s position in JSON format. We include the system prompt <em>“You are a helpful assistant"</em>, the user prompt describing the task <em>“Outline the position of each object and output all the bbox coordinates in JSON format.”</em>, and the path to the input image.</p>
+<div class="highlight"><pre><span></span><code><span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;You are a helpful assistant&quot;</span>
+<span class="n">prompt</span><span class="o">=</span><span class="s2">&quot;Outline the position of ecah object and output all the bbox coordinates in JSON format.&quot;</span>
+<span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">system_prompt</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">prompt</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="n">image_path</span><span class="p">,</span>
+        <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="n">prompt</span> <span class="o">=</span> <span class="n">apply_chat_template</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">messages</span><span class="p">,</span> <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+
+<p>We then generate the spatial output:</p>
+<div class="highlight"><pre><span></span><code><span class="n">output</span> <span class="o">=</span> <span class="n">generate</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">,</span>
+    <span class="n">processor</span><span class="p">,</span>
+    <span class="n">prompt</span><span class="p">,</span>
+    <span class="n">image</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Sample JSON Output:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="sb">```json</span>
+<span class="p">[</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;bbox_2d&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">170</span><span class="p">,</span><span class="w"> </span><span class="mi">105</span><span class="p">,</span><span class="w"> </span><span class="mi">429</span><span class="p">,</span><span class="w"> </span><span class="mi">699</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;person holding dog&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;bbox_2d&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">180</span><span class="p">,</span><span class="w"> </span><span class="mi">158</span><span class="p">,</span><span class="w"> </span><span class="mi">318</span><span class="p">,</span><span class="w"> </span><span class="mi">504</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dog&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">]</span>
+<span class="sb">```</span>
+</code></pre></div>
+
+<p>This output provides the absolute coordinates of the bounding boxes around the detected objects along with the corresponding label. We should note that the absolute coordinates are with respect to:</p>
+<ul>
+<li>The beginning of the coordinate system which is top left.</li>
+<li>The image size corresponding to the possibly resized image after it’s processed via the <code>processor</code>. We can determine the new size by checking the <code>image_grid_thw</code> value in</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">processor</span><span class="o">.</span><span class="n">image_processor</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+</code></pre></div>
+
+<p>and the <code>patch_size</code> value from <code>processor</code>. Then we simply multiply the height and width values of <code>image_grid_thw</code> with the <code>ptach_size</code>, which by default is <span class="math">\(14\)</span>. Thus, the adjusted bounding box coordinates can be determined by scaling with the original image size divided by the image size after it’s processed by the <code>processor</code>. The code can be seen in the next section in the function <code>normalize_bbox(processor, image, x_min, y_min, x_max, y_max)</code>.</p>
+<p><strong>Observations:</strong></p>
+<ol>
+<li>
+<p>Most of the time the model produces an identical format of the JSON, with the same key-value pairs. If the user prompt didn’t include the word bbox before the word coordinates, the model sometimes produced slightly different key names and/or structure.</p>
+</li>
+<li>
+<p>I achieved accurate and identical JSON outputs when using <a href="https://huggingface.co/mlx-community/Qwen2.5-VL-3B-Instruct-8bit">mlx-community/Qwen2.5-VL-3B-Instruct-8bit</a> and <a href="https://huggingface.co/mlx-community/Qwen2.5-VL-3B-Instruct-bf16">mlx-community/Qwen2.5-VL-3B-Instruct-bf16</a>. In contrast, when I experimented with <a href="https://huggingface.co/mlx-community/Qwen2.5-VL-7B-Instruct-6bit">mlx-community/Qwen2.5-VL-7B-Instruct-6bit</a> and <a href="https://huggingface.co/mlx-community/Qwen2.5-VL-7B-Instruct-8bit">mlx-community/Qwen2.5-VL-7B-Instruct-8bit</a> the generated bounding box coordinates seemed to be shifted along the <span class="math">\(y\)</span>-axis, but otherwise matched the dimensions of the bounding boxes generated with 3B models.</p>
+</li>
+</ol>
+<h2>Visualizing the Bounding Boxes</h2>
+<p>To better understand the spatial outputs, we can visualize these bounding boxes on the image. Below are helper functions that:</p>
+<ul>
+<li>Parse the JSON output</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">parse_bbox</span><span class="p">(</span><span class="n">bbox_str</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">bbox_str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;```json&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;```&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+</code></pre></div>
+
+<ul>
+<li>Normalize bounding box coordinates to match the image dimensions</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">normalize_bbox</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">x_min</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">y_max</span><span class="p">):</span>
+    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">input_height</span><span class="p">,</span> <span class="n">input_width</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">processor</span><span class="o">.</span><span class="n">image_processor</span><span class="p">(</span><span class="n">image</span><span class="p">)[</span><span class="s2">&quot;image_grid_thw&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">14</span>
+    <span class="p">)</span>
+
+    <span class="n">x_min_norm</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x_min</span> <span class="o">/</span> <span class="n">input_width</span> <span class="o">*</span> <span class="n">width</span><span class="p">)</span>
+    <span class="n">y_min_norm</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">y_min</span> <span class="o">/</span> <span class="n">input_height</span> <span class="o">*</span> <span class="n">height</span><span class="p">)</span>
+    <span class="n">x_max_norm</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x_max</span> <span class="o">/</span> <span class="n">input_width</span> <span class="o">*</span> <span class="n">width</span><span class="p">)</span>
+    <span class="n">y_max_norm</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">y_max</span> <span class="o">/</span> <span class="n">input_height</span> <span class="o">*</span> <span class="n">height</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">x_min_norm</span><span class="p">,</span> <span class="n">y_min_norm</span><span class="p">,</span> <span class="n">x_max_norm</span><span class="p">,</span> <span class="n">y_max_norm</span>
+</code></pre></div>
+
+<ul>
+<li>Plot the image with rectangles and labels</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">plot_image_with_bboxes</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">bboxes</span><span class="p">):</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">image</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">image</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bboxes</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">bbox</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">for</span> <span class="n">bbox</span> <span class="ow">in</span> <span class="n">bboxes</span><span class="p">):</span>
+        <span class="n">colors</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">rainbow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">bboxes</span><span class="p">)))</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">bbox</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">bboxes</span><span class="p">,</span> <span class="n">colors</span><span class="p">)):</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">bbox</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">x_min</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">bbox</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bbox_2d&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+            <span class="n">x_min_norm</span><span class="p">,</span> <span class="n">y_min_norm</span><span class="p">,</span> <span class="n">x_max_norm</span><span class="p">,</span> <span class="n">y_max_norm</span> <span class="o">=</span> <span class="n">normalize_bbox</span><span class="p">(</span>
+                <span class="n">processor</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">x_min</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">y_max</span>
+            <span class="p">)</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="n">x_max_norm</span> <span class="o">-</span> <span class="n">x_min_norm</span>
+            <span class="n">height</span> <span class="o">=</span> <span class="n">y_max_norm</span> <span class="o">-</span> <span class="n">y_min_norm</span>
+
+            <span class="n">rect</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">x_min_norm</span><span class="p">,</span> <span class="n">y_min_norm</span><span class="p">),</span>
+                <span class="n">width</span><span class="p">,</span>
+                <span class="n">height</span><span class="p">,</span>
+                <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="n">edgecolor</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                <span class="n">x_min_norm</span><span class="p">,</span>
+                <span class="n">y_min_norm</span><span class="p">,</span>
+                <span class="n">label</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span>
+                <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">),</span>
+            <span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</code></pre></div>
+
+<p>Running the functions below</p>
+<div class="highlight"><pre><span></span><code><span class="n">objects_data</span> <span class="o">=</span> <span class="n">parse_bbox</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+<span class="n">plot_image_with_bboxes</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">bboxes</span><span class="o">=</span><span class="n">objects_data</span><span class="p">)</span>
+</code></pre></div>
+
+<p>display the original image with bounding boxes drawn around the person and the dog, along with their respective labels.</p>
+<p><img alt="Output" src="../images/2025-02-13-qwen2_5-vl-mlx-vlm/output.png" style="display: block; margin: 0 auto"></p>
+<p>This example shows that even the 3B model can accurately detect objects based on a general prompt to detect all objects in the image.</p>
+<h2>More Spatial Understanding Examples</h2>
+<p>We can demonstrate a few other model outputs, corresponding to different spatial understanding tasks.</p>
+<h3>Detect a specific object using descriptions</h3>
+<p><strong>Prompt:</strong> <em>“Outline the position of the dog and output all the bbox coordinates in JSON format.”</em></p>
+<p><strong>Output:</strong></p>
+<p><img alt="Output" src="../images/2025-02-13-qwen2_5-vl-mlx-vlm/output_1.png" style="display: block; margin: 0 auto"></p>
+<p><strong>Observation:</strong> The dog was accurately detected.</p>
+<p>The next examples are taken from the original Qwen2.5-VL <a href="https://github.com/QwenLM/Qwen2.5-VL/blob/main/cookbooks/spatial_understanding.ipynb">cookbook</a> in which they use the model <code>Qwen2.5-VL-7B-Instruct</code>.</p>
+<h3>Reasoning capability</h3>
+<p><strong>Prompt:</strong> <em>“Locate the shadow of the paper fox, report the bbox coordinates in JSON format.”</em></p>
+<p><strong>Note:</strong> The original image size as in the cookbook example was reduced so it can be better processed by the 3B model.</p>
+<p><strong>Output:</strong></p>
+<p><img alt="Output" src="../images/2025-02-13-qwen2_5-vl-mlx-vlm/output_2.png" style="display: block; margin: 0 auto"></p>
+<p><strong>Observation:</strong> The shadow of the paper fox was accurately detected.</p>
+<h3>Understand relationships across different instances</h3>
+<p><strong>Prompt:</strong> <em>“Locate the person who acts bravely, report the bbox coordinates in JSON format.”</em></p>
+<p><strong>Output:</strong></p>
+<p><img alt="Output" src="../images/2025-02-13-qwen2_5-vl-mlx-vlm/output_3.png" style="display: block; margin: 0 auto"></p>
+<p><strong>Observation:</strong> The person who acts bravely was accurately detected.</p>
+<h3>Find a special instance with unique characteristic</h3>
+<p><strong>Prompt:</strong> <em>“If the sun is very glaring, which item in this image should I use? Please locate it in the image with its bbox coordinates and its name and output in JSON format.”</em></p>
+<p><strong>Output:</strong></p>
+<p><img alt="Output" src="../images/2025-02-13-qwen2_5-vl-mlx-vlm/output_4.png" style="display: block; margin: 0 auto"></p>
+<p><strong>Observation:</strong> The image input in the cookbook has a transparent background. I tested the model with a present background and the produced results were not very logical. The above result is of the original image without background. Moreover, their output is <code>glasses</code>, in contrast to our 3B output <code>umbrella</code>, but our output is still logical.</p>
+<hr>
+<p>In the end of their cookbook they mention that the above examples were based on the default system prompt. The system prompt can be changed so that we can obtain other output format like plain text. The supported Qwen2.5-VL formats are:</p>
+<ul>
+<li>bbox-format: JSON</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="s2">&quot;bbox_2d&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;object name/description&quot;</span><span class="p">}</span>
+</code></pre></div>
+
+<ul>
+<li>bbox-format: plain text</li>
+</ul>
+<div class="highlight"><pre><span></span><code>x1,y1,x2,y2 object_name/description
+</code></pre></div>
+
+<ul>
+<li>point-format: XML</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;points</span><span class="w"> </span><span class="err">x</span><span class="w"> </span><span class="err">y</span><span class="nt">&gt;</span>object_name/description<span class="nt">&lt;/points&gt;</span>
+</code></pre></div>
+
+<ul>
+<li>point-format: JSON</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="s2">&quot;point_2d&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;object name/description&quot;</span><span class="p">}</span>
+</code></pre></div>
+
+<p>They also give an example of how to change the system prompt so it ouputs plain text:</p>
+<p><em>“As an AI assistant, you specialize in accurate image object detection, delivering coordinates in plain text format ‘x1,y1,x2,y2 object’.”</em></p>
+<h2>Conclusion</h2>
+<p>In this tutorial, we explored the capabilities of Qwen2.5-VL by using MLX-VLM for various visual understanding tasks. We demonstrated how to load the model and images, generate natural language descriptions, and perform object detection with bounding boxes in different spatial understanding scenarios. Our experiments show that even the 3B model provides accurate object localization and structured JSON outputs, and suggests to be indeed a very powerful vision-language model.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "true";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>        </body>
+</html>

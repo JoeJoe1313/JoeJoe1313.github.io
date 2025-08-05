@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>Dual Contouring of Hermite Data</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+    <meta name="description" content="This post is going to cover the so called Dual Contouring of Hermite Data introduced in the following paper. Dual Contouring is a surface..." />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li><a href="/books.html">Books</a></li>
+                                                <li><a href="/category/machine-learning.html">Machine Learning</a></li>
+                                                <li><a href="/category/mathematics.html">Mathematics</a></li>
+                                                <li><a href="/category/quick-takes.html">Quick Takes</a></li>
+                                <li class="active"><a href="/drafts.html">Drafts</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="/drafts/2025-01-20-dual-contouring.html" rel="bookmark"
+             title="Permalink to Dual Contouring of Hermite Data">Dual Contouring of Hermite Data</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2025-01-20T07:00:00+02:00">
+            Published: Mon 20 January 2025
+    </abbr>
+
+    <p>In <a href="/category/mathematics.html">Mathematics</a>.</p>
+<p>tags: <a href="/tag/mathematics.html">mathematics</a> <a href="/tag/geometry.html">geometry</a> </p>    
+</footer><!-- /.post-info -->        <p>This post is going to cover the so called <strong>Dual Contouring of Hermite Data</strong> introduced in the following <a href="https://www.cs.rice.edu/~jwarren/papers/dualcontour.pdf">paper</a>. Dual Contouring is a surface extraction technique that builds on ideas from methods like Marching Cubes but uses “dual” grid information to place vertices in cells based on Hermite data (i.e. both the intersection points of the isosurface with grid edges and the corresponding normals). The algorithm is particularly good at capturing sharp features and generating crack‐free meshes. In what follows, we are goig to walk through the main ideas and steps in detail.</p>
+<h1>Introduction</h1>
+<p>Traditional methods like <strong>Marching Cubes</strong> compute the intersection of an isosurface with the edges of a uniform grid and then connect these intersection points based on a lookup table. In contrast, on a very high-level, dual contouring</p>
+<ul>
+<li>collects <strong>Hermite data</strong> along cell edges which consists of both the point where the isosurface (approximately) intersects an edge and the unit surface normal (the gradient) at that point</li>
+<li>places a vertex per cell (the “dual” vertex) by optimally fitting these intersection constraints via minimization of a <strong>quadratic error function</strong> (QEF)</li>
+<li>constructs the mesh by connecting these vertices in the dual grid, ensuring that adjacent cells yield coherent connectivity</li>
+</ul>
+<p>This approach not only results in a lower polygon count but is also more adept at preserving sharp features (edges and corners) inherent in the underlying surface. Below we can see a comparison between Marching Cubes and Dual Contouring in <span class="math">\(R^2\)</span>. If we assume that the </p>
+<p><img alt="DC vs MC" src="../images/2025-01-20-dual-contouring/dc_tee_comparison.svg" style="display: block; margin: 0 auto"></p>
+<h1>Hermite Data Extraction</h1>
+<h2>Generating the Data</h2>
+<p>Given a scalar field defined over a grid (for example, a signed distance function), you first:</p>
+<ul>
+<li><strong>Identify Intersections:</strong> For each grid edge, detect a sign change in the scalar field. A sign change indicates that the isosurface (typically the zero level-set) crosses that edge.</li>
+<li><strong>Compute Intersection Points:</strong> Use linear interpolation along the edge to compute the approximate point <span class="math">\(\mathbf{p}_i\)</span> where the scalar field equals zero.</li>
+<li><strong>Estimate Normals:</strong> At each intersection, compute or sample the gradient (normal vector) <span class="math">\(\mathbf{n}_i\)</span> of the scalar field. This pair <span class="math">\((\mathbf{p}_i, \mathbf{n}_i)\)</span> is called Hermite data.</li>
+</ul>
+<p>Each cell in the grid that has one or more intersected edges becomes an “active cell” for which the dual vertex will be computed.</p>
+<h1>Setting Up the Quadratic Error Function (QEF)</h1>
+<p>The core idea is to find, for each active cell, a point <span class="math">\(\mathbf{x}\)</span> that “best fits” all the local Hermite data. For each intersection constraint, the ideal condition is that <span class="math">\(\mathbf{x}\)</span> lies on the tangent plane defined by the intersection point and normal. That is, for a given intersection,</p>
+<div class="math">$$
+\mathbf{n}_i \cdot (\mathbf{x} - \mathbf{p}_i) = 0.
+$$</div>
+<p>In practice, because there will be multiple intersecting edges (and because of noise or nonlinearity in the underlying surface), these constraints are not simultaneously satisfiable exactly. Instead, one minimizes the sum of squared distances of <span class="math">\(\mathbf{x}\)</span> from each tangent plane. This gives rise to the quadratic error function (QEF):</p>
+<div class="math">$$
+Q(\mathbf{x}) = \sum_{i} \left( \mathbf{n}_i \cdot (\mathbf{x} - \mathbf{p}_i) \right)^2.
+$$</div>
+<h2>Expressing the QEF</h2>
+<p>Expanding the squared terms, we have:</p>
+<div class="math">$$
+Q(\mathbf{x}) = \sum_{i} \left( \mathbf{n}_i^\top \mathbf{x} - \mathbf{n}_i^\top \mathbf{p}_i \right)^2.
+$$</div>
+<p>This is a quadratic function in <span class="math">\(\mathbf{x}\)</span> and can be written in the standard form:</p>
+<div class="math">$$
+Q(\mathbf{x}) = \mathbf{x}^\top A \mathbf{x} - 2\,\mathbf{b}^\top \mathbf{x} + c,
+$$</div>
+<p>where the matrix <span class="math">\(A\)</span> and vector <span class="math">\(\mathbf{b}\)</span> are derived from the normals and intersection points:</p>
+<ul>
+<li><span class="math">\(A = \sum_i \mathbf{n}_i \mathbf{n}_i^\top\)</span>,</li>
+<li><span class="math">\(\mathbf{b} = \sum_i (\mathbf{n}_i \mathbf{n}_i^\top \mathbf{p}_i)\)</span>,</li>
+<li><span class="math">\(c = \sum_i (\mathbf{n}_i^\top \mathbf{p}_i)^2\)</span> (which is constant with respect to <span class="math">\(\mathbf{x}\)</span>).</li>
+</ul>
+<p>Minimizing <span class="math">\(Q(\mathbf{x})\)</span> is a classic least-squares problem.</p>
+<h2>Solving for the Optimal Vertex</h2>
+<p>To find the minimizer, take the derivative with respect to <span class="math">\(\mathbf{x}\)</span> and set it to zero:</p>
+<div class="math">$$
+\frac{\partial Q}{\partial \mathbf{x}} = 2 A \mathbf{x} - 2 \mathbf{b} = 0 \quad \Longrightarrow \quad A \mathbf{x} = \mathbf{b}.
+$$</div>
+<p>In most cases, <span class="math">\(A\)</span> is a small (typically 3×3) symmetric matrix, and the system can be solved efficiently (using, for instance, a pseudo-inverse if <span class="math">\(A\)</span> is not full rank).</p>
+<p>The resulting <span class="math">\(\mathbf{x}\)</span> is the optimal vertex for that cell—it minimizes the squared distances to all the tangent planes defined by the Hermite data.</p>
+<h1>Dual Grid and Mesh Connectivity</h1>
+<h2>The Dual Grid Concept</h2>
+<p>Instead of placing vertices at grid intersections (as in Marching Cubes), dual contouring places one vertex per active cell. These vertices lie somewhere within the cell (or on its boundary) and represent the isosurface “inside” that cell.</p>
+<h2>Connecting the Vertices</h2>
+<p>The connectivity (i.e., which vertices should be connected by edges) is determined by the topology of the original grid:</p>
+<ul>
+<li><strong>Dual Faces:</strong> Each face of the dual mesh corresponds to an edge of the original grid that is shared by two active cells. If the isosurface passes through that grid edge, then the vertices computed in the two adjacent cells are connected by an edge.</li>
+<li><strong>Dual Cells:</strong> Likewise, the polygons (faces) of the final mesh are built by connecting these dual vertices in a manner that respects the grid connectivity.</li>
+</ul>
+<p>This strategy produces a polygonal mesh that is crack-free even when the underlying isosurface has sharp features.</p>
+<h1>Handling Sharp Features and Ambiguities</h1>
+<p>One of the strengths of dual contouring is its ability to capture sharp edges and corners:</p>
+<ul>
+<li>
+<p><strong>Sharp Features:</strong> In regions where the surface has discontinuities in its derivative (e.g., along creases or corners), the Hermite data will reflect these sharp changes. The QEF minimization naturally tends to “balance” between the different tangent plane constraints, and—with appropriate additional constraints or weighting—it can preserve these features.</p>
+</li>
+<li>
+<p><strong>Vertex Clamping:</strong> Sometimes the minimization might produce an optimal vertex <span class="math">\(\mathbf{x}\)</span> that lies outside the original cell, which can lead to topological artifacts (“cracks”) in the final mesh. In such cases, a <strong>clamping procedure</strong> is applied: the vertex is repositioned (often by projecting it back into the cell or finding a nearby point that still nearly minimizes the QEF) so that it lies within the cell.</p>
+</li>
+</ul>
+<p>These techniques help ensure that the final mesh accurately represents both smooth and sharp features of the underlying surface.</p>
+<h1>Extensions: Adaptive Dual Contouring</h1>
+<p>The original dual contouring algorithm was designed for uniform grids, but the paper also discusses extensions to <strong>adaptive octrees</strong>:</p>
+<ul>
+<li>
+<p><strong>Variable Cell Sizes:</strong> By using an octree (or other adaptive data structure), cells can be subdivided where more detail is needed (for example, near sharp features or high curvature regions) and kept larger where the surface is smooth.</p>
+</li>
+<li>
+<p><strong>Crack-Free Transitions:</strong> Special care is taken when connecting cells of different sizes. The algorithm defines strategies to “stitch” together the dual vertices from cells of varying resolutions so that the resulting mesh remains crack-free.</p>
+</li>
+</ul>
+<p>This adaptive version allows for efficient representations of complex surfaces with variable levels of detail.</p>
+<h1>Summary of the Algorithm</h1>
+<p>To encapsulate, here is a step-by-step summary of the dual contouring algorithm as introduced in the paper:</p>
+<p><strong>Data Generation:</strong></p>
+<ul>
+<li>Evaluate the scalar field on a grid.</li>
+<li>For each grid edge where a sign change occurs, compute the intersection point <span class="math">\(\mathbf{p}_i\)</span> and the normal <span class="math">\(\mathbf{n}_i\)</span> (the Hermite data).</li>
+</ul>
+<p><strong>Cell Processing:</strong></p>
+<ul>
+<li>Identify active cells (cells with one or more intersected edges).</li>
+<li>For each active cell, collect all Hermite data from the intersected edges.</li>
+</ul>
+<p><strong>QEF Setup and Minimization:</strong></p>
+<ul>
+<li>Formulate the QEF: 
+     <div class="math">$$
+     Q(\mathbf{x}) = \sum_i \left( \mathbf{n}_i \cdot (\mathbf{x} - \mathbf{p}_i) \right)^2.
+     $$</div>
+</li>
+<li>Solve the linear system <span class="math">\(A \mathbf{x} = \mathbf{b}\)</span> to obtain the optimal vertex <span class="math">\(\mathbf{x}\)</span>.</li>
+<li>Apply clamping if necessary to ensure <span class="math">\(\mathbf{x}\)</span> lies within the cell.</li>
+</ul>
+<p><strong>Mesh Construction:</strong></p>
+<ul>
+<li>Treat each active cell as a dual vertex location.</li>
+<li>Connect dual vertices of adjacent cells to form the edges and faces of the isosurface.</li>
+<li>Handle connectivity carefully (especially at cell boundaries) to avoid cracks.</li>
+</ul>
+<p><strong>Adaptive Processing (if applicable):</strong></p>
+<ul>
+<li>Use an adaptive grid (e.g., octree) to locally refine the mesh.</li>
+<li>Ensure that transitions between different cell sizes are managed so that the final mesh is coherent and crack-free.</li>
+</ul>
+<h1>Concluding Remarks</h1>
+<p>Dual contouring, as presented by Ju et al., offers a robust way to extract isosurfaces from volumetric data. By leveraging both intersection positions and normals (the Hermite data) and by formulating a QEF minimization problem for each cell, the method produces meshes that capture fine geometric details—including sharp features—while remaining topologically consistent. Its adaptability to varying resolutions further enhances its utility in applications ranging from computer graphics to scientific visualization.</p>
+<h1>STH</h1>
+<p>Dual Contouring: 2D Circle Example</p>
+<p><img alt="alt text" src="../images/2025-01-20-dual-contouring/circle_grid.png" style="display: block; margin: 0 auto" width="75%"></p>
+<p><img alt="alt text" src="../images/2025-01-20-dual-contouring/dc.png" width="50%"><img alt="alt text" src="../images/2025-01-20-dual-contouring/dc_quad.png" width="50%"></p>
+<p>Dual Contouring 3D Sphere:</p>
+<iframe src="/code/2025-01-20-dual-contouring/dc_3d.html" width="100%" height="600px" frameborder="10"></iframe>
+
+<h2>1. Introduction</h2>
+<p>Dual contouring is an isosurface extraction technique that, in contrast to methods such as Marching Cubes, computes a vertex per cell (or “dual cell”) by fitting an implicit surface to Hermite data. Here, <em>Hermite data</em> refers to the pair <span class="math">\((\mathbf{p}_i, \mathbf{n}_i)\)</span>, where <span class="math">\(\mathbf{p}_i \in \mathbb{R}^3\)</span> is an approximate point of intersection between the isosurface (typically the zero level-set) and a grid edge, and <span class="math">\(\mathbf{n}_i \in \mathbb{R}^3\)</span> is the corresponding unit normal (often derived from the gradient of the underlying scalar field). By locally solving a constrained minimization problem based on these data, dual contouring yields a mesh that is capable of representing both smooth surfaces and sharp features.</p>
+<h2>2. Mathematical Formulation</h2>
+<h3>2.1. Hermite Data Generation</h3>
+<p>Consider a scalar field <span class="math">\(f: \mathbb{R}^3 \to \mathbb{R}\)</span> defined over a regular grid. The isosurface is defined implicitly by the zero level-set:
+</p>
+<div class="math">$$
+\mathcal{S} = \{ \mathbf{x} \in \mathbb{R}^3 \,:\, f(\mathbf{x}) = 0 \}.
+$$</div>
+<p>
+For each grid edge connecting two vertices <span class="math">\(\mathbf{v}_a\)</span> and <span class="math">\(\mathbf{v}_b\)</span>, a sign change in <span class="math">\(f\)</span> (i.e., <span class="math">\(f(\mathbf{v}_a) f(\mathbf{v}_b) &lt; 0\)</span>) implies that an intersection exists along that edge. An approximate intersection point <span class="math">\(\mathbf{p}_i\)</span> is computed, commonly via linear interpolation:
+</p>
+<div class="math">$$
+\mathbf{p}_i = \mathbf{v}_a + \frac{|f(\mathbf{v}_a)|}{|f(\mathbf{v}_a)|+|f(\mathbf{v}_b)|} \, (\mathbf{v}_b - \mathbf{v}_a).
+$$</div>
+<p>
+The surface normal <span class="math">\(\mathbf{n}_i\)</span> at <span class="math">\(\mathbf{p}_i\)</span> is typically estimated as
+</p>
+<div class="math">$$
+\mathbf{n}_i = \frac{\nabla f(\mathbf{p}_i)}{\|\nabla f(\mathbf{p}_i)\|},
+$$</div>
+<p>
+thereby yielding the Hermite pair <span class="math">\((\mathbf{p}_i, \mathbf{n}_i)\)</span>.</p>
+<h3>2.2. Local Approximation via Tangent Planes</h3>
+<p>In an active cell (a cell with at least one intersected edge), assume we have a set of <span class="math">\(m\)</span> Hermite samples <span class="math">\(\{(\mathbf{p}_i, \mathbf{n}_i)\}_{i=1}^m\)</span>. Under the assumption that the surface is locally well approximated by its tangent planes, each sample defines the local constraint
+</p>
+<div class="math">$$
+\mathbf{n}_i \cdot (\mathbf{x} - \mathbf{p}_i) = 0, \quad i = 1,\dots, m,
+$$</div>
+<p>
+where <span class="math">\(\mathbf{x} \in \mathbb{R}^3\)</span> is a candidate vertex location. Since noise, discretization errors, or intrinsic surface curvature render the set of equations overdetermined, one seeks an <span class="math">\(\mathbf{x}\)</span> that minimizes the cumulative squared error.</p>
+<h2>3. Quadratic Error Function (QEF) Minimization</h2>
+<h3>3.1. Formulation of the QEF</h3>
+<p>The quadratic error function (QEF) is defined as:
+</p>
+<div class="math">$$
+Q(\mathbf{x}) = \sum_{i=1}^m \left( \mathbf{n}_i \cdot (\mathbf{x} - \mathbf{p}_i) \right)^2.
+$$</div>
+<p>
+This formulation can be rewritten in quadratic form. Defining the residual for each constraint as <span class="math">\(r_i(\mathbf{x}) = \mathbf{n}_i^\top \mathbf{x} - \mathbf{n}_i^\top \mathbf{p}_i\)</span>, we have
+</p>
+<div class="math">$$
+Q(\mathbf{x}) = \sum_{i=1}^m \left( r_i(\mathbf{x}) \right)^2.
+$$</div>
+<p>
+Expanding this sum, one obtains
+</p>
+<div class="math">$$
+Q(\mathbf{x}) = \mathbf{x}^\top A \mathbf{x} - 2\, \mathbf{b}^\top \mathbf{x} + c,
+$$</div>
+<p>
+where
+- The symmetric positive semi-definite matrix <span class="math">\(A\)</span> is given by
+  </p>
+<div class="math">$$
+  A = \sum_{i=1}^m \mathbf{n}_i \mathbf{n}_i^\top,
+  $$</div>
+<p>
+- The vector <span class="math">\(\mathbf{b}\)</span> is defined as
+  </p>
+<div class="math">$$
+  \mathbf{b} = \sum_{i=1}^m \left( \mathbf{n}_i \mathbf{n}_i^\top \mathbf{p}_i \right),
+  $$</div>
+<p>
+- And <span class="math">\(c\)</span> is a constant independent of <span class="math">\(\mathbf{x}\)</span>:
+  </p>
+<div class="math">$$
+  c = \sum_{i=1}^m \left( \mathbf{n}_i^\top \mathbf{p}_i \right)^2.
+  $$</div>
+<h3>3.2. Optimality Conditions</h3>
+<p>To determine the optimal vertex position <span class="math">\(\mathbf{x}^*\)</span> that minimizes <span class="math">\(Q(\mathbf{x})\)</span>, one sets the gradient of <span class="math">\(Q\)</span> with respect to <span class="math">\(\mathbf{x}\)</span> to zero:
+</p>
+<div class="math">$$
+\nabla Q(\mathbf{x}) = 2 A \mathbf{x} - 2 \mathbf{b} = \mathbf{0}.
+$$</div>
+<p>
+Thus, the first-order optimality condition is
+</p>
+<div class="math">$$
+A \mathbf{x}^* = \mathbf{b}.
+$$</div>
+<p>
+Since <span class="math">\(A\)</span> is a <span class="math">\(3 \times 3\)</span> matrix, standard linear algebra techniques (e.g., Cholesky decomposition, singular value decomposition (SVD) in the case of rank deficiency) are employed to solve for <span class="math">\(\mathbf{x}^*\)</span>. This solution represents the point that minimizes the aggregate squared distance to the tangent planes defined by the Hermite data.</p>
+<h2>4. Dual Grid Construction and Mesh Connectivity</h2>
+<h3>4.1. Dual Grid Concept</h3>
+<p>In dual contouring, each active cell (i.e., a cell that is intersected by the isosurface) is associated with a dual vertex located at <span class="math">\(\mathbf{x}^*\)</span>. This dual vertex is typically not coincident with any of the original grid vertices, but rather is positioned optimally within (or near) the cell to best approximate the local surface geometry.</p>
+<h3>4.2. Connectivity Determination</h3>
+<p>The connectivity of the resulting mesh is derived from the combinatorial structure of the original grid. In particular:
+- <strong>Dual Faces:</strong> Consider a grid edge that is shared by two adjacent cells. If the edge is intersected by the isosurface (as determined by a sign change in <span class="math">\(f\)</span>), then the corresponding dual vertices from the two adjacent cells are connected by an edge in the output mesh.
+- <strong>Dual Cells:</strong> The complete isosurface is obtained by “stitching” together the dual vertices through the dual faces. The underlying grid topology ensures that the resultant mesh is manifold and, with proper care, free of cracks.</p>
+<p>This dual construction inherently differs from the direct (primal) isosurface extraction methods and is one of the reasons why dual contouring is adept at preserving sharp features.</p>
+<h2>5. Preservation of Sharp Features</h2>
+<p>A significant advantage of dual contouring is its capacity to capture sharp geometric features such as edges and corners. The presence of discontinuities in surface normals is naturally encoded in the Hermite data. The minimization of the QEF, when formulated with multiple intersecting tangent planes (which may not be co-planar), tends to produce a vertex <span class="math">\(\mathbf{x}^*\)</span> that is positioned near the intersection of the underlying planes. This behavior effectively preserves sharp features.  </p>
+<p>To further reinforce the representation of sharp features, additional constraints or weighting strategies may be incorporated into the QEF formulation. For example, if a particular normal is deemed more reliable (or if it corresponds to a feature edge), its contribution in the sum may be amplified.</p>
+<h2>6. Handling Artifacts: Clamping and Cell Constraints</h2>
+<p>In some instances, the minimization of <span class="math">\(Q(\mathbf{x})\)</span> may yield a solution <span class="math">\(\mathbf{x}^*\)</span> that lies outside the spatial bounds of the cell. Such an outcome can lead to topological inconsistencies or "cracks" in the mesh. To mitigate this, the algorithm employs a <strong>clamping procedure</strong> where <span class="math">\(\mathbf{x}^*\)</span> is projected back into the cell or constrained to lie within its boundaries. This may be achieved via:
+- <strong>Projection Methods:</strong> Compute the closest point within the cell to <span class="math">\(\mathbf{x}^*\)</span> that still approximately minimizes <span class="math">\(Q\)</span>.
+- <strong>Penalty Methods:</strong> Augment the QEF with penalty terms that heavily penalize positions outside the cell.</p>
+<h2>7. Adaptive Dual Contouring</h2>
+<p>The original method is defined on uniform grids, but an extension to adaptive grids (e.g., octrees) is provided. In an adaptive setting:
+- <strong>Variable Resolution:</strong> Cells are subdivided adaptively in regions where the isosurface exhibits high curvature or where fine features are present.
+- <strong>Crack-Free Stitching:</strong> Special algorithms are implemented to ensure that the interface between cells of different sizes is smooth and that no gaps (cracks) are introduced in the mesh.
+- <strong>Hierarchical Data Structures:</strong> The use of octrees or similar data structures allows for efficient spatial queries and local refinement.</p>
+<p>The adaptive dual contouring algorithm thus preserves both the efficiency and the high-quality representation of the surface.</p>
+<h2>8. Summary of the Algorithm</h2>
+<p>The dual contouring algorithm proceeds as follows:</p>
+<ol>
+<li><strong>Data Generation:</strong></li>
+<li>Evaluate the scalar field <span class="math">\(f(\mathbf{x})\)</span> at the grid vertices.</li>
+<li>
+<p>For each edge where <span class="math">\(f\)</span> changes sign, compute the intersection <span class="math">\(\mathbf{p}_i\)</span> via linear interpolation and estimate the corresponding normal <span class="math">\(\mathbf{n}_i\)</span>.</p>
+</li>
+<li>
+<p><strong>Active Cell Identification:</strong></p>
+</li>
+<li>
+<p>Mark cells that contain one or more intersected edges.</p>
+</li>
+<li>
+<p><strong>QEF Construction and Minimization (per active cell):</strong></p>
+</li>
+<li>Formulate the QEF:
+     <div class="math">$$
+     Q(\mathbf{x}) = \sum_{i=1}^m \left( \mathbf{n}_i \cdot (\mathbf{x} - \mathbf{p}_i) \right)^2.
+     $$</div>
+</li>
+<li>Assemble the matrix <span class="math">\(A\)</span> and vector <span class="math">\(\mathbf{b}\)</span>.</li>
+<li>Solve the linear system <span class="math">\(A \mathbf{x}^* = \mathbf{b}\)</span> to obtain the optimal vertex position <span class="math">\(\mathbf{x}^*\)</span>.</li>
+<li>
+<p>If <span class="math">\(\mathbf{x}^*\)</span> falls outside the cell, apply a clamping or correction procedure.</p>
+</li>
+<li>
+<p><strong>Dual Mesh Generation:</strong></p>
+</li>
+<li>Assign each active cell a dual vertex at <span class="math">\(\mathbf{x}^*\)</span>.</li>
+<li>
+<p>Establish mesh connectivity by linking dual vertices corresponding to adjacent cells that share an intersected grid edge.</p>
+</li>
+<li>
+<p><strong>Adaptive Refinement (if applicable):</strong></p>
+</li>
+<li>Use an adaptive grid structure to refine regions of interest.</li>
+<li>Implement strategies for stitching cells of different resolutions to maintain a crack-free surface.</li>
+</ol>
+<h2>9. Concluding Remarks</h2>
+<p>Dual contouring of Hermite data provides a robust framework for isosurface extraction that is both mathematically sound and computationally efficient. By minimizing a well-defined quadratic error function derived from local tangent plane constraints, the method ensures that the extracted vertex optimally represents the underlying geometry—even in the presence of sharp features. The dual grid paradigm further simplifies the connectivity determination and facilitates the extension to adaptive spatial discretizations.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "true";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>        </body>
+</html>
