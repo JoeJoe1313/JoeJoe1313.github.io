@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>Fourier Method for the Wave Equation</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+    <meta name="description" content="In this post we are going to explore the Fourier method for solving the 1D and 2D wave equations. The method is more known under the name of the..." />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li><a href="/books.html">Books</a></li>
+                                                <li><a href="/category/machine-learning.html">Machine Learning</a></li>
+                                                <li><a href="/category/mathematics.html">Mathematics</a></li>
+                                                <li><a href="/category/quick-takes.html">Quick Takes</a></li>
+                                <li class="active"><a href="/drafts.html">Drafts</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="/drafts/2024-12-19-fourier-method-wave-equation.html" rel="bookmark"
+             title="Permalink to Fourier Method for the Wave Equation">Fourier Method for the Wave Equation</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2024-12-19T07:00:00+02:00">
+            Published: Thu 19 December 2024
+    </abbr>
+
+    <p>In <a href="/category/mathematics.html">Mathematics</a>.</p>
+<p>tags: <a href="/tag/mathematics.html">mathematics</a> </p>    
+</footer><!-- /.post-info -->        <p>In this post we are going to explore the Fourier method for solving the 1D and 2D wave equations. The method is more known under the name of the method of separation of variables. For the 1D wave equation we are going to show the application of the method to a fixed string, and for the 2D wave equation we are going to apply the method to a rectangular membrane and a circular membrane. We are also going to attempt to outline the physical interpretations of all scenarios.</p>
+<h1>1D Wave Equation</h1>
+<p>The 1D wave equation is of the form</p>
+<div class="math">$$
+u_{tt} = a^2 u_{xx}.
+$$</div>
+<h2>Fixed String</h2>
+<p>First, let's take a look at the model of a string with length <span class="math">\(l\)</span> which is also fixed at both ends:</p>
+<div class="math">\begin{equation}
+\left\{\begin{aligned}
+u_{tt} = a^2 u_{xx}, \\ 
+u(x, 0) = \varphi_1(x),\\
+u_t(x, 0) = \varphi_2(x), \\
+u(0, t) = u(l, t) = 0.
+\end{aligned}\right.
+\end{equation}</div>
+<p>A visualisation of the string can be seen in the figure below.</p>
+<p><center>
+<img alt="Fixed String" src="/images/2024-12-19-fourier-method-wave-equation/fixed_string.svg" width="60%">
+</center></p>
+<p>We start solving the equation by taking into account only the boundary conditions <span class="math">\(u(0, t) = u(l, t) = 0\)</span>. The idea is to find solution <span class="math">\(u(x, t)\)</span> of the form</p>
+<div class="math">$$
+u(x, t) = X(x)T(t).
+$$</div>
+<p>We substitute this form of the solution into the wave equation and get </p>
+<div class="math">$$
+\frac{1}{a^2} T^{\prime\prime}(t)X(x) = T(t)X^{\prime\prime}(x),
+$$</div>
+<p>further divding by <span class="math">\(X(x)T(t)\)</span> leads to</p>
+<div class="math">$$
+\frac{1}{a^2} \frac{T^{\prime\prime}(t)}{T(t)} = \frac{X^{\prime\prime}(x)}{X(x)}.
+$$</div>
+<p>We have two functions of independent variables which are equal. This is only possible if they are equal to the same constant. Therefore, let</p>
+<div class="math">$$
+\frac{1}{a^2} \frac{T^{\prime\prime}(t)}{T(t)} = \frac{X^{\prime\prime}(x)}{X(x)} = -\lambda,
+$$</div>
+<p>producing the following two equeations:</p>
+<div class="math">$$
+T^{\prime\prime}(t) + a^2 \lambda T(t) = 0
+$$</div>
+<p>and</p>
+<div class="math">$$\label{eq:ref}
+X^{\prime\prime}(x) + \lambda X(x) = 0. \tag{*}
+$$</div>
+<p>Let's begin with solving the second equation. The boundary conditions give</p>
+<div class="math">$$
+X(0)T(t) = 0 \quad \text{and} \quad X(l)T(t) = 0.
+$$</div>
+<p>Because we are interested only in non-trivial solutions and thus <span class="math">\(T \neq 0\)</span>, we have</p>
+<div class="math">$$\label{eq:ref2}
+X(0) = 0 \quad \text{and} \quad X(l) = 0. \tag{**}
+$$</div>
+<p>Now, we have to find the non-trivial solutions for <span class="math">\(X(x)\)</span> satisfying</p>
+<div class="math">$$
+\left\{\begin{align*}
+X^{\prime\prime}(x) + \lambda X(x) = 0, \\
+X(0) = 0, \quad X(l) = 0.
+\end{align*}\right.
+$$</div>
+<p>The above problem is an example of the so called <strong>Sturm-Liouville problem</strong>. In order to find the general solution of the second order linear homogeneous differential equation with constant coefficients <span class="math">\(\eqref{eq:ref}\)</span> we should solve its characteristic equation</p>
+<div class="math">$$
+r^2 + \lambda = 0.
+$$</div>
+<ul>
+<li>
+<p>If <span class="math">\(\lambda &lt; 0\)</span>, then <span class="math">\(r_{1, 2} = \pm \sqrt{-\lambda}\)</span>, hence the general solution is
+<div class="math">$$
+X(x) = c_1 e^{\sqrt{-\lambda}x} + c_2 e^{-\sqrt{-\lambda}x}
+$$</div>
+for some constants <span class="math">\(c_1\)</span> and <span class="math">\(c_2\)</span>. In order to determine the constants we substitute the above solution into the boundary conditions <span class="math">\(\eqref{eq:ref2}\)</span> and get the system
+<div class="math">$$
+\left\{\begin{align*}
+c_1 + c_2 = 0, \\
+c_1 e^{\sqrt{-\lambda}l} + c_2 e^{-\sqrt{-\lambda}l} = 0. 
+\end{align*}\right.
+$$</div>
+This results in <span class="math">\(c_1 = c_2 = 0\)</span>, meaning our Sturm-Liouville problem doesn't have a non-zero solution for <span class="math">\(\lambda &lt; 0\)</span>.</p>
+</li>
+<li>
+<p>If <span class="math">\(\lambda = 0\)</span>, then <span class="math">\(r_1 = r_2 = 0\)</span> and the general solution is
+<div class="math">$$
+X(x) = c_1 + c_2 x.
+$$</div>
+Substituing it into the boundary conditions <span class="math">\(\eqref{eq:ref2}\)</span> again lead to <span class="math">\(c_1 = c_2 = 0\)</span>, hence no non-zero solutions of our Sturm-Liouville problem for <span class="math">\(\lambda \leq 0\)</span>.</p>
+</li>
+<li>
+<p>If <span class="math">\(\lambda &gt; 0\)</span>, then <span class="math">\(r_{1, 2} = \pm i \sqrt{\lambda}\)</span>, and the general solution becomes
+<div class="math">$$
+X(x) = c_1 \cos{\left( \sqrt{\lambda} x \right)} + c_2 \sin{\left(\sqrt{\lambda}x\right)}.
+$$</div>
+Substituting into the boundary conditions <span class="math">\(\eqref{eq:ref2}\)</span> results in
+<div class="math">$$
+\left\{\begin{align*}
+c_1 = 0, \\
+c_2 \sin{\left(\sqrt{\lambda}l\right)} = 0
+\end{align*}\right.
+$$</div>
+If <span class="math">\(c_2 = 0\)</span>, then <span class="math">\(X(x) \equiv 0\)</span> which is a trivial solution. Therefore, we set <span class="math">\(c_2 \neq 0\)</span> and hence
+<div class="math">$$
+\sin{\left(\sqrt{\lambda}l\right)} = 0,
+$$</div>
+giving <span class="math">\(\sqrt{\lambda}l = k \pi\)</span>, <span class="math">\(k = \pm 1, \pm 2, ...\)</span>. Theerfore,
+<div class="math">$$
+\lambda = \lambda_k = \left(\frac{k \pi}{l}\right)^2,
+$$</div>
+meaning eigenvalues exist when <span class="math">\(\lambda &gt; 0\)</span>. The eigenfunctions corresponding to the above eigenvalues are
+<div class="math">$$
+X_k(x) = \sin{\left(\frac{k \pi x}{l}\right)}, \quad k &gt; 0, k \in N.
+$$</div>
+</p>
+</li>
+</ul>
+<p>Going back to <span class="math">\(T^{\prime\prime}(t) + a^2 \lambda T(t) = 0\)</span>, solving in analogical way, when <span class="math">\(\lambda = \lambda_k\)</span> the solution becomes</p>
+<div class="math">$$
+T_k(t) = A_k \cos{\left(\frac{ak\pi}{l}t\right)} + B_k \sin{\left(\frac{ak\pi}{l}t\right)}
+$$</div>
+<p>for some constants <span class="math">\(A_k\)</span> and <span class="math">\(B_k\)</span>. Hence,</p>
+<div class="math">$$
+u_k(x,t) = X_k(x) T_k(t) = \left(A_k \cos{\left(\frac{ak\pi}{l}t\right)} + B_k \sin{\left(\frac{ak\pi}{l}t\right)}\right) \sin{\left(\frac{k \pi x}{l}\right)}, \quad k &gt; 0, k \in N
+$$</div>
+<p>are solutions to our wave equation, also satisfying the boundary conditions. Since our equation is linear, forming a linear system with its conditions, the <strong>principle of superposition</strong> is valid. In other words, if <span class="math">\(u_1, u_2, ..., u_n\)</span> are solutions of our system, then</p>
+<div class="math">$$
+\alpha_1 u_1 + \alpha_2 u_2 + ... + \alpha_n u_n
+$$</div>
+<p>for some constants <span class="math">\(\alpha_1, \alpha_2, ..., \alpha_n\)</span> is also a solution of the system. But in our case we have an infinite number of functions <span class="math">\(u_1, u_2, ...\)</span> which satisfy the linear system. Therefore, we need the <strong>generalised superposition principle</strong> stating that in such case</p>
+<div class="math">$$
+u = \sum_n^{\infty} \alpha_n u_n
+$$</div>
+<p>for some arbitrary constants <span class="math">\(\alpha_n\)</span> is a solution to the system if the series converges uniformly and is twice differentiable termwise. This generalisation is a Lemma and should be prooved. The proof can be found in ...</p>
+<p>Assuming we have prooved the said Lemma, we can state that our system has a solution of the form</p>
+<div class="math">$$
+u(x, t) = \sum_{k=1}
+^{\infty} u_k(x, t) = \sum_{k=1}^{\infty} \left(A_k \cos{\left(\frac{ak\pi}{l}t\right)} + B_k \sin{\left(\frac{ak\pi}{l}t\right)}\right) \sin{\left(\frac{k \pi x}{l}\right)}.
+$$</div>
+<p>The next task we have to tackle is to determine the coefficients <span class="math">\(A_k\)</span> and <span class="math">\(B_k\)</span>. We can achieve this by using the initial conditions </p>
+<div class="math">$$
+u(x, 0) = \varphi_1(x), \quad \text{and} \quad u_t(x, 0) = \varphi_2(x).
+$$</div>
+<p>We get</p>
+<div class="math">$$
+u(x, 0) = \sum_{k=1}
+^{\infty} A_k \sin{\left(\frac{k \pi x}{l}\right)} = \varphi_1(x)
+$$</div>
+<p>and</p>
+<div class="math">$$
+u_t(x, 0) = \sum_{k=1}^{\infty} \frac{ak\pi}{l} B_k \sin{\left(\frac{k \pi x}{l}\right)} = \varphi_2(x).
+$$</div>
+<p>Now, we have to expand both <span class="math">\(\varphi_1(x)\)</span> and <span class="math">\(\varphi_2(x)\)</span> into series in terms of sines only (why?). We have</p>
+<div class="math">$$
+\varphi_1(x) = \sum_{k=1}^{\infty} \varphi_k^{(1)} \sin{\left(\frac{k \pi}{l}x\right)}
+$$</div>
+<p>and</p>
+<div class="math">$$
+\varphi_2(x) = \sum_{k=1}^{\infty} \varphi_k^{(2)} \sin{\left(\frac{k \pi}{l}x\right)}.
+$$</div>
+<p>By the Fourier series theroem of uniqueness, we get</p>
+<div class="math">$$
+A_k = \varphi_k^{(1)} \quad \text{and} \quad B_k = \frac{l}{ak\pi} \varphi_k^{(2)},
+$$</div>
+<p>or (why?)</p>
+<div class="math">$$
+A_k = \frac{2}{l} \int_{0}^{l} \varphi_1(x) \sin{\left(\frac{k \pi}{l}x\right)} \mathrm{d}x
+$$</div>
+<p>and</p>
+<div class="math">$$
+B_k = \frac{2}{ak\pi} \int_{0}^{l} \varphi_2(x) \sin{\left(\frac{k \pi}{l}x\right)} \mathrm{d}x.
+$$</div>
+<p>We are left with the task of the covergence of the infinite series. We have to explore the following series</p>
+<div class="math">$$
+|u(x, t)| \leq \sum_{k=1}^{\infty}(|A_k| + |B_k|),
+$$</div>
+<div class="math">$$
+|u_t(x, t)| \leq \sum_{k=1}^{\infty}\frac{ak\pi}{l}(|A_k| + |B_k|),
+$$</div>
+<div class="math">$$
+|u_x(x, t)| \leq \sum_{k=1}^{\infty}\frac{k\pi}{l}(|A_k| + |B_k|),
+$$</div>
+<div class="math">$$
+|u_{tt}(x, t)| \leq \sum_{k=1}^{\infty}\frac{a^2 k^2 \pi^2}{l^2}(|A_k| + |B_k|),
+$$</div>
+<div class="math">$$
+|u_{xx}(x, t)| \leq \sum_{k=1}^{\infty}\frac{k^2 \pi^2}{l^2}(|A_k| + |B_k|).
+$$</div>
+<p>If the series on the right side (majorizing series) converge then the series on the left would also converge and the needed differentiation would exist. It is enough (why?) for the following series to converge</p>
+<div class="math">$$
+\sum_{k=1}^{\infty} k^j \left(|\varphi_k^{(1)}| + \frac{2}{ak\pi}|\varphi_k^{(2)}|\right), j = 0, 1, 2.
+$$</div>
+<p>This is possible only if </p>
+<div class="math">$$
+\left\{\begin{align*}
+\sum_{k=1}^{\infty} k^j |\varphi_k^{(1)}|, \\
+\sum_{k=1}^{\infty} k^{j-1} |\varphi_k^{(2)}|,
+\end{align*}\right. \quad j = 0, 1, 2.
+$$</div>
+<p>converge. From Calculus we know (theorem) that if <span class="math">\(\varphi(x)\)</span> is <span class="math">\(m\)</span>-times differentiable then</p>
+<div class="math">$$
+\sum_{k=1}^{\infty} k^{m-1} |\varphi_k|
+$$</div>
+<p>convergres. Therefore, in order for all the majorzing series to converge it is enough <span class="math">\(\varphi_1(x)\)</span> to be <span class="math">\(3\)</span>-times differentiable, and <span class="math">\(\varphi_2(x)\)</span> to be <span class="math">\(2\)</span>-times differentiable.</p>
+<p>Finally, we should note a few things about the expansion of <span class="math">\(\varphi_1(x)\)</span> and <span class="math">\(\varphi_2(x)\)</span> into sine series. We have to note that in order to do that the function needs to be continued as an odd function which my lead to loss of the regularity of the lower derivatives. Let <span class="math">\(\tilde{\varphi}_1(x)\)</span> be the continuation of <span class="math">\(\varphi_1(x)\)</span> as an odd function (see the Figure below) defined as</p>
+<p><center>
+<img alt="Odd continuation of a function" src="/images/2024-12-19-fourier-method-wave-equation/odd_continuation.png" width="50%">
+</center></p>
+<div class="math">$$
+\tilde{\varphi}_1(x) = \left\{\begin{align*}
+\varphi_1(x), \quad 0 \leq x \leq l, \\
+-\varphi_1(-x), \quad -l \leq x \leq 0.
+\end{align*}\right.
+$$</div>
+<p>Hence, in order for it to be continous and continously differentibale we need to enforce the following condition</p>
+<div class="math">$$
+\varphi_1(0) = \varphi_1(l) = 0.
+$$</div>
+<p>To summarise, in order for <span class="math">\(\sum_{k=1}^{\infty} \varphi_k^{(1)} \sin{\left( \frac{k\pi}{l}x\right)}\)</span> to converge in <span class="math">\([0, l]\)</span> it is necessary to enforce the above conditions to have zero values at both ends of the interval. As for the second derivative, if it exists it would be continuous as well. Similarly, for the third derivative to exist we enforce</p>
+<div class="math">$$
+\varphi_1^{\prime\prime}(0) = \varphi_1^{\prime\prime}(l) = 0
+$$</div>
+<p>and obtain the corresponding necessary condition</p>
+<div class="math">$$
+\varphi_2(0) = \varphi_2(l) = 0.
+$$</div>
+<p>Finally, after these enforced conditions we can conclude that (tehorem)</p>
+<div class="math">$$
+u(x, t) = \sum_{k=1}^{\infty} \left(A_k \cos{\left(\frac{ak\pi}{l}t\right)} + B_k \sin{\left(\frac{ak\pi}{l}t\right)}\right) \sin{\left(\frac{k \pi x}{l}\right)}
+$$</div>
+<p>is a regular solution of the problem.</p>
+<p><strong>Physical interpretation:</strong></p>
+<p>If we go back to the eigenfunction</p>
+<div class="math">$$
+u_k(x,t) = \left(A_k \cos{\left(\frac{ak\pi}{l}t\right)} + B_k \sin{\left(\frac{ak\pi}{l}t\right)}\right) \sin{\left(\frac{k \pi}{l}x\right)}, \quad k &gt; 0, k \in N
+$$</div>
+<p>we can rewrite it as</p>
+<div class="math">$$
+u_k(x,t) = \sqrt{A_k^2 + B_k^2} \sin{\left(\frac{k \pi}{l}x\right)} \sin{\left(\frac{ak\pi}{l}t + \phi_k\right)}, \quad k \in N,
+$$</div>
+<p>where</p>
+<div class="math">$$
+\tan{(\phi_k)} = \frac{A_k}{B_k}.
+$$</div>
+<p>We can translate this as the points of the string to oscillate at the frequency <span class="math">\(\omega_k = \frac{ak\pi}{l}\)</span> with phase <span class="math">\(\phi_k\)</span>. The amplitude is dependant on <span class="math">\(x\)</span> and is given by
+</p>
+<div class="math">$$
+F_k = \sqrt{A_k^2 + B_k^2} \sin{\left(\frac{k\pi}{l}x\right)}.
+$$</div>
+<p>The <span class="math">\(u_k(x, t)\)</span> waves are called <strong>standing-waves</strong>. Depending on the values of <span class="math">\(k\)</span> we have the following scenarios:</p>
+<ul>
+<li>When <span class="math">\(k = 1\)</span> there are <span class="math">\(2\)</span> motionless points which are the ends of the (fixed) string</li>
+<li>When <span class="math">\(k = 2\)</span> a third moitonless point <span class="math">\(x = \frac{l}{2}\)</span> is added</li>
+</ul>
+<p>These motionless points are called <strong>nodes</strong> of the standing wave. In general, <span class="math">\(u_k(x, t)\)</span> has <span class="math">\((k + 1)\)</span> nodes located ate <span class="math">\(0, \frac{1}{k}l, \frac{2}{k}l, ..., \frac{k-1}{k}l, l\)</span>. The maximum amplitude is achieved in the middle points between two nodes. These points are called <strong>crests</strong>. The fundamental tone, or the lowest tone, has frequency of <span class="math">\(\omega_1 = \frac{a\pi}{l}\)</span>. The frequencies <span class="math">\(\omega_k\)</span> are called <strong>harmonics</strong>, while the higher tones corresponding to <span class="math">\(\omega_k\)</span>, <span class="math">\(k = 2, 3, ...\)</span> are called <strong>overtones</strong>. It is quite natural to notice that the higher the value of <span class="math">\(k\)</span> the rapidly lower the amplitude of <span class="math">\(u_k(x, t)\)</span> becomes. Meaning, the effect from the higher harmonics all combined influences the quality of the sound. The below figure shows the harmonics for <span class="math">\(k = 1, 2, 3\)</span>.</p>
+<p><center>
+<img alt="Fixed Strings" src="/images/2024-12-19-fourier-method-wave-equation/harmonics.svg" width="70%">
+</center></p>
+<h1>2D Wave Equation</h1>
+<p>The 2D wave equation is of the form</p>
+<div class="math">$$\label{eq:tdwave}
+\frac{\partial^2 u}{\partial t^2} = a^2 \Delta{u} = a^2\left(\frac{\partial^2 u}{\partial^2 x^2} + \frac{\partial^2 u}{\partial y^2}\right). \tag{1}
+$$</div>
+<h2>Rectangular Membrane</h2>
+<p>Let's assume we have a rectangular membrane with sides of length <span class="math">\(l_1\)</span> and <span class="math">\(l_2\)</span>. Let's also assume it is fastened along the edges. A visaulisation can be seen below.</p>
+<p><center>
+<img alt="Rectangular Membrane" src="/images/2024-12-19-fourier-method-wave-equation/rectangular_membrane.svg" width="50%">
+</center></p>
+<p>We can describe the problem via the model</p>
+<div class="math">$$
+\left\{\begin{align*}
+\frac{\partial^2 u}{\partial t^2} = a^2 \Delta{u} = a^2\left(\frac{\partial^2 u}{\partial^2 x^2} + \frac{\partial^2 u}{\partial y^2}\right), \quad 0 &lt; x &lt; l_1, \quad 0 &lt; y &lt; l_2, \\
+u|_{\Gamma} = 0, \\
+u|_{t=0} = \varphi(x, y), u_t|_{t=0} = \psi(x, y),
+\end{align*}\right.
+$$</div>
+<p>also with boundary conditions coming from the rectangular boundary <span class="math">\(\Gamma\)</span></p>
+<div class="math">$$
+\left\{\begin{align*}
+u(0, y, t) = 0, \quad u(x, 0, t) = 0, \\
+u(l_1, y, t) = 0, \quad u(x, l_2, t) = 0.
+\end{align*}\right.
+$$</div>
+<p>A visualisation of the problem can be seen below.</p>
+<p><center>
+<img alt="Rectangular Membrane 3D" src="/images/2024-12-19-fourier-method-wave-equation/rectangular_membrane_3d.svg" width="50%">
+</center></p>
+<p>As in the 1D wave equation, we are going to apply the Fourier method, meaning we are looking for a solution of the form</p>
+<div class="math">$$
+U(x, y, t) = T(t)W(x, y).
+$$</div>
+<p>Substituting into the 2D wave equation <span class="math">\(\eqref{eq:tdwave}\)</span> we get</p>
+<div class="math">$$
+T^{\prime\prime}W = a^2 T \Delta{W}.
+$$</div>
+<p>Then, we divide by <span class="math">\(a^2TW\)</span> and get</p>
+<div class="math">$$
+\frac{T^{\prime\prime}}{a^2T} = \frac{\Delta{W}}{W} = - \lambda^2,
+$$</div>
+<p>leading to the following equations</p>
+<div class="math">$$
+T^{\prime\prime} + \lambda^2 a^2 T = 0
+$$</div>
+<p>and</p>
+<div class="math">$$
+\Delta{W} + \lambda^2 W = 0. \quad \text{(Helmholtz equation)}
+$$</div>
+<p>Now, we should do the same and apply the Fourier method to the Helmoltz equation. We are looking for a solution of the form</p>
+<div class="math">$$
+W(x, y) = X(x) Y(y).
+$$</div>
+<p>Substitution leads to</p>
+<div class="math">$$
+X^{\prime\prime}Y + XY^{\prime\prime} + \lambda^2 XY = 0.
+$$</div>
+<p>Further, dividing by <span class="math">\(XY\)</span> gives</p>
+<div class="math">$$
+-\frac{X^{\prime\prime}}{X} = \frac{Y^{\prime\prime}}{Y} + \lambda^2 = \alpha^2.
+$$</div>
+<p>Once again, we obtain the following to equations</p>
+<div class="math">$$
+X^{\prime\prime} + \alpha^2 X = 0,
+$$</div>
+<p>and</p>
+<div class="math">$$
+Y^{\prime\prime} + \beta^2Y = 0,
+$$</div>
+<p>where</p>
+<div class="math">$$
+\lambda^2 = \alpha^2 + \beta^2.
+$$</div>
+<p>Now, the boundary conditions take the forms</p>
+<div class="math">$$
+X(0) Y(y) T(t) = 0, \quad \text{and} \quad X(l_1) Y(y) T(t) = 0,
+$$</div>
+<p>and because we are looking for non-trivial solutions meaning <span class="math">\(T(t) \neq 0\)</span> and <span class="math">\(Y(y) \neq 0\)</span> identically, it follows</p>
+<div class="math">$$
+X(0) = X(l_1) = 0.
+$$</div>
+<p>Now, with the same logic first we have the boundary conditions</p>
+<div class="math">$$
+X(x)Y(0)T(t) = 0, \quad \text{and} \quad X(x)Y(l_2)T(t) = 0,
+$$</div>
+<p>then since <span class="math">\(X(x) \neq 0\)</span>, and <span class="math">\(T(t) \neq 0\)</span> it follows</p>
+<div class="math">$$
+Y(0) = Y(l_2) = 0.
+$$</div>
+<p>We obtain the following Sturm-Liouville problms</p>
+<div class="math">$$
+\left\{\begin{align*}
+X^{\prime\prime} + \alpha^2 X = 0, \\
+X(0) = X(l_1) = 0,
+\end{align*}\right.
+$$</div>
+<p>and</p>
+<div class="math">$$
+\left\{\begin{align*}
+Y^{\prime\prime} + \beta^2Y = 0, \\
+Y(0) = Y(l_2) = 0,
+\end{align*}\right.
+$$</div>
+<p>with eigenvalues and corresponing eigenfunctions, respectively,</p>
+<div class="math">$$
+\alpha_k = \frac{k\pi}{l_1}, k = 1,2,..., \quad X_k(x) = \sin{\left(\frac{k\pi}{l_1}x\right)}
+$$</div>
+<p>and</p>
+<div class="math">$$
+\beta_k = \frac{n\pi}{l_2}, n = 1,2,..., \quad Y_n(y) = \sin{\left(\frac{n\pi}{l_2}y\right)}.
+$$</div>
+<p>As defined earlier, to every pair <span class="math">\(\alpha_k\)</span>, <span class="math">\(\beta_k\)</span> there is a corresponding <span class="math">\(\lambda_{kn}^2 = \alpha_k^2 + \beta_k^2\)</span>. This is a Dirichlet eigenvalue of the Laplacian in our rectangular membrane. For each <span class="math">\(\lambda_{kn}\)</span> we have</p>
+<div class="math">$$
+\lambda_{kn} = \sqrt{\alpha_k^2 + \beta_k^2} = \pi \sqrt{\frac{k^2}{l_1^2} + \frac{n^2}{l_2^2}}
+$$</div>
+<p>and hence the corresponding general solution of <span class="math">\(T^{\prime\prime} + \lambda_{kn}^2 a^2 T = 0\)</span> is</p>
+<div class="math">$$
+T_{kn}(t) = A_{kn}\cos{(a\lambda_{kn}t)} + B_{kn}\sin{(a\lambda_{kn}t)}.
+$$</div>
+<p>Again, by the superposition principle, the solution of our 2D wave equation on rectangular membrane is sought in the form</p>
+<div class="math">$$
+u(x, y, t) = \sum_{k,n=1}^{\infty}\left(A_{kn}\cos{(a\lambda_{kn}t)} + B_{kn}\sin{(a\lambda_{kn}t)}\right)\sin{\left(\frac{k\pi}{l_1}x\right)}\sin{\left(\frac{n\pi}{l_2}y\right)}.
+$$</div>
+<p>...</p>
+<div class="math">$$
+u(x, y, 0) = \sum_{k,n=1}^{\infty}A_{kn}\sin{\left(\frac{k\pi}{l_1}x\right)}\sin{\left(\frac{n\pi}{l_2}y\right)} = \varphi(x, y),
+$$</div>
+<p>and</p>
+<div class="math">$$
+u_t(x, y, 0) = \sum_{k,n=1}^{\infty}B_{kn}a\lambda_{kn}\sin{\left(\frac{k\pi}{l_1}x\right)}\sin{\left(\frac{n\pi}{l_2}y\right)} = \psi(x, y).
+$$</div>
+<p>...</p>
+<div class="math">$$
+\omega_{kn}(x, y) := \sin{\left(\frac{k\pi}{l_1}x\right)}\sin{\left(\frac{n\pi}{l_2}y\right)}
+$$</div>
+<p>...</p>
+<div class="math">$$
+\int_0^{l_1} \int_0^{l_2} \omega_{kn}(x, y) \omega_{rs}(x, y) \mathrm{d}x \mathrm{d}y = \left\{\begin{align*}
+0, \quad k \neq r \quad \text{or} \quad n \neq s, \\
+\frac{l_1 l_2}{4}, \quad k = r \quad \text{and} \quad n = s.
+\end{align*}\right.
+$$</div>
+<p>...</p>
+<div class="math">$$
+A_{kn} = \frac{4}{l_1 l_2} \int_0^{l_1} \int_0^{l_2} \varphi(x, y) \sin{\left(\frac{k\pi}{l_1}x\right)} \sin{\left(\frac{n\pi}{l_2}y\right)} \mathrm{d}x \mathrm{d}y,
+$$</div>
+<p>and</p>
+<div class="math">$$
+B_{kn} = \frac{4}{l_1 l_2 a \lambda_{kn}} \int_0^{l_1} \int_0^{l_2} \psi(x, y) \sin{\left(\frac{k\pi}{l_1}x\right)} \sin{\left(\frac{n\pi}{l_2}y\right)} \mathrm{d}x \mathrm{d}y.
+$$</div>
+<h2>Circular Membrane</h2>
+<p>Let's assume we have a circular membrane with radius of length <span class="math">\(\rho\)</span>. Let's also assume it is fastened along the edges. A visaulisation can be seen below.</p>
+<p><center>
+<img alt="Circular Membrane" src="/images/2024-12-19-fourier-method-wave-equation/circular_membrane.svg" width="50%">
+</center></p>
+<p>... the polar change of coordinates</p>
+<div class="math">$$
+\left\{\begin{align*}
+x = \rho \cos{(\varphi)}, \\
+y = \rho \sin{(\varphi)}.
+\end{align*}\right.
+$$</div>
+<p>A visualisation of the polar change can be seen below.</p>
+<p><center>
+<img alt="Polar Change" src="/images/2024-12-19-fourier-method-wave-equation/polar_change.svg" width="75%">
+</center></p>
+<p>Now, let's ...</p>
+<div class="math">$$
+\frac{\partial^2 u}{\partial t^2} = a^2 \Delta{u} = a^2\left(\frac{\partial^2 u}{\partial^2 x^2} + \frac{\partial^2 u}{\partial y^2}\right)
+$$</div>
+<div class="math">$$
+x^2 + y^2 = \rho^2 (\cos^2{(\varphi)} + \sin^2{(\varphi)}) = \rho^2, \\
+\rho = \sqrt{x^2 + y^2}
+$$</div>
+<p>and</p>
+<div class="math">$$
+\frac{y}{x} = \frac{\rho \sin{(\varphi)}}{\rho \cos{(\varphi)}} = \tan{(\varphi)}, \\
+\varphi = \arctan{\left(\frac{y}{x}\right)}
+$$</div>
+<div class="math">$$
+u = u(x, y, t) \quad \text{becomes} \quad u(\rho(x, y), \varphi(x, y), t)
+$$</div>
+<p>First partial derivative, Chain rule</p>
+<div class="math">$$
+\frac{\partial u}{\partial x} = \frac{\partial u}{\partial \rho} \frac{\partial \rho}{\partial x} + \frac{\partial u}{\partial \varphi} \frac{\partial \varphi}{\partial x},
+$$</div>
+<p>and</p>
+<div class="math">$$
+\frac{\partial u}{\partial y} = \frac{\partial u}{\partial \rho} \frac{\partial \rho}{\partial y} + \frac{\partial u}{\partial \varphi} \frac{\partial \varphi}{\partial y}.
+$$</div>
+<p>Now, for <span class="math">\(\rho\)</span></p>
+<div class="math">$$
+\frac{\partial \rho}{\partial x} = \frac{1}{2} \frac{1}{\sqrt{(x^2 + y^2)}} (2x) = \frac{x}{\rho} = \cos{(\varphi)},
+$$</div>
+<div class="math">$$
+\frac{\partial \rho}{\partial y} = \frac{1}{2} \frac{1}{\sqrt{(x^2 + y^2)}} (2y) = \frac{y}{\rho} = \sin{(\varphi)},
+$$</div>
+<p>and for <span class="math">\(\varphi\)</span></p>
+<div class="math">$$
+\frac{\partial \varphi}{\partial x} = \frac{1}{1 + \left(\frac{y}{x}\right)^2} y \left(-\frac{1}{x^2}\right) = -\frac{y}{x^2 + y^2} = - \frac{\rho \sin{(\varphi)}}{\rho^2} = - \frac{\sin{(\varphi)}}{\rho},
+$$</div>
+<div class="math">$$
+\frac{\partial \varphi}{\partial y} = \frac{1}{1 + \left(\frac{y}{x}\right)^2} \left(\frac{1}{x}\right) = \frac{x}{x^2 + y^2} = \frac{\rho \cos{(\varphi)}}{\rho^2} = \frac{\cos{(\varphi)}}{\rho}.
+$$</div>
+<p>Therefore,</p>
+<div class="math">$$
+\frac{\partial u}{\partial x} = \cos{(\varphi)} \frac{\partial u}{\partial \rho}  - \frac{\sin{(\varphi)}}{\rho} \frac{\partial u}{\partial \varphi},
+$$</div>
+<div class="math">$$
+\frac{\partial u}{\partial y} = \sin{(\varphi)} \frac{\partial u}{\partial \rho} + \frac{\cos{(\varphi)}}{\rho} \frac{\partial u}{\partial \varphi}.
+$$</div>
+<p>Second order derivatives</p>
+<div class="math">$$
+\frac{\partial^2 u}{\partial x^2} = ...
+$$</div>
+<p>...</p>
+<p>A visualisation of the problem can be seen below.</p>
+<p><center>
+<img alt="Circular Membrane 3D" src="/images/2024-12-19-fourier-method-wave-equation/circular_membrane_3d.svg" width="50%">
+</center></p>
+<p>...</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "true";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>        </body>
+</html>

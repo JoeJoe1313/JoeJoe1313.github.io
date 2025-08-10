@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Cubic Hermite Curve</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.18.0/plotly.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: Arial, sans-serif;
+      background: white;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 100%;
+      margin: 0 auto;
+      min-height: calc(100vh - 20px);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #333;
+      margin: 10px 0;
+      font-size: 1.2em;
+    }
+    
+    #hermite-plot {
+      width: 100%;
+      height: 70vh;
+      min-height: 400px;
+      max-height: 600px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin: 10px 0;
+      background: white;
+      flex-grow: 1;
+      /* disable default touch-zoom/scroll so our pointer handling works */
+      touch-action: none;
+    }
+    
+    .info-box {
+      background: #e3f2fd;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 10px 0;
+      border-left: 4px solid #2196f3;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .info-box h4 {
+      margin: 0 0 8px 0;
+      color: #1976d2;
+      font-size: 1em;
+    }
+    
+    .info-box ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+    
+    .info-box li {
+      margin: 4px 0;
+      font-size: 0.9em;
+      line-height: 1.4;
+    }
+    
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    
+    .control-group {
+      flex: 1;
+      min-width: 120px;
+      background: white;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
+    
+    .control-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: 0.9em;
+      color: #333;
+    }
+    
+    .control-group input {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    
+    .reset-btn {
+      background: #ff5722;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9em;
+      font-weight: bold;
+      width: 100%;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .reset-btn:hover {
+      background: #e64a19;
+    }
+    
+    /* Mobile-specific adjustments */
+    @media (max-width: 768px) {
+      body {
+        padding: 5px;
+      }
+      
+      h1 {
+        font-size: 1.1em;
+        margin: 5px 0;
+      }
+      
+      #hermite-plot {
+        height: 60vh;
+        min-height: 350px;
+      }
+      
+      .info-box {
+        padding: 10px;
+      }
+      
+      .info-box h4 {
+        font-size: 0.95em;
+      }
+      
+      .info-box li {
+        font-size: 0.85em;
+      }
+      
+      .controls {
+        flex-direction: column;
+      }
+      
+      .control-group {
+        min-width: auto;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      #hermite-plot {
+        height: 55vh;
+        min-height: 300px;
+      }
+      
+      .info-box {
+        padding: 8px;
+      }
+      
+      .info-box h4 {
+        font-size: 0.9em;
+      }
+      
+      .info-box li {
+        font-size: 0.8em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Interactive Cubic Hermite Curve</h1>
+    
+    <div id="hermite-plot"></div>
+
+    <div class="info-box">
+      <h4>Touch/Mouse Controls:</h4>
+      <ul>
+        <li><strong>Drag blue/green dots:</strong> Move curve endpoints (p0, p1)</li>
+        <li><strong>Drag red/purple dots:</strong> Adjust tangent vectors (v0, v1)</li>
+        <li><strong>Touch and hold:</strong> Works on mobile devices</li>
+      </ul>
+    </div>
+
+
+
+    <button class="reset-btn" onclick="resetToDefaults()">Reset to Default</button>
+  </div>
+
+  <script>
+  (function() {
+    // Hermite curve basis functions
+    function hermiteCurve(t, p0, v0, p1, v1) {
+      const h0 = 1 - 3*t*t + 2*t*t*t;
+      const h1 = t - 2*t*t + t*t*t;
+      const h2 = -t*t + t*t*t;
+      const h3 = 3*t*t - 2*t*t*t;
+      return [
+        h0*p0[0] + h1*v0[0] + h2*v1[0] + h3*p1[0],
+        h0*p0[1] + h1*v0[1] + h2*v1[1] + h3*p1[1]
+      ];
+    }
+
+    function generateCurvePoints(p0, v0, p1, v1) {
+      const pts = [];
+      const N = 100;
+      for (let i = 0; i <= N; i++) {
+        pts.push(hermiteCurve(i/N, p0, v0, p1, v1));
+      }
+      return pts;
+    }
+
+    function createArrowAnnotation(start, end, color) {
+      const dx = end[0]-start[0], dy = end[1]-start[1];
+      if (Math.hypot(dx,dy) < 0.01) return null;
+      return {
+        ax: start[0], ay: start[1],
+        x:   end[0],   y:   end[1],
+        axref: 'x', ayref: 'y',
+        xref:  'x', yref:  'y',
+        arrowhead: 2, arrowsize: 1.5, arrowwidth: 2,
+        arrowcolor: color, showarrow: true
+      };
+    }
+
+    // State
+    const defaultState = {
+      p0: [0,0],  v0: [1,0.5],
+      p1: [2,1],  v1: [-0.8,0.3]
+    };
+    
+    const state = {
+      p0: [...defaultState.p0],  v0: [...defaultState.v0],
+      p1: [...defaultState.p1],  v1: [...defaultState.v1]
+    };
+    
+    let plotInitialized = false;
+
+    function updateInputs() {
+      // No inputs to update since they were removed
+    }
+
+    function updatePlot() {
+      const pts = generateCurvePoints(state.p0, state.v0, state.p1, state.v1);
+      const curveX = pts.map(p=>p[0]), curveY = pts.map(p=>p[1]);
+      const v0_end = [state.p0[0]+state.v0[0], state.p0[1]+state.v0[1]];
+      const v1_end = [state.p1[0]+state.v1[0], state.p1[1]+state.v1[1]];
+
+      if (!plotInitialized) {
+        const data = [
+          { x: curveX, y: curveY, mode:'lines', name:'Curve', line:{color:'black',width:3}, hoverinfo:'skip' },
+          { x:[state.p0[0],state.p1[0]], y:[state.p0[1],state.p1[1]],
+            mode:'markers', name:'Control Points',
+            marker:{ color:['#1f77b4','#2ca02c'], size:15, line:{color:'white',width:2} },
+            text:['p0','p1'], textposition:'top center', textfont:{size:12}
+          },
+          { x:[state.p0[0],v0_end[0]], y:[state.p0[1],v0_end[1]],
+            mode:'lines', name:'v0', line:{color:'#d62728',width:2}, hoverinfo:'skip'
+          },
+          { x:[state.p1[0],v1_end[0]], y:[state.p1[1],v1_end[1]],
+            mode:'lines', name:'v1', line:{color:'#9467bd',width:2}, hoverinfo:'skip'
+          },
+          { x:[v0_end[0],v1_end[0]], y:[v0_end[1],v1_end[1]],
+            mode:'markers', name:'Vector Ends',
+            marker:{ color:['#d62728','#9467bd'], size:12, line:{color:'white',width:2} },
+            text:['v0','v1'], textposition:'top center', textfont:{size:12}
+          }
+        ];
+        
+        const layout = {
+          xaxis:{title:'X', scaleanchor:'y', scaleratio:1, showgrid:true, gridcolor:'#f0f0f0'},
+          yaxis:{title:'Y', showgrid:true, gridcolor:'#f0f0f0'},
+          annotations: [
+            createArrowAnnotation(state.p0, v0_end, '#d62728'),
+            createArrowAnnotation(state.p1, v1_end, '#9467bd')
+          ].filter(a=>a),
+          dragmode:false, 
+          hovermode:'closest', 
+          plot_bgcolor:'white',
+          paper_bgcolor:'white',
+          margin: {l: 50, r: 20, t: 20, b: 50},
+          showlegend: false
+        };
+        
+        const config = {
+          responsive: true,
+          displayModeBar: false, // Hide toolbar on mobile for cleaner look
+          scrollZoom: false,
+          doubleClick: false,
+          showTips: false
+        };
+        
+        Plotly.newPlot('hermite-plot', data, layout, config);
+        plotInitialized = true;
+      } else {
+        const update = {
+          x: [
+            curveX,
+            [state.p0[0],state.p1[0]],
+            [state.p0[0],v0_end[0]],
+            [state.p1[0],v1_end[0]],
+            [v0_end[0],v1_end[0]]
+          ],
+          y: [
+            curveY,
+            [state.p0[1],state.p1[1]],
+            [state.p0[1],v0_end[1]],
+            [state.p1[1],v1_end[1]],
+            [v0_end[1],v1_end[1]]
+          ]
+        };
+        Plotly.restyle('hermite-plot', update, [0,1,2,3,4]);
+        const anns = [
+          createArrowAnnotation(state.p0, v0_end, '#d62728'),
+          createArrowAnnotation(state.p1, v1_end, '#9467bd')
+        ].filter(a=>a);
+        Plotly.relayout('hermite-plot', { annotations: anns });
+      }
+      
+      updateInputs();
+    }
+
+    // Convert event to data coords
+    function clientToData(e) {
+      const plotDiv = document.getElementById('hermite-plot');
+      const margin = plotDiv._fullLayout.margin;
+      const bb = plotDiv.getBoundingClientRect();
+      const px = e.clientX - bb.left - margin.l;
+      const py = e.clientY - bb.top  - margin.t;
+      return [
+        plotDiv._fullLayout.xaxis.p2l(px),
+        plotDiv._fullLayout.yaxis.p2l(py)
+      ];
+    }
+
+    function setupEventHandlers() {
+      const plotDiv = document.getElementById('hermite-plot');
+      const dragRect = plotDiv.querySelector('.nsewdrag');
+      let isDragging = false, dragTarget = null;
+      
+      // Increased tolerance for touch devices
+      const isTouchDevice = 'ontouchstart' in window;
+      const tolerance = isTouchDevice ? 0.5 : 0.3;
+
+      function onDown(e) {
+        const [mx, my] = clientToData(e);
+        const tol = tolerance;
+        const d0 = Math.hypot(mx - state.p0[0], my - state.p0[1]);
+        const d1 = Math.hypot(mx - state.p1[0], my - state.p1[1]);
+        const v0e = [state.p0[0]+state.v0[0], state.p0[1]+state.v0[1]];
+        const d2 = Math.hypot(mx - v0e[0], my - v0e[1]);
+        const v1e = [state.p1[0]+state.v1[0], state.p1[1]+state.v1[1]];
+        const d3 = Math.hypot(mx - v1e[0], my - v1e[1]);
+
+        if (d0 < tol) dragTarget = 'p0';
+        else if (d1 < tol) dragTarget = 'p1';
+        else if (d2 < tol) dragTarget = 'v0';
+        else if (d3 < tol) dragTarget = 'v1';
+
+        if (dragTarget) {
+          isDragging = true;
+          plotDiv.style.cursor = 'grabbing';
+          e.preventDefault();
+        }
+      }
+
+      function onMove(e) {
+        if (!isDragging) return;
+        const [mx, my] = clientToData(e);
+        if (dragTarget === 'p0')      state.p0 = [mx,my];
+        else if (dragTarget === 'p1') state.p1 = [mx,my];
+        else if (dragTarget === 'v0') state.v0 = [mx - state.p0[0], my - state.p0[1]];
+        else if (dragTarget === 'v1') state.v1 = [mx - state.p1[0], my - state.p1[1]];
+        updatePlot();
+        e.preventDefault();
+      }
+
+      function onUp() {
+        if (isDragging) {
+          isDragging = false;
+          dragTarget = null;
+          plotDiv.style.cursor = 'default';
+        }
+      }
+
+      // Enhanced pointer events for better touch support
+      dragRect.addEventListener('pointerdown', onDown, { passive: false });
+      document.addEventListener('pointermove', onMove, { passive: false });
+      document.addEventListener('pointerup', onUp);
+      
+      // Additional touch event handling for better mobile support
+      dragRect.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const mouseEvent = new MouseEvent('pointerdown', {
+          clientX: touch.clientX,
+          clientY: touch.clientY
+        });
+        onDown(mouseEvent);
+      }, { passive: false });
+    }
+
+    // Input change handlers (removed since inputs are now readonly)
+    function setupInputHandlers() {
+      // P0 and P1 inputs are readonly - only dragging is allowed
+      // This ensures users can only modify control points through direct manipulation
+    }
+
+    // Reset function
+    window.resetToDefaults = function() {
+      state.p0 = [...defaultState.p0];
+      state.v0 = [...defaultState.v0];
+      state.p1 = [...defaultState.p1];
+      state.v1 = [...defaultState.v1];
+      updatePlot();
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updatePlot();
+      setupEventHandlers();
+      setupInputHandlers();
+    });
+  })();
+  </script>
+</body>
+</html>

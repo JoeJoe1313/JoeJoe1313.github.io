@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>String Motion Animation</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.18.0/plotly.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      text-align: center;
+      color: #333;
+      margin: 0 0 20px 0;
+      font-size: 1.8em;
+    }
+    
+    #string-plot {
+      width: 100%;
+      height: 500px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: white;
+      margin-bottom: 20px;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    
+    .control-btn {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    
+    .control-btn:hover {
+      background: #45a049;
+    }
+    
+    .control-btn:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+    }
+    
+    .control-btn.pause {
+      background: #f44336;
+    }
+    
+    .control-btn.pause:hover {
+      background: #da190b;
+    }
+    
+    .control-btn.reset {
+      background: #2196F3;
+    }
+    
+    .control-btn.reset:hover {
+      background: #0b7dda;
+    }
+    
+    .time-slider {
+      flex: 1;
+      min-width: 200px;
+      max-width: 400px;
+      margin: 0 20px;
+    }
+    
+    .time-display {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #333;
+      min-width: 100px;
+      text-align: center;
+    }
+    
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+      
+      h1 {
+        font-size: 1.4em;
+      }
+      
+      #string-plot {
+        height: 350px;
+      }
+      
+      .controls {
+        flex-direction: row;
+        gap: 10px;
+      }
+      
+      .time-slider {
+        min-width: 100%;
+        margin: 10px 0;
+      }
+      
+      .control-btn {
+        width: 100%;
+        max-width: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Vibrating String Animation</h1>
+    
+    <div id="string-plot"></div>
+    
+    <div class="controls">
+      <button class="control-btn" id="playBtn" onclick="togglePlay()">Play</button>
+      <button class="control-btn reset" onclick="resetAnimation()">Reset</button>
+      <div class="time-slider">
+        <input type="range" id="timeSlider" min="0" max="30" step="1" value="0" onchange="setTime(this.value)">
+      </div>
+      <div class="time-display" id="timeDisplay">t = 0.00</div>
+    </div>
+  </div>
+
+  <script>
+  (function() {
+    // Constants
+    const L = Math.PI * Math.sqrt(5);
+    const a = 2 / 3;
+    const tmax = 30;
+    const numPoints = 101;
+    const numTimeSteps = 31;
+    
+    // Generate x values
+    const x = [];
+    for (let i = 0; i < numPoints; i++) {
+      x.push(i * L / (numPoints - 1));
+    }
+    
+    // Generate time values
+    const timeValues = [];
+    for (let i = 0; i < numTimeSteps; i++) {
+      timeValues.push(i * tmax / (numTimeSteps - 1));
+    }
+    
+    // Initial condition phi(x)
+    function phi(x_val) {
+      if (x_val > 1 && x_val < 3) {
+        return Math.pow(Math.sin(Math.PI * x_val), 3);
+      }
+      return 0;
+    }
+    
+    // Initial velocity psi(x)
+    function psi(x_val) {
+      return 0;
+    }
+    
+    // Trapezoidal integration
+    function trapezoid(y, x) {
+      let sum = 0;
+      for (let i = 0; i < x.length - 1; i++) {
+        sum += (y[i] + y[i + 1]) * (x[i + 1] - x[i]) / 2;
+      }
+      return sum;
+    }
+    
+    // Fourier solution u(x, t)
+    function fourierU(x_vals, t_val) {
+      const y = new Array(x_vals.length).fill(0);
+      
+      for (let k = 1; k <= 100; k++) {
+        // Calculate Xk = sin(k*π*x/L)
+        const Xk = x_vals.map(x_val => Math.sin(k * Math.PI * x_val / L));
+        
+        // Calculate Ak coefficient
+        const phiXk = x_vals.map(x_val => phi(x_val) * Math.sin(k * Math.PI * x_val / L));
+        const Ak = (2 / L) * trapezoid(phiXk, x_vals);
+        
+        // Calculate Bk coefficient
+        const psiXk = x_vals.map(x_val => psi(x_val) * Math.sin(k * Math.PI * x_val / L));
+        const Bk = (2 / (a * k * Math.PI)) * trapezoid(psiXk, x_vals);
+        
+        // Calculate time-dependent part
+        const Tk = Ak * Math.cos(a * k * Math.PI * t_val / L) + Bk * Math.sin(a * k * Math.PI * t_val / L);
+        
+        // Add contribution to solution
+        for (let i = 0; i < x_vals.length; i++) {
+          y[i] += Tk * Xk[i];
+        }
+      }
+      
+      return y;
+    }
+    
+    // Animation state
+    let currentFrame = 0;
+    let isPlaying = false;
+    let animationId = null;
+    
+    // Calculate all frames
+    const frames = [];
+    for (let i = 0; i < timeValues.length; i++) {
+      const t_val = timeValues[i];
+      const y = fourierU(x, t_val);
+      frames.push({ x: [...x], y: [...y], t: t_val });
+    }
+    
+    // Initialize plot
+    function initPlot() {
+      const data = [
+        {
+          x: frames[0].x,
+          y: frames[0].y,
+          mode: 'lines',
+          name: 'String',
+          line: { color: 'red', width: 3 },
+          hovertemplate: 'x: %{x:.2f}<br>u(x,t): %{y:.3f}<extra></extra>'
+        },
+        {
+          x: [0, L],
+          y: [0, 0],
+          mode: 'markers',
+          name: 'Fixed Points',
+          marker: { color: 'black', size: 10 },
+          hovertemplate: 'Fixed point<br>x: %{x:.2f}<extra></extra>'
+        }
+      ];
+      
+      const layout = {
+        xaxis: {
+          title: 'x',
+          range: [-0.06, L + 0.06],
+          showgrid: true,
+          gridcolor: '#f0f0f0'
+        },
+        yaxis: {
+          title: 'u(x, t)',
+          range: [-1.1, 1.1],
+          showgrid: true,
+          gridcolor: '#f0f0f0'
+        },
+        plot_bgcolor: 'white',
+        paper_bgcolor: 'white',
+        margin: { l: 60, r: 20, t: 20, b: 60 },
+        showlegend: false
+      };
+      
+      const config = {
+        responsive: true,
+        displayModeBar: true,
+        displaylogo: false,
+        modeBarButtonsToRemove: ['lasso2d', 'select2d', 'autoScale2d', 'resetScale2d'],
+        toImageButtonOptions: {
+          format: 'png',
+          filename: 'string_motion',
+          height: 500,
+          width: 800,
+          scale: 1
+        }
+      };
+      
+      Plotly.newPlot('string-plot', data, layout, config);
+    }
+    
+    // Update plot with current frame
+    function updatePlot() {
+      const frame = frames[currentFrame];
+      const update = {
+        x: [frame.x, [0, L]],
+        y: [frame.y, [0, 0]]
+      };
+      
+      Plotly.restyle('string-plot', update, [0, 1]);
+      
+      // Update time display
+      document.getElementById('timeDisplay').textContent = `t = ${frame.t.toFixed(2)}`;
+      document.getElementById('timeSlider').value = currentFrame;
+    }
+    
+    // Animation loop
+    function animate() {
+      if (isPlaying) {
+        currentFrame = (currentFrame + 1) % frames.length;
+        updatePlot();
+        animationId = setTimeout(animate, 200); // 200ms between frames
+      }
+    }
+    
+    // Control functions
+    window.togglePlay = function() {
+      const btn = document.getElementById('playBtn');
+      if (isPlaying) {
+        isPlaying = false;
+        if (animationId) {
+          clearTimeout(animationId);
+          animationId = null;
+        }
+        btn.textContent = 'Play';
+        btn.classList.remove('pause');
+      } else {
+        isPlaying = true;
+        btn.textContent = 'Pause';
+        btn.classList.add('pause');
+        animate();
+      }
+    };
+    
+    window.resetAnimation = function() {
+      if (isPlaying) {
+        window.togglePlay(); // Stop if playing
+      }
+      currentFrame = 0;
+      updatePlot();
+    };
+    
+    window.setTime = function(frameIndex) {
+      currentFrame = parseInt(frameIndex);
+      updatePlot();
+    };
+    
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      initPlot();
+      updatePlot();
+      
+      // Set up slider
+      const slider = document.getElementById('timeSlider');
+      slider.max = frames.length - 1;
+    });
+  })();
+  </script>
+</body>
+</html>
