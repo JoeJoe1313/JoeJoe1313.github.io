@@ -28,5 +28,4 @@ Title: About
 - QAT
 - Recureence Plots - Time Series related stuff
 - Subliminal Learning
-- SensorLM
 - FastVLM
