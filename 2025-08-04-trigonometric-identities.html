@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>Trigonometric Identities the Euler Way</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+    <meta name="description" content="I have always believed that mathematics is about thinking rather than memorizing. The trigonometric identities were among the things we were told..." />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li><a href="/books.html">Books</a></li>
+                                                <li><a href="/category/machine-learning.html">Machine Learning</a></li>
+                                                <li class="active"><a href="/category/mathematics.html">Mathematics</a></li>
+                                                <li><a href="/category/quick-takes.html">Quick Takes</a></li>
+                                <li><a href="/drafts.html">Drafts</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="/2025-08-04-trigonometric-identities.html" rel="bookmark"
+             title="Permalink to Trigonometric Identities the Euler Way">Trigonometric Identities the Euler Way</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2025-08-04T07:00:00+03:00">
+            Published: Mon 04 August 2025
+    </abbr>
+
+    <p>In <a href="/category/mathematics.html">Mathematics</a>.</p>
+<p>tags: <a href="/tag/trigonometry.html">trigonometry</a> </p>    
+</footer><!-- /.post-info -->        <p>I have always believed that mathematics is about thinking rather than memorizing. The trigonometric identities were among the things we were told to memorize at school, and not only I struggled with that but I also actively rebelled against this approach. For me, mathematics is fundamentally about having a minimal but sufficient set of definitions and axioms, understanding them deeply, and then deriving everything else from these foundations. During one of my Complex Analysis lectures in my undergraduate Applied Mathematics studies, I was introduced to Euler's formula. When I discovered how it could be used to derive some of the most important trigonometric identities, I was more than relieved. I could finally derive the identities easily whenever I needed them, instead of relying on rote memorization, or panicking about my failure to memorize them.</p>
+<h1>Euler's Formula</h1>
+<p><strong>Euler's formula</strong> states that for any real number <span class="math">\(\theta\)</span>,</p>
+<div class="math">$$\label{eq:1}
+e^{i \theta} = \cos\theta + i \sin\theta, \tag{1}
+$$</div>
+<p>where <span class="math">\(i\)</span> is the imaginary unit, defined as <span class="math">\(i^2 = -1\)</span>. The formula has a geometric interpretation in the complex plane that provides insight into trigonometry and complex numbers, <strong>Figure 1</strong>.</p>
+<figure>
+  <img src="../images/2025-08-04-trigonometric-identities/Euler's_formula.svg" alt="Euler" style="display: block; margin: 0 auto; width: 35%">
+  <figcaption style="text-align: center">Figure 1. Euler's formula in the complex plane</figcaption>
+</figure>
+
+<p>In <strong>Figure 1</strong>, the horizontal axis represents the real part, the vertical axis represents the imaginary part, and any complex number <span class="math">\(z = x + i y\)</span> is plotted as the point <span class="math">\((x, y)\)</span>. Euler's formula represents a point on the unit circle at angle <span class="math">\(\theta\)</span> from the positive real axis, where:</p>
+<ul>
+<li><strong>Real part</strong>: <span class="math">\(\cos\theta\)</span> (horizontal coordinate)</li>
+<li><strong>Imaginary part</strong>: <span class="math">\(\sin\theta\)</span> (vertical coordinate)</li>
+<li><strong>Magnitude</strong>: <span class="math">\(|e^{i\theta}| = \sqrt{\cos^2\theta + \sin^2\theta} = 1\)</span></li>
+</ul>
+<p>As <span class="math">\(\theta\)</span> varies from <span class="math">\(0\)</span> to <span class="math">\(2\pi\)</span>, the point <span class="math">\(e^{i\theta}\)</span> traces out the entire unit circle. The famous <strong>Euler's identity</strong> emerges naturally:</p>
+<div class="math">$$
+e^{i \pi} = \cos(\pi) + i \sin(\pi) = -1 + 0 i = -1,
+$$</div>
+<p>or</p>
+<div class="math">$$
+e^{i \pi} + 1 = 0.
+$$</div>
+<p>Now, let's go back to <span class="math">\(\eqref{eq:1}\)</span>. We know that <span class="math">\(\cos(x)\)</span> is an even function, meaning <span class="math">\(\cos(-x) = \cos(x)\)</span>, and <span class="math">\(\sin(x)\)</span> is an odd function, meaning <span class="math">\(\sin(-x) = -\sin(x)\)</span>. Using that, we can derive the following identity:</p>
+<div class="math">$$\label{eq:2}
+e^{-i \theta} = e^{i (-\theta)} = \cos(-\theta) + i \sin(-\theta) = \cos\theta - i \sin\theta. \tag{2}
+$$</div>
+<h1>Cosine and Sine Expressions</h1>
+<p>If we add <span class="math">\(\eqref{eq:1}\)</span> and <span class="math">\(\eqref{eq:2}\)</span>, we can derive the cosine function:</p>
+<div class="math">$$\label{eq:3}
+\cos\theta = \frac{e^{i\theta} + e^{-i\theta}}{2}. \tag{3}
+$$</div>
+<p>If we subtract <span class="math">\(\eqref{eq:2}\)</span> from <span class="math">\(\eqref{eq:1}\)</span>, we can derive the sine function:</p>
+<div class="math">$$\label{eq:4}
+\sin\theta = \frac{e^{i\theta} - e^{-i\theta}}{2i}. \tag{4}
+$$</div>
+<h1>Angle Addition Formulas</h1>
+<p>Let's say we want to derive the angle addition formulas for sine and cosine using Euler's formula. We start with</p>
+<div class="math">$$
+e^{i(\alpha + \beta)}  = e^{i\alpha + i\beta} = e^{i\alpha} e^{i\beta}.
+$$</div>
+<p>Applying the Euler's formula to the left side, we have:</p>
+<div class="math">$$
+e^{i(\alpha + \beta)} = \cos(\alpha + \beta) + i \sin(\alpha + \beta).
+$$</div>
+<p>Now, applying the Euler's formula to the right side, we have:</p>
+<div class="math">$$
+e^{i\alpha} e^{i\beta} = (\cos\alpha + i \sin\alpha)(\cos\beta + i \sin\beta) =
+$$</div>
+<div class="math">$$
+= \cos\alpha \cos\beta - \sin\alpha \sin\beta + i (\sin\alpha \cos\beta + \cos\alpha \sin\beta).
+$$</div>
+<p>Equating the real parts of the above two expressions, we get the <strong>cosine addition formula</strong></p>
+<div class="math">$$
+\cos(\alpha + \beta) = \cos\alpha \cos\beta - \sin\alpha \sin\beta.
+$$</div>
+<p>Equating the imaginary parts, we get the <strong>sine addition formula</strong></p>
+<div class="math">$$
+\sin(\alpha + \beta) = \sin\alpha \cos\beta + \cos\alpha \sin\beta.
+$$</div>
+<h1>Product-to-Sum Formulas</h1>
+<p>Let's derive the identity for the product of cosine and cosine functions. Using <span class="math">\(\eqref{eq:3}\)</span> and <span class="math">\(\eqref{eq:4}\)</span>, we have</p>
+<div class="math">$$
+\cos\alpha \cos\beta = \frac{1}{4}\left(e^{i\alpha} + e^{-i\alpha}\right)\left(e^{i\beta} + e^{-i\beta}\right) =
+$$</div>
+<div class="math">$$
+= \frac{1}{4}\left[e^{i(\alpha + \beta)} + e^{i(\alpha - \beta)} + e^{-i(\alpha - \beta)} + e^{-i(\alpha + \beta)}\right] =
+$$</div>
+<div class="math">$$
+= \frac{1}{2}\left[\cos(\alpha + \beta) + \cos(\alpha - \beta)\right].
+$$</div>
+<h1>Conclusion</h1>
+<p>The key advantage of using Euler's formula is that it transforms trigonometric problems into algebraic manipulations with exponentials, and I find this beautiful.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "true";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>        </body>
+</html>

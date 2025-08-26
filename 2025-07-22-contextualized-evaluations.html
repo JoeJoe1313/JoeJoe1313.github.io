@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>Contextualized Evaluations</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+    <meta name="description" content=""When we ask a language model a question, we often leave out important context. A query like, "Is coffee good for you?" seems straightforward, but..." />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li><a href="/books.html">Books</a></li>
+                                                <li><a href="/category/machine-learning.html">Machine Learning</a></li>
+                                                <li><a href="/category/mathematics.html">Mathematics</a></li>
+                                                <li class="active"><a href="/category/quick-takes.html">Quick Takes</a></li>
+                                <li><a href="/drafts.html">Drafts</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="/2025-07-22-contextualized-evaluations.html" rel="bookmark"
+             title="Permalink to Contextualized Evaluations">Contextualized Evaluations</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2025-07-22T07:00:00+03:00">
+            Published: Tue 22 July 2025
+    </abbr>
+
+    <p>In <a href="/category/quick-takes.html">Quick Takes</a>.</p>
+<p>tags: <a href="/tag/llm.html">llm</a> </p>    
+</footer><!-- /.post-info -->        <p><em>"When we ask a language model a question, we often leave out important context. A query like, "Is coffee good for you?" seems straightforward, but a quality response depends on hidden context about the user (e.g., does the user have high blood pressure? Are they pregnant?)."</em></p>
+<figure>
+  <img src="../images/2025-07-22-contextualized-evaluations/transf_q.png" alt="Example conversation" style="display: block; margin: 0 auto; width: 75%">
+  <figcaption style="text-align: center">Figure 1. No context makes it hard to determine the better answer for “Tell me about transformers” (<a href="https://allenai.org/blog/contextualized-evaluations">source</a>)</figcaption>
+</figure>
+
+<p>New research from Ai2, <strong>"Contextualized Evaluations: Judging Language Model Responses to Underspecified Queries"</strong>, reveals a major flaw in how we benchmark language models. When we ask vague questions like <strong><em>"Is coffee good for you?"</em></strong> or <strong><em>"Tell me about transformers"</em></strong>, we're missing crucial context that determines what makes a good response.</p>
+<h3>The problem:</h3>
+<p><span class="math">\(\sim 76\%\)</span> of queries in major AI benchmarks are underspecified, leading to inconsistent evaluations and unreliable model rankings.</p>
+<figure>
+  <img src="../images/2025-07-22-contextualized-evaluations/underspec_table.png" alt="Example conversation" style="display: block; margin: 0 auto; width: 75%">
+  <figcaption style="text-align: center">Figure 2. Types of underspecified queries (<a href="https://allenai.org/blog/contextualized-evaluations">source</a>)</figcaption>
+</figure>
+
+<h3>The solution:</h3>
+<p><strong><em>"Contextualized Evaluations"</em></strong> – adding synthetic context through follow‑up questions before evaluation. For example, that coffee question needs to know: <em>Are you pregnant? Do you have high blood pressure?</em></p>
+<figure>
+  <img src="../images/2025-07-22-contextualized-evaluations/context_eval.png" alt="Example conversation" style="display: block; margin: 0 auto; width: 75%">
+  <figcaption style="text-align: center">Figure 3. Contextualized Evaluations (<a href="https://allenai.org/blog/contextualized-evaluations">source</a>)</figcaption>
+</figure>
+
+<h3>Key findings:</h3>
+<p>&emsp; ✅ Context improves evaluator agreement by 3–10%</p>
+<p>&emsp; ✅ Can completely flip model rankings</p>
+<p>&emsp; ✅ Shifts focus from style to actual usefulness</p>
+<p>&emsp; ✅ Reveals models have a "WEIRD bias" – defaulting to responses for Western, educated, wealthy users</p>
+<h3>Why this matters:</h3>
+<p>Current AI leaderboards might not reflect how well models actually serve diverse users or adapt to specific needs. This research offers a simple way to make AI evaluations more reliable and inclusive.</p>
+<h3>Read more:</h3>
+<p>&emsp; 📬 <strong>Blog post:</strong> <a href="https://allenai.org/blog/contextualized-evaluations">https://allenai.org/blog/contextualized-evaluations</a></p>
+<p>&emsp; 🗒️ <strong>Paper:</strong> <a href="https://arxiv.org/abs/2411.07237">https://arxiv.org/abs/2411.07237</a></p>
+<p>&emsp; 💻 <strong>Code:</strong> <a href="https://github.com/allenai/ContextEval">https://github.com/allenai/ContextEval</a></p>
+<p>&emsp; 📊 <strong>Data:</strong> <a href="https://huggingface.co/datasets/allenai/ContextEval">https://huggingface.co/datasets/allenai/ContextEval</a></p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "true";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>        </body>
+</html>

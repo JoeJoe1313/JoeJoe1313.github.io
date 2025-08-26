@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>Meta’s TRImodal Brain Encoder (TRIBE)</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+    <meta name="description" content="Researchers from Meta have developed TRIBE (TRImodal Brain Encoder), the first deep encoding pipeline trained across text + audio + video,..." />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li><a href="/books.html">Books</a></li>
+                                                <li><a href="/category/machine-learning.html">Machine Learning</a></li>
+                                                <li><a href="/category/mathematics.html">Mathematics</a></li>
+                                                <li class="active"><a href="/category/quick-takes.html">Quick Takes</a></li>
+                                <li><a href="/drafts.html">Drafts</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="/2025-08-21-tribe.html" rel="bookmark"
+             title="Permalink to Meta’s TRImodal Brain Encoder (TRIBE)">Meta’s TRImodal Brain Encoder (TRIBE)</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2025-08-21T07:00:00+03:00">
+            Published: Thu 21 August 2025
+    </abbr>
+
+    <p>In <a href="/category/quick-takes.html">Quick Takes</a>.</p>
+<p>tags: <a href="/tag/ai.html">ai</a> </p>    
+</footer><!-- /.post-info -->        <p>Researchers from Meta have developed <strong>TRIBE</strong> (TRImodal Brain Encoder), the <strong>first</strong> deep encoding pipeline trained across <strong>text</strong> + <strong>audio</strong> + <strong>video</strong>, multiple <strong>cortical areas</strong>, and <strong>individuals</strong>, winning <strong>1st place</strong> in <strong>Algonauts 2025</strong>.</p>
+<p>TRIBE fuses features from <strong>Llama-3.2-3B</strong> (text), <strong>Wav2Vec2-BERT</strong> (audio), and <strong>V-JEPA-2</strong> (video) with a <strong>temporal Transformer</strong> and <strong>subject embeddings</strong> to predict <strong>1,000-parcel fMRI</strong> responses to naturalistic videos. The architecture is available in <strong>Figure 1</strong> bloew.</p>
+<figure>
+  <img src="../images/2025-08-21-tribe/architecture.png" alt="Curation Process" style="display: block; margin: 0 auto; width: 100%">
+  <figcaption style="text-align: center">Figure 1. TRIBE architecure</figcaption>
+</figure>
+
+<h3>Why it’s cool</h3>
+<p>&emsp; ✅ Late <strong>fusion of strong unimodal FMs</strong> &gt; unimodal or VL-only baselines</p>
+<p>&emsp; ✅ Learns shared dynamics via <strong>subject embeddings</strong></p>
+<p>&emsp; ✅ Robust to missing inputs with <strong>modality dropout</strong></p>
+<p>&emsp; ✅ <strong>Generalizes OOD</strong>: cartoons, documentaries, even silent B&amp;W</p>
+<h3>Key results</h3>
+<p>&emsp; 🥇 1st on <strong>Algonauts 2025</strong> public leaderboard</p>
+<p>&emsp; 📊 Captures <strong>~54% of explainable variance</strong> on average</p>
+<p>&emsp; 🔬 Trained/evaluated on <strong>80+ hours</strong> of fMRI per participant</p>
+<p>&emsp; ⚡ <strong>Up to ~30% higher</strong> encoding scores in associative cortices vs the best unimodal model</p>
+<h3>Read more</h3>
+<p>&emsp; 📄 <strong>Paper:</strong> <a href="https://www.arxiv.org/abs/2507.22229">https://www.arxiv.org/abs/2507.22229</a></p>
+<p>&emsp; 💻 <strong>Code:</strong> <a href="https://github.com/facebookresearch/algonauts-2025">https://github.com/facebookresearch/algonauts-2025</a></p>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>        </body>
+</html>

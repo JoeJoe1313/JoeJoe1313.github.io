@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>Hermite Interpolation</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+    <meta name="description" content="Intro ..." />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li><a href="/books.html">Books</a></li>
+                                                <li><a href="/category/machine-learning.html">Machine Learning</a></li>
+                                                <li><a href="/category/mathematics.html">Mathematics</a></li>
+                                                <li><a href="/category/quick-takes.html">Quick Takes</a></li>
+                                <li class="active"><a href="/drafts.html">Drafts</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="/drafts/2025-06-29-hermite-interpolation.html" rel="bookmark"
+             title="Permalink to Hermite Interpolation">Hermite Interpolation</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2025-06-29T07:00:00+03:00">
+            Published: Sun 29 June 2025
+    </abbr>
+
+            <address class="vcard author">
+                    By                             <a class="url fn" href="/author/joana-levtcheva.html">Joana Levtcheva</a>
+            </address>
+    <p>In <a href="/category/mathematics.html">Mathematics</a>.</p>
+<p>tags: <a href="/tag/mlx.html">mlx</a> <a href="/tag/interpolation.html">interpolation</a> <a href="/tag/polynomials.html">polynomials</a> </p>    
+</footer><!-- /.post-info -->        <p>Intro ...</p>
+<h1>Cubic Hermite Interpolation</h1>
+<p>Intro ...</p>
+<figure>
+  <img src="../images/2025-06-29-hermite-interpolation/cubic_hermite.png" alt="Example conversation" style="display: block; margin: 0 auto; width: 50%">
+  <figcaption style="text-align: center">Figure 1. Cubic Hermite Curve</figcaption>
+</figure>
+
+<p>We look for a curve </p>
+<div class="math">$$
+c(t) = a_0 + a_1 t + a_2 t^2 + a_3 t^3
+$$</div>
+<p>that satisfies</p>
+<div class="math">$$
+\begin{cases}
+c(0) = p_0, \quad c^{\prime}(0) = v_0 \\
+c(1) = p_1, \quad c^{\prime}(1) = v_1
+\end{cases},
+$$</div>
+<p>or we should solve the following system</p>
+<div class="math">$$
+\begin{cases}
+p_0 = a_0 \\
+v_0 = a_1 \\
+p_1 = a_0 + a_1 + a_2 + a_3 \\
+v_1 = a_1 + 2a_2 + 3a_3
+\end{cases}.
+$$</div>
+<p>which gives us the curve parameters we want in terms of the given data</p>
+<div class="math">$$\begin{cases}
+a_0 = p_0 \\
+a_1 = v_0 \\
+a_2 = 3p_1 - 3p_0 - 2v_0 - v_1 \\
+a_3 = -2p_1 + 2p_0 + v_0 + v_1
+\end{cases}.
+$$</div>
+<p>If we rearrange the terms for <span class="math">\(c(t)\)</span> we get</p>
+<div class="math">$$
+c(t) = (1 - 3t^2 + 2t^3)p_0 + (t - 2t^2 + t^3)v_0 + (-t^2 + t^3)v_1 + (3t^2 - 2t^3)p_1
+$$</div>
+<p>or in basis function form</p>
+<div class="math">$$
+c(t) = H_0^3(t)p_0 + H_1^3(t)v_0 + H_2^3(t)v_1 + H_3^3(t)p_1,
+$$</div>
+<p>where</p>
+<div class="math">$$
+\begin{cases}
+H_0^3(t) = 1 - 3t^2 + 2t^3 \\
+H_1^3(t) = t - 2t^2 + t^3 \\
+H_2^3(t) = -t^2 + t^3 \\
+H_3^3(t) = 3t^2 - 2t^3
+\end{cases}.
+$$</div>
+<p>Plotting the Cubic Hermite basis functions</p>
+<figure>
+  <img src="../images/2025-06-29-hermite-interpolation/cubic_hermite_basis.png" alt="Example conversation" style="display: block; margin: 0 auto; width: 75%">
+  <figcaption style="text-align: center">Figure 2. Cubic Hermite basis functions</figcaption>
+</figure>
+
+<h2>Examples</h2>
+<iframe src="/code/hermite/chi_anim.html" width="100%" height="800px" frameborder="0"></iframe>
+
+<p>Some text</p>
+<figure>
+  <img src="../images/2025-06-29-hermite-interpolation/v1_0.png" alt="Example conversation" style="display: block; margin: 0 auto; width: 100%">
+  <figcaption style="text-align: center">Figure 2. Cubic Hermite basis functions</figcaption>
+</figure>
+
+<figure>
+  <img src="../images/2025-06-29-hermite-interpolation/v1_1.png" alt="Example conversation" style="display: block; margin: 0 auto; width: 100%">
+  <figcaption style="text-align: center">Figure 2. Cubic Hermite basis functions</figcaption>
+</figure>
+
+<figure>
+  <img src="../images/2025-06-29-hermite-interpolation/v0_v1_0.png" alt="Example conversation" style="display: block; margin: 0 auto; width: 100%">
+  <figcaption style="text-align: center">Figure 2. Cubic Hermite basis functions</figcaption>
+</figure>
+
+<figure>
+  <img src="../images/2025-06-29-hermite-interpolation/v0_v1_1.png" alt="Example conversation" style="display: block; margin: 0 auto; width: 100%">
+  <figcaption style="text-align: center">Figure 2. Cubic Hermite basis functions</figcaption>
+</figure>
+
+<h1>Quintic Hermite Interpolation</h1>
+<h1>Piecewise Curves: Building Complex Paths</h1>
+<h1>Experiments</h1>
+<p><img alt="alt text" src="../images/2025-06-29-hermite-interpolation/Figure_2.png"></p>
+<p><img alt="alt text" src="../images/2025-06-29-hermite-interpolation/test.png"></p>
+<p><img alt="alt text" src="../images/2025-06-29-hermite-interpolation/Figure_1_ccc.png"></p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "true";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>        </body>
+</html>
