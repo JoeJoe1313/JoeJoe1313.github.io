@@ -1,0 +1,50 @@
+{% macro render_bookshelf(shelf) %}
+  {% if shelf %}
+  <section id="content" class="body">
+    <h1>{{ shelf.shelf_title }}</h1>
+    {% for book in shelf.books %}
+      <div class="book-item">
+        {% set cover = book.l_cover or book.m_cover or book.s_cover %}
+        {% if cover %}
+        <img class="book-cover" src="{{ cover }}" alt="{{ book.title }}">
+        {% endif %}
+        <div class="book-details">
+          <header>{{ book.title }}<small> by {{ book.author }}</small></header>
+          {% if book.description %}
+          <article>{{ book.description|truncate(end='') }} {% if book.link %}<a href="{{ book.link }}" target="_blank" rel="noopener noreferrer">...more</a>{% endif %}</article>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+{% endmacro %}
+
+{% if GOODREADS_ACTIVITY_FEED %}
+  {% set shelves = GOODREADS_ACTIVITY_FEED.keys() %}
+  {% for shelf_name in shelves %}
+    {{ render_bookshelf(goodreads_activity[shelf_name]) }}
+  {% endfor %}
+{% endif %}
+
+{% if GOODREADS_ACTIVITY %}
+<section id="content" class="body">
+    <h2>{{ GOODREADS_ACTIVITY.shelf_title }}</h2>
+    {% for book in GOODREADS_ACTIVITY.books %}
+        <div class="book-item">
+            {% set cover = book.l_cover or book.m_cover or book.s_cover %}
+            {% if cover %}
+            <img class="book-cover" src="{{ cover }}" alt="{{ book.title }}">
+            {% endif %}
+            <div class="book-details">
+                <header>{{ book.title }}<small> by {{ book.author }}</small></header>
+                <article>
+                    {% if book.description %}
+                        <p>{{ book.description|truncate(end='') }} {% if book.link %}<a href="{{ book.link }}" target="_blank" rel="noopener noreferrer">...more</a>{% endif %}</p>
+                    {% endif %}
+                </article>
+            </div>
+        </div>
+    {% endfor %}
+</section>
+{% endif %}
