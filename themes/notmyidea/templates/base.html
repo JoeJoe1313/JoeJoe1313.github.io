@@ -32,10 +32,9 @@
                                 {% endif %}
                                 {% if DISPLAY_CATEGORIES_ON_MENU -%}
                                         {% for cat, null in categories %}
-                                                <li{% if cat == category and not (article and article.status == 'draft') %} class="active"{% endif %}><a href="{{ SITEURL }}/{{ cat.url }}">{{ cat }}</a></li>
+                                                <li{% if cat == category %} class="active"{% endif %}><a href="{{ SITEURL }}/{{ cat.url }}">{{ cat }}</a></li>
                                         {% endfor %}
                                 {% endif %}
-                                <li{% if output_file == 'drafts.html' or (article and article.status == 'draft') %} class="active"{% endif %}><a href="{{ SITEURL }}/drafts.html">Drafts</a></li>
                                 <li{% if output_file == 'tags.html' %} class="active"{% endif %}><a href="{{ SITEURL }}/tags.html">Tags</a></li>
                         </ul></nav>
                 </header><!-- /#banner -->

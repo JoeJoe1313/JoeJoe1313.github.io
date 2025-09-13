@@ -22,9 +22,6 @@ STATIC_PATHS = [
     "images",
     "code",
 ]
-TEMPLATE_PAGES = {
-    "drafts.html": "drafts.html",
-}
 
 TIMEZONE = "Europe/Sofia"
 

@@ -99,7 +99,7 @@ def extract_summary(instance):
 def run_plugin(generators):
     for generator in generators:
         if isinstance(generator, ArticlesGenerator):
-            for article in generator.articles + generator.drafts:
+            for article in generator.articles:
                 extract_summary(article)
         elif isinstance(generator, PagesGenerator):
             for page in generator.pages:
