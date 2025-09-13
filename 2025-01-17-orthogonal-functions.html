@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>Orthogonal Functions</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+                           
+    <meta name="description" content="In this post we are going to explore the so called orthogonal functions, and some of their properties. We are also going to show that these..." />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">JoJo's Blog</a></h1>
+                        <nav><ul>
+                                                <li><a href="/about.html">About</a></li>
+                                                <li><a href="/books.html">Books</a></li>
+                                                <li><a href="/category/machine-learning.html">Machine Learning</a></li>
+                                                <li class="active"><a href="/category/mathematics.html">Mathematics</a></li>
+                                                <li><a href="/category/python.html">Python</a></li>
+                                <li><a href="/tags.html">Tags</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="/2025-01-17-orthogonal-functions.html" rel="bookmark"
+             title="Permalink to Orthogonal Functions">Orthogonal Functions</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+    <abbr class="published" title="2025-01-17T07:00:00+02:00">
+            Published: Fri 17 January 2025
+    </abbr>
+
+    <p>In <a href="/category/mathematics.html">Mathematics</a>.</p>
+<p>tags: <a href="/tag/mathematics.html">mathematics</a> </p>    
+</footer><!-- /.post-info -->        <p>In this post we are going to explore the so called orthogonal functions, and some of their properties. We are also going to show that these orthogonal functions are closely related to the least-squares approximation method. This alternative to the least-squares method can be helpful in certain cases when the least-squares produces a hard to solve linear system.</p>
+<h1>Orthogonal Functions</h1>
+<p>First, we should introduce some important theory. Let's begin by stating that two <span class="math">\(n\)</span>-dimensional <strong>vectors</strong> <span class="math">\(x\)</span> and <span class="math">\(y\)</span> are <strong>orthogonal</strong> if their components satisfy</p>
+<div class="math">$$
+\sum_{i = 1}^{n} x_i y_i = 0. 
+$$</div>
+<p>Now, if we increase the dimensions <span class="math">\(n\)</span> to infinity such that we can replace the vectors in the limit with continous functions (<span class="math">\(f_{1}(x)\)</span> and <span class="math">\(f_{2}(x)\)</span>), and their sum approaches an integral, we have that two <strong>functions</strong> are <strong>orthogonal</strong> over the intevral <span class="math">\(a \leq x \leq b\)</span> if</p>
+<div class="math">$$\label{eq:1}
+\int_a^b f_{1}(x) f_{2}(x) \mathrm{d}x = 0.\tag{1}
+$$</div>
+<p>In some cases a weight <span class="math">\(w(x) \geq 0\)</span> is included, and then \eqref{eq:1} becomes</p>
+<div class="math">$$
+\int_a^b w(x) f_{1}(x) f_{2}(x) \mathrm{d}x = 0.
+$$</div>
+<p>Similarly, if we have a set of functions <span class="math">\(f_{i}(x)\)</span>, <span class="math">\(i = 0, 1, ...\)</span> they are said to be mutually orthogonal if</p>
+<div class="math">$$
+\int_a^b f_{i}(x) f_{j}(x) \mathrm{d}x = \left\{
+\begin{align*}
+0, \quad i \neq j \\
+\lambda_i &gt; 0, \quad i = j
+\end{align*}
+\right.
+.
+$$</div>
+<p>Once again, a weight term <span class="math">\(w(x) \geq 0\)</span>  can be included, and then</p>
+<div class="math">$$
+\int_a^b w(x) f_{i}(x) f_{j}(x) \mathrm{d}x = \left\{
+\begin{align*}
+0, \quad i \neq j \\
+\lambda_i &gt; 0, \quad i = j
+\end{align*}
+\right.
+.
+$$</div>
+<p>The above system is called <strong>orthonormal</strong> if</p>
+<div class="math">$$
+\int_a^b w(x) f_{i}^{2}(x) \mathrm{d}x = 1.
+$$</div>
+<h2>Example</h2>
+<p>One of the most famous systems (families) of orthogonal functions is</p>
+<div class="math">$$
+1, \cos{(x)}, \sin{(x)}, \cos{(2x)}, \sin{(2x)}, \cos{(3x)}, ...
+$$</div>
+<p>Part of the family is visualised below.</p>
+<p><center>
+<img alt="Orthogonal Functions Example" src="/images/2025-01-17-orthogonal-functions/orthogonal_functions_example.svg" width="75%">
+</center></p>
+<p>We can easily show that the functions are orthogonal over the interval <span class="math">\(0 \leq x \leq 2\pi\)</span> because the following equations hold (by using a fundamental trigonometric formulas)</p>
+<div class="math">$$
+\int_{0}^{2\pi} \cos{(mx)} \cos{(nx)} \mathrm{d}x = \left\{
+\begin{align*}
+2\pi, \quad m = n = 0 \\
+\pi, \quad m = n \neq 0 \\
+0, \quad m \neq n
+\end{align*}
+\right.
+,
+$$</div>
+<div class="math">$$
+\int_{0}^{2\pi} \cos{(mx)} \sin{(nx)} \mathrm{d}x = 0,
+$$</div>
+<p>and</p>
+<div class="math">$$
+\int_{0}^{2\pi} \sin{(mx)} \sin{(nx)} \mathrm{d}x = \left\{
+\begin{align*}
+\pi, \quad m = n \neq 0 \\
+0, \quad m \neq n
+\end{align*}
+\right.
+.
+$$</div>
+<p>Now, let's take a look at one possible application of these orthogonal functions. Let's assume that for a function <span class="math">\(F(x)\)</span>, <span class="math">\(0 \leq x \leq 2\pi\)</span> we have</p>
+<div class="math">$$\label{eq:2}
+F(x) = \frac{a_0}{2} + a_1 \cos{(x)} + b_1 \sin{(x)} + a_2 \cos{(2x)} + b_2 \sin{(2x)} + ... = \\
+= \frac{a_0}{2} + \sum_{k = 1}^{\infty} (a_k \cos{(kx)} + b_k \sin{(kx)}).\tag{2}
+$$</div>
+<p>If we multiply \eqref{eq:2} with <span class="math">\(\cos{(mx)}\)</span> and integrate over the range of <span class="math">\(x\)</span>, we get</p>
+<div class="math">$$\label{eq:3}
+\int_{0}^{2\pi} F(x)\cos{(mx)} \mathrm{d}x = \pi a_m, \quad m = 0, 1, ...\tag{3}
+$$</div>
+<p>If we multiply \eqref{eq:2} with <span class="math">\(\sin{(mx)}\)</span> and integrate over the range of <span class="math">\(x\)</span>, we get</p>
+<div class="math">$$\label{eq:4}
+\int_{0}^{2\pi} F(x)\sin{(mx)} \mathrm{d}x = \pi b_m, \quad m = 1, 2, ...\tag{4}
+$$</div>
+<p>But why did we even mention that? In fact, with \eqref{eq:3} and \eqref{eq:4} we can compute the coefficients in the function expansion. Moreover, this way of computing the <span class="math">\(a_m\)</span> and <span class="math">\(b_m\)</span> coefficients gives them the name <strong>Fourier coefficeints</strong>. This is also valid for the general case of a system of orthogonal functions, meaning</p>
+<div class="math">$$
+\int_{a}^{b} w(x) f_{i}(x) f_{j}(x) \mathrm{d}x = \left\{
+\begin{align*}
+0, \quad i \neq j \\
+\lambda_i, \quad i = j
+\end{align*}
+\right.
+.
+$$</div>
+<p>If we have the function expansion</p>
+<div class="math">$$
+F(x) = \sum_{i = 0}^{\infty} a_i f_{i}(x),
+$$</div>
+<p>then the coefficients</p>
+<div class="math">$$
+a_j = \frac{1}{\lambda_j} \int_{a}^{b} w(x) F(x) f_{j}(x) \mathrm{d}x
+$$</div>
+<p>are the Fourier coefficients.</p>
+<h1>Linear Independence and Orthogonality: Connection</h1>
+<p>Here, we are going to show that linear independence and orthogonality are closely connected. For this purpose the first thing we have to show is that a system of orthogonal functions <span class="math">\(f_i(x)\)</span> is linearly independent over the interval of interest.</p>
+<p>Let's assume there exists a linear dependence between the functions <span class="math">\(f_i(x)\)</span> with non-zero coefficients, or</p>
+<div class="math">$$
+c_1 f_1(x) + c_2 f_2(x) + ... + c_N f_N(x) = 0
+$$</div>
+<p>for some <span class="math">\(c_j \neq 0\)</span>. Then, we multiply with <span class="math">\(w(x) f_j(x)\)</span>, <span class="math">\(w(x) \geq 0\)</span> and integrate over the interval and get</p>
+<div class="math">$$
+c_1 \int_a^b w(x) f_1(x) f_j(x) \mathrm{d}x + c_2 \int_a^b w(x) f_2(x) f_j(x) \mathrm{d}x + ... + c_N \int_a^b w(x) f_N(x) f_j(x) \mathrm{d}x = 0
+$$</div>
+<p>From the orthogonal properties it follows</p>
+<div class="math">$$
+c_j \int_{a}^{b} w(x) f_{j}^{2}(x) \mathrm{d}x = c_j \lambda_j = 0,
+$$</div>
+<p>meaning <span class="math">\(c_j = 0\)</span> for every <span class="math">\(j\)</span>. Thus, the assumed relation doesn't exist, and the functions are independent.</p>
+<p>We are left with proving the opposite, that from a system of linearly independent functions we can construct an orthogonal system. We can do this with the help of the <strong>Schmidt process</strong>. Let <span class="math">\(f_i(x)\)</span> be the set of linearly independent functions. We have</p>
+<div class="math">$$
+\int_{a}^{b} w(x) f_{0}^2(x) \mathrm{d}x = \lambda_0 &gt; 0, \quad w(x) &gt; 0.
+$$</div>
+<p>Then</p>
+<div class="math">$$
+g_{0} = \frac{f_{0}(x)}{\sqrt{\lambda_0}}
+$$</div>
+<p>would be our first orthonormal function. By induction, we can assume we have constructed the first <span class="math">\(j\)</span> orthonormal functions <span class="math">\(g_{i}(x)\)</span>, <span class="math">\(i = 0, 1, ..., j-1\)</span>. Let</p>
+<div class="math">$$
+F_{j}(x) = a_{0} g_{0}(x) + a_{1} g_{1}(x) + ... + a_{j-1} g_{j-1}(x) + f_j.
+$$</div>
+<p>We have that the functions <span class="math">\(f_i(x)\)</span> are linearly independent, and that every <span class="math">\(g_{i}(x)\)</span> is a linear combination of <span class="math">\(f_{k}(x)\)</span>, <span class="math">\(k \leq i\)</span>, thus</p>
+<div class="math">$$
+F_j(x) \not\equiv 0.
+$$</div>
+<p>We need</p>
+<div class="math">$$
+\int_{a}^{b} w(x) F_j(x) g_j(x) \mathrm{d}x = 0, \quad 0 \leq i \leq j-1.
+$$</div>
+<p>From the definition of <span class="math">\(F_j(x)\)</span> the above equation becomes</p>
+<div class="math">$$
+a_i + \int_{a}^{b} w(x) g_i(x) f_j(x) \mathrm{d}x = 0.
+$$</div>
+<p>From here we can determine <span class="math">\(a_i\)</span>, and hence <span class="math">\(F_j(x)\)</span> as well. We have to "norm" <span class="math">\(F_j(x)\)</span> so we have to compute</p>
+<div class="math">$$
+\int_{a}^{b} w(x) F_j^2(x) \mathrm{d}x = \lambda_j &gt; 0, \quad w(x) \geq 0,
+$$</div>
+<p>and let</p>
+<div class="math">$$
+g_j(x) = \frac{F_j(x)}{\sqrt{\lambda_j}}.
+$$</div>
+<p>This ends the induction step.</p>
+<p>If we have a finite number <span class="math">\(N\)</span> of nodes <span class="math">\(x_m\)</span>, there exist at least <span class="math">\(N\)</span> linearly independent functions <span class="math">\(f_j(x_m)\)</span>. But these <span class="math">\(N\)</span> functions exist because of the following system</p>
+<div class="math">$$
+g_j(x_m) = \left\{
+\begin{align*}
+0, \quad m \neq j \\
+1, \quad m = j
+\end{align*}
+\right.
+, \quad j = 1, 2, ..., N,
+$$</div>
+<p>where no subset of these <span class="math">\(N\)</span> functions <span class="math">\(g_j(x_m)\)</span> can be linearly dependant.</p>
+<h1>Least Squares and the Fourier Coefficients</h1>
+<p>Finally, we are at the point of showing that the least-squares method is closely connected to orthogonality.</p>
+<hr>
+<p><b>Theorem 1.</b> <i>The Fourier coefficients <span class="math">\(a_j\)</span> give the best leas-squares approximation when the function <span class="math">\(F(x)\)</span> is expanded over an orthogonal system of functions <span class="math">\(g_j(x)\)</span>.</i></p>
+<p>In order to prove the theorem we have to minimize the arbitrary expansion </p>
+<div class="math">$$
+m = \int_{a}^{b} w(x) \left[F(x) - \sum_{j=0}^{M} c_j g_j(x) \right]^2 \mathrm{d}x = \\
+= \int_a^b w(x) F^2(x) \mathrm{d}x - 2 \sum_{j=0}^{M} c_j \int_{a}^{b} w(x) F(x) g_j(x) \mathrm{d}x + \sum_{i=0}^{M} \sum_{j=0}^{M} c_j c_i \int_{a}^{b} w(x) g_i(x) g_j(x) \mathrm{d}x = \\
+= \int_{a}^{b} w(x) F^2(x) \mathrm{d}x - 2\sum_{i=0}^{M}c_i a_i + \sum_{i=0}^{M} c_i^2 = \\
+= \int_{a}^{b} w(x) F^2(x) \mathrm{d}x - \sum_{i=0}^{M} a_i^2 + \sum_{i=0}^{M} (a_i - c_i)^2.
+$$</div>
+<p>The above equation achieves its minimum only when <span class="math">\(c_i = a_i\)</span>, which is what we wanted.</p>
+<hr>
+<p>It is useful to note that regarding the best approximation with orthogonal functions every coefficient <span class="math">\(a_i\)</span> is determined independently of the others. Thus, if we dedcide to change the amount of the used functions <span class="math">\(g_i(x)\)</span> there is no need to reevaluate the coefficients we have already evaluated. This motivates us to explore the next problem.</p>
+<p>If the coefficients <span class="math">\(c_i\)</span> of the function <span class="math">\(F(x)\)</span> when approximating with the least-squares method via the system <span class="math">\(\mu_i(x)\)</span> do not change when we change the number of used functions <span class="math">\(\mu_i(x)\)</span>, then the functions <span class="math">\(\mu_i(x)\)</span> are orthogonal. Let</p>
+<div class="math">$$
+g(c_0, c_1, ..., c_n) = \int_a^b w(x) \left[F(x) - \sum_{i=0}^{M}c_i\mu_i(x)\right]^2 \mathrm{d}x.
+$$</div>
+<p>Once again, we have to minimze <span class="math">\(g\)</span>. Thus,</p>
+<div class="math">$$
+\frac{\partial{g}}{\partial{c_i}} = 0 = -2 \int_a^b w(x) \left[F(x) - \sum_{i=0}^{M}c_i \mu_i(x)\right] \mu_j(x) \mathrm{d}x,
+$$</div>
+<p>or</p>
+<div class="math">$$
+\int_a^b w(x) F(x) \mu_j(x) \mathrm{d}x = \sum_{i=0}^{M} c_i \int_a^b w(x) \mu_i(x) \mu_j(x) \mathrm{d}x.
+$$</div>
+<p>If the above property is true for all <span class="math">\(M\)</span>, then it should be true for <span class="math">\(M+1\)</span> as well:</p>
+<div class="math">$$
+\int_a^b w(x) F(x) \mu_j(x) dx = \sum_{i=0}^{M+1} c_i \int_a^b w(x) \mu_i(x) \mu_j(x) \mathrm{d}x, \quad c_{M+1} \neq 0.
+$$</div>
+<p>Now, after subtracting it from the previous equation, we get</p>
+<div class="math">$$
+c_{M+1} \int_a^b w(x) \mu_{M+1}(x) \mathrm{d}x = 0, 
+$$</div>
+<p>for every <span class="math">\(j\)</span>. Simply said, <span class="math">\(\mu_j(x)\)</span> is orthogonal to <span class="math">\(\mu_{M+1}\)</span> for an arbitrary <span class="math">\(M\)</span>.</p>
+<p>To summarise, we saw that the orthogonal functions, the Fourier coefficients, and the approxiamtion via the least-squares method are closely connected.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "true";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://github.com/JoeJoe1313">GitHub</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="https://www.linkedin.com/in/joana-levtcheva-479844164/">LinkedIn</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>        </body>
+</html>
