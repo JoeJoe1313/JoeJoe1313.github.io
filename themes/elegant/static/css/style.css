@@ -49,3 +49,34 @@
     color: #666;
     margin-bottom: 0.5em;
 }
+
+/* Home Recent Posts: boxed style like notmyidea */
+.recent-posts .recent-posts-article {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin: 0 0 20px 0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+/* Override Elegant's dotted divider */
+.recent-posts .recent-posts-article {
+    border-bottom: none !important;
+}
+
+.recent-posts .recent-posts-article a {
+    text-decoration: none;
+}
+
+.recent-posts .recent-posts-article a:hover {
+    text-decoration: underline;
+}
+
+.recent-posts .recent-posts-posted {
+    margin: 6px 0 10px 0;
+}
+
+.recent-posts .entry-content {
+    margin-top: 6px;
+}
