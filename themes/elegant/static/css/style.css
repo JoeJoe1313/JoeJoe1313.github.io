@@ -80,3 +80,37 @@
 .recent-posts .entry-content {
     margin-top: 6px;
 }
+
+/* Make recent post titles larger */
+.recent-posts .recent-title {
+    font-size: 1.8rem;
+    line-height: 1.25;
+    margin: 0 0 6px 0;
+    border: none;
+}
+
+.recent-posts .recent-title a {
+    display: block;
+}
+
+/* Ensure recent post titles keep link color (not inherited black) */
+.recent-posts .recent-title a {
+    color: #4169e1 !important; /* match Elegant link tone */
+}
+.recent-posts .recent-title a:hover {
+    color: #1e90ff !important;
+}
+
+/* Backward compatibility if template isn't updated */
+.recent-posts .recent-posts-article > a {
+    display: block;
+    font-size: 1.6rem !important;
+    line-height: 1.3;
+    font-weight: 600;
+}
+
+.recent-posts .recent-posts-article small.subtitle {
+    font-size: 1rem;
+    margin-left: 6px;
+    color: #696969;
+}
