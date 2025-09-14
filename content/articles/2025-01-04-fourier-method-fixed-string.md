@@ -5,6 +5,7 @@ Category: Mathematics
 Tags: mathematics, pde
 Slug: 2025-01-04-fourier-method-fixed-string
 Status: published
+Series: The Wave Equation
 ---
 
 In this post we are going to explore the Fourier method for solving the 1D wave equation. The method is more known under the name of the **method of separation of variables**. For the 1D wave equation we are going to show the application of the method to a fixed string. We are also going to attempt to outline some of the physical interpretations of the fixed string.

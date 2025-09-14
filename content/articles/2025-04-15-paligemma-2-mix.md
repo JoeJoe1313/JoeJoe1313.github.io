@@ -5,6 +5,7 @@ Category: Machine Learning
 Tags: ai, ml, vlm, mlx-vlm, mlx
 Slug: 2025-04-15-paligemma-2-mix
 Status: published
+Series: PaliGemma 2 Mix
 ---
 
 In this post, we are going to explore Google’s [**PaliGemma 2 mix**](https://developers.googleblog.com/en/introducing-paligemma-2-mix/) vision-language model (VLM), and its capabilities to perform image segmentation. What’s interesting is that we are going to perform this task by only using Apple’s MLX framework, and MLX-VLM. This would eliminate the dependency of using JAX/Flax as in the original Google’s segmentation [script](https://github.com/google-research/big_vision/blob/main/big_vision/evaluators/proj/paligemma/transfers/segmentation.py), and would allow us to fully and seamlessly utilise Apple’s unified memory. Medium post can be found [here](https://medium.com/@levchevajoana/image-segmentation-with-paligemma-2-mix-and-mlx-7e69e077968b).

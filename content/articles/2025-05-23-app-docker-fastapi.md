@@ -5,6 +5,7 @@ Category: Machine Learning
 Tags: ai, ml, vlm, docker, fastapi, github-actions
 Slug: 2025-05-23-app-docker-fastapi
 Status: published
+Series: PaliGemma 2 Mix
 ---
 
 In today’s fast-paced machine learning landscape, deploying AI models is just as important as developing them. In this blog post, we are going to walk through an image segmentation application using Google’s **PaliGemma 2 Mix** model and **transformers**, containerized with **Docker**, and served through a **FastAPI** backend. We are also going to discuss the CI/CD pipeline using **GitHub Actions** to automate building the Docker image and pushing it to Docker Hub. Let’s explore this service, why we chose these technologies, and how you can get started and use the service yourself!
