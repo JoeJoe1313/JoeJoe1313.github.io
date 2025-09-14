@@ -44,12 +44,12 @@ All categories of the {{ SITENAME|striptags|e }} blog.
             {% for category, articles in categories %}
             <div class="accordion-group">
                 <div class="accordion-heading">
-                    <a class="accordion-toggle category-title-inside-accordion collapsed" data-toggle="collapse" data-parent="#accordion2" href="#{{ category.slug }}-ref">
+                    <a class="accordion-toggle category-title-inside-accordion" href="#{{ category.slug }}-ref">
                         {% set num = articles|count %}
                         {{ category }}<span class="superscript">{{ num }}</span>
                     </a>
                 </div>
-                <div id="{{ category.slug }}-ref" class="accordion-body collapse">
+                <div id="{{ category.slug }}-ref" class="accordion-body collapse in">
                     <div class="accordion-inner">
                         <ul class="list-articles-under-tag-category">
                             {% for article in articles %}
@@ -80,13 +80,26 @@ All categories of the {{ SITENAME|striptags|e }} blog.
 {{ super() }}
 <script>
     function uncollapse() {
-            $(window.location.hash).collapse({
-                toggle: true
-            })
+        if (window.location.hash) {
+            $(window.location.hash).collapse('show');
+        }
     }
-</script>
-
-<script>
-    uncollapse();
+    $(function(){
+        // Manual toggle so collapsing one does not affect others
+        $('.accordion .category-title-inside-accordion').on('click', function(e){
+            e.preventDefault();
+            var target = $(this).attr('href');
+            $(target).collapse('toggle');
+        });
+        // Keep toggle button style in sync
+        $('.accordion .accordion-body').on('shown', function(){
+            var selector = '#' + this.id;
+            $('.accordion a[href="' + selector + '"]').removeClass('collapsed');
+        }).on('hidden', function(){
+            var selector = '#' + this.id;
+            $('.accordion a[href="' + selector + '"]').addClass('collapsed');
+        });
+        uncollapse();
+    });
 </script>
 {% endblock script %}
