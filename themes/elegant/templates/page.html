@@ -56,8 +56,9 @@
     {% include '_includes/photoswipe.html' %}
     {% endblock content %}
 
-    {% block script %}
+{% block script %}
     {{ super() }}
     {% from '_includes/comments.html' import comments_script with context %}
     {{ comments_script() }}
-    {% endblock script %}
+    {% include '_includes/mermaid_diagrams.html' %}
+{% endblock script %}
