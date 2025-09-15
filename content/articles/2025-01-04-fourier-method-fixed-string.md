@@ -6,6 +6,7 @@ Tags: mathematics, pde
 Slug: 2025-01-04-fourier-method-fixed-string
 Status: published
 Series: The Wave Equation
+Modified: 2025-09-15 07:00
 ---
 
 In this post we are going to explore the Fourier method for solving the 1D wave equation. The method is more known under the name of the **method of separation of variables**. For the 1D wave equation we are going to show the application of the method to a fixed string. We are also going to attempt to outline some of the physical interpretations of the fixed string.
@@ -167,7 +168,7 @@ $$
 u = \sum_n^{\infty} \alpha_n u_n
 $$
 
-for some arbitrary constants $\alpha_n$ is a solution to the system if the series converges uniformly and is twice differentiable termwise. This generalisation is a Lemma and should be prooved. The proof can be found in ...
+for some arbitrary constants $\alpha_n$ is a solution to the system if the series converges uniformly and is twice differentiable termwise. This generalisation is a Lemma and should be prooved.
 
 Assuming we have prooved the said Lemma, we can state that our system has a solution of the form
 
@@ -195,7 +196,7 @@ $$
 u_t(x, 0) = \sum_{k=1}^{\infty} \frac{ak\pi}{l} B_k \sin{\left(\frac{k \pi x}{l}\right)} = \varphi_2(x).
 $$
 
-Now, we have to expand both $\varphi_1(x)$ and $\varphi_2(x)$ into series in terms of sines only (why?). We have
+Now, we have to expand both $\varphi_1(x)$ and $\varphi_2(x)$ into series in terms of sines only. We have
 
 $$
 \varphi_1(x) = \sum_{k=1}^{\infty} \varphi_k^{(1)} \sin{\left(\frac{k \pi}{l}x\right)}
@@ -213,7 +214,7 @@ $$
 A_k = \varphi_k^{(1)} \quad \text{and} \quad B_k = \frac{l}{ak\pi} \varphi_k^{(2)},
 $$
 
-or (why?)
+or
 
 $$
 A_k = \frac{2}{l} \int_{0}^{l} \varphi_1(x) \sin{\left(\frac{k \pi}{l}x\right)} \mathrm{d}x
@@ -247,7 +248,7 @@ $$
 |u_{xx}(x, t)| \leq \sum_{k=1}^{\infty}\frac{k^2 \pi^2}{l^2}(|A_k| + |B_k|).
 $$
 
-If the series on the right side (majorizing series) converge then the series on the left would also converge and the needed differentiation would exist. It is enough (why?) for the following series to converge
+If the series on the right side (majorizing series) converge then the series on the left would also converge and the needed differentiation would exist. It is enough for the following series to converge
 
 $$
 \sum_{k=1}^{\infty} k^j \left(|\varphi_k^{(1)}| + \frac{2}{ak\pi}|\varphi_k^{(2)}|\right), j = 0, 1, 2.
