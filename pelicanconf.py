@@ -16,7 +16,7 @@ AUTHOR_SAVE_AS = ""
 # TAG_SAVE_AS = ""
 # TAG_URL = ""
 # CATEGORY_SAVE_AS = ""
-ARCHIVES_SAVE_AS = ""
+# ARCHIVES_SAVE_AS = ""
 THEME = "themes/elegant"
 STATIC_PATHS = [
     "images",
