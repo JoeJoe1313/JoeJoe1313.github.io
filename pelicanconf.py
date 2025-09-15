@@ -45,9 +45,11 @@ LINKS = (
 
 # Social widget
 SOCIAL = (
+    ("GitHub", "https://github.com/JoeJoe1313"),
     ("LinkedIn", "https://www.linkedin.com/in/joana-levtcheva-479844164/"),
-    # ("Another social link", "#"),
+    ("Twitter", "https://x.com/13_jo_jo_13"),
 )
+SOCIAL_PROFILE_LABEL = "Stay in Touch"
 
 DEFAULT_PAGINATION = 5
 
