@@ -3,7 +3,7 @@ Title: Image Segmentation with PaliGemma 2 mix, Transformers, Docker, FastAPI, a
 Date: 2025-05-23 07:00
 Category: Machine Learning
 Tags: ai, ml, vlm, docker, fastapi, github-actions
-Slug: 2025-05-23-app-docker-fastapi
+Slug: app-docker-fastapi
 Status: published
 Series: PaliGemma 2 Mix
 ---

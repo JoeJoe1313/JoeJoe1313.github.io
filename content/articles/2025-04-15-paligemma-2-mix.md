@@ -3,7 +3,7 @@ Title: Image Segmentation with PaliGemma 2 Mix and MLX
 Date: 2025-04-15 07:00
 Category: Machine Learning
 Tags: ai, ml, vlm, mlx-vlm, mlx
-Slug: 2025-04-15-paligemma-2-mix
+Slug: paligemma-2-mix
 Status: published
 Series: PaliGemma 2 Mix
 ---

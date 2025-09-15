@@ -3,7 +3,7 @@ Title: Fine-Tuning a Model for Function-Calling with MLX-LM
 Date: 2025-04-06 07:00
 Category: Machine Learning
 Tags: ai, ml, llm, mlx-lm, mlx
-Slug: 2025-04-06-fine-tuning-function-calling
+Slug: fine-tuning-function-calling
 Status: published
 ---
 

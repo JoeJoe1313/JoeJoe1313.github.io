@@ -3,7 +3,7 @@ Title: Fourier Method for the 1D Wave Equation: Fixed String
 Date: 2025-01-04 07:00
 Category: Mathematics
 Tags: mathematics, pde
-Slug: 2025-01-04-fourier-method-fixed-string
+Slug: fourier-method-fixed-string
 Status: published
 Series: The Wave Equation
 Modified: 2025-09-15 07:00

@@ -3,7 +3,7 @@ Title: Trigonometric Identities the Euler Way
 Date: 2025-08-04 07:00
 Category: Mathematics
 Tags: trigonometry
-Slug: 2025-08-04-trigonometric-identities
+Slug: trigonometric-identities
 Status: published
 ---
 

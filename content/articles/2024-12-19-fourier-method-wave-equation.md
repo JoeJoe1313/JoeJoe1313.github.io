@@ -3,7 +3,7 @@ Title: Fourier Method for the Wave Equation
 Date: 2024-12-19 07:00
 Category: Mathematics
 Tags: mathematics
-Slug: 2024-12-19-fourier-method-wave-equation
+Slug: fourier-method-wave-equation
 Status: draft
 ---
 

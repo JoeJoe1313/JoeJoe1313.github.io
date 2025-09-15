@@ -3,7 +3,7 @@ Title: Thinking Backwards: The "Reversal Blessing" in LLM Multiple-Choice Reason
 Date: 2025-05-29 07:00
 Category: Machine Learning
 Tags: ai, ml, llm
-Slug: 2025-05-29-reversal-blessing
+Slug: reversal-blessing
 Status: published
 ---
 

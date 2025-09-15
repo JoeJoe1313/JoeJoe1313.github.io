@@ -3,7 +3,7 @@ Title: Fourier Method for the 2D Wave Equation: Rectangular Membrane
 Date: 2025-01-19 07:00
 Category: Mathematics
 Tags: mathematics, pde
-Slug: 2025-01-19-fourier-method-rectangular-membrane
+Slug: fourier-method-rectangular-membrane
 Status: draft
 ---
 

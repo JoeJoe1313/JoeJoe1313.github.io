@@ -3,7 +3,7 @@ Title: Python's os.environ vs os.getenv
 Date: 2025-08-26 07:00
 Category: Python
 Tags: Python
-Slug: 2025-08-26-osenviron
+Slug: osenviron
 Status: published
 ---
 

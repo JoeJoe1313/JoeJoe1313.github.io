@@ -3,7 +3,7 @@ Title: Lissajous Curves
 Date: 2025-04-22 07:00
 Category: Mathematics
 Tags: mathematics, python
-Slug: 2025-04-22-lissajous-curves
+Slug: lissajous-curves
 Status: draft
 ---
 

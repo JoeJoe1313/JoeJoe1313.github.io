@@ -3,7 +3,7 @@ Title: Dual Contouring of Hermite Data
 Date: 2025-01-20 07:00
 Category: Mathematics
 Tags: mathematics, geometry
-Slug: 2025-01-20-dual-contouring
+Slug: dual-contouring
 Status: draft
 ---
 

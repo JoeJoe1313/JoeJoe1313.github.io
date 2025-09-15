@@ -3,7 +3,7 @@ Title: A Job Postings Tool: A Guide to MLX-LM Server and Tool Use with the OpenA
 Date: 2025-06-21 07:00
 Category: Machine Learning
 Tags: ai, ml, llm
-Slug: 2025-06-21-tool-mlx-openai
+Slug: tool-mlx-openai
 Status: published
 ---
 

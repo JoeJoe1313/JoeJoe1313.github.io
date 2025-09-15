@@ -3,7 +3,7 @@ Title: Qwen2.5-vl with MLX-VLM
 Date: 2025-02-13 07:00
 Category: Machine Learning
 Tags: ai, ml, vlm, mlx-vlm, mlx
-Slug: 2025-02-13-qwen2_5-vl-mlx-vlm
+Slug: qwen2_5-vl-mlx-vlm
 Status: published
 ---
 

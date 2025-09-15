@@ -3,7 +3,7 @@ Title: Hermite Interpolation
 Date: 2025-06-29 07:00
 Category: Mathematics
 Tags: mlx, interpolation, polynomials
-Slug: 2025-06-29-hermite-interpolation
+Slug: hermite-interpolation
 Status: draft
 Author: Joana Levtcheva
 ---

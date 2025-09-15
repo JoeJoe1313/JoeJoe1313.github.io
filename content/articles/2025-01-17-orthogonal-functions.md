@@ -3,7 +3,7 @@ Title: Orthogonal Functions
 Date: 2025-01-17 07:00
 Category: Mathematics
 Tags: mathematics
-Slug: 2025-01-17-orthogonal-functions
+Slug: orthogonal-functions
 Status: published
 ---
 

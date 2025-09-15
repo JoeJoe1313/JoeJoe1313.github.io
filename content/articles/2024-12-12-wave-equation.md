@@ -3,7 +3,7 @@ Title: Wave Equation
 Date: 2024-12-12 13:15
 Category: Mathematics
 Tags: mathematics, python
-Slug: 2024-12-12-wave-equation
+Slug: wave-equation
 Status: draft
 ---
 

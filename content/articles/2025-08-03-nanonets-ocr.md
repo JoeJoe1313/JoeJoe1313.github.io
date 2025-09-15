@@ -3,7 +3,7 @@ Title: NanoNets OCR for Handwritten Notes
 Date: 2025-08-03 07:00
 Category: Machine Learning
 Tags: ai, ml, vlm
-Slug: 2025-08-03-nanonets-ocr
+Slug: nanonets-ocr
 Status: published
 ---
 

@@ -3,7 +3,7 @@ Title: Chebyshev Polynomials: Part 1
 Date: 2025-01-06 07:00
 Category: Mathematics
 Tags: mathematics, polynomials
-Slug: 2025-01-06-chebyshev-polynomials
+Slug: chebyshev-polynomials
 Status: published
 Series: Chebyshev Polynomials
 ---

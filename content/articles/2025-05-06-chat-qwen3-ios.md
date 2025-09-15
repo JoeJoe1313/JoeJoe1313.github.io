@@ -3,7 +3,7 @@ Title: Chat with Qwen3 on your iPhone: A Step-by-Step Guide
 Date: 2025-05-06 00:00
 Category: Machine Learning
 Tags: ai, ml, vlm, ios, swift, mlx-swift
-Slug: 2025-05-06-chat-qwen3-ios
+Slug: chat-qwen3-ios
 Status: published
 ---
 
