@@ -52,6 +52,7 @@ SOCIAL = (
 SOCIAL_PROFILE_LABEL = "Stay in Touch"
 
 DEFAULT_PAGINATION = 5
+READING_TIME_LOWER_LIMIT = 1
 
 PLUGINS = [
     "plugins.summary",
@@ -61,6 +62,7 @@ PLUGINS = [
     "plugins.goodreads_activity",
     "plugins.goodreads_quotes",
     "plugins.series",
+    "plugins.statistics",
 ]
 SUMMARY_USE_FIRST_PARAGRAPH = True
 WITH_FUTURE_DATES = False
