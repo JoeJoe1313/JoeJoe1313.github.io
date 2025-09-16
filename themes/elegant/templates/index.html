@@ -98,24 +98,22 @@
             {% for article in articles %}
             {% if loop.index0 < RECENT_ARTICLES_COUNT %}
             <div itemscope class="recent-posts-article">
-                <h2 class="recent-title">
-                    <a href="{{ SITEURL }}/{{ article.url }}">
-                        {{ article.title }}
-                        {% if article.subtitle %}
-                        <small class="subtitle">
-                            {{ article.subtitle }}
-                        </small>
-                        {% endif %}
-                    </a>
-                </h2>
+                <a href="{{ SITEURL }}/{{ article.url }}">
+                    {{ article.title }}
+                    {% if article.subtitle %}
+                    <small class="subtitle">
+                        {{ article.subtitle }}
+                    </small>
+                    {% endif %}
+                </a>
                 <div class="recent-posts-posted">
                     posted in
                     <a href="{{ SITEURL }}/{{ CATEGORIES_URL }}#{{ article.category.slug }}-ref">{{ article.category }}</a>
                     <time itemprop="dateCreated" datetime="{{ article.date.isoformat() }}">{{ article.locale_date }}</time>
                 </div>
-                <div class="entry-content">
-                    {{ article.summary }}
-                </div>
+                {% if RECENT_ARTICLE_SUMMARY %}
+                    <p>{{ article.summary }}</p>
+                {% endif %}
             </div>
             {% endif %}
             {% endfor %}

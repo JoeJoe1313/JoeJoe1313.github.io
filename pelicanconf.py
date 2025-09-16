@@ -80,3 +80,4 @@ GOODREADS_ACTIVITY_FEED = {
 GOODREADS_QUOTES = "https://www.goodreads.com/quotes/list_rss/109326321-joana"
 
 RECENT_ARTICLES_COUNT = 5
+RECENT_ARTICLE_SUMMARY = True
