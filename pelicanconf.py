@@ -78,3 +78,5 @@ GOODREADS_ACTIVITY_FEED = {
     # "mathematics": "https://www.goodreads.com/review/list_rss/109326321?key=3I5TuNfj-aUSty_wg0vzJhR3GxSlg6BKJdcqnhIF5wEZ8xuH&shelf=mathematics",
 }
 GOODREADS_QUOTES = "https://www.goodreads.com/quotes/list_rss/109326321-joana"
+
+RECENT_ARTICLES_COUNT = 5
