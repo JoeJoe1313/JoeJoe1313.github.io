@@ -1,3 +1,0 @@
-[submodule "plugins/jinja2content"]
-	path = plugins/jinja2content
-	url = https://github.com/pelican-plugins/jinja2content.git
