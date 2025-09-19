@@ -98,7 +98,7 @@
 
 /* target only paragraphs inside the box */
 /* .recent-posts .recent-posts-article p {
-    font-size: 0.95rem;       /* override if you want paragraph-specific size */
+    font-size: 0.95rem;
     margin: 0 0 0.8em 0;
 } */
 
@@ -173,3 +173,19 @@
 .highlight .vg { color: #99cf50; background-color: #252c31 } /* Name.Variable.Global */
 .highlight .vi { color: #99cf50; background-color: #252c31 } /* Name.Variable.Instance */
 .highlight .il { color: #3c98d9; background-color: #252c31 } /* Literal.Number.Integer.Long */
+
+/* Align landing sections with the standard content width */
+@media (min-width: 980px) {
+  #content .span10 > .row-fluid > .page-header.span12 {
+    float: none;
+    max-width: 940px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #content .span10 > .row-fluid > .row-fluid {
+    max-width: 940px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

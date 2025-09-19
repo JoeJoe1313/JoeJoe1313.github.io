@@ -81,3 +81,17 @@ GOODREADS_QUOTES = "https://www.goodreads.com/quotes/list_rss/109326321-joana"
 
 RECENT_ARTICLES_COUNT = 5
 RECENT_ARTICLE_SUMMARY = True
+LANDING_PAGE_TITLE = "Welcome to JoJo's Blog"
+PROJECTS = [
+    {
+        "name": "LLMs Journey",
+        "url": "https://github.com/JoeJoe1313/LLMs-Journey",
+        "description": "Collection of various experiments with Large Language Models",
+    },
+    {
+        "name": "PaliGemma Image Segmentation",
+        "url": "https://github.com/JoeJoe1313/PaliGemma-Image-Segmentation",
+        "description": "An API service for performing image segmentation based on"
+        " text prompts using Google's PaliGemma 2 mix model, built with FastAPI, JAX/Flax, and Transformers.",
+    },
+]

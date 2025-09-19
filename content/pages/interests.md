@@ -1,5 +1,5 @@
 ---
-Title: Books
+Title: Interests
 show_goodreads: True
 ---
 
