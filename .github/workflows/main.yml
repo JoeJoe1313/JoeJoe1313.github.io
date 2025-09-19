@@ -28,10 +28,10 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Install Stork (Cargo)
+      - name: Install Stork (Cargo, locked deps)
         run: |
-          cargo install stork-search
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+          cargo install stork-search --locked
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
           stork --version
 
       - name: Build site
