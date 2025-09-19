@@ -21,7 +21,7 @@ Page does not exist at {{ SITENAME|striptags|e }} blog.
         <div class="input-append">
             {% from '_includes/_defaults.html' import SEARCH_URL with context %}
             <form action="{{ SITEURL }}/{{ SEARCH_URL }}" onsubmit="return validateForm(this.elements['q'].value)">
-                <input type="text" class="span12" placeholder="Search" name="q" id="tipue_search_input_404">
+                <input type="text" class="span12" placeholder="Search" name="q" id="search_input_404">
                 <button class="btn" type="submit">Search</button>
             </form>
         </div>
@@ -42,7 +42,7 @@ Page does not exist at {{ SITENAME|striptags|e }} blog.
     var newurl = newurl.replace(/\-/g, ' ');
 
     // Fill search field with resulting string
-    document.getElementById('tipue_search_input_404').value = newurl;
+    document.getElementById('search_input_404').value = newurl;
 </script>
 
 {% endblock content %}

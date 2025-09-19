@@ -63,11 +63,19 @@ PLUGINS = [
     "plugins.goodreads_quotes",
     "plugins.series",
     "plugins.statistics",
+    "plugins.search",
 ]
 SUMMARY_USE_FIRST_PARAGRAPH = True
 WITH_FUTURE_DATES = False
 MATH_JAX = {
     "linebreak_automatic": True,
+}
+
+DIRECT_TEMPLATES = ("index", "tags", "categories", "archives", "search")
+SEARCH_SAVE_AS = "search.html"
+SEARCH_URL = "search.html"
+STORK_INPUT_OPTIONS = {
+    "html_selector": ".article-content",
 }
 
 # Uncomment following line if you want document-relative URLs when developing

@@ -27,20 +27,36 @@ Search results for {{ SITENAME|striptags|e }} blog.
 {% block content %}
 <div class="row-fluid">
     <header id="lunr-search-result-heading" class="page-header span10 offset2">
+        <h1>Search Results</h1>
     </header>
 </div>
 
 <div class="row-fluid">
     <div class="span8 offset2">
-        <div id="lunr-search-result" >
-        </div>
+        <div id="lunr-search-result" data-stork="site-search-output"></div>
     </div>
 </div>
 {% endblock content %}
 
 {% block script %}
-    {% if PLUGINS and 'tipue_search' in PLUGINS %}
-        <script src="{{ SITEURL }}/tipuesearch_content.js"></script>
-    {% endif %}
 {{ super() }}
+{% if PLUGINS and 'plugins.search' in PLUGINS %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    if (typeof initializeStorkSearch !== 'function') {
+        console.error('Stork search helper is not available.');
+        return;
+    }
+
+    initializeStorkSearch({
+        index: 'site-search',
+        indexUrl: '{{ SITEURL }}/search-index.st',
+        headingSelector: '#lunr-search-result-heading',
+        outputSelector: "[data-stork='site-search-output']"
+    }).catch(function (error) {
+        console.error('Failed to register Stork search index.', error);
+    });
+});
+</script>
+{% endif %}
 {% endblock script %}
