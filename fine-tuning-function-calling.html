@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+        <link rel="stylesheet" href="https://files.stork-search.net/basic.css">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="ai, ml, llm, mlx-lm, mlx, Machine Learning, " />
+
+<meta property="og:title" content="Fine-Tuning a Model for Function-Calling with MLX-LM "/>
+<meta property="og:url" content="/fine-tuning-function-calling.html" />
+<meta property="og:description" content="In this post, we explore the process of fine-tuning a language model for function-calling using MLX-LM. Following the Hugging Face Agents course notebook, we’ll walk through the steps from setting up the environment to training the model with LoRA adapters. The goal is to empower the model with the ability to intelligently plan and generate function calls, making it a versatile tool for interactive applications. Medium post can be found here" />
+<meta property="og:site_name" content="JoJo&#39;s Blog" />
+<meta property="og:article:author" content="" />
+<meta property="og:article:published_time" content="2025-04-06T07:00:00+03:00" />
+<meta name="twitter:title" content="Fine-Tuning a Model for Function-Calling with MLX-LM ">
+<meta name="twitter:description" content="In this post, we explore the process of fine-tuning a language model for function-calling using MLX-LM. Following the Hugging Face Agents course notebook, we’ll walk through the steps from setting up the environment to training the model with LoRA adapters. The goal is to empower the model with the ability to intelligently plan and generate function calls, making it a versatile tool for interactive applications. Medium post can be found here">
+
+        <title>Fine-Tuning a Model for Function-Calling with MLX-LM  · JoJo&#39;s Blog
+</title>
+        <link rel="shortcut icon" href="/theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="/theme/images/apple-touch-icon-152x152.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/theme/images/apple-touch-icon.png"  type="image/png" />
+        <link rel="apple-touch-icon" sizes="57x57" href="/theme/images/apple-touch-icon-57x57.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/images/apple-touch-icon-72x72.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="/theme/images/apple-touch-icon-76x76.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/images/apple-touch-icon-114x114.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/theme/images/apple-touch-icon-120x120.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/images/apple-touch-icon-144x144.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/theme/images/apple-touch-icon-152x152.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/theme/images/apple-touch-icon-180x180.png" type="image/png" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="/"><span class=site-name>JoJo's Blog</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       "/"
+                                    >Home</a>
+                                </li>
+                                <li ><a href="/interests.html">Interests</a></li>
+                                <li ><a href="/categories.html">Categories</a></li>
+                                <li ><a href="/tags.html">Tags</a></li>
+                                <li ><a href="/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+                                    <input type="text" class="search-query" placeholder="Search" name="q" data-stork="site-search" autocomplete="off">
+                                </form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="/fine-tuning-function-calling.html">
+                Fine-Tuning a Model for Function-Calling with MLX-LM
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>In this post, we explore the process of fine-tuning a language model for function-calling using <a href="https://github.com/ml-explore/mlx-lm">MLX-LM</a>. Following the Hugging Face Agents course <a href="https://huggingface.co/agents-course/notebooks/blob/main/bonus-unit1/bonus-unit1.ipynb">notebook</a>, we’ll walk through the steps from setting up the environment to training the model with LoRA adapters. The goal is to empower the model with the ability to intelligently plan and generate function calls, making it a versatile tool for interactive applications. Medium post can be found <a href="https://medium.com/@levchevajoana/fine-tuning-a-model-for-function-calling-with-mlx-lm-d00d587e2559">here</a></p>
+<h2>Introduction</h2>
+<p>Modern AI models can do much more than generate plain text — they can now integrate with external tools by “calling” functions based on user intent. In this tutorial, we demonstrate how to adapt a pre-trained model (in our case, the <a href="https://huggingface.co/mlx-community/gemma-2-2b-it-4bit">gemma-2-2b-it-4bit</a> model from the <a href="https://huggingface.co/mlx-community">MLX Community</a>) to handle function-calling by using the <code>mlx-lm</code> package. This involves creating a specialized chat template, preprocessing a dataset of function call interactions, and applying LoRA for efficient fine-tuning.</p>
+<h2>Setting Up the Model and Tokenizer</h2>
+<p>We start by importing the necessary libraries and modules, including the MLX-LM package, dataset utilities, and LoRA functions.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">mlx.optimizers</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">optim</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">tree_flatten</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_lm</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate</span><span class="p">,</span> <span class="n">load</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_lm.tuner</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrainingArgs</span><span class="p">,</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">linear_to_lora_layers</span><span class="p">,</span> <span class="n">train</span>
+</code></pre></div>
+
+<p>After loading our model and tokenizer,</p>
+<div class="highlight"><pre><span></span><code><span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;mlx-community/gemma-2-2b-it-4bit&quot;</span>
+<span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
+</code></pre></div>
+
+<p>we customize the tokenizer’s chat template to define the structure of our conversational interactions.</p>
+<div class="highlight"><pre><span></span><code><span class="n">tokenizer</span><span class="o">.</span><span class="n">chat_template</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;{{ bos_token }}&quot;</span>
+    <span class="s2">&quot;{</span><span class="si">% i</span><span class="s2">f messages[0][&#39;role&#39;] == &#39;system&#39; %}{{ raise_exception(&#39;System role not supported&#39;) }}{</span><span class="si">% e</span><span class="s2">ndif %}&quot;</span>
+    <span class="s2">&quot;{</span><span class="si">% f</span><span class="s2">or message in messages %}&quot;</span>
+    <span class="s2">&quot;{{ &#39;&lt;start_of_turn&gt;&#39; + message[&#39;role&#39;] + &#39;</span><span class="se">\n</span><span class="s2">&#39; + message[&#39;content&#39;] | trim + &#39;&lt;end_of_turn&gt;&lt;eos&gt;</span><span class="se">\n</span><span class="s2">&#39; }}&quot;</span>
+    <span class="s2">&quot;{</span><span class="si">% e</span><span class="s2">ndfor %}&quot;</span>
+    <span class="s2">&quot;{</span><span class="si">% i</span><span class="s2">f add_generation_prompt %}{{&#39;&lt;start_of_turn&gt;model</span><span class="se">\n</span><span class="s2">&#39;}}{</span><span class="si">% e</span><span class="s2">ndif %}&quot;</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>This template embeds special tokens (like <code>&lt;bos&gt;</code>, <code>&lt;start_of_turn&gt;</code>,<code>&lt;think&gt;</code>, and <code>&lt;tool_call&gt;</code>) that mark the different stages of the conversation - from the user’s prompt to the model’s internal reasoning and eventual function call.</p>
+<h2>Dataset Preparation and Preprocessing</h2>
+<p>We use the dataset <a href="https://huggingface.co/datasets/Jofthomas/hermes-function-calling-thinking-V1">Jofthomas/hermes-function-calling-thinking-V1</a> which contains conversations involving function calls.</p>
+<div class="highlight"><pre><span></span><code><span class="n">dataset_path</span> <span class="o">=</span> <span class="s2">&quot;Jofthomas/hermes-function-calling-thinking-V1&quot;</span>
+</code></pre></div>
+
+<p>Let’s load the dataset.</p>
+<div class="highlight"><pre><span></span><code><span class="n">dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="n">dataset_path</span><span class="p">)</span>
+<span class="n">dataset</span>
+</code></pre></div>
+
+<p>This outputs</p>
+<div class="highlight"><pre><span></span><code>DatasetDict({
+    train: Dataset({
+        features: [&#39;conversations&#39;],
+        num_rows: 3570
+    })
+})
+</code></pre></div>
+
+<p>showing that the dataset originally includes a “conversations” column, and has 3570 rows. We rename this column to “messages” for consistency</p>
+<div class="highlight"><pre><span></span><code><span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">rename_column</span><span class="p">(</span><span class="s2">&quot;conversations&quot;</span><span class="p">,</span> <span class="s2">&quot;messages&quot;</span><span class="p">)</span>
+<span class="n">dataset</span>
+</code></pre></div>
+
+<p>and then apply the following preprocessing function</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">preprocess</span><span class="p">(</span><span class="n">sample</span><span class="p">):</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">]</span>
+    <span class="n">first_message</span> <span class="o">=</span> <span class="n">messages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Instead of adding a system message, we merge the content into the first user message</span>
+    <span class="k">if</span> <span class="n">first_message</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;system&quot;</span><span class="p">:</span>
+        <span class="n">system_message_content</span> <span class="o">=</span> <span class="n">first_message</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">]</span>
+        <span class="c1"># Merge system content with the first user message</span>
+        <span class="n">messages</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;content&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">system_message_content</span>
+            <span class="o">+</span> <span class="s2">&quot;Also, before making a call to a function take the time to plan the function to take. Make that thinking process between &lt;think&gt;{your thoughts}&lt;/think&gt;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="o">+</span> <span class="n">messages</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;content&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="c1"># Remove the system message from the conversation</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">)}</span>
+</code></pre></div>
+
+<p>to the dataset</p>
+<div class="highlight"><pre><span></span><code><span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">preprocess</span><span class="p">,</span> <span class="n">remove_columns</span><span class="o">=</span><span class="s2">&quot;messages&quot;</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">dataset</span>
+</code></pre></div>
+
+<p>This function merges any system messages into the first user message, ensuring the context is maintained without extra role annotations. This outputs</p>
+<div class="highlight"><pre><span></span><code>DatasetDict({
+    train: Dataset({
+        features: [&#39;text&#39;],
+        num_rows: 3213
+    })
+    test: Dataset({
+        features: [&#39;text&#39;],
+        num_rows: 357
+    })
+})
+</code></pre></div>
+
+<p>showing that we have successfully separated our original dataset into a train set with 3213 records, and a test set with 357 records. Each sample is now a formatted text string ready for fine-tuning. Let’s see one train example</p>
+<div class="highlight"><pre><span></span><code>&lt;bos&gt;&lt;start_of_turn&gt;human
+You are a function calling AI model. You are provided with function signatures within &lt;tools&gt;&lt;/tools&gt; XML tags.You may call one or more functions to assist with the user query. Don&#39;t make assumptions about what values to plug into functions.Here are the available tools:&lt;tools&gt; [{&#39;type&#39;: &#39;function&#39;, &#39;function&#39;: {&#39;name&#39;: &#39;create_todo&#39;, &#39;description&#39;: &#39;Create a new todo item&#39;, &#39;parameters&#39;: {&#39;type&#39;: &#39;object&#39;, &#39;properties&#39;: {&#39;task&#39;: {&#39;type&#39;: &#39;string&#39;, &#39;description&#39;: &#39;The task description&#39;}, &#39;due_date&#39;: {&#39;type&#39;: &#39;string&#39;, &#39;format&#39;: &#39;date&#39;, &#39;description&#39;: &#39;The due date of the task&#39;}, &#39;priority&#39;: {&#39;type&#39;: &#39;integer&#39;, &#39;description&#39;: &#39;The priority of the task (1-5)&#39;}}, &#39;required&#39;: [&#39;task&#39;, &#39;due_date&#39;]}}}, {&#39;type&#39;: &#39;function&#39;, &#39;function&#39;: {&#39;name&#39;: &#39;calculate_bmi&#39;, &#39;description&#39;: &#39;Calculate the Body Mass Index (BMI)&#39;, &#39;parameters&#39;: {&#39;type&#39;: &#39;object&#39;, &#39;properties&#39;: {&#39;weight&#39;: {&#39;type&#39;: &#39;number&#39;, &#39;description&#39;: &#39;The weight in kilograms&#39;}, &#39;height&#39;: {&#39;type&#39;: &#39;number&#39;, &#39;description&#39;: &#39;The height in meters&#39;}}, &#39;required&#39;: [&#39;weight&#39;, &#39;height&#39;]}}}] &lt;/tools&gt;Use the following pydantic model json schema for each tool call you will make: {&#39;title&#39;: &#39;FunctionCall&#39;, &#39;type&#39;: &#39;object&#39;, &#39;properties&#39;: {&#39;arguments&#39;: {&#39;title&#39;: &#39;Arguments&#39;, &#39;type&#39;: &#39;object&#39;}, &#39;name&#39;: {&#39;title&#39;: &#39;Name&#39;, &#39;type&#39;: &#39;string&#39;}}, &#39;required&#39;: [&#39;arguments&#39;, &#39;name&#39;]}For each function call return a json object with function name and arguments within &lt;tool_call&gt;&lt;/tool_call&gt; XML tags as follows:
+&lt;tool_call&gt;
+{tool_call}
+&lt;/tool_call&gt;Also, before making a call to a function take the time to plan the function to take. Make that thinking process between &lt;think&gt;{your thoughts}&lt;/think&gt;
+
+I need to create a new task.&lt;end_of_turn&gt;&lt;eos&gt;
+&lt;start_of_turn&gt;model
+Sure, I can help with that. Could you please provide me with the task description, the due date, and the priority level?&lt;end_of_turn&gt;&lt;eos&gt;
+&lt;start_of_turn&gt;human
+The task is to prepare a presentation for the annual meeting. The due date is 2022-09-15 and the priority level is 3.&lt;end_of_turn&gt;&lt;eos&gt;
+&lt;start_of_turn&gt;model
+&lt;think&gt;Okay, so I need to figure out the reasoning that goes between the conversation and the next function call. Let me break this down step by step.
+
+First, looking at the conversation, the user starts by saying, &quot;I need to create a new task.&quot; The model responds by asking for the task description, due date, and priority level. The user then provides all the necessary details: the task is to prepare a presentation for the annual meeting, the due date is 2022-09-15, and the priority is 3.
+
+Now, the model&#39;s next move should be to call the appropriate function. The available functions are &#39;create_todo&#39; and &#39;calculate_bmi&#39;. Since the user is talking about creating a new task, &#39;create_todo&#39; is the relevant function here.
+
+Examining the function&#39;s parameters, it requires &#39;task&#39;, &#39;due_date&#39;, and takes &#39;priority&#39; as optional. The user provided all three, so we can include them in the arguments.
+
+Therefore, the model will execute the &#39;create_todo&#39; function with the provided task details. This makes sense because the conversation is about setting up a new task, and the function is designed for that exact purpose.
+&lt;/think&gt;&lt;tool_call&gt;
+{&#39;name&#39;: &#39;create_todo&#39;, &#39;arguments&#39;: {&#39;task&#39;: &#39;Prepare a presentation for the annual meeting&#39;, &#39;due_date&#39;: &#39;2022-09-15&#39;, &#39;priority&#39;: 3}}
+&lt;/tool_call&gt;&lt;end_of_turn&gt;&lt;eos&gt;
+&lt;start_of_turn&gt;tool
+&lt;tool_response&gt;
+{&#39;status&#39;: &#39;success&#39;, &#39;message&#39;: &#39;Todo item successfully created&#39;, &#39;todo_id&#39;: &#39;12345&#39;}
+&lt;/tool_response&gt;&lt;end_of_turn&gt;&lt;eos&gt;
+&lt;start_of_turn&gt;model
+Your task has been successfully created. The ID for your new task is 12345.&lt;end_of_turn&gt;&lt;eos&gt;
+</code></pre></div>
+
+<h2>Training Setup with LoRA Adapters</h2>
+<p>To efficiently fine-tune the model without retraining all of its parameters, we leverage LoRA. First, we create a directory to store adapter configurations and weights.</p>
+<div class="highlight"><pre><span></span><code><span class="n">adapter_path</span> <span class="o">=</span> <span class="s2">&quot;adapters_fc&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">adapter_path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">adapter_config_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">adapter_path</span><span class="p">,</span> <span class="s2">&quot;adapter_config.json&quot;</span><span class="p">)</span>
+<span class="n">adapter_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">adapter_path</span><span class="p">,</span> <span class="s2">&quot;adapters.safetensors&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Then we define our LoRA configuration, with parameters like number of layers 8, a rank of 16, scale of 64, a dropout of 0.05,</p>
+<div class="highlight"><pre><span></span><code><span class="n">lora_config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;num_layers&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="s2">&quot;lora_parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;rank&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+        <span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span>
+        <span class="s2">&quot;dropout&quot;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>and save it as a JSON file.</p>
+<div class="highlight"><pre><span></span><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">adapter_config_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">lora_config</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Next, we define the training arguments, specifically setting a single iteration,</p>
+<div class="highlight"><pre><span></span><code><span class="n">training_args</span> <span class="o">=</span> <span class="n">TrainingArgs</span><span class="p">(</span>
+    <span class="n">adapter_file</span><span class="o">=</span><span class="n">adapter_file_path</span><span class="p">,</span>
+    <span class="n">iters</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">steps_per_eval</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>and freeze the original model parameters.</p>
+<div class="highlight"><pre><span></span><code><span class="n">_</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
+</code></pre></div>
+
+<p>Then, we convert selected linear layers to LoRA layers to make only a small subset of parameters trainable.</p>
+<div class="highlight"><pre><span></span><code><span class="n">linear_to_lora_layers</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">lora_config</span><span class="p">[</span><span class="s2">&quot;num_layers&quot;</span><span class="p">],</span> <span class="n">lora_config</span><span class="p">[</span><span class="s2">&quot;lora_parameters&quot;</span><span class="p">])</span>
+</code></pre></div>
+
+<p>In our example, this results in</p>
+<div class="highlight"><pre><span></span><code><span class="n">num_train_params</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">size</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">tree_flatten</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">trainable_parameters</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of trainable parameters: </span><span class="si">{</span><span class="n">num_train_params</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>983,040 trainable parameters. Finally, we should not forget to activate training mode while still preserving the frozen state of the main model parameters.</p>
+<div class="highlight"><pre><span></span><code><span class="n">_</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+</code></pre></div>
+
+<h2>Fine-Tuning Process and Metrics</h2>
+<p>With our model and dataset ready, we configure a metrics tracker to log both training and validation losses,</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Metrics</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_losses</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">val_losses</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_train_loss_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_losses</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;iteration&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;train_loss&quot;</span><span class="p">]))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_val_loss_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">val_losses</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;iteration&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;val_loss&quot;</span><span class="p">]))</span>
+</code></pre></div>
+
+<p>and create an instance of this class.</p>
+<div class="highlight"><pre><span></span><code><span class="n">metrics</span> <span class="o">=</span> <span class="n">Metrics</span><span class="p">()</span>
+</code></pre></div>
+
+<p>We also create mlx-lm–suitable datasets by first defining the following configuration about our datasets,</p>
+<div class="highlight"><pre><span></span><code><span class="n">configs</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;mask_prompt&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;prompt_feature&quot;</span><span class="p">:</span> <span class="s2">&quot;prompt&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;text_feature&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;completion_feature&quot;</span><span class="p">:</span> <span class="s2">&quot;completion&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;chat_feature&quot;</span><span class="p">:</span> <span class="s2">&quot;messages&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>and then create a train set with the help of the mlx-lm function <code>datasets.create_dataset</code> and passing the configuration from above.</p>
+<div class="highlight"><pre><span></span><code><span class="n">train_set</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">],</span>
+    <span class="n">tokenizer</span><span class="p">,</span>
+    <span class="n">configs</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>Similarly, we create our validation set.</p>
+<div class="highlight"><pre><span></span><code><span class="n">val_set</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">],</span>
+    <span class="n">tokenizer</span><span class="p">,</span>
+    <span class="n">configs</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>Finally, we start the fine-tuning process by calling the <code>train()</code> function.</p>
+<div class="highlight"><pre><span></span><code><span class="n">train</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+    <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
+    <span class="n">args</span><span class="o">=</span><span class="n">training_args</span><span class="p">,</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">),</span>
+    <span class="n">train_dataset</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span>
+    <span class="n">val_dataset</span><span class="o">=</span><span class="n">val_set</span><span class="p">,</span>
+    <span class="n">training_callback</span><span class="o">=</span><span class="n">metrics</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>The training logs report both training and validation losses, along with performance metrics like tokens processed per second and memory usage. After training, the adapter weights are saved and can later be reloaded to quickly deploy the fine-tuned model.</p>
+<div class="highlight"><pre><span></span><code>Starting training..., iters: 1
+Iter 1: Val loss 1.821, Val took 128.584s
+Iter 1: Train loss 1.861, Learning Rate 1.000e-05, It/sec 0.430, Tokens/sec 160.427, Trained Tokens 3735, Peak mem 20.665 GB
+Saved final weights to adapters_fc/adapters.safetensors.
+</code></pre></div>
+
+<h2>Evaluating the Fine-Tuned Model</h2>
+<p>After training, we reload the model with the newly learned LoRA weights,</p>
+<div class="highlight"><pre><span></span><code><span class="n">model_lora</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">adapter_path</span><span class="o">=</span><span class="n">adapter_path</span><span class="p">)</span>
+</code></pre></div>
+
+<p>set our prompt to</p>
+<div class="highlight"><pre><span></span><code><span class="n">prompt</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;&lt;bos&gt;&lt;start_of_turn&gt;human</span>
+<span class="s2">You are a function calling AI model. You are provided with function signatures within &lt;tools&gt;&lt;/tools&gt; XML tags.You may call one or more functions to assist with the user query. Don&#39;t make assumptions about what values to plug into functions.Here are the available tools:&lt;tools&gt; [{&#39;type&#39;: &#39;function&#39;, &#39;function&#39;: {&#39;name&#39;: &#39;convert_currency&#39;, &#39;description&#39;: &#39;Convert from one currency to another&#39;, &#39;parameters&#39;: {&#39;type&#39;: &#39;object&#39;, &#39;properties&#39;: {&#39;amount&#39;: {&#39;type&#39;: &#39;number&#39;, &#39;description&#39;: &#39;The amount to convert&#39;}, &#39;from_currency&#39;: {&#39;type&#39;: &#39;string&#39;, &#39;description&#39;: &#39;The currency to convert from&#39;}, &#39;to_currency&#39;: {&#39;type&#39;: &#39;string&#39;, &#39;description&#39;: &#39;The currency to convert to&#39;}}, &#39;required&#39;: [&#39;amount&#39;, &#39;from_currency&#39;, &#39;to_currency&#39;]}}}, {&#39;type&#39;: &#39;function&#39;, &#39;function&#39;: {&#39;name&#39;: &#39;calculate_distance&#39;, &#39;description&#39;: &#39;Calculate the distance between two locations&#39;, &#39;parameters&#39;: {&#39;type&#39;: &#39;object&#39;, &#39;properties&#39;: {&#39;start_location&#39;: {&#39;type&#39;: &#39;string&#39;, &#39;description&#39;: &#39;The starting location&#39;}, &#39;end_location&#39;: {&#39;type&#39;: &#39;string&#39;, &#39;description&#39;: &#39;The ending location&#39;}}, &#39;required&#39;: [&#39;start_location&#39;, &#39;end_location&#39;]}}}] &lt;/tools&gt;Use the following pydantic model json schema for each tool call you will make: {&#39;title&#39;: &#39;FunctionCall&#39;, &#39;type&#39;: &#39;object&#39;, &#39;properties&#39;: {&#39;arguments&#39;: {&#39;title&#39;: &#39;Arguments&#39;, &#39;type&#39;: &#39;object&#39;}, &#39;name&#39;: {&#39;title&#39;: &#39;Name&#39;, &#39;type&#39;: &#39;string&#39;}}, &#39;required&#39;: [&#39;arguments&#39;, &#39;name&#39;]}For each function call return a json object with function name and arguments within &lt;tool_call&gt;&lt;/tool_call&gt; XML tags as follows:</span>
+<span class="s2">&lt;tool_call&gt;</span>
+<span class="si">{tool_call}</span>
+<span class="s2">&lt;/tool_call&gt;Also, before making a call to a function take the time to plan the function to take. Make that thinking process between &lt;think&gt;{your thoughts}&lt;/think&gt;</span>
+
+<span class="s2">Hi, I need to convert 500 USD to Euros. Can you help me with that?&lt;end_of_turn&gt;&lt;eos&gt;</span>
+<span class="s2">&lt;start_of_turn&gt;model</span>
+<span class="s2">&lt;think&gt;&quot;&quot;&quot;</span>
+</code></pre></div>
+
+<p>and generate a response</p>
+<div class="highlight"><pre><span></span><code><span class="n">generate</span><span class="p">(</span><span class="n">model_lora</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</code></pre></div>
+
+<p>which returns</p>
+<div class="highlight"><pre><span></span><code>==========
+
+To convert USD to Euros, I need to use the &#39;convert_currency&#39; function from the provided tools.  I need to provide the amount to convert, the currency to convert from (USD), and the currency to convert to (Euros).  I should also make sure the amount is a number.
+&lt;/think&gt;
+
+&lt;tool_call&gt;
+{
+  &#39;name&#39;: &#39;convert_currency&#39;,
+  &#39;arguments&#39;: {
+    &#39;amount&#39;: 500,
+    &#39;from_currency&#39;: &#39;USD&#39;,
+    &#39;to_currency&#39;: &#39;EUR&#39;
+  }
+}
+&lt;/tool_call&gt; 
+
+==========
+Prompt: 460 tokens, 862.170 tokens-per-sec
+Generation: 135 tokens, 68.472 tokens-per-sec
+Peak memory: 20.665 GB
+</code></pre></div>
+
+<p>The model first walks through a thought process before generating a function call to convert USD to Euros. This demonstrates the model’s improved ability to generate precise JSON function calls within <code>&lt;tool_call&gt;</code> XML tags.</p>
+<h2>Conclusion</h2>
+<p>Fine-tuning a model for function-calling can significantly enhance its interactivity and real-world utility. By adapting the chat template, preprocessing the dataset, and applying LoRA adapters, we’ve demonstrated a streamlined approach to training a model that can generate executable function calls with clear reasoning. It is impressive that we achieved this by using only the <code>mlx-lm</code> package. Happy fine-tuning!</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+    <h4>Reading Time</h4>
+    <p>~8 min read</p>
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-04-06T07:00:00+03:00">Sun 06 April 2025</time>
+            <h4>Category</h4>
+            <a class="category-link" href="/categories.html#machine-learning-ref">Machine Learning</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#ai-ref">ai
+                    <span class="superscript">9</span>
+</a></li>
+                <li><a href="/tags.html#llm-ref">llm
+                    <span class="superscript">4</span>
+</a></li>
+                <li><a href="/tags.html#ml-ref">ml
+                    <span class="superscript">9</span>
+</a></li>
+                <li><a href="/tags.html#mlx-ref">mlx
+                    <span class="superscript">4</span>
+</a></li>
+                <li><a href="/tags.html#mlx-lm-ref">mlx-lm
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Stay in Touch</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/JoeJoe1313" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+    <a href="https://www.linkedin.com/in/joana-levtcheva-479844164/" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="LinkedIn" role="img" viewBox="0 0 512 512" fill="#fff"><rect width="512" height="512" rx="15%" fill="#0077b5"/><circle cx="142" cy="138" r="37"/><path stroke="#fff" stroke-width="66" d="M244 194v198M142 194v198"/><path d="M276 282c0-20 13-40 36-40 24 0 33 18 33 45v105h66V279c0-61-32-89-76-89-34 0-51 19-59 32"/></svg>
+    </a>
+    <a href="https://x.com/13_jo_jo_13" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="Twitter" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1da1f3"/><path fill="#fff" d="M437 152a72 72 0 0 1-40 12 72 72 0 0 0 32-40 72 72 0 0 1-45 17 72 72 0 0 0-122 65 200 200 0 0 1-145-74 72 72 0 0 0 22 94 72 72 0 0 1-32-7 72 72 0 0 0 56 69 72 72 0 0 1-32 1 72 72 0 0 0 67 50 200 200 0 0 1-105 29 200 200 0 0 0 309-179 200 200 0 0 0 35-37"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+    </div>
+</footer><div id="zoom-overlay" class="zoom-overlay" aria-hidden="true">
+    <button type="button" class="zoom-overlay__close" aria-label="Close zoomed image">×</button>
+    <img src="" alt="">
+</div>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script src="/theme/js/zoom-overlay.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+        <script src="https://files.stork-search.net/releases/v1.6.0/stork.js"></script>
+        <script src="/theme/js/stork-search.js"></script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

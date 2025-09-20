@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+        <link rel="stylesheet" href="https://files.stork-search.net/basic.css">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="ai, ml, vlm, Machine Learning, " />
+
+<meta property="og:title" content="NanoNets OCR for Handwritten Notes "/>
+<meta property="og:url" content="/nanonets-ocr.html" />
+<meta property="og:description" content="Nanonets has released Nanonets-OCR-s, a state-of-the-art small 3B image-to-markdown OCR model that goes far beyond traditional text extraction. The model is available on Hugging Face and integrated with their docext tool for immediate use. Medium post can be found here." />
+<meta property="og:site_name" content="JoJo&#39;s Blog" />
+<meta property="og:article:author" content="" />
+<meta property="og:article:published_time" content="2025-08-03T07:00:00+03:00" />
+<meta name="twitter:title" content="NanoNets OCR for Handwritten Notes ">
+<meta name="twitter:description" content="Nanonets has released Nanonets-OCR-s, a state-of-the-art small 3B image-to-markdown OCR model that goes far beyond traditional text extraction. The model is available on Hugging Face and integrated with their docext tool for immediate use. Medium post can be found here.">
+
+        <title>NanoNets OCR for Handwritten Notes  · JoJo&#39;s Blog
+</title>
+        <link rel="shortcut icon" href="/theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="/theme/images/apple-touch-icon-152x152.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/theme/images/apple-touch-icon.png"  type="image/png" />
+        <link rel="apple-touch-icon" sizes="57x57" href="/theme/images/apple-touch-icon-57x57.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/images/apple-touch-icon-72x72.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="/theme/images/apple-touch-icon-76x76.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/images/apple-touch-icon-114x114.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/theme/images/apple-touch-icon-120x120.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/images/apple-touch-icon-144x144.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/theme/images/apple-touch-icon-152x152.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/theme/images/apple-touch-icon-180x180.png" type="image/png" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="/"><span class=site-name>JoJo's Blog</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       "/"
+                                    >Home</a>
+                                </li>
+                                <li ><a href="/interests.html">Interests</a></li>
+                                <li ><a href="/categories.html">Categories</a></li>
+                                <li ><a href="/tags.html">Tags</a></li>
+                                <li ><a href="/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+                                    <input type="text" class="search-query" placeholder="Search" name="q" data-stork="site-search" autocomplete="off">
+                                </form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="/nanonets-ocr.html">
+                NanoNets OCR for Handwritten Notes
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Nanonets has released <a href="https://nanonets.com/research/nanonets-ocr-s/">Nanonets-OCR-s</a>, a state-of-the-art small <strong>3B</strong> image-to-markdown OCR model that goes far beyond traditional text extraction. The model is available on <a href="https://huggingface.co/nanonets/Nanonets-OCR-s">Hugging Face</a> and integrated with their <a href="https://github.com/NanoNets/docext">docext</a> tool for immediate use. Medium post can be found <a href="https://medium.com/@levchevajoana/nanonets-ocr-a-small-gem-for-handwritten-notes-3fd069b76e78">here</a>.</p>
+<p>Unlike conventional OCR systems that only extract plain text, Nanonets-OCR-s understands document structure and content context, converting documents into structured markdown ready for LLM processing.</p>
+<p><strong>Key Capabilities:</strong></p>
+<ul>
+<li><strong>LaTeX Equation Recognition</strong> — converts mathematical formulas to proper LaTeX syntax with <code>$...$</code> for inline and <code>$$...$$</code> for display equations</li>
+<li><strong>Intelligent Image Description</strong> — describes charts, graphs, and visuals within structured tags <code>&lt;img&gt;</code></li>
+<li><strong>Signature Detection &amp; Isolation</strong> — identifies signatures separately from regular text and outputs them within a <code>&lt;signature&gt;</code> tag</li>
+<li><strong>Watermark Extraction</strong> — detects and extracts watermark text within a <code>&lt;watermark&gt;</code> tag</li>
+<li><strong>Smart Checkbox Handling</strong> — converts checkboxes, radio buttons to Unicode symbols</li>
+<li><strong>Complex Table Extraction</strong> — transforms tables into markdown/HTML format</li>
+</ul>
+<p><strong>Training:</strong> The model was trained on over 250,000 pages comprising research papers, financial documents, legal documents, healthcare documents, tax forms, receipts, and invoices. It uses <strong>Qwen2.5-VL-3B</strong> as the base model, fine-tuned on both synthetic and manually annotated datasets.</p>
+<blockquote>
+<p><strong>Note:</strong> The team seems to be experimenting with a 7B version version of the model based on Qwen2.5-VL-7B. Refer to the following <a href="https://huggingface.co/nanonets/Nanonets-OCR-s/discussions/2#684ddb4c8f8fe9eacccd2e65">comment</a>.</p>
+</blockquote>
+<hr>
+<p>In the original Nanonets blog <a href="https://nanonets.com/research/nanonets-ocr-s/">post</a> it is stated the model has not been trained on handwritten text. Out of curiosity I tested the model on handwritten math notes, and I was pretty impressed with the results such a small model produced. Thus, let’s put <strong>Nanonets-OCR-s</strong> to the test, and challenge it with handwritten notes.</p>
+<p>For the purpose, we are going to use <strong>mlx-vlm</strong>, and compare it to one of the most used large language models for OCR: <strong>Mistral OCR</strong>. First, I have converted the weights of the originally published by Nanonets <a href="https://huggingface.co/nanonets/Nanonets-OCR-s">model</a> on Hugging Face to <a href="https://huggingface.co/mlx-community/Nanonets-OCR-s-bf16">mlx suitbale weights</a>. In this post we are going to use <strong>mlx-community/Nanonets-OCR-s-bf16</strong>.</p>
+<h1>Tutorial</h1>
+<p>We are going to cover two main tasks:</p>
+<ul>
+<li><strong>Image processing:</strong> Direct OCR on handwritten mathematical notes</li>
+<li><strong>PDF processing:</strong> Processing of multi-page documents</li>
+</ul>
+<p>For testing purposes, we are going to use two sample images (see <strong>Figure 1</strong> below), containing handwritten mathematical equations and graphs to evaluate the model’s performance on content it wasn’t specifically trained for.</p>
+<figure style="display: flex; justify-content: center; gap: 1rem; margin: 0;">
+  <div>
+    <img src="../images/2025-08-03-nanonets-ocr/input_1.png" alt="Input 1" class="zoomable" />
+  </div>
+  <div>
+    <img src="../images/2025-08-03-nanonets-ocr/input_2.png" alt="Input 2" class="zoomable" />
+  </div>
+</figure>
+<figcaption style="text-align: center; width: 100%; margin-top: 0.5rem;">
+    Figure 1. Left: Input 1 containing equations | Right: Input 2 containing equations and a graph
+</figcaption>
+
+<h2>Process an Image</h2>
+<blockquote>
+<p><strong>Note:</strong> We are going to use mlx-vlm version 0.1.27 because at the moment of writing this post there are some issues with the higher versions.</p>
+</blockquote>
+<p>First, we need to load the necessary libraries:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">mlx_vlm</span><span class="w"> </span><span class="kn">import</span> <span class="n">apply_chat_template</span><span class="p">,</span> <span class="n">generate</span><span class="p">,</span> <span class="n">load</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_vlm.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_image</span>
+</code></pre></div>
+
+<p>Next, we load the MLX-converted Nanonets OCR model:</p>
+<div class="highlight"><pre><span></span><code><span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;mlx-community/Nanonets-OCR-s-bf16&quot;</span>
+<span class="n">model</span><span class="p">,</span> <span class="n">processor</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">config</span>
+</code></pre></div>
+
+<p>Now, we have to load the image:</p>
+<div class="highlight"><pre><span></span><code><span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;../images/sc_1.png&quot;</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">load_image</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
+</code></pre></div>
+
+<p>The prompt is crucial for getting optimal results. Here, we use the prompt from the Nanonet’s usage example given in the <a href="https://huggingface.co/nanonets/Nanonets-OCR-s">original model card</a> in Hugging Face.</p>
+<div class="highlight"><pre><span></span><code><span class="n">prompt</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;Extract the text from the above document as if you were reading it naturally. &quot;</span>
+    <span class="s2">&quot;Return the tables in html format. Return the equations in LaTeX representation. &quot;</span>
+    <span class="s2">&quot;If there is an image in the document and image caption is not present, add a small description of the image inside the &lt;img&gt;&lt;/img&gt; tag; otherwise, add the image caption inside &lt;img&gt;&lt;/img&gt;. &quot;</span> 
+    <span class="s2">&quot;Watermarks should be wrapped in brackets. Ex: &lt;watermark&gt;OFFICIAL COPY&lt;/watermark&gt;. &quot;</span>
+    <span class="s2">&quot;Page numbers should be wrapped in brackets. Ex: &lt;page_number&gt;14&lt;/page_number&gt; or &lt;page_number&gt;9/22&lt;/page_number&gt;. Prefer using ☐ and ☑ for check boxes.&quot;</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>We structure the input as a conversation format that the model expects:</p>
+<div class="highlight"><pre><span></span><code><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a helpful assistant.&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;file://</span><span class="si">{</span><span class="n">image_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">},</span>
+    <span class="p">]},</span>
+<span class="p">]</span>
+<span class="n">formatted_prompt</span> <span class="o">=</span> <span class="n">apply_chat_template</span><span class="p">(</span>
+    <span class="n">processor</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">messages</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>And finally, we generate a model output:</p>
+<div class="highlight"><pre><span></span><code><span class="n">generate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">processor</span><span class="p">,</span> <span class="n">formatted_prompt</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>Process a PDF</h2>
+<p>For processing of multi-page documents, we extend our approach to handle PDF files by converting them to images first. We need <code>pdf2image</code> to convert the PDF to an array of <code>PIL.PpmImagePlugin.PpmImageFile</code> objects, one for each page:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">mlx_vlm</span><span class="w"> </span><span class="kn">import</span> <span class="n">apply_chat_template</span><span class="p">,</span> <span class="n">generate</span><span class="p">,</span> <span class="n">load</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pdf2image</span><span class="w"> </span><span class="kn">import</span> <span class="n">convert_from_path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm.notebook</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+</code></pre></div>
+
+<p>The conversion is done by using the function <code>convert_from_path</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">pdf_path</span> <span class="o">=</span> <span class="s2">&quot;../pdfs/Hermite Interpolation.pdf&quot;</span>
+<span class="n">images</span> <span class="o">=</span> <span class="n">convert_from_path</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">)</span>
+</code></pre></div>
+
+<p>We should set the prompt:</p>
+<div class="highlight"><pre><span></span><code><span class="n">prompt</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;Extract the text from the above document as if you were reading it naturally. &quot;</span>
+    <span class="s2">&quot;Return the tables in html format. Return the equations in LaTeX representation. &quot;</span>
+    <span class="s2">&quot;If there is an image in the document and image caption is not present, add a small description of the image inside the &lt;img&gt;&lt;/img&gt; tag; otherwise, add the image caption inside &lt;img&gt;&lt;/img&gt;. &quot;</span> 
+    <span class="s2">&quot;Watermarks should be wrapped in brackets. Ex: &lt;watermark&gt;OFFICIAL COPY&lt;/watermark&gt;. &quot;</span>
+    <span class="s2">&quot;Page numbers should be wrapped in brackets. Ex: &lt;page_number&gt;14&lt;/page_number&gt; or &lt;page_number&gt;9/22&lt;/page_number&gt;. Prefer using ☐ and ☑ for check boxes.&quot;</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>The loop processes each page individually, resizing images to a consistent dimension (850x1100) for optimal model performance, and saves the output to a structured markdown file.</p>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">images</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing pages&quot;</span><span class="p">):</span>
+    <span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;mlx-community/Nanonets-OCR-s-bf16&quot;</span>
+    <span class="n">model</span><span class="p">,</span> <span class="n">processor</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">config</span>
+
+    <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">850</span><span class="p">,</span> <span class="mi">1100</span><span class="p">))</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a helpful assistant.&quot;</span><span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="n">image</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">},</span>
+            <span class="p">],</span>
+        <span class="p">},</span>
+    <span class="p">]</span>
+    <span class="n">formatted_prompt</span> <span class="o">=</span> <span class="n">apply_chat_template</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">messages</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">generate</span><span class="p">(</span>
+        <span class="n">model</span><span class="p">,</span> <span class="n">processor</span><span class="p">,</span> <span class="n">formatted_prompt</span><span class="p">,</span> <span class="p">[</span><span class="n">image</span><span class="p">],</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">2000</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished generating page </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="n">output</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;output.md&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;## Page </span><span class="si">{</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">---</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished writing page </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<blockquote>
+<p><strong>Note:</strong> We are manually adding page number headlines and lines to separate the pages in the markdown.</p>
+</blockquote>
+<p>In theory, we can also directly pass all of the image pages to the prompt so they can be processed simultaneously, but in practice this is not very optimal if we are GPU poor (like me). An example notebook with the above code can be found <a href="https://github.com/JoeJoe1313/LLMs-Journey/blob/main/VLMs/nanonets_handwritten_maths.ipynb">here</a>.</p>
+<h1>Performance on Handwritten Math Notes</h1>
+<p>Despite not being explicitly trained on handwritten text, <strong>Nanonets-OCR-s</strong> demonstrates remarkable capability in recognising handwritten mathematical notation. Let’s see the model output using the original example prompt</p>
+<blockquote>
+<p>Extract the text from the above document as if you were reading it naturally. Return the tables in html format. Return the equations in LaTeX representation. If there is an image in the document and image caption is not present, add a small description of the image inside the <img></img> tag; otherwise, add the image caption inside <img></img>. Watermarks should be wrapped in brackets. Ex: <watermark>OFFICIAL COPY</watermark>. Page numbers should be wrapped in brackets. Ex: <page_number>14</page_number> or <page_number>9/22</page_number>. Prefer using ☐ and ☑ for check boxes.</p>
+</blockquote>
+<p>and also compare the results with <strong>Mistral OCR</strong>’s output(<a href="https://github.com/JoeJoe1313/LLMs-Journey/blob/main/VLMs/mistral_handwritten.ipynb">example code</a>).</p>
+<h2>Input 1</h2>
+<p>In <strong>Figure 2</strong> below, on the left we can see the output from the Nanonets model. On the right we can examine the rendered result. Generally, the output preserves the structure, and the equation’s content. The red note is missing, on one line I noticed a -2 missing, and in one place instead of curly brackets {}, we can see the classical ones (). The formatting is following the original note, and even the cases are bold.</p>
+<figure>
+  <img src="../images/2025-08-03-nanonets-ocr/output_1_nanonets.png" alt="Output 1 Nanonets" class="zoomable" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 2. Nanonets output for Input 1</figcaption>
+</figure>
+
+<p>In <strong>Figure 3</strong> below we can see the output from the Mistral OCR model. The output preserves the structure, but there are some problems with the equation’s content. The red note is missing as well, but the one line with a -2 missing is ok here, and the curly brackets {} are present. However, in Case 1 we can see some nonsense and missing = signs. Also, the line before Case 1 starts with (1) and not (i), which was correct in the Nanonets output. The formatting is following the original note, but this time the cases are not bold.</p>
+<figure>
+  <img src="../images/2025-08-03-nanonets-ocr/output_1_mistral.png" alt="Output 1 Mistral" class="zoomable" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 3. Mistral OCR output for Input 1</figcaption>
+</figure>
+
+<h2>Input 2</h2>
+<p>In <strong>Figure 4</strong> and <strong>Figure 5</strong> below we can see the outputs for Input 2, which consists of less complex content but includes a diagram. Both models produce accurate outputs, however, both of them miss the diagram. In the Mistral OCR output we can see that Cubic Hermite Interpolation is treated as a headline.</p>
+<figure>
+  <img src="../images/2025-08-03-nanonets-ocr/output_2_nanonets.png" alt="Output 2 Nanonets" class="zoomable" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 4. Nanonets output for Input 2</figcaption>
+</figure>
+
+<figure>
+  <img src="../images/2025-08-03-nanonets-ocr/output_2_mistral.png" alt="Output 2 Mistral" class="zoomable" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 5. Mistral OCR output for Input 2</figcaption>
+</figure>
+
+<p>What we can notice for the raw LaTeX output is that Mistral OCR formats the output with more new lines, always having a new line before and after each display equation.</p>
+<blockquote>
+<p>While impressive for a model not specifically trained on handwritten content, we should not forget that performance varies significantly with handwriting quality. Here, these were my notes written on an iPad using <a href="https://notability.com">Notability</a>, and then converted to PDF. The handwriting is easily readable, the notes are well structured, and are of high quality.</p>
+</blockquote>
+<h1>Conclusion</h1>
+<p>Nanonets-OCR-s proves to be a remarkably capable small model for OCR tasks, just with 3B parameters. Its ability to handle handwritten notes despite not being trained on such data demonstrates the model’s robust generalization capabilities. The structured markdown output, and LaTeX equation conversion make it particularly valuable for academic and research applications. <strong>This would have been a dream come true while I was studying for my bachelor’s degree in Applied Mathematics just a few years ago.</strong></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+    <h4>Reading Time</h4>
+    <p>~6 min read</p>
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-08-03T07:00:00+03:00">Sun 03 August 2025</time>
+            <h4>Category</h4>
+            <a class="category-link" href="/categories.html#machine-learning-ref">Machine Learning</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#ai-ref">ai
+                    <span class="superscript">9</span>
+</a></li>
+                <li><a href="/tags.html#ml-ref">ml
+                    <span class="superscript">9</span>
+</a></li>
+                <li><a href="/tags.html#vlm-ref">vlm
+                    <span class="superscript">5</span>
+</a></li>
+            </ul>
+<h4>Stay in Touch</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/JoeJoe1313" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+    <a href="https://www.linkedin.com/in/joana-levtcheva-479844164/" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="LinkedIn" role="img" viewBox="0 0 512 512" fill="#fff"><rect width="512" height="512" rx="15%" fill="#0077b5"/><circle cx="142" cy="138" r="37"/><path stroke="#fff" stroke-width="66" d="M244 194v198M142 194v198"/><path d="M276 282c0-20 13-40 36-40 24 0 33 18 33 45v105h66V279c0-61-32-89-76-89-34 0-51 19-59 32"/></svg>
+    </a>
+    <a href="https://x.com/13_jo_jo_13" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="Twitter" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1da1f3"/><path fill="#fff" d="M437 152a72 72 0 0 1-40 12 72 72 0 0 0 32-40 72 72 0 0 1-45 17 72 72 0 0 0-122 65 200 200 0 0 1-145-74 72 72 0 0 0 22 94 72 72 0 0 1-32-7 72 72 0 0 0 56 69 72 72 0 0 1-32 1 72 72 0 0 0 67 50 200 200 0 0 1-105 29 200 200 0 0 0 309-179 200 200 0 0 0 35-37"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+    </div>
+</footer><div id="zoom-overlay" class="zoom-overlay" aria-hidden="true">
+    <button type="button" class="zoom-overlay__close" aria-label="Close zoomed image">×</button>
+    <img src="" alt="">
+</div>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script src="/theme/js/zoom-overlay.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+        <script src="https://files.stork-search.net/releases/v1.6.0/stork.js"></script>
+        <script src="/theme/js/stork-search.js"></script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

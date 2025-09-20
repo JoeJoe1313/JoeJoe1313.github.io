@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+        <link rel="stylesheet" href="https://files.stork-search.net/basic.css">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="trigonometry, Mathematics, " />
+
+<meta property="og:title" content="Trigonometric Identities the Euler Way "/>
+<meta property="og:url" content="/trigonometric-identities.html" />
+<meta property="og:description" content="I have always believed that mathematics is about thinking rather than memorizing. The trigonometric identities were among the things we were told to memorize at school, and not only I struggled with that but I also actively rebelled against this approach. For me, mathematics is fundamentally about having a minimal but sufficient set of definitions and axioms, understanding them deeply, and then deriving everything else from these foundations. During one of my Complex Analysis lectures in my undergraduate Applied Mathematics studies, I was introduced to Euler&#39;s formula. When I discovered how it could be used to derive some of the most important trigonometric identities, I was more than relieved. I could finally derive the identities easily whenever I needed them, instead of relying on rote memorization, or panicking about my failure to memorize them." />
+<meta property="og:site_name" content="JoJo&#39;s Blog" />
+<meta property="og:article:author" content="" />
+<meta property="og:article:published_time" content="2025-08-04T07:00:00+03:00" />
+<meta name="twitter:title" content="Trigonometric Identities the Euler Way ">
+<meta name="twitter:description" content="I have always believed that mathematics is about thinking rather than memorizing. The trigonometric identities were among the things we were told to memorize at school, and not only I struggled with that but I also actively rebelled against this approach. For me, mathematics is fundamentally about having a minimal but sufficient set of definitions and axioms, understanding them deeply, and then deriving everything else from these foundations. During one of my Complex Analysis lectures in my undergraduate Applied Mathematics studies, I was introduced to Euler&#39;s formula. When I discovered how it could be used to derive some of the most important trigonometric identities, I was more than relieved. I could finally derive the identities easily whenever I needed them, instead of relying on rote memorization, or panicking about my failure to memorize them.">
+
+        <title>Trigonometric Identities the Euler Way  · JoJo&#39;s Blog
+</title>
+        <link rel="shortcut icon" href="/theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="/theme/images/apple-touch-icon-152x152.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/theme/images/apple-touch-icon.png"  type="image/png" />
+        <link rel="apple-touch-icon" sizes="57x57" href="/theme/images/apple-touch-icon-57x57.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/images/apple-touch-icon-72x72.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="/theme/images/apple-touch-icon-76x76.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/images/apple-touch-icon-114x114.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/theme/images/apple-touch-icon-120x120.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/images/apple-touch-icon-144x144.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/theme/images/apple-touch-icon-152x152.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/theme/images/apple-touch-icon-180x180.png" type="image/png" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="/"><span class=site-name>JoJo's Blog</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       "/"
+                                    >Home</a>
+                                </li>
+                                <li ><a href="/interests.html">Interests</a></li>
+                                <li ><a href="/categories.html">Categories</a></li>
+                                <li ><a href="/tags.html">Tags</a></li>
+                                <li ><a href="/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+                                    <input type="text" class="search-query" placeholder="Search" name="q" data-stork="site-search" autocomplete="off">
+                                </form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="/trigonometric-identities.html">
+                Trigonometric Identities the Euler Way
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>I have always believed that mathematics is about thinking rather than memorizing. The trigonometric identities were among the things we were told to memorize at school, and not only I struggled with that but I also actively rebelled against this approach. For me, mathematics is fundamentally about having a minimal but sufficient set of definitions and axioms, understanding them deeply, and then deriving everything else from these foundations. During one of my Complex Analysis lectures in my undergraduate Applied Mathematics studies, I was introduced to Euler's formula. When I discovered how it could be used to derive some of the most important trigonometric identities, I was more than relieved. I could finally derive the identities easily whenever I needed them, instead of relying on rote memorization, or panicking about my failure to memorize them.</p>
+<h1>Euler's Formula</h1>
+<p><strong>Euler's formula</strong> states that for any real number <span class="math">\(\theta\)</span>,</p>
+<div class="math">$$\label{eq:1}
+e^{i \theta} = \cos\theta + i \sin\theta, \tag{1}
+$$</div>
+<p>where <span class="math">\(i\)</span> is the imaginary unit, defined as <span class="math">\(i^2 = -1\)</span>. The formula has a geometric interpretation in the complex plane that provides insight into trigonometry and complex numbers, <strong>Figure 1</strong>.</p>
+<figure>
+  <img src="../images/2025-08-04-trigonometric-identities/Euler's_formula.svg" alt="Euler" class="zoomable" style="display: block; margin: 0 auto; width: 35%">
+  <figcaption style="text-align: center">Figure 1. Euler's formula in the complex plane</figcaption>
+</figure>
+
+<p>In <strong>Figure 1</strong>, the horizontal axis represents the real part, the vertical axis represents the imaginary part, and any complex number <span class="math">\(z = x + i y\)</span> is plotted as the point <span class="math">\((x, y)\)</span>. Euler's formula represents a point on the unit circle at angle <span class="math">\(\theta\)</span> from the positive real axis, where:</p>
+<ul>
+<li><strong>Real part</strong>: <span class="math">\(\cos\theta\)</span> (horizontal coordinate)</li>
+<li><strong>Imaginary part</strong>: <span class="math">\(\sin\theta\)</span> (vertical coordinate)</li>
+<li><strong>Magnitude</strong>: <span class="math">\(|e^{i\theta}| = \sqrt{\cos^2\theta + \sin^2\theta} = 1\)</span></li>
+</ul>
+<p>As <span class="math">\(\theta\)</span> varies from <span class="math">\(0\)</span> to <span class="math">\(2\pi\)</span>, the point <span class="math">\(e^{i\theta}\)</span> traces out the entire unit circle. The famous <strong>Euler's identity</strong> emerges naturally:</p>
+<div class="math">$$
+e^{i \pi} = \cos(\pi) + i \sin(\pi) = -1 + 0 i = -1,
+$$</div>
+<p>or</p>
+<div class="math">$$
+e^{i \pi} + 1 = 0.
+$$</div>
+<p>Now, let's go back to <span class="math">\(\eqref{eq:1}\)</span>. We know that <span class="math">\(\cos(x)\)</span> is an even function, meaning <span class="math">\(\cos(-x) = \cos(x)\)</span>, and <span class="math">\(\sin(x)\)</span> is an odd function, meaning <span class="math">\(\sin(-x) = -\sin(x)\)</span>. Using that, we can derive the following identity:</p>
+<div class="math">$$\label{eq:2}
+e^{-i \theta} = e^{i (-\theta)} = \cos(-\theta) + i \sin(-\theta) = \cos\theta - i \sin\theta. \tag{2}
+$$</div>
+<h1>Cosine and Sine Expressions</h1>
+<p>If we add <span class="math">\(\eqref{eq:1}\)</span> and <span class="math">\(\eqref{eq:2}\)</span>, we can derive the cosine function:</p>
+<div class="math">$$\label{eq:3}
+\cos\theta = \frac{e^{i\theta} + e^{-i\theta}}{2}. \tag{3}
+$$</div>
+<p>If we subtract <span class="math">\(\eqref{eq:2}\)</span> from <span class="math">\(\eqref{eq:1}\)</span>, we can derive the sine function:</p>
+<div class="math">$$\label{eq:4}
+\sin\theta = \frac{e^{i\theta} - e^{-i\theta}}{2i}. \tag{4}
+$$</div>
+<h1>Angle Addition Formulas</h1>
+<p>Let's say we want to derive the angle addition formulas for sine and cosine using Euler's formula. We start with</p>
+<div class="math">$$
+e^{i(\alpha + \beta)}  = e^{i\alpha + i\beta} = e^{i\alpha} e^{i\beta}.
+$$</div>
+<p>Applying the Euler's formula to the left side, we have:</p>
+<div class="math">$$
+e^{i(\alpha + \beta)} = \cos(\alpha + \beta) + i \sin(\alpha + \beta).
+$$</div>
+<p>Now, applying the Euler's formula to the right side, we have:</p>
+<div class="math">$$
+e^{i\alpha} e^{i\beta} = (\cos\alpha + i \sin\alpha)(\cos\beta + i \sin\beta) =
+$$</div>
+<div class="math">$$
+= \cos\alpha \cos\beta - \sin\alpha \sin\beta + i (\sin\alpha \cos\beta + \cos\alpha \sin\beta).
+$$</div>
+<p>Equating the real parts of the above two expressions, we get the <strong>cosine addition formula</strong></p>
+<div class="math">$$
+\cos(\alpha + \beta) = \cos\alpha \cos\beta - \sin\alpha \sin\beta.
+$$</div>
+<p>Equating the imaginary parts, we get the <strong>sine addition formula</strong></p>
+<div class="math">$$
+\sin(\alpha + \beta) = \sin\alpha \cos\beta + \cos\alpha \sin\beta.
+$$</div>
+<h1>Product-to-Sum Formulas</h1>
+<p>Let's derive the identity for the product of cosine and cosine functions. Using <span class="math">\(\eqref{eq:3}\)</span> and <span class="math">\(\eqref{eq:4}\)</span>, we have</p>
+<div class="math">$$
+\cos\alpha \cos\beta = \frac{1}{4}\left(e^{i\alpha} + e^{-i\alpha}\right)\left(e^{i\beta} + e^{-i\beta}\right) =
+$$</div>
+<div class="math">$$
+= \frac{1}{4}\left[e^{i(\alpha + \beta)} + e^{i(\alpha - \beta)} + e^{-i(\alpha - \beta)} + e^{-i(\alpha + \beta)}\right] =
+$$</div>
+<div class="math">$$
+= \frac{1}{2}\left[\cos(\alpha + \beta) + \cos(\alpha - \beta)\right].
+$$</div>
+<h1>Conclusion</h1>
+<p>The key advantage of using Euler's formula is that it transforms trigonometric problems into algebraic manipulations with exponentials, and I find this beautiful.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "true";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+    <h4>Reading Time</h4>
+    <p>~3 min read</p>
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-08-04T07:00:00+03:00">Mon 04 August 2025</time>
+            <h4>Category</h4>
+            <a class="category-link" href="/categories.html#mathematics-ref">Mathematics</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#trigonometry-ref">trigonometry
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Stay in Touch</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/JoeJoe1313" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+    <a href="https://www.linkedin.com/in/joana-levtcheva-479844164/" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="LinkedIn" role="img" viewBox="0 0 512 512" fill="#fff"><rect width="512" height="512" rx="15%" fill="#0077b5"/><circle cx="142" cy="138" r="37"/><path stroke="#fff" stroke-width="66" d="M244 194v198M142 194v198"/><path d="M276 282c0-20 13-40 36-40 24 0 33 18 33 45v105h66V279c0-61-32-89-76-89-34 0-51 19-59 32"/></svg>
+    </a>
+    <a href="https://x.com/13_jo_jo_13" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="Twitter" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1da1f3"/><path fill="#fff" d="M437 152a72 72 0 0 1-40 12 72 72 0 0 0 32-40 72 72 0 0 1-45 17 72 72 0 0 0-122 65 200 200 0 0 1-145-74 72 72 0 0 0 22 94 72 72 0 0 1-32-7 72 72 0 0 0 56 69 72 72 0 0 1-32 1 72 72 0 0 0 67 50 200 200 0 0 1-105 29 200 200 0 0 0 309-179 200 200 0 0 0 35-37"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+    </div>
+</footer><div id="zoom-overlay" class="zoom-overlay" aria-hidden="true">
+    <button type="button" class="zoom-overlay__close" aria-label="Close zoomed image">×</button>
+    <img src="" alt="">
+</div>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script src="/theme/js/zoom-overlay.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+        <script src="https://files.stork-search.net/releases/v1.6.0/stork.js"></script>
+        <script src="/theme/js/stork-search.js"></script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>
