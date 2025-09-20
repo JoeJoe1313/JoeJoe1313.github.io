@@ -189,3 +189,37 @@
     margin-right: auto;
   }
 }
+
+.zoom-overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1050;
+}
+.zoom-overlay.is-open { display: flex; }
+.zoom-overlay img {
+    max-width: min(90vw, 1200px);
+    max-height: 90vh;
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.6);
+    border-radius: 6px;
+}
+.zoom-overlay__close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    padding: 0.4rem 0.75rem;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.55);
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+}
+.zoomable {
+    cursor: zoom-in;
+}
