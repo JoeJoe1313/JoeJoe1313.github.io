@@ -17,7 +17,7 @@ In this post, we are going to explore Google’s [**PaliGemma 2 mix**](https://d
 In December 2024 Google introduced the [PaliGemma 2](https://developers.googleblog.com/en/introducing-paligemma-2-powerful-vision-language-models-simple-fine-tuning/) vision-language models (VLMs). These are pre-trained (**pt**) models coming in three different sizes: `3B`, `10B`, and `28B`, as well as three different input resolutions for images: `224x224`, `448x448`, and `896x896` pixels. These models represent the latest evolution of vision-language models developed by Google, building upon the foundation laid by its predecessor, PaliGemma. Below, we can see the architecture of the PaliGemma 2 model.
 
 <figure>
-  <img src="../images/2025-04-15-paligemma-2-mix/paligemma2-architecture.png" alt="PaliGemma 2 architecture" style="display: block; margin: 0 auto">
+  <img src="../images/2025-04-15-paligemma-2-mix/paligemma2-architecture.png" alt="PaliGemma 2 architecture" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 1. PaliGemma 2 Architecture Overview <span style="font-size: 0.8em;">[<a href="https://arxiv.org/pdf/2412.03555">Source</a>]</span></figcaption>
 </figure>
 
@@ -97,7 +97,7 @@ Let’s first begin by outlining the steps of the process for generating a segme
 - The model generates an output with 4 location coordinates and 16 segmentation tokens. The `<locXXXX><locXXXX><locXXXX><locXXXX>` sequence corresponds to the $y_{\text{min}}$, $x_{\text{min}}$, $y_{\text{max}}$, $x_{\text{max}}$ coordinates defining the **bounding box**. These coordinates should be normalised to an image size of `1024x1024` to obtain the bounding box coordinates of the object we want to segment with respect to the input image dimensions.
 
 <figure>
-  <img src="../images/2025-04-15-paligemma-2-mix/input_bb.png" alt="Model input and bounding box" style="display: block; margin: 0 auto">
+  <img src="../images/2025-04-15-paligemma-2-mix/input_bb.png" alt="Model input and bounding box" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 2. Model input and bounding box coordinates</figcaption>
 </figure>
 
@@ -107,7 +107,7 @@ Now that we’ve defined the bounding box by its coordinates, let’s zoom in on
 - Next, we need to map the segmentation mask onto the bounding box that was previously defined. This is accomplished using classical interpolation techniques to scale the mask to the bounding box’s dimensions.
 
 <figure>
-  <img src="../images/2025-04-15-paligemma-2-mix/map_mask.png" alt="Mapping mask to bounding box" style="display: block; margin: 0 auto">
+  <img src="../images/2025-04-15-paligemma-2-mix/map_mask.png" alt="Mapping mask to bounding box" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 3. Mapping the 64x64 mask to the bounding box</figcaption>
 </figure>
 
@@ -538,7 +538,7 @@ In this section, we are going to show to examples of single object segmentation.
 **Image:**
 
 <figure>
-  <img src="../images/2025-04-15-paligemma-2-mix/cow_in.png" alt="Cow input" style="display: block; margin: 0 auto">
+  <img src="../images/2025-04-15-paligemma-2-mix/cow_in.png" alt="Cow input" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 4. Original image of size 400x400</figcaption>
 </figure>
 
@@ -551,7 +551,7 @@ In this section, we are going to show to examples of single object segmentation.
 **Mask overlay and reconstructed mask:**
 
 <figure>
-  <img src="../images/2025-04-15-paligemma-2-mix/cow_out.png" alt="Cow output" style="display: block; margin: 0 auto">
+  <img src="../images/2025-04-15-paligemma-2-mix/cow_out.png" alt="Cow output" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 5. Left: mask overlay onto the input image of size 448x448 | Right: reconstructed mask of size 64x64</figcaption>
 </figure>
 
@@ -570,7 +570,7 @@ Based on the overlay image, the model manages to detect the precise location of 
 **Image:**
 
 <figure>
-  <img src="../images/2025-04-15-paligemma-2-mix/cat_in.png" alt="Cat input" style="display: block; margin: 0 auto">
+  <img src="../images/2025-04-15-paligemma-2-mix/cat_in.png" alt="Cat input" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 6. Original image of size 400x400</figcaption>
 </figure>
 
@@ -583,7 +583,7 @@ Based on the overlay image, the model manages to detect the precise location of 
 **Mask overlay and reconstructed mask:**
 
 <figure>
-  <img src="../images/2025-04-15-paligemma-2-mix/cat_out.png" alt="Cat output" style="display: block; margin: 0 auto">
+  <img src="../images/2025-04-15-paligemma-2-mix/cat_out.png" alt="Cat output" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 7. Left: mask overlay onto the input image of size 448x448 | Right: reconstructed mask of size 64x64</figcaption>
 </figure>
 
@@ -606,7 +606,7 @@ It was tricky to find a working example for segmenting multiple objects, so ther
 **Image:**
 
 <figure>
-  <img src="../images/2025-04-15-paligemma-2-mix/car_in.png" alt="Car input" style="display: block; margin: 0 auto">
+  <img src="../images/2025-04-15-paligemma-2-mix/car_in.png" alt="Car input" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 8. Original image of size 640x480</figcaption>
 </figure>
 
@@ -619,7 +619,7 @@ It was tricky to find a working example for segmenting multiple objects, so ther
 **Mask overlay and reconstructed mask:**
 
 <figure>
-  <img src="../images/2025-04-15-paligemma-2-mix/car_out.png" alt="Car output" style="display: block; margin: 0 auto">
+  <img src="../images/2025-04-15-paligemma-2-mix/car_out.png" alt="Car output" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 9. Left: masks overlay onto the input image of size 448x448 | Right: reconstructed masks of size 64x64</figcaption>
 </figure>
 

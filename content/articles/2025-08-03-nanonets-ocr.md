@@ -41,10 +41,10 @@ For testing purposes, we are going to use two sample images (see **Figure 1** be
 
 <figure style="display: flex; justify-content: center; gap: 1rem; margin: 0;">
   <div>
-    <img src="../images/2025-08-03-nanonets-ocr/input_1.png" alt="Input 1" />
+    <img src="../images/2025-08-03-nanonets-ocr/input_1.png" alt="Input 1" class="zoomable" />
   </div>
   <div>
-    <img src="../images/2025-08-03-nanonets-ocr/input_2.png" alt="Input 2" />
+    <img src="../images/2025-08-03-nanonets-ocr/input_2.png" alt="Input 2" class="zoomable" />
   </div>
 </figure>
 <figcaption style="text-align: center; width: 100%; margin-top: 0.5rem;">
@@ -187,14 +187,14 @@ and also compare the results with **Mistral OCR**’s output([example code](http
 In **Figure 2** below, on the left we can see the output from the Nanonets model. On the right we can examine the rendered result. Generally, the output preserves the structure, and the equation’s content. The red note is missing, on one line I noticed a -2 missing, and in one place instead of curly brackets {}, we can see the classical ones (). The formatting is following the original note, and even the cases are bold.
 
 <figure>
-  <img src="../images/2025-08-03-nanonets-ocr/output_1_nanonets.png" alt="Output 1 Nanonets" style="display: block; margin: 0 auto">
+  <img src="../images/2025-08-03-nanonets-ocr/output_1_nanonets.png" alt="Output 1 Nanonets" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 2. Nanonets output for Input 1</figcaption>
 </figure>
 
 In **Figure 3** below we can see the output from the Mistral OCR model. The output preserves the structure, but there are some problems with the equation’s content. The red note is missing as well, but the one line with a -2 missing is ok here, and the curly brackets {} are present. However, in Case 1 we can see some nonsense and missing = signs. Also, the line before Case 1 starts with (1) and not (i), which was correct in the Nanonets output. The formatting is following the original note, but this time the cases are not bold.
 
 <figure>
-  <img src="../images/2025-08-03-nanonets-ocr/output_1_mistral.png" alt="Output 1 Mistral" style="display: block; margin: 0 auto">
+  <img src="../images/2025-08-03-nanonets-ocr/output_1_mistral.png" alt="Output 1 Mistral" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 3. Mistral OCR output for Input 1</figcaption>
 </figure>
 
@@ -203,12 +203,12 @@ In **Figure 3** below we can see the output from the Mistral OCR model. The outp
 In **Figure 4** and **Figure 5** below we can see the outputs for Input 2, which consists of less complex content but includes a diagram. Both models produce accurate outputs, however, both of them miss the diagram. In the Mistral OCR output we can see that Cubic Hermite Interpolation is treated as a headline.
 
 <figure>
-  <img src="../images/2025-08-03-nanonets-ocr/output_2_nanonets.png" alt="Output 2 Nanonets" style="display: block; margin: 0 auto">
+  <img src="../images/2025-08-03-nanonets-ocr/output_2_nanonets.png" alt="Output 2 Nanonets" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 4. Nanonets output for Input 2</figcaption>
 </figure>
 
 <figure>
-  <img src="../images/2025-08-03-nanonets-ocr/output_2_mistral.png" alt="Output 2 Mistral" style="display: block; margin: 0 auto">
+  <img src="../images/2025-08-03-nanonets-ocr/output_2_mistral.png" alt="Output 2 Mistral" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 5. Mistral OCR output for Input 2</figcaption>
 </figure>
 

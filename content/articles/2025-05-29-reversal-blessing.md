@@ -64,7 +64,7 @@ Multiple‚Äêchoice questions (MCQs) are a common benchmark for evaluating an LLM‚
 - Exactly **one correct answer** $a^{*}$ among these $n$ choices
 
 <figure>
-  <img src="../images/2025-05-29-reversal-blessing/mcq_fig.jpeg" alt="MCQ figure" style="display: block; margin: 0 auto">
+  <img src="../images/2025-05-29-reversal-blessing/mcq_fig.jpeg" alt="MCQ figure" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 1. A diagram showing forward vs. reverse thinking in MCQs. The top half shows L2R evaluating answers based on the question. The bottom half shows R2L evaluating the question based on the answers.</figcaption>
 </figure>
 
@@ -123,7 +123,7 @@ This is proposed as the most unified and powerful criterion. The core idea is th
 An LLM can be viewed as constructing a directed search graph (a Directed Acyclic Graph (DAG)) from the training data, mapping between information entities. An L2R model and an R2L model trained on the same data will form analogous DAGs but with opposite edge directions, as illustrated below.
 
 <figure>
-  <img src="../images/2025-05-29-reversal-blessing/dag.jpeg" alt="MCQ figure" style="display: block; margin: 0 auto">
+  <img src="../images/2025-05-29-reversal-blessing/dag.jpeg" alt="MCQ figure" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 2. L2R and R2L models pretrained on the same data generate opposite search graphs based on the order in which they process information entities.</figcaption>
 </figure>
 
@@ -135,7 +135,7 @@ The efficiency of searching these graphs in either direction is what conditional
 The paper hypothesizes that the direction with the minimum entropy will yield higher accuracy. Since directly computing these entropies is intractable, the authors estimate them using a **Monte Carlo proxy** based on single-sample "rollouts" from the models. The results show a strong correlation: the direction with lower estimated conditional entropy typically achieves higher accuracy on the benchmark.
 
 <figure>
-  <img src="../images/2025-05-29-reversal-blessing/cond_entr.jpg" alt="MCQ figure" style="display: block; margin: 0 auto">
+  <img src="../images/2025-05-29-reversal-blessing/cond_entr.jpg" alt="MCQ figure" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 3. Accuracy vs. conditional entropy. The empirical results show that lower conditional entropy is typically associated with higher accuracy in the corresponding reasoning direction.</figcaption>
 </figure>
 
@@ -144,7 +144,7 @@ The paper hypothesizes that the direction with the minimum entropy will yield hi
 To isolate the "3C" effects, the researchers designed a controlled experiment using 4-digit multiplication.
 
 <figure>
-  <img src="../images/2025-05-29-reversal-blessing/contr_mult.jpg" alt="MCQ figure" style="display: block; margin: 0 auto">
+  <img src="../images/2025-05-29-reversal-blessing/contr_mult.jpg" alt="MCQ figure" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 4. An illustration of the forward multiplication and reverse multiplication tasks used in the simulation study. Forward multiplication is a many-to-one mapping, while reverse multiplication is one-to-many.</figcaption>
 </figure>
 

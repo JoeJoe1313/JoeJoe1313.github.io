@@ -359,7 +359,7 @@ mlx_lm.server
 You should see output indicating the server has started, by default on `127.0.0.1:8080`.
 
 <figure>
-  <img src="../images/2025-06-21-tool-mlx-openai/start_mlx_server.jpg" alt="Start mlx server" style="display: block; margin: 0 auto">
+  <img src="../images/2025-06-21-tool-mlx-openai/start_mlx_server.jpg" alt="Start mlx server" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 1. Start the mlx-lm server</figcaption>
 </figure>
 
@@ -374,7 +374,7 @@ python jobs_tool_conv.py
 Now you can chat with your AI assistant.
 
 <figure>
-  <img src="../images/2025-06-21-tool-mlx-openai/run_job_tool.jpg" alt="Run job tool" style="display: block; margin: 0 auto">
+  <img src="../images/2025-06-21-tool-mlx-openai/run_job_tool.jpg" alt="Run job tool" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 2. Run the job tool client</figcaption>
 </figure>
 
@@ -393,14 +393,14 @@ What are the jobs from today in Data Science category?
 You are going to see the log messages as the assistant thinks, calls its tool, and then presents the final, formatted list of jobs it found. If jobs are not found it will inform you, and you can try a refined search. If jobs are found and presented, you can continue the conversation with other questions (which can require or not require tool calling — the decision is taken based on the question). To end the conversation you just type `quit` or `exit`. See an example below:
 
 <figure>
-  <img src="../images/2025-06-21-tool-mlx-openai/example_conv.jpg" alt="Example conversation" style="display: block; margin: 0 auto">
+  <img src="../images/2025-06-21-tool-mlx-openai/example_conv.jpg" alt="Example conversation" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 3. Example conversation</figcaption>
 </figure>
 
 If we go back to the terminal we started the server in, we can see the successful POST requests we just made.
 
 <figure>
-  <img src="../images/2025-06-21-tool-mlx-openai/server_logs.jpg" alt="Server logs" style="display: block; margin: 0 auto">
+  <img src="../images/2025-06-21-tool-mlx-openai/server_logs.jpg" alt="Server logs" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 4. Mlx-lm server requests logs</figcaption>
 </figure>
 

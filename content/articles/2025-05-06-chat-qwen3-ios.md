@@ -67,7 +67,7 @@ We are interested in deploying the **MLXChatExample** app on your connected iPho
 - Set the destination to your connected iPhone by going to **Product &#8594; Destination &#8594; Choose Destination**
 
 <figure>
-  <img src="../images/2025-05-06-chat-qwen3-ios/config_scheme_dest.png" alt="Configure scheme and destination" style="display: block; margin: 0 auto">
+  <img src="../images/2025-05-06-chat-qwen3-ios/config_scheme_dest.png" alt="Configure scheme and destination" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 1. Configure scheme and destination</figcaption>
 </figure>
 
@@ -80,7 +80,7 @@ In order to build and run the app we have to assign a development team:
 - Choose your **Team** from the dropdown menu
 
 <figure>
-  <img src="../images/2025-05-06-chat-qwen3-ios/developer_team.png" alt="Developer team" style="display: block; margin: 0 auto">
+  <img src="../images/2025-05-06-chat-qwen3-ios/developer_team.png" alt="Developer team" class="zoomable" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 2. Add developer team</figcaption>
 </figure>
 
@@ -106,10 +106,10 @@ With that, we are ready to test the MLXChatExample app. Let’s open it:
 
 <figure style="display: flex; justify-content: center; gap: 1rem; margin: 0;">
   <div>
-    <img src="../images/2025-05-06-chat-qwen3-ios/3_1.png" alt="App launch 1" />
+    <img src="../images/2025-05-06-chat-qwen3-ios/3_1.png" alt="App launch 1" class="zoomable" />
   </div>
   <div>
-    <img src="../images/2025-05-06-chat-qwen3-ios/3_2.png" alt="App launch 2" />
+    <img src="../images/2025-05-06-chat-qwen3-ios/3_2.png" alt="App launch 2" class="zoomable" />
   </div>
 </figure>
 <figcaption style="text-align: center; width: 100%; margin-top: 0.5rem;">
@@ -122,10 +122,10 @@ If this is the first run for a given model, we have to wait for the model to dow
 
 <figure style="display: flex; justify-content: center; gap: 1rem; margin: 0;">
   <div>
-    <img src="../images/2025-05-06-chat-qwen3-ios/4_1.png" alt="Init query" />
+    <img src="../images/2025-05-06-chat-qwen3-ios/4_1.png" alt="Init query" class="zoomable" />
   </div>
   <div>
-    <img src="../images/2025-05-06-chat-qwen3-ios/4_2.png" alt="Download model" />
+    <img src="../images/2025-05-06-chat-qwen3-ios/4_2.png" alt="Download model" class="zoomable" />
   </div>
 </figure>
 <figcaption style="text-align: center; width: 100%; margin-top: 0.5rem;">
@@ -136,10 +136,10 @@ The Qwen3 models can have thinking enabled and disabled. At the moment the app d
 
 <figure style="display: flex; justify-content: center; gap: 1rem; margin: 0;">
   <div>
-    <img src="../images/2025-05-06-chat-qwen3-ios/5_1.png" alt="Gen 1" />
+    <img src="../images/2025-05-06-chat-qwen3-ios/5_1.png" alt="Gen 1" class="zoomable" />
   </div>
   <div>
-    <img src="../images/2025-05-06-chat-qwen3-ios/5_2.png" alt="Gen 2" />
+    <img src="../images/2025-05-06-chat-qwen3-ios/5_2.png" alt="Gen 2" class="zoomable" />
   </div>
 </figure>
 <figcaption style="text-align: center; width: 100%; margin-top: 0.5rem;">

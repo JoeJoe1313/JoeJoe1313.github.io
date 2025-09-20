@@ -72,7 +72,7 @@ print(image.size)  # Example output: (467, 700)
 
 The input image is shown below.
 
-![Input](../images/2025-02-13-qwen2_5-vl-mlx-vlm/input.png){ style="display: block; margin: 0 auto"}
+![Input](../images/2025-02-13-qwen2_5-vl-mlx-vlm/input.png){ class="zoomable" style="display: block; margin: 0 auto"}
 
 ## Generating an Image Description
 
@@ -254,7 +254,7 @@ plot_image_with_bboxes(processor, image, bboxes=objects_data)
 
 display the original image with bounding boxes drawn around the person and the dog, along with their respective labels.
 
-![Output](../images/2025-02-13-qwen2_5-vl-mlx-vlm/output.png){ style="display: block; margin: 0 auto"}
+![Output](../images/2025-02-13-qwen2_5-vl-mlx-vlm/output.png){ class="zoomable" style="display: block; margin: 0 auto"}
 
 This example shows that even the 3B model can accurately detect objects based on a general prompt to detect all objects in the image.
 
@@ -268,7 +268,7 @@ We can demonstrate a few other model outputs, corresponding to different spatial
 
 **Output:**
 
-![Output](../images/2025-02-13-qwen2_5-vl-mlx-vlm/output_1.png){ style="display: block; margin: 0 auto"}
+![Output](../images/2025-02-13-qwen2_5-vl-mlx-vlm/output_1.png){ class="zoomable" style="display: block; margin: 0 auto"}
 
 **Observation:** The dog was accurately detected.
 
@@ -282,7 +282,7 @@ The next examples are taken from the original Qwen2.5-VL [cookbook](https://gith
 
 **Output:**
 
-![Output](../images/2025-02-13-qwen2_5-vl-mlx-vlm/output_2.png){ style="display: block; margin: 0 auto"}
+![Output](../images/2025-02-13-qwen2_5-vl-mlx-vlm/output_2.png){ class="zoomable" style="display: block; margin: 0 auto"}
 
 **Observation:** The shadow of the paper fox was accurately detected.
 
@@ -292,7 +292,7 @@ The next examples are taken from the original Qwen2.5-VL [cookbook](https://gith
 
 **Output:**
 
-![Output](../images/2025-02-13-qwen2_5-vl-mlx-vlm/output_3.png){ style="display: block; margin: 0 auto"}
+![Output](../images/2025-02-13-qwen2_5-vl-mlx-vlm/output_3.png){ class="zoomable" style="display: block; margin: 0 auto"}
 
 **Observation:** The person who acts bravely was accurately detected.
 
@@ -302,7 +302,7 @@ The next examples are taken from the original Qwen2.5-VL [cookbook](https://gith
 
 **Output:**
 
-![Output](../images/2025-02-13-qwen2_5-vl-mlx-vlm/output_4.png){ style="display: block; margin: 0 auto"}
+![Output](../images/2025-02-13-qwen2_5-vl-mlx-vlm/output_4.png){ class="zoomable" style="display: block; margin: 0 auto"}
 
 **Observation:** The image input in the cookbook has a transparent background. I tested the model with a present background and the produced results were not very logical. The above result is of the original image without background. Moreover, their output is `glasses`, in contrast to our 3B output `umbrella`, but our output is still logical.
 

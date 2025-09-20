@@ -208,7 +208,7 @@ plt.show()
 
 For example, one of the trainings performed resulted in the following losses.
 
-![Train & Validation Loss](../images/2025-02-12-fine-tuning-lora-mlx/lora.jpg)
+![Train & Validation Loss](../images/2025-02-12-fine-tuning-lora-mlx/lora.jpg){ class="zoomable" style="display: block; margin: 0 auto" }
 
 ## Test the model_lora
 
