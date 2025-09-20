@@ -14,7 +14,8 @@
 
         var srcWithoutQuery = zoomSrc.split(/[?#]/)[0];
         var isSvg = /\.svg$/i.test(srcWithoutQuery);
-        overlay.classList.toggle('is-svg', isSvg);
+        var isTransparentPng = /\.png$/i.test(srcWithoutQuery) && img.classList.contains('zoomable--transparent');
+        overlay.classList.toggle('is-svg', isSvg || isTransparentPng);
         overlay.classList.add('is-open');
         overlay.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';

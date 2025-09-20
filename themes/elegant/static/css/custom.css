@@ -228,6 +228,9 @@
 .zoom-overlay.is-svg .zoom-overlay__close {
     background: rgba(255, 255, 255, 0.75);
 }
+.zoomable--transparent {
+    cursor: zoom-in;
+}
 .zoomable {
     cursor: zoom-in;
 }
