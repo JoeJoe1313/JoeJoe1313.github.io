@@ -8,8 +8,13 @@
     var closeBtn = overlay.querySelector('.zoom-overlay__close');
 
     function openOverlay(img) {
-        overlayImg.src = img.dataset.zoomSrc || img.src;
+        var zoomSrc = img.dataset.zoomSrc || img.src;
+        overlayImg.src = zoomSrc;
         overlayImg.alt = img.alt || '';
+
+        var srcWithoutQuery = zoomSrc.split(/[?#]/)[0];
+        var isSvg = /\.svg$/i.test(srcWithoutQuery);
+        overlay.classList.toggle('is-svg', isSvg);
         overlay.classList.add('is-open');
         overlay.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
@@ -19,6 +24,7 @@
     function closeOverlay() {
         overlay.classList.remove('is-open');
         overlay.setAttribute('aria-hidden', 'true');
+        overlay.classList.remove('is-svg');
         overlayImg.src = '';
         document.body.style.overflow = '';
     }

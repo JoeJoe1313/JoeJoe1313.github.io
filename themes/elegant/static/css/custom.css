@@ -197,13 +197,14 @@
     align-items: center;
     justify-content: center;
     padding: 2rem;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
     z-index: 1050;
 }
 .zoom-overlay.is-open { display: flex; }
 .zoom-overlay img {
-    max-width: min(90vw, 1200px);
-    max-height: 90vh;
+    max-width: min(96vw, 1600px);
+    max-height: 95vh;
     box-shadow: 0 0 24px rgba(0, 0, 0, 0.6);
     border-radius: 6px;
 }
@@ -214,11 +215,18 @@
     padding: 0.4rem 0.75rem;
     font-size: 1.6rem;
     line-height: 1;
-    color: #fff;
+    color: currentColor;
     background: rgba(0, 0, 0, 0.55);
     border: 0;
     border-radius: 999px;
     cursor: pointer;
+}
+.zoom-overlay.is-svg {
+    background: rgba(255, 255, 255, 0.95);
+    color: #111;
+}
+.zoom-overlay.is-svg .zoom-overlay__close {
+    background: rgba(255, 255, 255, 0.75);
 }
 .zoomable {
     cursor: zoom-in;
