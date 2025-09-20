@@ -19,6 +19,7 @@ AUTHOR_SAVE_AS = ""
 # ARCHIVES_SAVE_AS = ""
 THEME = "themes/elegant"
 STATIC_PATHS = [
+    "theme/images",
     "images",
     "code",
 ]
@@ -103,4 +104,4 @@ PROJECTS = [
         " text prompts using Google's PaliGemma 2 mix model, built with FastAPI, JAX/Flax, and Transformers.",
     },
 ]
-# USE_SHORTCUT_ICONS = True
+USE_SHORTCUT_ICONS = True
