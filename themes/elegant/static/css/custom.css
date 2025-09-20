@@ -189,21 +189,3 @@
     margin-right: auto;
   }
 }
-
-div.applause_button applause-button .count-container {
-  top: 50%;
-  left: calc(100% + 0.2rem);
-  transform: translateY(-50%);
-  width: auto;
-  text-align: left;
-}
-
-div.applause_button applause-button .count-container .count {
-  width: auto;
-  margin: 0;
-  transform: none;
-}
-
-div.applause_button {
-  padding-right: 0.75rem;
-}

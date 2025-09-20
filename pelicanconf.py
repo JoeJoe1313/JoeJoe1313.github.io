@@ -104,4 +104,3 @@ PROJECTS = [
     },
 ]
 # USE_SHORTCUT_ICONS = True
-APPLAUSE_BUTTON = True
