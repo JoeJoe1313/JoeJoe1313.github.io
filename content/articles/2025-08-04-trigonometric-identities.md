@@ -20,7 +20,7 @@ $$
 where $i$ is the imaginary unit, defined as $i^2 = -1$. The formula has a geometric interpretation in the complex plane that provides insight into trigonometry and complex numbers, **Figure 1**.
 
 <figure>
-  <img src="../images/2025-08-04-trigonometric-identities/Euler's_formula.svg" alt="Euler" style="display: block; margin: 0 auto; width: 35%">
+  <img src="../images/2025-08-04-trigonometric-identities/Euler's_formula.svg" alt="Euler" class="zoomable" style="display: block; margin: 0 auto; width: 35%">
   <figcaption style="text-align: center">Figure 1. Euler's formula in the complex plane</figcaption>
 </figure>
 

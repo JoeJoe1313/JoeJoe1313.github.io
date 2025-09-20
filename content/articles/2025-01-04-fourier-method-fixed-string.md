@@ -35,7 +35,7 @@ $$
 A visualisation of the string can be seen in the figure below.
 
 <center>
-![Fixed String](/images/2025-01-04-fourier-method-fixed-string/fixed_string.svg){width=60%}
+![Fixed String](/images/2025-01-04-fourier-method-fixed-string/fixed_string.svg){ class="zoomable" width=60% }
 </center>
 
 We start solving the equation by taking into account only the boundary conditions $u(0, t) = u(l, t) = 0$. The idea is to find solution $u(x, t)$ of the form
@@ -274,7 +274,7 @@ convergres. Therefore, in order for all the majorzing series to converge it is e
 Finally, we should note a few things about the expansion of $\varphi_1(x)$ and $\varphi_2(x)$ into sine series. We have to note that in order to do that the function needs to be continued as an odd function which my lead to loss of the regularity of the lower derivatives. Let $\tilde{\varphi}_1(x)$ be the continuation of $\varphi_1(x)$ as an odd function (see the Figure below) defined as
 
 <center>
-![Odd continuation of a function](/images/2025-01-04-fourier-method-fixed-string/odd_continuation.png){width=50%}
+![Odd continuation of a function](/images/2025-01-04-fourier-method-fixed-string/odd_continuation.png){ class="zoomable" width=50% }
 </center>
 
 $$
@@ -343,7 +343,7 @@ The $u_k(x, t)$ waves are called **standing-waves**. Depending on the values of 
 These motionless points are called **nodes** of the standing wave. In general, $u_k(x, t)$ has $(k + 1)$ nodes located ate $0, \frac{1}{k}l, \frac{2}{k}l, ..., \frac{k-1}{k}l, l$. The maximum amplitude is achieved in the middle points between two nodes. These points are called **crests**. The fundamental tone, or the lowest tone, has frequency of $\omega_1 = \frac{a\pi}{l}$. The frequencies $\omega_k$ are called **harmonics**, while the higher tones corresponding to $\omega_k$, $k = 2, 3, ...$ are called **overtones**. It is quite natural to notice that the higher the value of $k$ the rapidly lower the amplitude of $u_k(x, t)$ becomes. Meaning, the effect from the higher harmonics all combined influences the quality of the sound. The below figure shows the harmonics for $k = 1, 2, 3$.
 
 <center>
-![Fixed Strings](/images/2025-01-04-fourier-method-fixed-string/harmonics.svg){width=70%}
+![Fixed Strings](/images/2025-01-04-fourier-method-fixed-string/harmonics.svg){ class="zoomable" width=70% }
 </center>
 
 ### Example
@@ -366,4 +366,4 @@ Using the $100$-th partial Fourier sum, below is shown the animated solution for
 
 {% include_code_collapsible 2025-01-04-fourier-method-fixed-string/fixed_string.py lang:python :hideall: %}
 
-<iframe src="{static}/code/2025-01-04-fourier-method-fixed-string/fixed_string_animation.html" width="100%" height="610px" frameborder="0"></iframe>
+<iframe src="{static}/code/2025-01-04-fourier-method-fixed-string/fixed_string_animation.html" width="100%" height="700px" frameborder="0"></iframe>

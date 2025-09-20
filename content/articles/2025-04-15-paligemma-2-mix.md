@@ -17,7 +17,7 @@ In this post, we are going to explore Google’s [**PaliGemma 2 mix**](https://d
 In December 2024 Google introduced the [PaliGemma 2](https://developers.googleblog.com/en/introducing-paligemma-2-powerful-vision-language-models-simple-fine-tuning/) vision-language models (VLMs). These are pre-trained (**pt**) models coming in three different sizes: `3B`, `10B`, and `28B`, as well as three different input resolutions for images: `224x224`, `448x448`, and `896x896` pixels. These models represent the latest evolution of vision-language models developed by Google, building upon the foundation laid by its predecessor, PaliGemma. Below, we can see the architecture of the PaliGemma 2 model.
 
 <figure>
-  <img src="../images/2025-04-15-paligemma-2-mix/paligemma2-architecture.png" alt="PaliGemma 2 architecture" class="zoomable" style="display: block; margin: 0 auto">
+  <img src="../images/2025-04-15-paligemma-2-mix/paligemma2-architecture.png" alt="PaliGemma 2 architecture" class="zoomable zoomable--transparent" style="display: block; margin: 0 auto">
   <figcaption style="text-align: center">Figure 1. PaliGemma 2 Architecture Overview <span style="font-size: 0.8em;">[<a href="https://arxiv.org/pdf/2412.03555">Source</a>]</span></figcaption>
 </figure>
 
