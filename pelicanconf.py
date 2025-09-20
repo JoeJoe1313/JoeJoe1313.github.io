@@ -103,3 +103,5 @@ PROJECTS = [
         " text prompts using Google's PaliGemma 2 mix model, built with FastAPI, JAX/Flax, and Transformers.",
     },
 ]
+# USE_SHORTCUT_ICONS = True
+APPLAUSE_BUTTON = True
