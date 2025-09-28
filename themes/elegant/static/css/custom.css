@@ -234,3 +234,96 @@
 .zoomable {
     cursor: zoom-in;
 }
+
+/* Match NotMyIdea typography and spacing */
+/* body {
+    background: #F5F4EF;
+    color: #000305;
+    font-size: 87.5%;
+    font-family: 'Trebuchet MS', Trebuchet, 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    line-height: 1.429;
+} */
+
+a,
+a:visited {
+    color: #800000;
+    text-decoration: underline;
+}
+
+a:hover,
+a:focus {
+    color: #FF2400;
+    text-decoration: none;
+}
+
+/* .article-content {
+    font-family: inherit;
+    font-size: 1em;
+    line-height: 1.429;
+    text-align: left;
+}
+
+.article-content p {
+    margin: 1em 0;
+}
+
+.article-content ul,
+.article-content ol {
+    margin: 0 0 0 1.5em;
+    list-style-position: outside;
+}
+
+.article-content li {
+    margin: 0.5em 0 1em 0;
+    line-height: 1.429;
+}
+
+.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4,
+.article-content h5,
+.article-content h6 {
+    font-family: 'Yanone Kaffeesatz', Arial, serif;
+    font-weight: 400;
+    line-height: 1.1;
+    margin: 0.8em 0;
+    border-bottom: none;
+    color: #800000;
+}
+
+.article-content h1:first-child {
+    margin-top: 0;
+}
+
+.article-content table {
+    border: none;
+    border-collapse: collapse;
+    margin: 0.5em auto 1.5em auto;
+    width: 98%;
+    background: transparent;
+}
+
+.article-content th,
+.article-content td {
+    border: none;
+    padding: 0.5em 0.4em;
+    text-align: left;
+}
+
+.article-content tbody > tr:nth-child(odd) > td {
+    background: transparent;
+} */
+
+a.category-link,
+a.category-title-inside-accordion,
+.list-of-tags a,
+.tags-in-article a {
+    color: #800000;
+}
+
+a.category-title-inside-accordion:hover,
+a:not(.collapsed).accordion-toggle.category-title-inside-accordion {
+    background-color: #5c0000;
+    color: #fff;
+}
