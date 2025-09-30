@@ -4,29 +4,17 @@
     padding: 0;
 }
 
-/* Code copy button with different colour */
+/* Code copy button overrides */
 .codecopy {
-  position: relative;
-  overflow: visible;
-
   & button.codecopy-btn {
-    font-size: rfs(0.9rem);
-    box-shadow: none;
-    min-height: initial;
-
-    position: absolute;
-    z-index: 1;
-
-    right: 0;
-    top: 0;
-    background-color: #dda790;
-    padding: rfs(0.2rem);
-    border: none;
-    border-top-right-radius: var(--borderRadius);
-    border-bottom-left-radius: var(--borderRadius);
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.8);
+    opacity: 0.95;
 
     &:hover,
     &:focus {
+      color: rgba(255, 255, 255, 1);
+      opacity: 1;
       box-shadow: none;
     }
   }

@@ -12,16 +12,78 @@
 
     right: 0;
     top: 0;
-    background-color: #fe8019;
+    background-color: transparent;
     padding: rfs(0.2rem);
     border: none;
     border-top-right-radius: var(--borderRadius);
     border-bottom-left-radius: var(--borderRadius);
+    color: rgba(255, 255, 255, 0.8);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: rfs(2rem);
+    height: rfs(2rem);
+    cursor: pointer;
+    transition: color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+    opacity: 0.95;
+
+    & .codecopy-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    & .codecopy-icon-success {
+      display: none;
+    }
+
+    & .codecopy-icon-copy,
+    & .codecopy-icon-success {
+      width: 70%;
+      height: 70%;
+      stroke: currentColor;
+    }
 
     &:hover,
     &:focus {
       box-shadow: none;
+      transform: translateY(-1px);
+      opacity: 1;
+      color: rgba(255, 255, 255, 1);
     }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: none;
+    }
+
+    &.is-copied {
+      background-color: transparent;
+      color: #98971a;
+      opacity: 1;
+
+      & .codecopy-icon-copy {
+        display: none;
+      }
+
+      & .codecopy-icon-success {
+        display: block;
+      }
+    }
+  }
+
+  & .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 }
 
