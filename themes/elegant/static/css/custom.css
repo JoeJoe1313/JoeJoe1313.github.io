@@ -20,6 +20,17 @@
   }
 }
 
+/* Keep reference bullets aligned on narrow viewports */
+.article-content h1:last-of-type + ul li a {
+    display: inline !important;
+    position: static !important;
+    text-decoration: underline !important;
+}
+
+.article-content h1:last-of-type + ul li a::after {
+    content: none !important;
+}
+
 /* Goodreads Integration Styles */
 .book-item {
     display: flex !important;
