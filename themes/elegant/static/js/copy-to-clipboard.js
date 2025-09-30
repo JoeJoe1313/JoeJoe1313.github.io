@@ -33,8 +33,23 @@ document.querySelectorAll("div.highlight pre").forEach((snippet) => {
 
 // Add copy to clipboard functionality
 const clipboard = new ClipboardJS(".codecopy-btn", {
-  target: (trigger) => {
-    return trigger.parentNode;
+  text: (trigger) => {
+    const wrapper = trigger.closest(".codecopy");
+
+    if (!wrapper) {
+      return "";
+    }
+
+    const preElement = wrapper.querySelector("pre");
+
+    if (!preElement) {
+      return "";
+    }
+
+    const codeElement = preElement.querySelector("code");
+
+    // Ensure we only copy the code contents, never the button label
+    return (codeElement || preElement).textContent;
   },
 });
 
