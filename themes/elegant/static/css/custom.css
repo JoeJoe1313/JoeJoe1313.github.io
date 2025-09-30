@@ -247,7 +247,7 @@
 a,
 a:visited {
     color: #800000;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 a:hover,
@@ -340,4 +340,22 @@ a.category-title-inside-accordion:hover,
 a:not(.collapsed).accordion-toggle.category-title-inside-accordion {
     background-color: #5c0000;
     color: #fff;
+}
+
+article div.article-content ul:not(.articles-timeline):not(.related-posts-list) a:not(.ampl),
+article ol a:not(.ampl),
+article p:not(#list-of-translations):not(#post-share-links) a:not(.ampl),
+blockquote a:not(.ampl) {
+    color: #800000;
+}
+
+article div.article-content ul:not(.articles-timeline):not(.related-posts-list) a:not(.ampl):hover,
+article div.article-content ul:not(.articles-timeline):not(.related-posts-list) a:not(.ampl):focus,
+article ol a:not(.ampl):hover,
+article ol a:not(.ampl):focus,
+article p:not(#list-of-translations):not(#post-share-links) a:not(.ampl):hover,
+article p:not(#list-of-translations):not(#post-share-links) a:not(.ampl):focus,
+blockquote a:not(.ampl):hover,
+blockquote a:not(.ampl):focus {
+    color: #d14;
 }
