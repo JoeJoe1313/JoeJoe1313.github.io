@@ -256,12 +256,12 @@ a:focus {
     text-decoration: none;
 }
 
-/* .article-content {
+.article-content {
     font-family: inherit;
-    font-size: 1em;
-    line-height: 1.429;
+    /* font-size: 1em; */
+    /* line-height: 1.429; */
     text-align: left;
-} */
+}
 
 /* .article-content p {
     margin: 1em 0;
