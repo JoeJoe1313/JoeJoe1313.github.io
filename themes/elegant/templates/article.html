@@ -122,7 +122,15 @@
             {% if article.category|trim|count > 0 %}
             <h4>Category</h4>
             {% from '_includes/_defaults.html' import CATEGORIES_URL with context %}
-            <a class="category-link" href="{{ SITEURL }}/{{ CATEGORIES_URL }}#{{ category.slug }}-ref">{{ article.category }}</a>
+            <ul class="list-of-tags tags-in-article">
+                <li>
+                    <a class="category-link" href="{{ SITEURL }}/{{ CATEGORIES_URL }}#{{ article.category.slug }}-ref">{{ article.category }}
+                        {% for cat, cat_articles in categories if cat == article.category %}
+                        <span class="superscript">{{ cat_articles|count }}</span>
+                        {% endfor %}
+                    </a>
+                </li>
+            </ul>
             {% endif %}
             {% if article.tags and article.tags[0]|trim|count > 0 %}
             {% from '_includes/_defaults.html' import TAGS_URL with context %}
