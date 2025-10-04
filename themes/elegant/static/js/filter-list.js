@@ -18,6 +18,7 @@
         this.sectionListSelector = $input.data('filterSectionList') || '.list-articles-under-tag-category';
         this.$list = $(this.listSelector);
         this.$sectionTitles = $(this.sectionTitleSelector);
+        this.$form = $input.closest('form');
     }
 
     FilterList.prototype.showAllSections = function () {
@@ -107,10 +108,22 @@
         });
     };
 
+    FilterList.prototype.bindFormSubmit = function () {
+        if (!this.$form || !this.$form.length) {
+            return;
+        }
+        this.$form.on('submit', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        });
+    };
+
     FilterList.prototype.init = function () {
         if (!this.$input.length || !this.$list.length || !this.$sectionTitles.length) {
             return;
         }
+        this.bindFormSubmit();
         this.bindInput();
         this.bindListClick();
         if (this.$input.val()) {
