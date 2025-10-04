@@ -1,0 +1,78 @@
+[input]
+html_selector = ".article-content"
+base_directory = "/home/runner/work/JoeJoe1313.github.io/JoeJoe1313.github.io/output"
+
+[[input.files]]
+path = "interests.html"
+url = "/interests.html"
+title = "Interests"
+
+[[input.files]]
+path = "osenviron.html"
+url = "/osenviron.html"
+title = "Python's os.environ vs os.getenv"
+
+[[input.files]]
+path = "trigonometric-identities.html"
+url = "/trigonometric-identities.html"
+title = "Trigonometric Identities the Euler Way"
+
+[[input.files]]
+path = "nanonets-ocr.html"
+url = "/nanonets-ocr.html"
+title = "NanoNets OCR for Handwritten Notes"
+
+[[input.files]]
+path = "tool-mlx-openai.html"
+url = "/tool-mlx-openai.html"
+title = "A Job Postings Tool: A Guide to MLX-LM Server and Tool Use with the OpenAI Client"
+
+[[input.files]]
+path = "reversal-blessing.html"
+url = "/reversal-blessing.html"
+title = "Thinking Backwards: The \\\"Reversal Blessing\\\" in LLM Multiple-Choice Reasoning"
+
+[[input.files]]
+path = "app-docker-fastapi.html"
+url = "/app-docker-fastapi.html"
+title = "Image Segmentation with PaliGemma 2 mix, Transformers, Docker, FastAPI, and GitHub Actions"
+
+[[input.files]]
+path = "chat-qwen3-ios.html"
+url = "/chat-qwen3-ios.html"
+title = "Chat with Qwen3 on your iPhone: A Step-by-Step Guide"
+
+[[input.files]]
+path = "paligemma-2-mix.html"
+url = "/paligemma-2-mix.html"
+title = "Image Segmentation with PaliGemma 2 Mix and MLX"
+
+[[input.files]]
+path = "fine-tuning-function-calling.html"
+url = "/fine-tuning-function-calling.html"
+title = "Fine-Tuning a Model for Function-Calling with MLX-LM"
+
+[[input.files]]
+path = "qwen2_5-vl-mlx-vlm.html"
+url = "/qwen2_5-vl-mlx-vlm.html"
+title = "Qwen2.5-vl with MLX-VLM"
+
+[[input.files]]
+path = "fine-tuning-lora-mlx.html"
+url = "/fine-tuning-lora-mlx.html"
+title = "Fine-Tuning LLMs with LoRA and MLX-LM"
+
+[[input.files]]
+path = "orthogonal-functions.html"
+url = "/orthogonal-functions.html"
+title = "Orthogonal Functions"
+
+[[input.files]]
+path = "chebyshev-polynomials.html"
+url = "/chebyshev-polynomials.html"
+title = "Chebyshev Polynomials: Part 1"
+
+[[input.files]]
+path = "fourier-method-fixed-string.html"
+url = "/fourier-method-fixed-string.html"
+title = "Fourier Method for the 1D Wave Equation: Fixed String"
