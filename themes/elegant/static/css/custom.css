@@ -277,19 +277,36 @@ a:focus {
     line-height: 1.429;
 } */
 
-/* .article-content h1,
+.article-content h1,
 .article-content h2,
 .article-content h3,
 .article-content h4,
 .article-content h5,
 .article-content h6 {
-    font-family: 'Yanone Kaffeesatz', Arial, serif;
+    font-family: var(--sansFontFamily);
     font-weight: 400;
     line-height: 1.1;
-    margin: 0.8em 0;
+    margin: 0.5em 0;
     border-bottom: none;
     color: #800000;
-} */
+}
+
+header.page-header h1,
+.page-header h1 {
+    font-family: var(--sansFontFamily);
+}
+
+#about-me {
+    border-bottom: none;
+}
+
+h1#recent-posts {
+    margin-bottom: 1.5rem;
+}
+
+.recent-posts {
+    margin-top: 1rem;
+}
 
 /* .article-content h1:first-child {
     margin-top: 0;
