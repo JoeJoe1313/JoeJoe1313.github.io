@@ -342,6 +342,19 @@ h1#recent-posts {
     word-break: break-word;
 }
 
+.article-content :not(pre) code,
+.article-content .literal {
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.article-content pre code {
+    white-space: pre;
+    word-break: normal;
+    overflow-wrap: normal;
+}
+
 .article-content td:last-child {
     border-right: none;
 }
