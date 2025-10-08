@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+        <link rel="stylesheet" href="https://files.stork-search.net/basic.css">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="ai, ml, vlm, ios, swift, mlx-swift, Machine Learning, " />
+
+<meta property="og:title" content="Chat with Qwen3 on your iPhone: A Step-by-Step Guide "/>
+<meta property="og:url" content="/chat-qwen3-ios.html" />
+<meta property="og:description" content="Have you ever wanted to run a powerful large language model directly on your iPhone without sending your data to the cloud? Thanks to Apple’s MLX Swift framework, you can now run the remarakably capable Qwen3 models right on your iPhone." />
+<meta property="og:site_name" content="JoJo&#39;s Blog" />
+<meta property="og:article:author" content="" />
+<meta property="og:article:published_time" content="2025-05-06T00:00:00+03:00" />
+<meta name="twitter:title" content="Chat with Qwen3 on your iPhone: A Step-by-Step Guide ">
+<meta name="twitter:description" content="Have you ever wanted to run a powerful large language model directly on your iPhone without sending your data to the cloud? Thanks to Apple’s MLX Swift framework, you can now run the remarakably capable Qwen3 models right on your iPhone.">
+
+        <title>Chat with Qwen3 on your iPhone: A Step-by-Step Guide  · JoJo&#39;s Blog
+</title>
+        <link rel="shortcut icon" href="/theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="/theme/images/apple-touch-icon-152x152.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/theme/images/apple-touch-icon.png"  type="image/png" />
+        <link rel="apple-touch-icon" sizes="57x57" href="/theme/images/apple-touch-icon-57x57.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/images/apple-touch-icon-72x72.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="/theme/images/apple-touch-icon-76x76.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/images/apple-touch-icon-114x114.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/theme/images/apple-touch-icon-120x120.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/images/apple-touch-icon-144x144.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/theme/images/apple-touch-icon-152x152.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/theme/images/apple-touch-icon-180x180.png" type="image/png" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="/"><span class=site-name>JoJo's Blog</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       "/"
+                                    >Home</a>
+                                </li>
+                                <li ><a href="/interests.html">Interests</a></li>
+                                <li ><a href="/categories.html">Categories</a></li>
+                                <li ><a href="/tags.html">Tags</a></li>
+                                <li ><a href="/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+                                    <input type="text" class="search-query" placeholder="Search" name="q" data-stork="site-search" autocomplete="off">
+                                </form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="/chat-qwen3-ios.html">
+                Chat with Qwen3 on your iPhone: A Step-by-Step Guide
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Have you ever wanted to run a powerful large language model directly on your iPhone without sending your data to the cloud? Thanks to Apple’s <a href="https://github.com/ml-explore/mlx-swift">MLX Swift</a> framework, you can now run the remarakably capable <a href="https://qwenlm.github.io/blog/qwen3/">Qwen3</a> models right on your iPhone.</p>
+<p>What makes this exciting is how capable these new models are even with as little as 4B parameters. Based on Qwen’s benchmark reports, Qwen3–4B can rival the performance of Qwen2.5–72B-Instruct, delivering impressive results with just a fraction of the parameters. This development means truly powerful AI can now fit in your pocket.</p>
+<p>This blog post will guide you through the entire process from setting up your development environment to testing the model on your device. You can embrace true privacy, and take ownership of your AI experience. Your data stays on your device, where it belongs, and most importantly - you have access to this knowledge powerhouse even with no internet connection.</p>
+<p>Medium post can be found <a href="https://medium.com/@levchevajoana/chat-with-qwen3-on-your-iphone-a-step-by-step-guide-515bb957cd02">here</a>.</p>
+<h1>Main Steps</h1>
+<p>The whole process consists of three main steps:</p>
+<ul>
+<li>Enable Developer Mode on your iPhone</li>
+<li>Clone Apple’s MLX Swift Examples <a href="https://github.com/ml-explore/mlx-swift-examples">repository</a></li>
+<li>Configure and deploy the Xcode project to your device</li>
+</ul>
+<h1>Enable Developer Mode on iPhone</h1>
+<p>In order to deploy custom apps to your iPhone, you need to enable <strong>Developer Mode</strong>. On your iPhone:</p>
+<ul>
+<li>Go to <strong>Settings &#8594; Privacy &amp; Security &#8594; Developer Mode</strong>  </li>
+<li>Toggle Developer Mode to <strong>On</strong>
+Restart your iPhone when prompted</li>
+</ul>
+<blockquote>
+<p><strong>NOTE:</strong> It is important to note that your device’s security is reduced in Developer Mode.</p>
+</blockquote>
+<h1>Apple’s MLX Swift Examples Repository</h1>
+<p>Now that your iPhone is ready for development, let’s get the necessary code. We are going to run the <strong>MLXChatExample</strong>, an example chat app supporting LLMs and VLMs for iOS and macOS, which can be found in the Applications folder in the <a href="https://github.com/ml-explore/mlx-swift-examples">mlx-swift-examples</a> repository. So, the first step is to clone the repository:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:ml-explore/mlx-swift-examples.git
+</code></pre></div>
+
+<p>Then, navigate to the cloned directory:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>mlx-swift-examples
+</code></pre></div>
+
+<p>And finally, open the Xcode project:</p>
+<div class="highlight"><pre><span></span><code>open<span class="w"> </span>mlx-swift-examples.xcodeproj
+</code></pre></div>
+
+<p>The above command should open the project directly in Xcode.</p>
+<h1>Configure and Deploy the Xcode Project</h1>
+<p>With the project open in Xcode, you should connect your iPhone to the Mac, and then make a few adjustments.</p>
+<h2>Configure the Project</h2>
+<p>We are interested in deploying the <strong>MLXChatExample</strong> app on your connected iPhone, so you should:</p>
+<ul>
+<li>Change your scheme to <strong>MLXChatExample</strong> by going to <strong>Product &#8594; Scheme &#8594; Choose Scheme</strong> (this opens a dropdown menu from the Xcode’s top bar, which can be selected directly from the bar as well)</li>
+<li>Set the destination to your connected iPhone by going to <strong>Product &#8594; Destination &#8594; Choose Destination</strong></li>
+</ul>
+<figure>
+  <img src="../images/2025-05-06-chat-qwen3-ios/config_scheme_dest.png" alt="Configure scheme and destination" class="zoomable" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 1. Configure scheme and destination</figcaption>
+</figure>
+
+<h2>Add Developer Team</h2>
+<p>In order to build and run the app we have to assign a development team:</p>
+<ul>
+<li>Select the <strong>mlx-swift-examples</strong> project in the Project Navigator (on the left)</li>
+<li>Go to the <strong>Signing &amp; Capabilities</strong> tab</li>
+<li>Choose your <strong>Team</strong> from the dropdown menu</li>
+</ul>
+<figure>
+  <img src="../images/2025-05-06-chat-qwen3-ios/developer_team.png" alt="Developer team" class="zoomable" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 2. Add developer team</figcaption>
+</figure>
+
+<h1>Deploy to Your iPhone</h1>
+<p>Now we are ready to deploy <strong>MLXChatExample</strong> to our actual device:</p>
+<ul>
+<li>Click the Run button (▶) on the left to run the project, or alternatively choose <strong>Product &#8594; Run</strong></li>
+<li>You might be asked to authorize Xcode development on your device</li>
+<li>If successful, the app will be downloaded to your iPhone</li>
+</ul>
+<h2>Trust Developer Certificate</h2>
+<p>If this is your first app from this developer team, you would get a message on your iPhone that the app is from an <strong>Untrusted Developer</strong> and you are not allowed to use it. We should allow applications from this developer, so on your iPhone:</p>
+<ul>
+<li>Go to <strong>Settings &#8594; General &#8594; VPN &amp; Device Management</strong></li>
+<li>Under <strong>Developer App</strong>, tap on your app
+Select <strong>Trust “[Developer Name]”</strong> and confirm</li>
+</ul>
+<h2>Using Qwen3 on Your iPhone</h2>
+<p>With that, we are ready to test the MLXChatExample app. Let’s open it:</p>
+<figure style="display: flex; justify-content: center; gap: 1rem; margin: 0;">
+  <div>
+    <img src="../images/2025-05-06-chat-qwen3-ios/3_1.png" alt="App launch 1" class="zoomable" />
+  </div>
+  <div>
+    <img src="../images/2025-05-06-chat-qwen3-ios/3_2.png" alt="App launch 2" class="zoomable" />
+  </div>
+</figure>
+<figcaption style="text-align: center; width: 100%; margin-top: 0.5rem;">
+    Figure 3. Left: MLXChatExample app default screen | Right: models dropdown menu
+</figcaption>
+
+<p>By default, the app loads with the <strong>llama3.2:1b</strong> model. You can select different models from the dropdown menu in the upper right corner, see <strong>Figure 3</strong>. Let’s choose <strong>qwen3:4b</strong>, which runs successfully on an iPhone 14 Pro, and type our first query.</p>
+<p>If this is the first run for a given model, we have to wait for the model to download from Hugging Face to our cache. Below, in <strong>Figure 4</strong>, we can see our first query and how it triggers the model download (the arrow on top), and when clicking on the arrow we can see the download progress.</p>
+<figure style="display: flex; justify-content: center; gap: 1rem; margin: 0;">
+  <div>
+    <img src="../images/2025-05-06-chat-qwen3-ios/4_1.png" alt="Init query" class="zoomable" />
+  </div>
+  <div>
+    <img src="../images/2025-05-06-chat-qwen3-ios/4_2.png" alt="Download model" class="zoomable" />
+  </div>
+</figure>
+<figcaption style="text-align: center; width: 100%; margin-top: 0.5rem;">
+    Figure 4. Left: first query for a model triggering model download | Right: model downloading progress
+</figcaption>
+
+<p>The Qwen3 models can have thinking enabled and disabled. At the moment the app doesn’t support a toggle to manually switch between both modes. The default behaviour is to use thinking (the thought process output is encapsulated between the tags <code>&lt;think&gt;&lt;/think&gt;</code>), and in order to disable the thinking we have to add <strong>/no_think</strong> at the end of our prompt. In this case the think tags appear with nothing between them. Refer to <strong>Figure 5</strong> below.</p>
+<figure style="display: flex; justify-content: center; gap: 1rem; margin: 0;">
+  <div>
+    <img src="../images/2025-05-06-chat-qwen3-ios/5_1.png" alt="Gen 1" class="zoomable" />
+  </div>
+  <div>
+    <img src="../images/2025-05-06-chat-qwen3-ios/5_2.png" alt="Gen 2" class="zoomable" />
+  </div>
+</figure>
+<figcaption style="text-align: center; width: 100%; margin-top: 0.5rem;">
+    Figure 5. Left: query with default thinking behaviour | Right: query with disabled thinking
+</figcaption>
+
+<h1>The Benefits of On-Device AI</h1>
+<p>Running models like Qwen3 directly on your device offers several significant advantages:</p>
+<ul>
+<li><strong>Complete Privacy:</strong> Your conversations never leave your device. No server logs, no data collection, just you and your AI.</li>
+<li><strong>Works Offline:</strong> You have all the world’s knowledge in your pocket wherever you are, without depending on internet connection availability. Need AI assistance while traveling, hiking, or in areas with poor connectivity? Local models work anywhere, anytime.</li>
+<li><strong>No Subscription Fees:</strong> Once you’ve set up the model, there are no ongoing costs.</li>
+<li><strong>No Rate Limits:</strong> Chat as much as you want without hitting quotas.</li>
+<li><strong>Reduced Environmental Impact:</strong> On-device inference eliminates the carbon footprint associated with massive data centers processing your requests.</li>
+</ul>
+<h1>Conclusion</h1>
+<p>While cloud-based solutions may offer larger models with excellent performance, the gap is closing rapidly as efficiency improvements make smaller models surprisingly capable. The Qwen3 models are an excellent example for this, and are a “living” proof of the rapid advancements in the field of AI. The MLX Swift framework from Apple makes powerful machine learning accessible to everyday users on their personal devices. This shift from cloud-dependent to local-first AI is just beginning.</p>
+<p><strong><em>Own your AI. Own your data. Go local.</em></strong></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+    <h4>Reading Time</h4>
+    <p>~5 min read</p>
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-05-06T00:00:00+03:00">Tue 06 May 2025</time>
+            <h4>Category</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li>
+                    <a class="category-link" href="/categories.html#machine-learning-ref">Machine Learning
+                        <span class="superscript">9</span>
+                    </a>
+                </li>
+            </ul>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#ai-ref">ai
+                    <span class="superscript">9</span>
+</a></li>
+                <li><a href="/tags.html#ios-ref">ios
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="/tags.html#ml-ref">ml
+                    <span class="superscript">9</span>
+</a></li>
+                <li><a href="/tags.html#mlx-swift-ref">mlx-swift
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="/tags.html#swift-ref">swift
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="/tags.html#vlm-ref">vlm
+                    <span class="superscript">5</span>
+</a></li>
+            </ul>
+<h4>Stay in Touch</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/JoeJoe1313" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+    <a href="https://www.linkedin.com/in/joana-levtcheva-479844164/" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="LinkedIn" role="img" viewBox="0 0 512 512" fill="#fff"><rect width="512" height="512" rx="15%" fill="#0077b5"/><circle cx="142" cy="138" r="37"/><path stroke="#fff" stroke-width="66" d="M244 194v198M142 194v198"/><path d="M276 282c0-20 13-40 36-40 24 0 33 18 33 45v105h66V279c0-61-32-89-76-89-34 0-51 19-59 32"/></svg>
+    </a>
+    <a href="https://x.com/13_jo_jo_13" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="Twitter" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1da1f3"/><path fill="#fff" d="M437 152a72 72 0 0 1-40 12 72 72 0 0 0 32-40 72 72 0 0 1-45 17 72 72 0 0 0-122 65 200 200 0 0 1-145-74 72 72 0 0 0 22 94 72 72 0 0 1-32-7 72 72 0 0 0 56 69 72 72 0 0 1-32 1 72 72 0 0 0 67 50 200 200 0 0 1-105 29 200 200 0 0 0 309-179 200 200 0 0 0 35-37"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+    </div>
+</footer><div id="zoom-overlay" class="zoom-overlay" aria-hidden="true">
+    <button type="button" class="zoom-overlay__close" aria-label="Close zoomed image">×</button>
+    <img src="" alt="">
+</div>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script src="/theme/js/zoom-overlay.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+        <script src="https://files.stork-search.net/releases/v1.6.0/stork.js"></script>
+        <script src="/theme/js/stork-search.js"></script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>
