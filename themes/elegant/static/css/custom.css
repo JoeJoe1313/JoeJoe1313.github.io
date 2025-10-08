@@ -315,7 +315,8 @@ h1#recent-posts {
 .article-content table {
     border: 1px solid #ddd;
     border-collapse: collapse;
-    width: 98%;
+    table-layout: auto;
+    width: 100%;
     background: transparent;
 }
 
@@ -324,6 +325,8 @@ h1#recent-posts {
     border-right: 1px solid #ddd;
     padding: 0.5em 0.4em;
     text-align: left;
+    white-space: normal;
+    word-break: break-word;
 }
 
 .article-content th:last-child {
@@ -335,6 +338,8 @@ h1#recent-posts {
     padding: 0.5em 0.4em;
     text-align: left;
     border-bottom: none;
+    white-space: normal;
+    word-break: break-word;
 }
 
 .article-content td:last-child {

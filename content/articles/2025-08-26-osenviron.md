@@ -5,6 +5,7 @@ Category: Python
 Tags: Python
 Slug: osenviron
 Status: published
+Modified: 2025-10-08 07:00
 ---
 
 Environment variables are key-value pairs that exist in the operating system's environment and can be accessed by programs running on that system. They are a way to configure applications without hardcoding values directly into the source code. Python provides several ways to work with environment variables through the **`os`** module. Two common methods are **`os.environ`** and **`os.getenv`**. While they might seem similar, they have different use cases and behaviors. Let's explore the differences and when to use each method effectively.
@@ -87,12 +88,12 @@ This makes `os.getenv()` suitable for **optional** settings or configurations wh
 
 At their core, the difference between the two can be thought of as a mutable object versus a read-only function. This distinction dictates how they handle missing data and what operations they support.
 
-| Feature | `os.environ["VAR"]` | `os.getenv("VAR", default)` |
+| Feature | os.environ["VAR"] | os.getenv("VAR", default) |
 | :--- | :--- | :--- |
-| **Operation Type**| Mutable (Read/Write) | Read-Only |
-| **Object Type** | Dictionary-style mapping object | Function call |
-| **Missing Variable**| Raises a `KeyError` | Returns `None` or a specified default |
-| **Primary Use Case**| Accessing or modifying **mandatory** configuration | Safely reading **optional** configuration with fallbacks |
+| Operation Type| Mutable (Read/Write) | Read-Only |
+| Object Type | Dictionary-style mapping object | Function call |
+| Missing Variable| Raises a `KeyError` | Returns `None` or a specified default |
+| Primary Use Case| Accessing or modifying **mandatory** configuration | Safely reading **optional** configuration with fallbacks |
 
 # When to Use Which?
 
