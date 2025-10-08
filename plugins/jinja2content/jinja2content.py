@@ -39,15 +39,41 @@ class JinjaContentMixin:
             self.env.tests.update(self.settings["JINJA_TESTS"])
 
     def read(self, source_path):
-        with pelican_open(source_path) as text:
-            text = self.env.from_string(text).render()
+        with pelican_open(source_path) as original_text:
+            if not self._should_render_with_jinja(original_text):
+                return super().read(source_path)
+
+            rendered_text = self.env.from_string(original_text).render()
 
         with NamedTemporaryFile(delete=False) as f:
-            f.write(text.encode())
+            f.write(rendered_text.encode())
             f.close()
             content, metadata = super().read(f.name)
             os.unlink(f.name)
             return content, metadata
+
+    def _should_render_with_jinja(self, text):
+        """Return True when front matter sets ``jinja`` to a truthy value."""
+        if not text.startswith("---"):
+            return False
+
+        delimiter = "---"
+        lines = text.splitlines()
+        try:
+            start = lines.index(delimiter)
+            end = lines.index(delimiter, start + 1)
+        except ValueError:
+            return False
+
+        for raw_line in lines[start + 1 : end]:
+            if ":" not in raw_line:
+                continue
+            key, value = raw_line.split(":", 1)
+            if key.strip().lower() != "jinja":
+                continue
+            normalized = value.strip().lower()
+            return normalized in {"true", "yes", "on", "1"}
+        return False
 
 
 class JinjaMarkdownReader(JinjaContentMixin, MarkdownReader):

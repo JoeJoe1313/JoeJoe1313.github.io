@@ -42,11 +42,6 @@
             {% endif %}
 
             {{ page.content }}
-            
-            {% if page.show_goodreads %}
-                {% include 'goodreads_activity.html' %}
-                {% include 'goodreads_quotes.html' %}
-            {% endif %}
 
             {% from '_includes/comments.html' import comments_section with context %}
             {{ comments_section(page) }}

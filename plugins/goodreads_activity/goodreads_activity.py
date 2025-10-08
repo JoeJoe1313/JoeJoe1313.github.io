@@ -2,33 +2,30 @@ from __future__ import unicode_literals
 
 import logging
 
+from pelican import signals
+
 logger = logging.getLogger(__name__)
 
-from pelican import signals
+_activity_loader = None
 
 
 class GoodreadsActivity:
-    def __init__(self, generator):
+    def __init__(self, settings):
         import feedparser
 
-        self.activities = dict()
-        activity_feeds = generator.settings["GOODREADS_ACTIVITY_FEED"]
-        for activity_feed in activity_feeds:
-            self.activities[activity_feed] = feedparser.parse(
-                activity_feeds[activity_feed]
-            )
+        self.activities = {}
+        activity_feeds = settings["GOODREADS_ACTIVITY_FEED"]
+        for shelf, url in activity_feeds.items():
+            self.activities[shelf] = feedparser.parse(url)
 
     def fetch(self):
-        goodreads_activity = dict()
-        for activity_feed in self.activities:
-            goodreads_activity[activity_feed] = {
-                # "shelf_title": self.activities[activity_feed]["feed"]["title"],
-                "shelf_title": " ".join(
-                    word.capitalize() for word in activity_feed.split("_")
-                ),
+        goodreads_activity = {}
+        for shelf, parsed in self.activities.items():
+            goodreads_activity[shelf] = {
+                "shelf_title": " ".join(word.capitalize() for word in shelf.split("_")),
                 "books": [],
             }
-            for entry in self.activities[activity_feed]["entries"]:
+            for entry in parsed["entries"]:
                 book = {
                     "title": entry.title,
                     "author": entry.author_name,
@@ -41,26 +38,50 @@ class GoodreadsActivity:
                     "review": entry.user_review,
                     "tags": entry.user_shelves,
                 }
-                goodreads_activity[activity_feed]["books"].append(book)
+                goodreads_activity[shelf]["books"].append(book)
 
         return goodreads_activity
 
 
+def _get_loader(settings):
+    global _activity_loader
+
+    if "GOODREADS_ACTIVITY_FEED" not in settings:
+        return None
+
+    if _activity_loader is None:
+        try:
+            _activity_loader = GoodreadsActivity(settings)
+        except ImportError:
+            logger.warning(
+                "`goodreads_activity` failed to load dependency `feedparser`."
+                " `goodreads_activity` plugin not loaded."
+            )
+            return None
+
+    return _activity_loader
+
+
 def fetch_goodreads_activity(gen, metadata):
-    if "GOODREADS_ACTIVITY_FEED" in gen.settings:
-        gen.context["goodreads_activity"] = gen.goodreads_activity.fetch()
+    loader = _get_loader(gen.settings)
+    if loader is not None:
+        gen.context["goodreads_activity"] = loader.fetch()
 
 
-def initialize_feedparser(generator):
-    generator.goodreads_activity = GoodreadsActivity(generator)
+def add_to_jinja_globals(pelican_obj):
+    loader = _get_loader(pelican_obj.settings)
+    if loader is None:
+        return
+
+    jinja_globals = pelican_obj.settings.setdefault("JINJA_GLOBALS", {})
+    jinja_globals["goodreads_activity"] = loader.fetch()
+    if "GOODREADS_ACTIVITY_FEED" in pelican_obj.settings:
+        jinja_globals["GOODREADS_ACTIVITY_FEED"] = pelican_obj.settings[
+            "GOODREADS_ACTIVITY_FEED"
+        ]
 
 
 def register():
-    try:
-        signals.article_generator_init.connect(initialize_feedparser)
-        signals.article_generator_context.connect(fetch_goodreads_activity)
-    except ImportError:
-        logger.warning(
-            "`goodreads_activity` failed to load dependency `feedparser`."
-            "`goodreads_activity` plugin not loaded."
-        )
+    signals.initialized.connect(add_to_jinja_globals)
+    signals.article_generator_context.connect(fetch_goodreads_activity)
+    signals.page_generator_context.connect(fetch_goodreads_activity)
