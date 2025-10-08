@@ -65,6 +65,7 @@ PLUGINS = [
     "plugins.series",
     "plugins.statistics",
     "plugins.search",
+    "plugins.jinja2content",
 ]
 SUMMARY_USE_FIRST_PARAGRAPH = True
 WITH_FUTURE_DATES = False
