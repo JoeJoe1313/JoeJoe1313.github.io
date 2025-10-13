@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+        <link rel="stylesheet" href="https://files.stork-search.net/basic.css">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="ai, ml, llm, mlx-lm, mlx, Machine Learning, " />
+
+<meta property="og:title" content="Fine-Tuning LLMs with LoRA and MLX-LM "/>
+<meta property="og:url" content="/fine-tuning-lora-mlx.html" />
+<meta property="og:description" content="This blog post is going to be a tutorial on how to fine-tune a LLM with LoRA and the mlx-lm package. Medium post can be found here and Substack here." />
+<meta property="og:site_name" content="JoJo&#39;s Blog" />
+<meta property="og:article:author" content="" />
+<meta property="og:article:published_time" content="2025-02-12T07:00:00+02:00" />
+<meta name="twitter:title" content="Fine-Tuning LLMs with LoRA and MLX-LM ">
+<meta name="twitter:description" content="This blog post is going to be a tutorial on how to fine-tune a LLM with LoRA and the mlx-lm package. Medium post can be found here and Substack here.">
+
+        <title>Fine-Tuning LLMs with LoRA and MLX-LM  · JoJo&#39;s Blog
+</title>
+        <link rel="shortcut icon" href="/theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="/theme/images/apple-touch-icon-152x152.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/theme/images/apple-touch-icon.png"  type="image/png" />
+        <link rel="apple-touch-icon" sizes="57x57" href="/theme/images/apple-touch-icon-57x57.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/images/apple-touch-icon-72x72.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="/theme/images/apple-touch-icon-76x76.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/images/apple-touch-icon-114x114.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/theme/images/apple-touch-icon-120x120.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/images/apple-touch-icon-144x144.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/theme/images/apple-touch-icon-152x152.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/theme/images/apple-touch-icon-180x180.png" type="image/png" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="/"><span class=site-name>JoJo's Blog</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       "/"
+                                    >Home</a>
+                                </li>
+                                <li ><a href="/interests.html">Interests</a></li>
+                                <li ><a href="/categories.html">Categories</a></li>
+                                <li ><a href="/tags.html">Tags</a></li>
+                                <li ><a href="/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+                                    <input type="text" class="search-query" placeholder="Search" name="q" data-stork="site-search" autocomplete="off">
+                                </form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="/fine-tuning-lora-mlx.html">
+                Fine-Tuning LLMs with LoRA and MLX-LM
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>This blog post is going to be a tutorial on how to fine-tune a LLM with LoRA and the <code>mlx-lm</code> package. Medium post can be found <a href="https://medium.com/@levchevajoana/fine-tuning-llms-with-lora-and-mlx-lm-c0b143642deb">here</a> and Substack <a href="https://substack.com/home/post/p-157008884">here</a>.</p>
+<h2>Introduction</h2>
+<p><a href="https://opensource.apple.com/projects/mlx/">MLX</a> is an array framework tailored for efficient machine learning research on Apple silicon. Its biggest strength is that it leverages the unified memory architecture of Apple devices and offers a familiar, NumPy-like API. Apple has also developed a package for LLM text generation, fine-tuning, etc. called <a href="https://github.com/ml-explore/mlx-examples/blob/main/llms/README.md">MLX LM</a>.</p>
+<p>Overall, <code>mlx-lm</code> supports many of Hugging Face format LLMs. With <code>mlx-lm</code> it is also very easy to directly load models from the Hugging Face <a href="https://huggingface.co/mlx-community">MLX Community</a>. This is a place for mlx model pre-converted weights that run on Apple Silicon, hosting many ready-to-use models with the framework. The framework also supports parameter-efficient fine-tuning (<a href="https://huggingface.co/blog/peft">PEFT</a>) with <a href="https://github.com/ml-explore/mlx-examples/tree/main/lora">LoRA and QLoRA</a>. You can find more information about LoRA in the following <a href="https://arxiv.org/abs/2106.09685">paper</a>.</p>
+<p>In this tutorial, with the help of the <code>mlx-lm</code> package, we are going to load the <a href="https://medium.com/r/?url=https%3A%2F%2Fhuggingface.co%2Fmlx-community%2FMistral-7B-Instruct-v0.3-4bit">Mistral-7B-Instruct-v0.3–4bit</a> model from the MLX Community space, and attempt to fine-tune it with LoRA and the dataset <a href="https://medium.com/r/?url=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Fwin-wang%2FMachine_Learning_QA_Collection">win-wang/Machine_Learning_QA_Collection</a>. Let's begin.</p>
+<h2>Packages and Model Loading</h2>
+<p>First, we have to load the needed packages.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mlx.optimizers</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">optim</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">tree_flatten</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_lm</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate</span><span class="p">,</span> <span class="n">load</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_lm.tuner</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrainingArgs</span><span class="p">,</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">linear_to_lora_layers</span><span class="p">,</span> <span class="n">train</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">PreTrainedTokenizer</span>
+</code></pre></div>
+
+<p>Then, we should load the model and tokenizer.</p>
+<div class="highlight"><pre><span></span><code><span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;mlx-community/Mistral-7B-Instruct-v0.3-4bit&quot;</span>
+<span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Let's see what would our model output when given a simple pormpt such as <em>"What is fine-tuning in machine learning?"</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;What is fine-tuning in machine learning?&quot;</span>
+<span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}]</span>
+<span class="n">prompt</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
+    <span class="n">messages</span><span class="p">,</span> <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">generate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+
+<p>The generated output of the model is:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">Fine</span><span class="o">-</span><span class="nx">tuning</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">machine</span><span class="w"> </span><span class="nx">learning</span><span class="w"> </span><span class="nx">refers</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">process</span><span class="w"> </span><span class="nx">of</span><span class="w"> </span><span class="nx">taking</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">pre</span><span class="o">-</span><span class="nx">trained</span><span class="w"> </span><span class="nx">model</span><span class="p">,</span><span class="w"> </span><span class="nx">which</span><span class="w"> </span><span class="nx">has</span><span class="w"> </span><span class="nx">already</span><span class="w"> </span><span class="nx">been</span><span class="w"> </span><span class="nx">trained</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">large</span><span class="w"> </span><span class="nx">dataset</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">specific</span><span class="w"> </span><span class="nx">task</span><span class="p">,</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">adapting</span><span class="w"> </span><span class="nx">it</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">new</span><span class="p">,</span><span class="w"> </span><span class="nx">related</span><span class="w"> </span><span class="nx">task</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">different</span><span class="w"> </span><span class="nx">aspect</span><span class="w"> </span><span class="nx">of</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">same</span><span class="w"> </span><span class="nx">task</span><span class="p">.</span>
+
+<span class="nx">For</span><span class="w"> </span><span class="nx">example</span><span class="p">,</span><span class="w"> </span><span class="nx">imagine</span><span class="w"> </span><span class="nx">you</span><span class="w"> </span><span class="nx">have</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">pre</span><span class="o">-</span><span class="nx">trained</span><span class="w"> </span><span class="nx">model</span><span class="w"> </span><span class="nx">that</span><span class="w"> </span><span class="nx">can</span><span class="w"> </span><span class="nx">recognize</span><span class="w"> </span><span class="nx">different</span><span class="w"> </span><span class="nx">types</span><span class="w"> </span><span class="nx">of</span><span class="w"> </span><span class="nx">animals</span><span class="p">.</span><span class="w"> </span><span class="nx">You</span><span class="w"> </span><span class="nx">can</span><span class="w"> </span><span class="nx">fine</span><span class="o">-</span><span class="nx">tune</span><span class="w"> </span><span class="nx">this</span><span class="w"> </span><span class="nx">model</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">recognize</span><span class="w"> </span><span class="nx">specific</span><span class="w"> </span><span class="nx">breeds</span><span class="w"> </span><span class="nx">of</span><span class="w"> </span><span class="nx">dogs</span><span class="p">,</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="nx">even</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">recognize</span><span class="w"> </span><span class="nx">different</span><span class="w"> </span><span class="nx">types</span><span class="w"> </span><span class="nx">of</span><span class="w"> </span><span class="nx">flowers</span><span class="p">.</span><span class="w"> </span><span class="nx">The</span><span class="w"> </span><span class="nx">idea</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="nx">that</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">pre</span><span class="o">-</span><span class="nx">trained</span><span class="w"> </span><span class="nx">model</span><span class="w"> </span><span class="nx">has</span><span class="w"> </span><span class="nx">already</span><span class="w"> </span><span class="nx">learned</span><span class="w"> </span><span class="nx">some</span><span class="w"> </span><span class="nx">general</span><span class="w"> </span><span class="nx">features</span><span class="w"> </span><span class="nx">that</span><span class="w"> </span><span class="nx">are</span><span class="w"> </span><span class="nx">useful</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">new</span><span class="w"> </span><span class="nx">task</span><span class="p">,</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">fine</span><span class="o">-</span><span class="nx">tuning</span><span class="w"> </span><span class="nx">helps</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">model</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">learn</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">specific</span><span class="w"> </span><span class="nx">details</span><span class="w"> </span><span class="nx">that</span><span class="w"> </span><span class="nx">are</span><span class="w"> </span><span class="nx">important</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">new</span><span class="w"> </span><span class="nx">task</span><span class="p">.</span>
+
+<span class="nx">Fine</span><span class="o">-</span><span class="nx">tuning</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="nx">often</span><span class="w"> </span><span class="nx">used</span><span class="w"> </span><span class="nx">when</span><span class="w"> </span><span class="nx">you</span><span class="w"> </span><span class="nx">have</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">small</span><span class="w"> </span><span class="nx">dataset</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">new</span><span class="w"> </span><span class="nx">task</span><span class="p">,</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nx">it</span><span class="w"> </span><span class="nx">allows</span><span class="w"> </span><span class="nx">you</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">leverage</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">knowledge</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">model</span><span class="w"> </span><span class="nx">has</span><span class="w"> </span><span class="nx">already</span><span class="w"> </span><span class="nx">gained</span><span class="w"> </span><span class="nx">from</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">large</span><span class="w"> </span><span class="nx">pre</span><span class="o">-</span><span class="nx">training</span><span class="w"> </span><span class="nx">dataset</span><span class="p">.</span><span class="w"> </span><span class="nx">It</span><span class="err">&#39;</span><span class="nx">s</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">common</span><span class="w"> </span><span class="nx">technique</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">deep</span><span class="w"> </span><span class="nx">learning</span><span class="p">,</span><span class="w"> </span><span class="nx">particularly</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nx">tasks</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="nx">classification</span><span class="p">,</span><span class="w"> </span><span class="nx">natural</span><span class="w"> </span><span class="nx">language</span><span class="w"> </span><span class="nx">processing</span><span class="p">,</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">speech</span><span class="w"> </span><span class="nx">recognition</span><span class="p">.</span>
+</code></pre></div>
+
+<h2>Preparation for Fine-Tuning</h2>
+<p>Let's create an <code>adapters</code> directory, and the paths to the adapter configuration (in our case the LoRA configuration) and adapter files.</p>
+<div class="highlight"><pre><span></span><code><span class="n">adapter_path</span> <span class="o">=</span> <span class="s2">&quot;adapters&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">adapter_path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">adapter_config_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">adapter_path</span><span class="p">,</span> <span class="s2">&quot;adapter_config.json&quot;</span><span class="p">)</span>
+<span class="n">adapter_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">adapter_path</span><span class="p">,</span> <span class="s2">&quot;adapters.safetensors&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>We have to set our LoRA parameter configurations. This can be done in a separate <code>.yml</code> file, as shown <a href="https://github.com/ml-explore/mlx-examples/blob/main/llms/mlx_lm/examples/lora_config.yaml">here</a>, but for code simplicity and the sake of just showing the process of fine-tuning with LoRA and mlx-lm, we are going to stick to this simple in-code configuration</p>
+<div class="highlight"><pre><span></span><code><span class="n">lora_config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;num_layers&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="s2">&quot;lora_parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;rank&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+        <span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="mf">20.0</span><span class="p">,</span>
+        <span class="s2">&quot;dropout&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>which we save into the adapters directory we already created.</p>
+<div class="highlight"><pre><span></span><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">adapter_config_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">lora_config</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</code></pre></div>
+
+<p>We can also set our training arguments, pointing to our adapter file, how many iterations we want to perform, and how many steps per evaluation should be done.</p>
+<div class="highlight"><pre><span></span><code><span class="n">training_args</span> <span class="o">=</span> <span class="n">TrainingArgs</span><span class="p">(</span>
+    <span class="n">adapter_file</span><span class="o">=</span><span class="n">adapter_file_path</span><span class="p">,</span>
+    <span class="n">iters</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+    <span class="n">steps_per_eval</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>In the LoRA framework, most of the model's original parameters remain unchanged during fine-tuning. The <code>model.freeze()</code> command is used to set these parameters to a non-trainable state so that their weights aren't updated during backpropagation. This way, only the newly introduced low-rank adaptation matrices (LoRA parameters) are optimized, reducing computational overhead and memory usage while preserving the original model's knowledge.</p>
+<p>The <code>linear_to_lora_layers</code> function converts or wraps some of the model's linear layers into LoRA layers. Essentially, it replaces (or augments) selected linear layers with their LoRA counterparts, which include the additional low-rank matrices that will be trained. The configuration parameters (like the number of layers and specific LoRA parameters) determine which layers are modified and how the LoRA adapters are set up.</p>
+<p>We should also verify that only a small subset of parameters are set for training, and activate training mode while preserving the frozen state of the main model parameters.</p>
+<div class="highlight"><pre><span></span><code><span class="n">model</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
+<span class="n">linear_to_lora_layers</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">lora_config</span><span class="p">[</span><span class="s2">&quot;num_layers&quot;</span><span class="p">],</span> <span class="n">lora_config</span><span class="p">[</span><span class="s2">&quot;lora_parameters&quot;</span><span class="p">])</span>
+<span class="n">num_train_params</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">size</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">tree_flatten</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">trainable_parameters</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of trainable parameters: </span><span class="si">{</span><span class="n">num_train_params</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+</code></pre></div>
+
+<p>We can also create a class to follow the train and validation loss metrics during the training process</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Metrics</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_losses</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">val_losses</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_train_loss_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_losses</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;iteration&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;train_loss&quot;</span><span class="p">]))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_val_loss_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">val_losses</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;iteration&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;val_loss&quot;</span><span class="p">]))</span>
+</code></pre></div>
+
+<p>and create an instance of this class.</p>
+<div class="highlight"><pre><span></span><code><span class="n">metrics</span> <span class="o">=</span> <span class="n">Metrics</span><span class="p">()</span>
+</code></pre></div>
+
+<h2>Data Loading</h2>
+<p>Here, we are creating a simplified variant of the following <a href="https://github.com/ml-explore/mlx-examples/blob/ec30dc35382d87614f51fe7590f015f93a491bfd/llms/mlx_lm/tuner/datasets.py#L163-L187">function</a> for loading a Hugging Face dataset.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">custom_load_hf_dataset</span><span class="p">(</span>
+    <span class="n">data_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">tokenizer</span><span class="p">:</span> <span class="n">PreTrainedTokenizer</span><span class="p">,</span>
+    <span class="n">names</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;valid&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">),</span>
+<span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">exceptions</span><span class="p">,</span> <span class="n">load_dataset</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="n">data_id</span><span class="p">)</span>
+
+        <span class="n">train</span><span class="p">,</span> <span class="n">valid</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span>
+                <span class="n">datasets</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">tokenizer</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                <span class="k">else</span> <span class="p">[]</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span>
+        <span class="p">]</span>
+
+    <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DatasetNotFoundError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Not found Hugging Face dataset: </span><span class="si">{</span><span class="n">data_id</span><span class="si">}</span><span class="s2"> .&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">train</span><span class="p">,</span> <span class="n">valid</span><span class="p">,</span> <span class="n">test</span>
+</code></pre></div>
+
+<p>Then, let's load the <code>win-wang/Machine_Learning_QA_Collection</code> dataset from Hugging Face.</p>
+<div class="highlight"><pre><span></span><code><span class="n">train_set</span><span class="p">,</span> <span class="n">val_set</span><span class="p">,</span> <span class="n">test_set</span> <span class="o">=</span> <span class="n">custom_load_hf_dataset</span><span class="p">(</span>
+    <span class="n">data_id</span><span class="o">=</span><span class="s2">&quot;win-wang/Machine_Learning_QA_Collection&quot;</span><span class="p">,</span>
+    <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
+    <span class="n">names</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;validation&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">),</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<h2>Fine-Tuning</h2>
+<p>Finally, we can begin the LoRA fine-tuning process by calling the <code>train()</code> function.</p>
+<div class="highlight"><pre><span></span><code><span class="n">train</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+    <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
+    <span class="n">args</span><span class="o">=</span><span class="n">training_args</span><span class="p">,</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">),</span>
+    <span class="n">train_dataset</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span>
+    <span class="n">val_dataset</span><span class="o">=</span><span class="n">val_set</span><span class="p">,</span>
+    <span class="n">training_callback</span><span class="o">=</span><span class="n">metrics</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>After the training is completed, we can also plot the train and validation loss.</p>
+<div class="highlight"><pre><span></span><code><span class="n">train_its</span><span class="p">,</span> <span class="n">train_losses</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">metrics</span><span class="o">.</span><span class="n">train_losses</span><span class="p">)</span>
+<span class="n">validation_its</span><span class="p">,</span> <span class="n">validation_losses</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">metrics</span><span class="o">.</span><span class="n">val_losses</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">train_its</span><span class="p">,</span> <span class="n">train_losses</span><span class="p">,</span> <span class="s2">&quot;-o&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Train&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">validation_its</span><span class="p">,</span> <span class="n">validation_losses</span><span class="p">,</span> <span class="s2">&quot;-o&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Validation&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Iteration&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Loss&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+<p>For example, one of the trainings performed resulted in the following losses.</p>
+<p><img alt="Train &amp; Validation Loss" class="zoomable" src="../images/2025-02-12-fine-tuning-lora-mlx/lora.jpg" style="display: block; margin: 0 auto"></p>
+<h2>Test the model_lora</h2>
+<p>Now, we can load the fine-tuned model, specifying the <code>adapter_path</code>,</p>
+<div class="highlight"><pre><span></span><code><span class="n">model_lora</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">adapter_path</span><span class="o">=</span><span class="n">adapter_path</span><span class="p">)</span>
+</code></pre></div>
+
+<p>and we can generate an output for the same prompt as earlier.</p>
+<div class="highlight"><pre><span></span><code><span class="n">response</span> <span class="o">=</span> <span class="n">generate</span><span class="p">(</span><span class="n">model_lora</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+
+<p>The generated response is:</p>
+<div class="highlight"><pre><span></span><code>Fine-tuning in machine learning refers to the process of adjusting the parameters of a pre-trained model to adapt it to a specific task or dataset. This approach is often used when the available data is limited, as it allows the model to leverage the knowledge it has already gained from previous training. Fine-tuning can improve the performance of a model on a new task, making it a valuable technique in many machine learning applications.
+</code></pre></div>
+
+<h2>Conclusion</h2>
+<p>In this tutorial, we explored how to leverage MLX LM and LoRA for fine-tuning large language models on Apple silicon. We started by setting up the necessary environment, loading a pre-trained model from the MLX Community, and preparing our dataset from Hugging Face. By converting selected linear layers into LoRA adapters and freezing the majority of the model's weights, we efficiently fine-tuned the model using a modest computational footprint. This approach not only optimizes resource usage but also opens the door to experimenting with different fine-tuning strategies and datasets. Further modifications can be explored, such as experimenting with other adapter configurations like QLoRA (extends the LoRA approach by integrating quantization techniques), fusing adapters, integrating additional evaluation metrics to better understand a model's performance, etc. Happy fine-tuning!</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+    <h4>Reading Time</h4>
+    <p>~5 min read</p>
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-02-12T07:00:00+02:00">Wed 12 February 2025</time>
+            <h4>Category</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li>
+                    <a class="category-link" href="/categories.html#machine-learning-ref">Machine Learning
+                        <span class="superscript">10</span>
+                    </a>
+                </li>
+            </ul>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#ai-ref">ai
+                    <span class="superscript">9</span>
+</a></li>
+                <li><a href="/tags.html#llm-ref">llm
+                    <span class="superscript">5</span>
+</a></li>
+                <li><a href="/tags.html#ml-ref">ml
+                    <span class="superscript">9</span>
+</a></li>
+                <li><a href="/tags.html#mlx-ref">mlx
+                    <span class="superscript">4</span>
+</a></li>
+                <li><a href="/tags.html#mlx-lm-ref">mlx-lm
+                    <span class="superscript">3</span>
+</a></li>
+            </ul>
+<h4>Stay in Touch</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/JoeJoe1313" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+    <a href="https://www.linkedin.com/in/joana-levtcheva-479844164/" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="LinkedIn" role="img" viewBox="0 0 512 512" fill="#fff"><rect width="512" height="512" rx="15%" fill="#0077b5"/><circle cx="142" cy="138" r="37"/><path stroke="#fff" stroke-width="66" d="M244 194v198M142 194v198"/><path d="M276 282c0-20 13-40 36-40 24 0 33 18 33 45v105h66V279c0-61-32-89-76-89-34 0-51 19-59 32"/></svg>
+    </a>
+    <a href="https://x.com/13_jo_jo_13" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="Twitter" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1da1f3"/><path fill="#fff" d="M437 152a72 72 0 0 1-40 12 72 72 0 0 0 32-40 72 72 0 0 1-45 17 72 72 0 0 0-122 65 200 200 0 0 1-145-74 72 72 0 0 0 22 94 72 72 0 0 1-32-7 72 72 0 0 0 56 69 72 72 0 0 1-32 1 72 72 0 0 0 67 50 200 200 0 0 1-105 29 200 200 0 0 0 309-179 200 200 0 0 0 35-37"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+    </div>
+</footer><div id="zoom-overlay" class="zoom-overlay" aria-hidden="true">
+    <button type="button" class="zoom-overlay__close" aria-label="Close zoomed image">×</button>
+    <img src="" alt="">
+</div>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script src="/theme/js/zoom-overlay.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+        <script src="https://files.stork-search.net/releases/v1.6.0/stork.js"></script>
+        <script src="/theme/js/stork-search.js"></script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

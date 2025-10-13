@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+        <link rel="stylesheet" href="https://files.stork-search.net/basic.css">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="ai, ml, llm, Machine Learning, " />
+
+<meta property="og:title" content="Thinking Backwards: The &#34;Reversal Blessing&#34; in LLM Multiple-Choice Reasoning "/>
+<meta property="og:url" content="/reversal-blessing.html" />
+<meta property="og:description" content="Most modern languages are written from left to right, thus we assume that thinking from left to right is the most natural way to process information expressed with these languages. This is particularly true for Large Language Models (LLMs) which are typically trained to predict the next word in a sequence, known as left-to-right (L2R) language models. But what if, for certain tasks, thinking backward could actually be better?" />
+<meta property="og:site_name" content="JoJo&#39;s Blog" />
+<meta property="og:article:author" content="" />
+<meta property="og:article:published_time" content="2025-05-29T07:00:00+03:00" />
+<meta name="twitter:title" content="Thinking Backwards: The &#34;Reversal Blessing&#34; in LLM Multiple-Choice Reasoning ">
+<meta name="twitter:description" content="Most modern languages are written from left to right, thus we assume that thinking from left to right is the most natural way to process information expressed with these languages. This is particularly true for Large Language Models (LLMs) which are typically trained to predict the next word in a sequence, known as left-to-right (L2R) language models. But what if, for certain tasks, thinking backward could actually be better?">
+
+        <title>Thinking Backwards: The &#34;Reversal Blessing&#34; in LLM Multiple-Choice Reasoning  · JoJo&#39;s Blog
+</title>
+        <link rel="shortcut icon" href="/theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="/theme/images/apple-touch-icon-152x152.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/theme/images/apple-touch-icon.png"  type="image/png" />
+        <link rel="apple-touch-icon" sizes="57x57" href="/theme/images/apple-touch-icon-57x57.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/images/apple-touch-icon-72x72.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="/theme/images/apple-touch-icon-76x76.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/images/apple-touch-icon-114x114.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/theme/images/apple-touch-icon-120x120.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/images/apple-touch-icon-144x144.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/theme/images/apple-touch-icon-152x152.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/theme/images/apple-touch-icon-180x180.png" type="image/png" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="/"><span class=site-name>JoJo's Blog</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       "/"
+                                    >Home</a>
+                                </li>
+                                <li ><a href="/interests.html">Interests</a></li>
+                                <li ><a href="/categories.html">Categories</a></li>
+                                <li ><a href="/tags.html">Tags</a></li>
+                                <li ><a href="/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+                                    <input type="text" class="search-query" placeholder="Search" name="q" data-stork="site-search" autocomplete="off">
+                                </form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="/reversal-blessing.html">
+                Thinking Backwards: The "Reversal Blessing" in LLM Multiple-Choice Reasoning
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Most modern languages are written from left to right, thus we assume that thinking from left to right is the most natural way to process information expressed with these languages. This is particularly true for <strong>Large Language Models (LLMs)</strong> which are typically trained to predict the next word in a sequence, known as <strong>left-to-right (L2R)</strong> language models. But what if, for certain tasks, thinking backward could actually be better?</p>
+<p>A recent paper from Apple researchers, titled <strong><em>"Reversal Blessing: Thinking Backward May Outpace Thinking Forward in Multi-choice Questions"</em></strong>, explores a counterintuitive approach to data augmentation: training LLMs on "reversed" sequences. It delves into the potential of <strong>right-to-left (R2L)</strong> language models, and their effectiveness in tackling some tasks such as <strong>multiple-choice questions (MCQs)</strong>. The paper can be found <a href="https://arxiv.org/abs/2502.18435v2">here</a>, and the supporting code can be found in the GitHub repository <a href="https://github.com/apple/ml-reversal-blessing?tab=readme-ov-file">here</a>. In this blog post, we are going to explore some of the key ideas and findings from this paper.</p>
+<p>Medium post can be found <a href="https://medium.com/@levchevajoana/thinking-backwards-the-reversal-blessing-in-llm-multiple-choice-reasoning-fa71916b51e5">here</a>.</p>
+<h1>Left‐to‐right (L2R) Autoregressive Factorization</h1>
+<p>Most LLMs are trained to predict text in a strictly left‐to‐right order. Left-to-right autoregressive (<strong>L2R</strong>) factorization is the fundamental mathematical principle underlying how these models generate text, based on decomposing the probability of a sequence into a chain of conditional probabilities.</p>
+<h2>The Theory</h2>
+<p>Given a sequence of tokens <span class="math">\(x = (x_1, x_2, \dots, x_T)\)</span>, the model expresses the joint probability as a product of conditional probabilities:</p>
+<div class="math">$$
+p_{L2R}(x) = \prod_{t=1}^{T} p_{L2R}(x_{t}\mid x_{&lt;t}),
+$$</div>
+<p>where <span class="math">\(x_{&lt;t}\)</span> represents the preceding tokens <span class="math">\((x_{1}, x_{2}, \dots, x_{t-1})\)</span>. This approach can introduce inductive biases and approximation errors that compound at each step, which may not be optimal for all tasks.</p>
+<p>For training, models typically optimize the log-likelihood of the sequence for numerical stability and easier differentiation:</p>
+<div class="math">$$
+\log p(x) = \sum_{t=1}^{T} \log p_{L2R}(x_{t}\mid x_{&lt;t}).
+$$</div>
+<h1>Right‐to‐left (R2L) Autoregressive Factorization</h1>
+<p>R2L factorization is the mathematical mirror image of L2R, where each token is conditioned on the tokens that come after it.</p>
+<h2>The Theory</h2>
+<p>The joint probability is factored in the reverse order</p>
+<div class="math">$$
+p_{R2L}(x) \;=\; \prod_{t=1}^{T} p_{R2L}(x_{t}\mid x_{&gt;t}),
+$$</div>
+<p>where <span class="math">\(x_t\)</span> is the sequence of subsequent tokens <span class="math">\((x_{t+1},\dots,x_T)\)</span>. To train an R2L model, each training instance is tokenized, and then the order of all tokens is reversed before being fed to the model. Although L2R and R2L factorizations represent the same distribution in theory, their neural network approximations learn different behaviors and exhibit different performance characteristics.</p>
+<h1>Key Questions</h1>
+<p>The paper investigates the following three questions:</p>
+<ul>
+<li>How to evaluate R2L models on knowledge extraction and basic reasoning tasks? </li>
+<li>Can R2L factorization match or surpass L2R’s capabilities in knowledge extraction and reasoning for downstream tasks?</li>
+<li>What are underlying factors determining the preference of L2R or R2L factorizations?</li>
+</ul>
+<h1>Multiple‐Choice Questions</h1>
+<p>Multiple‐choice questions (MCQs) are a common benchmark for evaluating an LLM’s knowledge, reasoning, and calibration. As we can see in <strong>Figure 1</strong>, in their simplest form, an MCQ comprises:</p>
+<ul>
+<li>A <strong>question</strong> <span class="math">\(q\)</span></li>
+<li>A set of <span class="math">\(n\)</span> <strong>candidate answers</strong> <span class="math">\(a_1, \dots, a_n\)</span></li>
+<li>Exactly <strong>one correct answer</strong> <span class="math">\(a^{*}\)</span> among these <span class="math">\(n\)</span> choices</li>
+</ul>
+<figure>
+  <img src="../images/2025-05-29-reversal-blessing/mcq_fig.jpeg" alt="MCQ figure" class="zoomable" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 1. A diagram showing forward vs. reverse thinking in MCQs. The top half shows L2R evaluating answers based on the question. The bottom half shows R2L evaluating the question based on the answers.</figcaption>
+</figure>
+
+<p>The paper uses MCQs as the primary testbed for comparing the two reasoning directions.</p>
+<h2>L2R on MCQs</h2>
+<p>Let <span class="math">\(q\)</span> be a question with answer candidates <span class="math">\(\{a_1, a_2, \dots, a_n\}\)</span>. L2R models compute a score for each answer <span class="math">\(a_i\)</span> given the question <span class="math">\(q\)</span>. This score is typically the log-probability of the answer, normalized by its length <span class="math">\(N_i\)</span> to prevent bias towards shorter answers</p>
+<div class="math">$$
+s_i^{(L2R)} = \frac{1}{N_i} \log p_{L2R}(a_i \mid ​q),
+$$</div>
+<p>The model then selects the answer with the highest score. This approach, however, can suffer from "surface-form competition," where semantically similar answers (e.g., “dog” vs. “puppy”) split the probability mass, penalizing the correct answer concept.</p>
+<h2>R2L on MCQs</h2>
+<p>For R2L models, the paper proposes "reverse thinking" based on Bayes' rule, which evaluates how likely the question is given a particular answer. The authors test three scoring paradigms and find that the simplest one performs the best:</p>
+<ul>
+<li><strong>Paradigm 1 (Normalized + Prior):</strong></li>
+</ul>
+<div class="math">$$
+s_i^{(1)} = \frac{1}{M_i} \log p_{R2L}(q \mid a_i) + \log p_{R2L}(a_i)
+$$</div>
+<ul>
+<li><strong>Paradigm 2 (Unnormalized + Prior):</strong></li>
+</ul>
+<div class="math">$$
+\tilde{s}_i^{(2)} = \log p_{R2L}(q \mid a_i) + \log p_{R2L}(a_i)
+$$</div>
+<ul>
+<li><strong>Paradigm 3 (Unnormalized, Uniform Prior):</strong></li>
+</ul>
+<div class="math">$$
+s_i^{(3)} = \log p_{R2L}(q \mid a_i)
+$$</div>
+<p>Empirically, Paradigm 3 consistently yields the highest MCQ accuracy. By ignoring the prior probability of the answer, it avoids noisy estimations and cleanly sidesteps the surface-form competition issue.</p>
+<h1>Why Does Reverse Thinking Work? The "3C" Hypotheses</h1>
+<p>The paper explores three main hypotheses for why one direction might outperform the other: <strong>Calibration</strong>, <strong>Computability</strong>, and <strong>Conditional Entropy</strong>.</p>
+<h2>Calibration and Surface‐Form Competition</h2>
+<p>Reverse thinking (Paradigm 3) fixes the calibration issue because it evaluates <span class="math">\(p(q \mid a_i)\)</span>. Since the question <span class="math">\(q\)</span> is the same for all choices, there's no competition among different answer forms. This allows the model to fairly assess how well each distinct answer concept explains the question, effectively auto-normalizing the choices.</p>
+<h2>Computability: Forward vs. Reverse Task Difficulty</h2>
+<p>This idea draws an analogy to tasks like prime factorization, where the forward operation (multiplication) is easy and the reverse (factoring) is hard. Similarly, some reasoning tasks might be intrinsically easier to compute in one direction. However, the paper notes that most MCQs are "shallow" tasks involving pattern matching rather than deep symbolic inversion, making this a less dominant factor.</p>
+<h2>Conditional Entropy</h2>
+<p>This is proposed as the most unified and powerful criterion. The core idea is that the direction of reasoning with <strong>lower conditional entropy</strong> is inherently less uncertain and thus easier for a model to learn accurately.</p>
+<p>An LLM can be viewed as constructing a directed search graph (a Directed Acyclic Graph (DAG)) from the training data, mapping between information entities. An L2R model and an R2L model trained on the same data will form analogous DAGs but with opposite edge directions, as illustrated below.</p>
+<figure>
+  <img src="../images/2025-05-29-reversal-blessing/dag.jpeg" alt="MCQ figure" class="zoomable" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 2. L2R and R2L models pretrained on the same data generate opposite search graphs based on the order in which they process information entities.</figcaption>
+</figure>
+
+<p>The efficiency of searching these graphs in either direction is what conditional entropy aims to measure.</p>
+<ul>
+<li><strong>L2R Conditional Entropy <span class="math">\(H(A∣Q)\)</span>:</strong> Measures the average uncertainty over answers given a question.</li>
+<li><strong>R2L Conditional Entropy <span class="math">\(H(Q∣A)\)</span>:</strong> Measures the average uncertainty over questions given an answer.</li>
+</ul>
+<p>The paper hypothesizes that the direction with the minimum entropy will yield higher accuracy. Since directly computing these entropies is intractable, the authors estimate them using a <strong>Monte Carlo proxy</strong> based on single-sample "rollouts" from the models. The results show a strong correlation: the direction with lower estimated conditional entropy typically achieves higher accuracy on the benchmark.</p>
+<figure>
+  <img src="../images/2025-05-29-reversal-blessing/cond_entr.jpg" alt="MCQ figure" class="zoomable" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 3. Accuracy vs. conditional entropy. The empirical results show that lower conditional entropy is typically associated with higher accuracy in the corresponding reasoning direction.</figcaption>
+</figure>
+
+<h1>Controlled Simulation: 4‐Digit Multiplication</h1>
+<p>To isolate the "3C" effects, the researchers designed a controlled experiment using 4-digit multiplication.</p>
+<figure>
+  <img src="../images/2025-05-29-reversal-blessing/contr_mult.jpg" alt="MCQ figure" class="zoomable" style="display: block; margin: 0 auto">
+  <figcaption style="text-align: center">Figure 4. An illustration of the forward multiplication and reverse multiplication tasks used in the simulation study. Forward multiplication is a many-to-one mapping, while reverse multiplication is one-to-many.</figcaption>
+</figure>
+
+<ul>
+<li><strong>Forward X (Multiplication):</strong> The task is <span class="math">\(m \times n = p\)</span>. This is a deterministic, many-to-one mapping with a theoretical conditional entropy of <span class="math">\(0\)</span>.</li>
+<li><strong>Reverse X (Factorization):</strong> The task is <span class="math">\(p = m \times n\)</span>. This is a one-to-many mapping with a higher theoretical conditional entropy of <span class="math">\(1.49\)</span> nats.</li>
+</ul>
+<p>The results were definitive:</p>
+<ul>
+<li>In <strong>Forward X</strong>, the L2R model (aligned with the zero-entropy direction) achieved <span class="math">\(99.81\%\)</span> accuracy, while the R2L model struggled.</li>
+<li>In <strong>Reverse X</strong>, the R2L model (now aligned with the zero-entropy direction) achieved <span class="math">\(100\%\)</span> accuracy, far surpassing the L2R model.</li>
+</ul>
+<p>This experiment provides clear evidence that conditional entropy is a key determinant of performance when other factors are controlled.</p>
+<h1>Synthesis and Implications</h1>
+<h2>Why Conditional Entropy Dominates</h2>
+<p>Across both real-world MCQ benchmarks and the controlled arithmetic simulation, conditional entropy emerges as the primary predictor of whether L2R or R2L "thinking" yields higher accuracy. A lower entropy signifies a more deterministic mapping from condition to target, making the learning task easier and the resulting model more accurate. For example, on tasks like TruthfulQA, the mapping from a true statement (answer) back to a question about it is likely less ambiguous than predicting one of many possible true statements from a question, hence R2L's advantage.</p>
+<h2>Calibration and Computability as Secondary Factors</h2>
+<p>While entropy is the main driver, calibration and computability are important secondary factors that can explain outliers or amplify performance differences. For example, on CommonsenseQA, R2L performs better even though the entropy difference isn't as pronounced. This is likely because the task is rife with paraphrased and semantically similar answer choices, a scenario where R2L's ability to mitigate "surface-form competition" provides a decisive edge.</p>
+<h1>Conclusion</h1>
+<p>“Reversal Blessing” demonstrates that thinking backward can indeed outpace forward thinking on specific MCQ tasks. By systematically comparing L2R and R2L models, the authors show that <strong>conditional entropy</strong> is the principal driver of which factorization is preferred.</p>
+<p><strong>Key Takeaways:</strong></p>
+<ul>
+<li><strong>Reverse thinking</strong> sidesteps calibration issues like surface-form competition, making it ideal for tasks with synonymous answers.</li>
+<li><strong>Conditional entropy</strong> offers a practical criterion to decide between L2R and R2L, with the lower-entropy direction generally being superior.</li>
+<li>The best reasoning direction is <strong>task-dependent</strong>, and a one-size-fits-all approach may be suboptimal.</li>
+</ul>
+<p>Ultimately, this work invites us to rethink the default L2R pretraining paradigm. By embracing the potential for bidirectional reasoning and choosing a factorization direction based on task-specific entropy profiles, future LLMs could achieve more robust, calibrated, and efficient performance across a broader array of problem domains.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "true";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+    <h4>Reading Time</h4>
+    <p>~7 min read</p>
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-05-29T07:00:00+03:00">Thu 29 May 2025</time>
+            <h4>Category</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li>
+                    <a class="category-link" href="/categories.html#machine-learning-ref">Machine Learning
+                        <span class="superscript">10</span>
+                    </a>
+                </li>
+            </ul>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#ai-ref">ai
+                    <span class="superscript">9</span>
+</a></li>
+                <li><a href="/tags.html#llm-ref">llm
+                    <span class="superscript">5</span>
+</a></li>
+                <li><a href="/tags.html#ml-ref">ml
+                    <span class="superscript">9</span>
+</a></li>
+            </ul>
+<h4>Stay in Touch</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/JoeJoe1313" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+    <a href="https://www.linkedin.com/in/joana-levtcheva-479844164/" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="LinkedIn" role="img" viewBox="0 0 512 512" fill="#fff"><rect width="512" height="512" rx="15%" fill="#0077b5"/><circle cx="142" cy="138" r="37"/><path stroke="#fff" stroke-width="66" d="M244 194v198M142 194v198"/><path d="M276 282c0-20 13-40 36-40 24 0 33 18 33 45v105h66V279c0-61-32-89-76-89-34 0-51 19-59 32"/></svg>
+    </a>
+    <a href="https://x.com/13_jo_jo_13" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="Twitter" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1da1f3"/><path fill="#fff" d="M437 152a72 72 0 0 1-40 12 72 72 0 0 0 32-40 72 72 0 0 1-45 17 72 72 0 0 0-122 65 200 200 0 0 1-145-74 72 72 0 0 0 22 94 72 72 0 0 1-32-7 72 72 0 0 0 56 69 72 72 0 0 1-32 1 72 72 0 0 0 67 50 200 200 0 0 1-105 29 200 200 0 0 0 309-179 200 200 0 0 0 35-37"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+    </div>
+</footer><div id="zoom-overlay" class="zoom-overlay" aria-hidden="true">
+    <button type="button" class="zoom-overlay__close" aria-label="Close zoomed image">×</button>
+    <img src="" alt="">
+</div>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script src="/theme/js/zoom-overlay.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+        <script src="https://files.stork-search.net/releases/v1.6.0/stork.js"></script>
+        <script src="/theme/js/stork-search.js"></script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+        <link rel="stylesheet" href="https://files.stork-search.net/basic.css">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="agents, llm, mlx-lm, Machine Learning, " />
+
+<meta property="og:title" content="Running Local Hugging Face Models with MLX-LM and the Agno Agentic Framework "/>
+<meta property="og:url" content="/agno-framework.html" />
+<meta property="og:description" content="In this blog post we are going to show how to run a Hugging Face model locally using Apple&#39;s MLX-LM framework, connect it to the Agno agentic framework, and extend the agent&#39;s capabilities with custom tools. Agno is a modern and extensible agentic framework for Python. It is designed to be model-agnostic, allowing to seamlessly switch between different LLM providers and models. Medium post can be found here." />
+<meta property="og:site_name" content="JoJo&#39;s Blog" />
+<meta property="og:article:author" content="" />
+<meta property="og:article:published_time" content="2025-10-13T07:00:00+03:00" />
+<meta name="twitter:title" content="Running Local Hugging Face Models with MLX-LM and the Agno Agentic Framework ">
+<meta name="twitter:description" content="In this blog post we are going to show how to run a Hugging Face model locally using Apple&#39;s MLX-LM framework, connect it to the Agno agentic framework, and extend the agent&#39;s capabilities with custom tools. Agno is a modern and extensible agentic framework for Python. It is designed to be model-agnostic, allowing to seamlessly switch between different LLM providers and models. Medium post can be found here.">
+
+        <title>Running Local Hugging Face Models with MLX-LM and the Agno Agentic Framework  · JoJo&#39;s Blog
+</title>
+        <link rel="shortcut icon" href="/theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="/theme/images/apple-touch-icon-152x152.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/theme/images/apple-touch-icon.png"  type="image/png" />
+        <link rel="apple-touch-icon" sizes="57x57" href="/theme/images/apple-touch-icon-57x57.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/images/apple-touch-icon-72x72.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="/theme/images/apple-touch-icon-76x76.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/images/apple-touch-icon-114x114.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/theme/images/apple-touch-icon-120x120.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/images/apple-touch-icon-144x144.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/theme/images/apple-touch-icon-152x152.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/theme/images/apple-touch-icon-180x180.png" type="image/png" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="/"><span class=site-name>JoJo's Blog</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       "/"
+                                    >Home</a>
+                                </li>
+                                <li ><a href="/interests.html">Interests</a></li>
+                                <li ><a href="/categories.html">Categories</a></li>
+                                <li ><a href="/tags.html">Tags</a></li>
+                                <li ><a href="/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+                                    <input type="text" class="search-query" placeholder="Search" name="q" data-stork="site-search" autocomplete="off">
+                                </form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="/agno-framework.html">
+                Running Local Hugging Face Models with MLX-LM and the Agno Agentic Framework
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>In this blog post we are going to show how to run a Hugging Face model locally using Apple's <a href="https://github.com/ml-explore/mlx-lm">MLX-LM</a> framework, connect it to the <a href="https://www.agno.com/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=agno-github">Agno</a> agentic framework, and extend the agent's capabilities with custom tools. Agno is a modern and extensible agentic framework for Python. It is designed to be model-agnostic, allowing to seamlessly switch between different LLM providers and models. Medium post can be found <a href="https://medium.com/@levchevajoana/running-local-hugging-face-models-with-mlx-lm-and-the-agno-agentic-framework-de134259d34d">here</a>.</p>
+<p>Before we begin, ensure you have MLX-LM and Agno installed:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>mlx-lm
+pip<span class="w"> </span>install<span class="w"> </span>agno
+</code></pre></div>
+
+<h1>Step 1: Running the Local LLM Server</h1>
+<p>The first step is to serve our desired Hugging Face model locally. The mlx-lm library comes with a built-in server that exposes an OpenAI-compatible API. This allows tools designed for OpenAI's API, like Agno, to interact with our local model without any special modifications. You can read more about it in <a href="https://joejoe1313.github.io/tool-mlx-openai.html">one of my previous posts</a>.</p>
+<p>Open your terminal and run the following command:</p>
+<div class="highlight"><pre><span></span><code>mlx_lm.server
+</code></pre></div>
+
+<p>This command will start the server. Once the server is running, you will see output indicating that it's listening for requests, at <code>http://localhost:8080</code>.</p>
+<figure>
+  <img src="../images/2025-10-05-agno/start_server.png" alt="Euler" class="zoomable" style="display: block; margin: 0 auto; width: 100%">
+  <figcaption style="text-align: center">Figure 1. Starting the mlx-lm server</figcaption>
+</figure>
+
+<p>Keep this terminal window open.</p>
+<h1>Step 2: Building a Basic Agno Agent</h1>
+<p>Now that our local LLM is being served, we can create a Python script, <code>agno_mlx.py</code>, to interact with it using Agno. We can use Agno's <a href="https://docs.agno.com/concepts/models/openai-like">OpenAILike</a> connector, which can be configured to point to any API endpoint that follows the OpenAI specification.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">agno.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">Agent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agno.models.openai.like</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAILike</span>
+
+<span class="n">MODEL</span> <span class="o">=</span> <span class="s2">&quot;mlx-community/Qwen3-8B-8bit&quot;</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="n">agent</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">OpenAILike</span><span class="p">(</span>
+            <span class="nb">id</span><span class="o">=</span><span class="n">MODEL</span><span class="p">,</span>
+            <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;not-needed&quot;</span><span class="p">,</span>
+            <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://localhost:8080/v1&quot;</span><span class="p">,</span>
+            <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+            <span class="n">max_tokens</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
+            <span class="n">max_completion_tokens</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">agent</span><span class="o">.</span><span class="n">print_response</span><span class="p">(</span><span class="s2">&quot;Share a 2 sentence horror story.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h1>Step 3: Running the Basic Agent</h1>
+<p>With the <code>mlx_lm.server</code> running in one terminal, open a second terminal and run your Python script:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>agno_mlx.py
+</code></pre></div>
+
+<p>The Agno agent will send the prompt to your local model, which will return back a response:</p>
+<figure>
+  <img src="../images/2025-10-05-agno/basic_agent.png" alt="Euler" class="zoomable" style="display: block; margin: 0 auto; width: 100%">
+  <figcaption style="text-align: center">Figure 2. Basic agent output</figcaption>
+</figure>
+
+<h1>Step 4: Supercharging the Agent with Tools</h1>
+<p>An "agent" is more than just a chatbot, it can take actions. In Agno, you can give an agent access to "tools," which are simply Python functions. The agent can then decide when to call these functions based on the user's prompt. You can read more about all types of tools available in their documentation <a href="https://docs.agno.com/concepts/tools/overview">here</a>.</p>
+<p>Let's create a new script, <code>agno_mlx_tool.py</code>, to demonstrate this with a simple tool.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">agno.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">Agent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agno.models.openai.like</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAILike</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agno.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">tool</span>
+
+<span class="nd">@tool</span><span class="p">(</span><span class="n">stop_after_tool_call</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add two numbers.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="n">agent</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span>
+    <span class="n">instructions</span><span class="o">=</span><span class="s2">&quot;You are a precise engineering assistant.&quot;</span><span class="p">,</span>
+    <span class="n">tools</span><span class="o">=</span><span class="p">[</span><span class="n">add</span><span class="p">],</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">OpenAILike</span><span class="p">(</span>
+        <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;mlx-community/Qwen3-8B-8bit&quot;</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;not-needed&quot;</span><span class="p">,</span>
+        <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://localhost:8080/v1&quot;</span><span class="p">,</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+        <span class="n">max_tokens</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
+        <span class="n">max_completion_tokens</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">agent</span><span class="o">.</span><span class="n">print_response</span><span class="p">(</span><span class="s2">&quot;What is 123.4 + 56.6?&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Let's analyze the new additions:</p>
+<ul>
+<li><code>@tool</code> <strong>decorator</strong>: We import <code>tool</code> from <code>agno.tools</code> and use it to decorate a standard Python function, <code>add</code>. This decorator automatically prepares the function to be used by the agent, parsing its name, parameters (including type hints), and docstring. The docstring is especially important, as the LLM uses it to understand what the tool does.</li>
+<li><code>tools=[add]</code>: In the <code>Agent</code> constructor, we now pass a list of the tool-enabled functions we want the agent to have access to.</li>
+<li><code>instructions="…"</code>: We've added a system prompt to guide the agent's persona. This helps it understand its role and how it should behave.</li>
+<li><strong>The Prompt</strong>: Our prompt is now a calculation question: <em>"What is 123.4 + 56.6?"</em>. While an LLM might be able to answer this, it's not a deterministic calculator. By providing the <code>add</code> tool, we give it a reliable way to get the correct answer.</li>
+</ul>
+<p>Now, run this new script from your second terminal:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>agno_mlx_tool.py
+</code></pre></div>
+
+<p>Here's what happens behind the scenes:</p>
+<ul>
+<li>The agent receives the prompt and analyzes it.</li>
+<li>It consults the list of available tools and, based on the <code>add</code> function's docstring (<em>"Add two numbers."</em>), determines that this tool is perfect for the task.</li>
+<li>The agent calls the <code>add</code> function with the arguments <code>a=123.4</code> and <code>b=56.6</code>.</li>
+<li>The function executes and returns <code>180.0</code>.</li>
+<li>This result is passed back to the agent.</li>
+<li>The agent then formulates a final, human-readable response based on the result and prints it.</li>
+</ul>
+<p>You will see an answer, such as:</p>
+<figure>
+  <img src="../images/2025-10-05-agno/tool_agent.png" alt="Euler" class="zoomable" style="display: block; margin: 0 auto; width: 100%">
+  <figcaption style="text-align: center">Figure 3. Agent with tools output</figcaption>
+</figure>
+
+<h1>Conclusion</h1>
+<p>We have successfully set up a local LLM with MLX-LM and integrated it into the Agno agentic framework. By simply changing the <code>base_url</code> in Agno's <code>OpenAILike</code> connector, we can point our agent to any OpenAI-compatible API. By decorating Python functions with <code>@tool</code>, we can give the local agent "limitless" capabilities, from performing precise calculations to interacting with databases or external APIs. This combination of local models and tool calling enables us to build more sophisticated, private, and cost-effective AI solutions.</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+    <h4>Reading Time</h4>
+    <p>~4 min read</p>
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-10-13T07:00:00+03:00">Mon 13 October 2025</time>
+        <h4>The Agno Framework</h4>
+    <ul class="multi-parts-list">
+            <li  class="active-part">
+            Part 1: Running Local Hugging Face Models with MLX-LM and the Agno Agentic Framework
+            </li>
+    </ul>
+            <h4>Category</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li>
+                    <a class="category-link" href="/categories.html#machine-learning-ref">Machine Learning
+                        <span class="superscript">10</span>
+                    </a>
+                </li>
+            </ul>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#agents-ref">agents
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="/tags.html#llm-ref">llm
+                    <span class="superscript">5</span>
+</a></li>
+                <li><a href="/tags.html#mlx-lm-ref">mlx-lm
+                    <span class="superscript">3</span>
+</a></li>
+            </ul>
+<h4>Stay in Touch</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/JoeJoe1313" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+    <a href="https://www.linkedin.com/in/joana-levtcheva-479844164/" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="LinkedIn" role="img" viewBox="0 0 512 512" fill="#fff"><rect width="512" height="512" rx="15%" fill="#0077b5"/><circle cx="142" cy="138" r="37"/><path stroke="#fff" stroke-width="66" d="M244 194v198M142 194v198"/><path d="M276 282c0-20 13-40 36-40 24 0 33 18 33 45v105h66V279c0-61-32-89-76-89-34 0-51 19-59 32"/></svg>
+    </a>
+    <a href="https://x.com/13_jo_jo_13" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="Twitter" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1da1f3"/><path fill="#fff" d="M437 152a72 72 0 0 1-40 12 72 72 0 0 0 32-40 72 72 0 0 1-45 17 72 72 0 0 0-122 65 200 200 0 0 1-145-74 72 72 0 0 0 22 94 72 72 0 0 1-32-7 72 72 0 0 0 56 69 72 72 0 0 1-32 1 72 72 0 0 0 67 50 200 200 0 0 1-105 29 200 200 0 0 0 309-179 200 200 0 0 0 35-37"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+    </div>
+</footer><div id="zoom-overlay" class="zoom-overlay" aria-hidden="true">
+    <button type="button" class="zoom-overlay__close" aria-label="Close zoomed image">×</button>
+    <img src="" alt="">
+</div>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script src="/theme/js/zoom-overlay.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+        <script src="https://files.stork-search.net/releases/v1.6.0/stork.js"></script>
+        <script src="/theme/js/stork-search.js"></script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize();
+</script>    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>
