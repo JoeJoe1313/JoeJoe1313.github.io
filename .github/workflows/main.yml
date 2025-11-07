@@ -5,6 +5,11 @@ on:
     branches:
       - master
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,38 +42,19 @@ jobs:
         run: |
           pelican content -o output -s pelicanconf.py
 
-      - name: Upload site artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: site
           path: output
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download site artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: site
-          path: site
-
       - name: Deploy to GitHub Pages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git checkout --orphan gh-pages
-          git rm -rf .
-          cp -R site/. .
-          rm -rf site
-          git add .
-          git commit -m "Deploy to GitHub Pages"
-          git push -f origin gh-pages
+        id: deployment
+        uses: actions/deploy-pages@v4
