@@ -7,7 +7,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -38,18 +37,38 @@ jobs:
         run: |
           pelican content -o output -s pelicanconf.py
 
+      - name: Upload site artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: output
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download site artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: site
+
       - name: Deploy to GitHub Pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git checkout --orphan gh-pages
           git rm -rf .
-          mv output/* .
-          rm -rf output
-          find . -type d -name "__pycache__" -exec rm -rf {} +
-          find . -type f -name "*.pyc" -delete
+          cp -R site/. .
+          rm -rf site
           git add .
           git commit -m "Deploy to GitHub Pages"
           git push -f origin gh-pages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
