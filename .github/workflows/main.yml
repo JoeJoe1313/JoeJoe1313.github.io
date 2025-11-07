@@ -1,14 +1,19 @@
-name: Pelican CI
+name: Pelican Build & Deploy
 
 on:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -40,7 +45,7 @@ jobs:
 
       - name: Build site
         run: |
-          pelican content -o output -s pelicanconf.py
+          make html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
