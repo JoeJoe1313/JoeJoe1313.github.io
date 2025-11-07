@@ -1,2 +1,1 @@
-[![Pelican CI](https://github.com/JoeJoe1313/JoeJoe1313.github.io/actions/workflows/main.yml/badge.svg)](https://github.com/JoeJoe1313/JoeJoe1313.github.io/actions/workflows/main.yml)
-[![pages-build-deployment](https://github.com/JoeJoe1313/JoeJoe1313.github.io/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/JoeJoe1313/JoeJoe1313.github.io/actions/workflows/pages/pages-build-deployment)
+[![Pelican Build & Deploy](https://github.com/JoeJoe1313/JoeJoe1313.github.io/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/JoeJoe1313/JoeJoe1313.github.io/actions/workflows/main.yml)
