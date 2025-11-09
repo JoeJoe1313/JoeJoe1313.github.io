@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mamikon's Theorem — Annulus Tangent Cluster</title>
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+  <style>
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f6fb;
+      color: #1c1e21;
+    }
+
+    .wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 20px 40px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 18px;
+      font-size: 1.8rem;
+      color: #12355b;
+    }
+
+    p.lead {
+      text-align: center;
+      color: #3f4b5a;
+      margin: 0 0 24px;
+    }
+
+    #annulus-plot {
+      width: 100%;
+      height: 540px;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 8px 30px rgba(18, 53, 91, 0.08);
+    }
+
+    .control-panel {
+      margin-top: 22px;
+      padding: 18px;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 8px 30px rgba(18, 53, 91, 0.06);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .slider-group {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .slider-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #12355b;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      appearance: none;
+      height: 6px;
+      background: linear-gradient(90deg, #0b8bd3, #26c6da);
+      border-radius: 3px;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #0b8bd3;
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 2px 6px rgba(11, 139, 211, 0.4);
+    }
+
+    .stats {
+      flex: 1;
+      min-width: 220px;
+      background: #e6f4ff;
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .stats h4 {
+      margin: 0 0 6px;
+      color: #0b4c81;
+      font-size: 0.95rem;
+    }
+
+    .stats p {
+      margin: 4px 0;
+      font-size: 0.9rem;
+      color: #12355b;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-weight: 600;
+      cursor: pointer;
+      color: white;
+      background: #0b8bd3;
+      box-shadow: 0 4px 14px rgba(11, 139, 211, 0.3);
+    }
+
+    button.secondary {
+      background: #6c757d;
+      box-shadow: none;
+    }
+
+    @media (max-width: 768px) {
+      #annulus-plot {
+        height: 440px;
+      }
+
+      .control-panel {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h1>Mamikon's Tangent Sweep → Tangent Cluster</h1>
+    <p class="lead">
+      Inner radius fixed at <strong>r = 2</strong>. As we add more tangent segments around the ring,
+      the translated segments build a disk of radius <strong>L = 1.5</strong>, making the ring area
+      visibly equal to the disk area.
+    </p>
+
+    <div id="annulus-plot"></div>
+
+    <div class="control-panel">
+      <div class="slider-group">
+        <label for="segment-slider">Number of tangent segments: <span id="segment-count">1</span> / 48</label>
+        <input type="range" id="segment-slider" min="1" max="48" value="1">
+      </div>
+
+      <div class="stats" id="stats-box">
+        <h4>Current configuration</h4>
+        <p>Inner radius r = 2.00</p>
+        <p>Outer radius R = 2.50</p>
+        <p>Tangent length L = 1.50</p>
+        <p>Area = π·L² = 7.069</p>
+      </div>
+
+      <div class="actions">
+        <button id="play-btn">Play</button>
+        <button id="pause-btn" class="secondary">Pause</button>
+        <button id="reset-btn" class="secondary">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const innerRadius = 2.0;
+    const tangentLength = 1.5;
+    const totalSegments = 48;
+
+    const area = Math.PI * tangentLength * tangentLength;
+    const outerRadius = Math.hypot(innerRadius, tangentLength);
+
+    const plotDiv = document.getElementById("annulus-plot");
+    const slider = document.getElementById("segment-slider");
+    const segmentCountEl = document.getElementById("segment-count");
+    const playBtn = document.getElementById("play-btn");
+    const pauseBtn = document.getElementById("pause-btn");
+    const resetBtn = document.getElementById("reset-btn");
+
+    let playInterval = null;
+
+    function circlePoints(radius, samples = 400) {
+      const xs = [];
+      const ys = [];
+      for (let i = 0; i <= samples; i++) {
+        const t = (2 * Math.PI * i) / samples;
+        xs.push(radius * Math.cos(t));
+        ys.push(radius * Math.sin(t));
+      }
+      return { xs, ys };
+    }
+
+    function annulusPolygon() {
+      const outer = circlePoints(outerRadius);
+      const inner = circlePoints(innerRadius);
+      const xs = [...outer.xs, ...inner.xs.reverse(), outer.xs[0]];
+      const ys = [...outer.ys, ...inner.ys.reverse(), outer.ys[0]];
+      return { xs, ys };
+    }
+
+    function buildSegments(count) {
+      const sweepX = [];
+      const sweepY = [];
+      const clusterX = [];
+      const clusterY = [];
+
+      for (let i = 0; i < count; i++) {
+        const theta = (2 * Math.PI * i) / totalSegments;
+        const baseX = innerRadius * Math.cos(theta);
+        const baseY = innerRadius * Math.sin(theta);
+        const dirX = -Math.sin(theta);
+        const dirY = Math.cos(theta);
+        const endX = baseX + tangentLength * dirX;
+        const endY = baseY + tangentLength * dirY;
+        const transX = tangentLength * dirX;
+        const transY = tangentLength * dirY;
+
+        sweepX.push(baseX, endX, null);
+        sweepY.push(baseY, endY, null);
+        clusterX.push(0, transX, null);
+        clusterY.push(0, transY, null);
+      }
+
+      return { sweepX, sweepY, clusterX, clusterY };
+    }
+
+    function initPlot() {
+      const annulus = annulusPolygon();
+      const disk = circlePoints(tangentLength);
+      const segments = buildSegments(1);
+
+      const data = [
+        {
+          x: annulus.xs,
+          y: annulus.ys,
+          mode: "lines",
+          fill: "toself",
+          fillcolor: "rgba(11, 139, 211, 0.18)",
+          line: { color: "rgba(11, 139, 211, 0.6)", width: 2 },
+          hoverinfo: "skip",
+          name: "Annulus",
+          xaxis: "x",
+          yaxis: "y"
+        },
+        {
+          x: segments.sweepX,
+          y: segments.sweepY,
+          mode: "lines",
+          line: { color: "#0b4c81", width: 2 },
+          hoverinfo: "skip",
+          name: "Tangent sweep",
+          xaxis: "x",
+          yaxis: "y"
+        },
+        {
+          x: [...disk.xs, disk.xs[0]],
+          y: [...disk.ys, disk.ys[0]],
+          mode: "lines",
+          fill: "toself",
+          fillcolor: "rgba(34, 139, 34, 0.2)",
+          line: { color: "rgba(34, 139, 34, 0.8)", width: 2 },
+          hoverinfo: "skip",
+          name: "Disk cluster",
+          xaxis: "x2",
+          yaxis: "y2"
+        },
+        {
+          x: segments.clusterX,
+          y: segments.clusterY,
+          mode: "lines",
+          line: { color: "#2e7d32", width: 2 },
+          hoverinfo: "skip",
+          name: "Translated tangents",
+          xaxis: "x2",
+          yaxis: "y2"
+        }
+      ];
+
+      const layout = {
+        grid: { rows: 1, columns: 2, pattern: "independent" },
+        margin: { l: 40, r: 40, t: 30, b: 40 },
+        template: "plotly_white",
+        showlegend: false,
+        xaxis: {
+          range: [-3.2, 3.2],
+          scaleanchor: "y",
+          scaleratio: 1,
+          title: "Annulus (tangent sweep)"
+        },
+        yaxis: { range: [-3.2, 3.2] },
+        xaxis2: {
+          range: [-2.2, 2.2],
+          scaleanchor: "y2",
+          scaleratio: 1,
+          title: "Translated segments (tangent cluster)"
+        },
+        yaxis2: { range: [-2.2, 2.2] }
+      };
+
+      Plotly.newPlot(plotDiv, data, layout, { displayModeBar: false });
+    }
+
+    function updateSegments(count) {
+      const segments = buildSegments(count);
+      Plotly.restyle(plotDiv, { x: [segments.sweepX], y: [segments.sweepY] }, [1]);
+      Plotly.restyle(plotDiv, { x: [segments.clusterX], y: [segments.clusterY] }, [3]);
+      segmentCountEl.textContent = count.toString();
+    }
+
+    function updateStats() {
+      const statsBox = document.getElementById("stats-box");
+      statsBox.innerHTML = `
+        <h4>Current configuration</h4>
+        <p>Inner radius r = ${innerRadius.toFixed(2)}</p>
+        <p>Outer radius R = ${outerRadius.toFixed(2)}</p>
+        <p>Tangent length L = ${tangentLength.toFixed(2)}</p>
+        <p>Area = π·L² = ${area.toFixed(3)}</p>
+      `;
+    }
+
+    function schedulePlay() {
+      if (playInterval) return;
+      playInterval = setInterval(() => {
+        let value = Number(slider.value);
+        value = value >= totalSegments ? 1 : value + 1;
+        slider.value = value;
+        updateSegments(value);
+      }, 600);
+    }
+
+    function pausePlay() {
+      if (playInterval) {
+        clearInterval(playInterval);
+        playInterval = null;
+      }
+    }
+
+    function reset() {
+      pausePlay();
+      slider.value = 1;
+      updateSegments(1);
+    }
+
+    slider.addEventListener("input", (e) => {
+      pausePlay();
+      updateSegments(Number(e.target.value));
+    });
+
+    playBtn.addEventListener("click", schedulePlay);
+    pauseBtn.addEventListener("click", pausePlay);
+    resetBtn.addEventListener("click", reset);
+
+    initPlot();
+    updateStats();
+  </script>
+</body>
+</html>
