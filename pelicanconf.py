@@ -67,6 +67,18 @@ PLUGINS = [
     "plugins.search",
     "plugins.jinja2content",
 ]
+
+MARKDOWN = {
+    "extension_configs": {
+        "markdown.extensions.codehilite": {
+            "css_class": "highlight",
+            "guess_lang": False,
+        },
+        "markdown.extensions.extra": {},
+        "markdown.extensions.meta": {},
+    },
+    "output_format": "html5",
+}
 SUMMARY_USE_FIRST_PARAGRAPH = True
 WITH_FUTURE_DATES = False
 MATH_JAX = {
