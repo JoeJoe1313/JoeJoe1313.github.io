@@ -111,13 +111,13 @@
 /* Code Theme (pygments.css) */
 :root {
     --code-bg: #f6f8fa;
-    --code-text: #24292f;
-    --code-comment: #57606a;
-    --code-keyword: #cf222e;
-    --code-type: #0550ae;
-    --code-string: #116329;
-    --code-function: #8250df;
-    --code-constant: #953800;
+    --code-text: #1f2933;
+    --code-comment: #5d6470;
+    --code-keyword: #a23a3a;
+    --code-type: #2c5ea8;
+    --code-string: #2e7045;
+    --code-function: #6c54b4;
+    --code-constant: #8b5315;
 }
 
 pre {
@@ -291,12 +291,12 @@ div.highlight,
 .highlight .vc,
 .highlight .vg,
 .highlight .vi {
-    color: #0f6feb;
+    color: var(--code-text);
     background-color: transparent;
 }
 
 .highlight .nb {
-    color: #0f6feb;
+    color: var(--code-text);
     background-color: transparent;
 }
 
