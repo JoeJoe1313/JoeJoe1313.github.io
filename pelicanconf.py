@@ -66,6 +66,7 @@ PLUGINS = [
     "plugins.statistics",
     "plugins.search",
     "plugins.jinja2content",
+    "plugins.extract_toc",
 ]
 
 MARKDOWN = {
