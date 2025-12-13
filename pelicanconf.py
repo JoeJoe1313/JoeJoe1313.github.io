@@ -66,6 +66,7 @@ PLUGINS = [
     "plugins.statistics",
     "plugins.search",
     "plugins.jinja2content",
+    "plugins.extract_toc",
 ]
 
 MARKDOWN = {
@@ -76,6 +77,9 @@ MARKDOWN = {
         },
         "markdown.extensions.extra": {},
         "markdown.extensions.meta": {},
+        "markdown.extensions.toc": {
+            "permalink": " ",
+        },
     },
     "output_format": "html5",
 }

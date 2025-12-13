@@ -8,6 +8,8 @@ Status: published
 Series: Chebyshev Polynomials
 ---
 
+[TOC]
+
 Chebyshev polynomials are a sequence of orthogonal polynomials that play a central role in numerical analysis, approximation theory, and applied mathematics. They are named after the Russian mathematician Pafnuty Chebyshev and come in two primary types: Chebyshev polynomials of the first kind ($T_n(x)$) and Chebyshev polynomials of the second kind ($U_n(x)$). In this post we are going to focus on the Chebyshev polynomials of the first kind.
 
 # Chebyshev Polynomials of the First Kind

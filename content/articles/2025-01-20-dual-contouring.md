@@ -7,6 +7,8 @@ Slug: dual-contouring
 Status: draft
 ---
 
+[TOC]
+
 This post is going to cover the so called **Dual Contouring of Hermite Data** introduced in the following [paper](https://www.cs.rice.edu/~jwarren/papers/dualcontour.pdf). Dual Contouring is a surface extraction technique that builds on ideas from methods like Marching Cubes but uses “dual” grid information to place vertices in cells based on Hermite data (i.e. both the intersection points of the isosurface with grid edges and the corresponding normals). The algorithm is particularly good at capturing sharp features and generating crack‐free meshes. In what follows, we are goig to walk through the main ideas and steps in detail.
 
 # Introduction

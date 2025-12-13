@@ -8,6 +8,8 @@ Status: published
 Modified: 2025-10-08 07:00
 ---
 
+[TOC]
+
 Environment variables are key-value pairs that exist in the operating system's environment and can be accessed by programs running on that system. They are a way to configure applications without hardcoding values directly into the source code. Python provides several ways to work with environment variables through the **`os`** module. Two common methods are **`os.environ`** and **`os.getenv`**. While they might seem similar, they have different use cases and behaviors. Let's explore the differences and when to use each method effectively.
 
 # **`os.environ`**: The Dictionary-like Object

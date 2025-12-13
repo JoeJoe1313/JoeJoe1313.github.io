@@ -7,6 +7,8 @@ Slug: lissajous-curves
 Status: draft
 ---
 
+[TOC]
+
 Lissajous (/ˈlɪsəʒuː/) curves or also Lissajous figures or even Bowditch curves are the family of curves described by the following parametric equations
 
 $$

@@ -7,6 +7,8 @@ Slug: wave-equation
 Status: draft
 ---
 
+[TOC]
+
 Partial differential equations...
 
 # Introduction

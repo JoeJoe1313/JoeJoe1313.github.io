@@ -7,6 +7,8 @@ Slug: tool-mlx-openai
 Status: published
 ---
 
+[TOC]
+
 Building intelligent applications that can interact with real-world data requires more than just Large Language Models (LLMs), it requires the ability to call external functions and tools. **Tool calling** transforms a conversational LLM into an agent that can execute code, query APIs, and perform tasks. In this blog post, we are going to create a job search assistant using the **MLX-LM Server**, connect it to the **OpenAI client** , and utilise the **Qwen3-8B** model’s tool‐calling abilities. We are going to build a tool that scrapes job postings from [DEV.BG](https://dev.bg), a popular Bulgarian job board, and provides intelligent responses about available positions. 
 
 Medium post can be found [here](https://medium.com/@levchevajoana/a-job-postings-tool-a-guide-to-mlx-lm-server-and-tool-use-with-the-openai-client-edb9a5d75b4c).

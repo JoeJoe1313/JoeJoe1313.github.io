@@ -7,6 +7,8 @@ Slug: qwen2_5-vl-mlx-vlm
 Status: published
 ---
 
+[TOC]
+
 In this post, we are going to show a tutorial on using the [Qwen2.5-VL](https://github.com/QwenLM/Qwen2.5-VL) model with [MLX-VLM](https://github.com/Blaizzy/mlx-vlm) for visual understanding tasks. We are going to cover:
 
 - Loading the model and image

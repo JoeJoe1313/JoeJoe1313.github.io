@@ -7,6 +7,8 @@ Slug: nanonets-ocr
 Status: published
 ---
 
+[TOC]
+
 Nanonets has released [Nanonets-OCR-s](https://nanonets.com/research/nanonets-ocr-s/), a state-of-the-art small **3B** image-to-markdown OCR model that goes far beyond traditional text extraction. The model is available on [Hugging Face](https://huggingface.co/nanonets/Nanonets-OCR-s) and integrated with their [docext](https://github.com/NanoNets/docext) tool for immediate use. Medium post can be found [here](https://medium.com/@levchevajoana/nanonets-ocr-a-small-gem-for-handwritten-notes-3fd069b76e78).
 
 Unlike conventional OCR systems that only extract plain text, Nanonets-OCR-s understands document structure and content context, converting documents into structured markdown ready for LLM processing.

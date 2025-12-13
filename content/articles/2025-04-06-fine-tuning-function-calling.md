@@ -7,6 +7,8 @@ Slug: fine-tuning-function-calling
 Status: published
 ---
 
+[TOC]
+
 In this post, we explore the process of fine-tuning a language model for function-calling using [MLX-LM](https://github.com/ml-explore/mlx-lm). Following the Hugging Face Agents course [notebook](https://huggingface.co/agents-course/notebooks/blob/main/bonus-unit1/bonus-unit1.ipynb), we’ll walk through the steps from setting up the environment to training the model with LoRA adapters. The goal is to empower the model with the ability to intelligently plan and generate function calls, making it a versatile tool for interactive applications. Medium post can be found [here](https://medium.com/@levchevajoana/fine-tuning-a-model-for-function-calling-with-mlx-lm-d00d587e2559)
 
 ## Introduction
