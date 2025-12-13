@@ -76,6 +76,9 @@ MARKDOWN = {
         },
         "markdown.extensions.extra": {},
         "markdown.extensions.meta": {},
+        "markdown.extensions.toc": {
+            "permalink": " ",
+        },
     },
     "output_format": "html5",
 }
