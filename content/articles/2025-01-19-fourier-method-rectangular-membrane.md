@@ -7,6 +7,8 @@ Slug: fourier-method-rectangular-membrane
 Status: draft
 ---
 
+[TOC]
+
 In this post we are going to explore the Fourier method for solving the 2D wave equation. For the 2D wave equation we are going to show the application of the method to a rectangular membrane. We are also going to attempt to outline some of the physical interpretations of the rectangular membrane.
 
 # 2D Wave Equation

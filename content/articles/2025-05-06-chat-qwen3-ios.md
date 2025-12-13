@@ -7,6 +7,8 @@ Slug: chat-qwen3-ios
 Status: published
 ---
 
+[TOC]
+
 Have you ever wanted to run a powerful large language model directly on your iPhone without sending your data to the cloud? Thanks to Apple’s [MLX Swift](https://github.com/ml-explore/mlx-swift) framework, you can now run the remarakably capable [Qwen3](https://qwenlm.github.io/blog/qwen3/) models right on your iPhone.
 
 What makes this exciting is how capable these new models are even with as little as 4B parameters. Based on Qwen’s benchmark reports, Qwen3–4B can rival the performance of Qwen2.5–72B-Instruct, delivering impressive results with just a fraction of the parameters. This development means truly powerful AI can now fit in your pocket.

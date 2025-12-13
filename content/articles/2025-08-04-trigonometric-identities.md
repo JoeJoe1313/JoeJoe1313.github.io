@@ -7,6 +7,8 @@ Slug: trigonometric-identities
 Status: published
 ---
 
+[TOC]
+
 I have always believed that mathematics is about thinking rather than memorizing. The trigonometric identities were among the things we were told to memorize at school, and not only I struggled with that but I also actively rebelled against this approach. For me, mathematics is fundamentally about having a minimal but sufficient set of definitions and axioms, understanding them deeply, and then deriving everything else from these foundations. During one of my Complex Analysis lectures in my undergraduate Applied Mathematics studies, I was introduced to Euler's formula. When I discovered how it could be used to derive some of the most important trigonometric identities, I was more than relieved. I could finally derive the identities easily whenever I needed them, instead of relying on rote memorization, or panicking about my failure to memorize them.
 
 # Euler's Formula

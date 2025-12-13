@@ -7,6 +7,8 @@ Slug: orthogonal-functions
 Status: published
 ---
 
+[TOC]
+
 In this post we are going to explore the so called orthogonal functions, and some of their properties. We are also going to show that these orthogonal functions are closely related to the least-squares approximation method. This alternative to the least-squares method can be helpful in certain cases when the least-squares produces a hard to solve linear system.
 
 # Orthogonal Functions

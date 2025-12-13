@@ -7,6 +7,8 @@ Slug: visual-calculus
 Status: draft
 ---
 
+[TOC]
+
 Some test 1
 
 <iframe src="{static}/code/2025-10-15-visual-calculus/annulus_segments.html" width="100%" height="950px" frameborder="0"></iframe>

@@ -7,6 +7,8 @@ Slug: fine-tuning-lora-mlx
 Status: published
 ---
 
+[TOC]
+
 This blog post is going to be a tutorial on how to fine-tune a LLM with LoRA and the `mlx-lm` package. Medium post can be found [here](https://medium.com/@levchevajoana/fine-tuning-llms-with-lora-and-mlx-lm-c0b143642deb) and Substack [here](https://substack.com/home/post/p-157008884).
 
 ## Introduction

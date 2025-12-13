@@ -8,6 +8,8 @@ Status: draft
 Author: Joana Levtcheva
 ---
 
+[TOC]
+
 Intro ...
 
 # Cubic Hermite Interpolation
