@@ -6,25 +6,41 @@
 
 /* Code copy button overrides */
 .codecopy button.codecopy-btn {
-    background-color: rgba(255, 255, 255, 0.92);
-    border: 1px solid #e5e7eb;
-    color: #4b5563;
-    opacity: 0.95;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    outline: none !important;
+    color: rgba(100, 100, 100, 0.6) !important;
+    box-shadow: none !important;
 }
 
 .codecopy button.codecopy-btn:hover,
-.codecopy button.codecopy-btn:focus {
-    background-color: #fff;
-    color: #111827;
-    opacity: 1;
-    box-shadow: none;
+.codecopy button.codecopy-btn:focus,
+.codecopy button.codecopy-btn:active {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    outline: none !important;
+    color: rgba(100, 100, 100, 0.6) !important;
+    box-shadow: none !important;
+}
+
+.codecopy button.codecopy-btn:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 .codecopy button.codecopy-btn.is-copied {
-    background-color: rgba(21, 128, 61, 0.1);
-    border-color: rgba(21, 128, 61, 0.25);
-    color: #15803d;
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    outline: none !important;
+    color: #15803d !important;
 }
 
 /* Keep reference bullets aligned on narrow viewports */
