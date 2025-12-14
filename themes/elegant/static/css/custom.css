@@ -9,37 +9,16 @@
     -webkit-appearance: none;
     appearance: none;
     background: transparent !important;
-    background-color: transparent !important;
     background-image: none !important;
     border: none !important;
     outline: none !important;
     color: rgba(100, 100, 100, 0.6) !important;
-    box-shadow: none !important;
-}
-
-.codecopy button.codecopy-btn:hover,
-.codecopy button.codecopy-btn:focus,
-.codecopy button.codecopy-btn:active {
-    background: transparent !important;
-    background-color: transparent !important;
-    background-image: none !important;
-    border: none !important;
-    outline: none !important;
-    color: rgba(100, 100, 100, 0.6) !important;
-    box-shadow: none !important;
-}
-
-.codecopy button.codecopy-btn:focus-visible {
-    outline: none !important;
     box-shadow: none !important;
 }
 
 .codecopy button.codecopy-btn.is-copied {
     background: transparent !important;
-    background-color: transparent !important;
     background-image: none !important;
-    border: none !important;
-    outline: none !important;
     color: #15803d !important;
 }
 
