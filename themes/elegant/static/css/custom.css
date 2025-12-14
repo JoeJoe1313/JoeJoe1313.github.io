@@ -26,11 +26,21 @@
 .article-content h1:last-of-type + ul li a {
     display: inline !important;
     position: static !important;
-    text-decoration: underline !important;
+    text-decoration: none !important;
 }
 
 .article-content h1:last-of-type + ul li a::after {
     content: none !important;
+}
+
+/* Remove link underlines globally */
+article p:not(#list-of-translations):not(#post-share-links) a:not(.ampl)::after,
+article ol a:not(.ampl)::after,
+blockquote a:not(.ampl)::after,
+article div.article-content ul:not(.articles-timeline):not(.related-posts-list) a::after,
+#lunr-search-result > div.lunr-search-result-item > h4 > a::after,
+a.ampl::after {
+    display: none !important;
 }
 
 /* Goodreads Integration Styles */
