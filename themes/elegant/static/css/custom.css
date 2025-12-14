@@ -130,6 +130,14 @@ pre {
     color: var(--code-text);
 }
 
+/* Inline code color (not in code blocks) */
+p code,
+li code,
+blockquote code,
+.article-content code:not(pre code) {
+    color: #800000 !important;
+}
+
 div.highlight,
 .highlight {
     background: var(--code-bg);
