@@ -55,6 +55,7 @@
         {% include '_includes/analytics.html' %}
     </head>
     <body>
+        <a id="top"></a>
         <div id="content">
             <div class="navbar navbar-static-top">
                 <div class="navbar-inner">
@@ -106,6 +107,7 @@
         </div>
         {% include '_includes/footer.html' %}
         {% include '_includes/zoom_overlay.html' %}
+        {% include '_includes/back_to_top.html' %}
         {% block script %}
         {% if AMAZON_BESTAZON %}
             {% include '_includes/bestazon.html' %}
@@ -114,6 +116,7 @@
         <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
         <script src="{{ SITEURL }}/theme/js/elegant.prod.9e9d5ce754.js"></script>
         <script src="{{ SITEURL }}/theme/js/zoom-overlay.js"></script>
+        <script src="{{ SITEURL }}/theme/js/back-to-top.js"></script>
         <script>
             function validateForm(query)
             {
