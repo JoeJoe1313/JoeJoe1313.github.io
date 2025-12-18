@@ -395,6 +395,24 @@ figure.code figcaption a:before {
     content: url("data:image/svg+xml,%3Csvg image-rendering='optimizeQuality' shape-rendering='geometricPrecision' text-rendering='geometricPrecision' viewBox='0 0 294 452.5' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%230f6feb'%3E%3Cpath d='m126 0h42v185h62l-83 111-83-111h62z'/%3E%3Cpath d='m294 257v105c-98 0-196 0-294 0v-105h34v71h226v-71z'/%3E%3C/g%3E%3C/svg%3E%0A");
 }
 
+/* Mermaid diagrams */
+.article-content pre.mermaid {
+    margin: 1.25rem auto;
+    padding: 0.75rem;
+    max-width: 100%;
+    overflow-x: auto;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+}
+
+.article-content pre.mermaid svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    cursor: zoom-in;
+}
+
 /* Align landing sections with the standard content width */
 @media (min-width: 980px) {
   #content .span10 > .row-fluid > .page-header.span12 {
@@ -423,9 +441,26 @@ figure.code figcaption a:before {
     z-index: 1050;
 }
 .zoom-overlay.is-open { display: flex; }
-.zoom-overlay img {
+.zoom-overlay__media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+}
+.zoom-overlay__media img {
+    display: block;
     max-width: min(96vw, 1600px);
     max-height: 95vh;
+    width: auto;
+    height: auto;
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.6);
+    border-radius: 6px;
+}
+.zoom-overlay__media svg {
+    display: block;
+    max-width: min(96vw, 1600px);
+    max-height: 95vh;
+    margin: 0;
     box-shadow: 0 0 24px rgba(0, 0, 0, 0.6);
     border-radius: 6px;
 }
@@ -443,17 +478,32 @@ figure.code figcaption a:before {
     cursor: pointer;
 }
 .zoom-overlay.is-svg {
-    background: rgba(255, 255, 255, 0.95);
-    color: #111;
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
 }
 .zoom-overlay.is-svg .zoom-overlay__close {
-    background: rgba(255, 255, 255, 0.75);
+    background: rgba(0, 0, 0, 0.55);
+}
+.zoom-overlay.is-svg .zoom-overlay__media svg,
+.zoom-overlay.is-svg .zoom-overlay__media img {
+    background: #fff;
 }
 .zoomable--transparent {
     cursor: zoom-in;
 }
 .zoomable {
     cursor: zoom-in;
+}
+
+@media (max-width: 600px) {
+    .zoom-overlay {
+        padding: 1rem;
+    }
+
+    .zoom-overlay__close {
+        top: 1rem;
+        right: 1rem;
+    }
 }
 
 /* Match NotMyIdea typography and spacing */
