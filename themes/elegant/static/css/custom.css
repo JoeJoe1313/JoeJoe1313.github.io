@@ -738,3 +738,66 @@ blockquote a:not(.ampl):focus {
     white-space: nowrap;
     border: 0;
 }
+
+/* Footer: social links */
+footer div.footer-social {
+    flex: 0 0 100%;
+    width: 100%;
+    margin-right: 0;
+    display: flex;
+    justify-content: center;
+}
+
+footer .footer-social h4 {
+    margin: 0;
+    font-size: 0.95em;
+}
+
+div#footer-social-link {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    margin-right: 0;
+}
+
+div#footer-social-link a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--mutedTextColor, dimgray);
+}
+
+div#footer-social-link a:visited {
+    color: var(--mutedTextColor, dimgray);
+}
+
+div#footer-social-link a:hover,
+div#footer-social-link a:focus {
+    color: #3875d7;
+    text-decoration: underline;
+}
+
+div#footer-social-link a svg {
+    -webkit-filter: saturate(0) brightness(0.7);
+    filter: saturate(0) brightness(0.7);
+    height: 18px;
+    width: 18px;
+    flex: 0 0 auto;
+    transition: all 0.2s ease-in-out;
+}
+
+div#footer-social-link a:hover svg,
+div#footer-social-link a:focus svg {
+    -webkit-filter: none;
+    filter: none;
+}
+
+div#footer-social-link .social-link__label {
+    line-height: 1;
+}
