@@ -740,6 +740,11 @@ blockquote a:not(.ampl):focus {
 }
 
 /* Footer: social links */
+footer {
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+
 footer div.footer-social {
     flex: 0 0 100%;
     width: 100%;
