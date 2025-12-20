@@ -3,6 +3,7 @@ create table if not exists public.comments (
   thread_id text not null,
   author_name text not null,
   body text not null,
+  parent_id bigint references public.comments(id) on delete cascade,
   is_approved boolean not null default false,
   created_at timestamptz not null default now(),
   constraint comments_author_name_length check (char_length(author_name) between 1 and 80),
@@ -12,6 +13,9 @@ create table if not exists public.comments (
 
 create index if not exists comments_thread_created_idx
   on public.comments (thread_id, created_at);
+
+create index if not exists comments_parent_idx
+  on public.comments (parent_id);
 
 alter table public.comments enable row level security;
 
@@ -35,4 +39,3 @@ create policy "public insert comments (unapproved)"
     and char_length(body) between 1 and 5000
     and char_length(thread_id) between 1 and 300
   );
-

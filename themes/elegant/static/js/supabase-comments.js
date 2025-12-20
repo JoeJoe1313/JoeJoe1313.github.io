@@ -35,8 +35,68 @@
     status.dataset.kind = kind;
   }
 
-  function renderComment(comment) {
-    const wrapper = el("div", { class: "sb-comment" });
+  function getSavedName() {
+    try {
+      return localStorage.getItem("sb-comments-name") || "";
+    } catch (err) {
+      return "";
+    }
+  }
+
+  function saveName(value) {
+    try {
+      localStorage.setItem("sb-comments-name", value);
+    } catch (err) {
+      // ignore
+    }
+  }
+
+  function validateInputs(container, authorName, body) {
+    if (!authorName || !body) {
+      setStatus(container, "Name and comment are required.", "error");
+      return false;
+    }
+    if (authorName.length > 80) {
+      setStatus(container, "Name is too long (max 80 characters).", "error");
+      return false;
+    }
+    if (body.length > 5000) {
+      setStatus(container, "Comment is too long (max 5000 characters).", "error");
+      return false;
+    }
+    return true;
+  }
+
+  function buildCommentTree(comments) {
+    const byId = new Map();
+    const roots = [];
+
+    for (const comment of comments) {
+      comment.children = [];
+      byId.set(String(comment.id), comment);
+    }
+
+    for (const comment of comments) {
+      const parentId = comment.parent_id;
+      const parentKey = parentId === null || parentId === undefined
+        ? ""
+        : String(parentId);
+      if (parentKey && byId.has(parentKey)) {
+        byId.get(parentKey).children.push(comment);
+      } else {
+        roots.push(comment);
+      }
+    }
+
+    return roots;
+  }
+
+  function renderComment(comment, level) {
+    const wrapper = el("div", {
+      class: "sb-comment",
+      "data-comment-id": String(comment.id),
+      style: `--sb-level: ${level}`
+    });
     const meta = el("div", { class: "sb-comment__meta" });
     const name = comment?.author_name?.trim() || "Anonymous";
     const when = formatDate(comment?.created_at);
@@ -45,9 +105,28 @@
     const body = el("div", { class: "sb-comment__body" });
     body.textContent = comment?.body || "";
 
+    const actions = el("div", { class: "sb-comment__actions" });
+    const replyButton = el(
+      "button",
+      { type: "button", class: "sb-comment__reply" },
+      "Reply"
+    );
+    actions.appendChild(replyButton);
+
     wrapper.appendChild(meta);
     wrapper.appendChild(body);
+    wrapper.appendChild(actions);
     return wrapper;
+  }
+
+  function renderCommentTree(list, comments, level) {
+    for (const comment of comments) {
+      const node = renderComment(comment, level);
+      list.appendChild(node);
+      if (comment.children && comment.children.length > 0) {
+        renderCommentTree(list, comment.children, level + 1);
+      }
+    }
   }
 
   async function loadComments({
@@ -64,7 +143,7 @@
     setStatus(container, "Loading comments…", "info");
 
     const url = new URL(endpoint);
-    url.searchParams.set("select", "id,author_name,body,created_at");
+    url.searchParams.set("select", "id,parent_id,author_name,body,created_at");
     url.searchParams.set("thread_id", `eq.${threadId}`);
     url.searchParams.set("is_approved", "eq.true");
     url.searchParams.set("order", "created_at.asc");
@@ -93,7 +172,8 @@
       }
 
       if (count) count.textContent = String(comments.length);
-      for (const comment of comments) list.appendChild(renderComment(comment));
+      const tree = buildCommentTree(comments);
+      renderCommentTree(list, tree, 0);
       setStatus(container, "", "muted");
     } catch (err) {
       setStatus(
@@ -114,17 +194,23 @@
     threadId,
     authorName,
     body,
+    parentId,
     requireApproval
   }) {
     setStatus(container, "Submitting…", "info");
 
-    const payload = [
-      {
-        thread_id: threadId,
-        author_name: authorName,
-        body
-      },
-    ];
+    const entry = {
+      thread_id: threadId,
+      author_name: authorName,
+      body
+    };
+
+    if (parentId !== undefined && parentId !== null && parentId !== "") {
+      const numericParent = Number(parentId);
+      entry.parent_id = Number.isNaN(numericParent) ? parentId : numericParent;
+    }
+
+    const payload = [entry];
 
     const res = await fetch(endpoint, {
       method: "POST",
@@ -174,16 +260,150 @@
       Accept: "application/json"
     };
 
+    const list = container.querySelector("[data-sb-comments-list]");
     const form = container.querySelector("form[data-sb-comments-form]");
     const nameInput = container.querySelector("input[name='sb-name']");
     const bodyInput = container.querySelector("textarea[name='sb-body']");
     const submitButton = container.querySelector("button[type='submit']");
 
-    try {
-      const savedName = localStorage.getItem("sb-comments-name");
-      if (savedName && nameInput && !nameInput.value) nameInput.value = savedName;
-    } catch (err) {
-      // ignore
+    const savedName = getSavedName();
+    if (savedName && nameInput && !nameInput.value) nameInput.value = savedName;
+
+    let replyForm = null;
+    let replyNameInput = null;
+    let replyBodyInput = null;
+    let replySubmitButton = null;
+    let replyCancelButton = null;
+    let activeReplyParentId = null;
+
+    function closeReplyForm() {
+      if (replyForm && replyForm.parentNode) replyForm.parentNode.removeChild(replyForm);
+      activeReplyParentId = null;
+    }
+
+    function ensureReplyForm() {
+      if (replyForm) return;
+
+      replyForm = el("form", { class: "sb-comments__reply-form" });
+
+      const nameLabel = el("label", {}, "Name");
+      replyNameInput = el("input", {
+        type: "text",
+        name: "sb-reply-name",
+        maxlength: "80",
+        required: "required"
+      });
+      nameLabel.appendChild(replyNameInput);
+
+      const bodyLabel = el("label", {}, "Reply");
+      replyBodyInput = el("textarea", {
+        name: "sb-reply-body",
+        maxlength: "5000",
+        required: "required"
+      });
+      bodyLabel.appendChild(replyBodyInput);
+
+      const actions = el("div", { class: "sb-comments__reply-actions" });
+      replySubmitButton = el(
+        "button",
+        { type: "submit", class: "btn btn-primary" },
+        "Post reply"
+      );
+      replyCancelButton = el(
+        "button",
+        { type: "button", class: "btn" },
+        "Cancel"
+      );
+
+      actions.appendChild(replySubmitButton);
+      actions.appendChild(replyCancelButton);
+
+      replyForm.appendChild(nameLabel);
+      replyForm.appendChild(bodyLabel);
+      replyForm.appendChild(actions);
+
+      replyCancelButton.addEventListener("click", () => {
+        closeReplyForm();
+      });
+
+      replyForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!replyNameInput || !replyBodyInput) return;
+
+        const authorName = replyNameInput.value.trim();
+        const body = replyBodyInput.value.trim();
+        if (!validateInputs(container, authorName, body)) return;
+
+        if (replySubmitButton) replySubmitButton.disabled = true;
+        try {
+          saveName(authorName);
+
+          await submitComment({
+            container,
+            endpoint,
+            headers,
+            threadId,
+            authorName,
+            body,
+            parentId: activeReplyParentId,
+            requireApproval: requireApprovalBool
+          });
+          replyBodyInput.value = "";
+          closeReplyForm();
+          if (!requireApprovalBool) {
+            await loadComments({
+              container,
+              endpoint,
+              headers,
+              threadId,
+              requireApproval: requireApprovalBool
+            });
+          }
+        } catch (err) {
+          const detail =
+            err && typeof err.message === "string" ? err.message.trim() : "";
+          setStatus(
+            container,
+            detail
+              ? `Couldn’t submit your reply: ${detail}`
+              : "Couldn’t submit your reply. Please try again.",
+            "error"
+          );
+          console.error("[supabase-comments] reply failed", err);
+        } finally {
+          if (replySubmitButton) replySubmitButton.disabled = false;
+        }
+      });
+    }
+
+    function openReplyForm(commentEl, parentId) {
+      if (!commentEl) return;
+
+      ensureReplyForm();
+      if (replyForm && replyForm.parentNode === commentEl) {
+        closeReplyForm();
+        return;
+      }
+
+      activeReplyParentId = parentId;
+      const savedReplyName = getSavedName();
+      if (savedReplyName && replyNameInput && !replyNameInput.value) {
+        replyNameInput.value = savedReplyName;
+      }
+      commentEl.appendChild(replyForm);
+      if (replyBodyInput) replyBodyInput.focus();
+    }
+
+    if (list) {
+      list.addEventListener("click", (event) => {
+        const button = event.target.closest(".sb-comment__reply");
+        if (!button) return;
+        event.preventDefault();
+        const commentEl = button.closest(".sb-comment");
+        if (!commentEl) return;
+        const parentId = commentEl.getAttribute("data-comment-id");
+        openReplyForm(commentEl, parentId);
+      });
     }
 
     void loadComments({
@@ -201,26 +421,11 @@
 
       const authorName = nameInput.value.trim();
       const body = bodyInput.value.trim();
-      if (!authorName || !body) {
-        setStatus(container, "Name and comment are required.", "error");
-        return;
-      }
-      if (authorName.length > 80) {
-        setStatus(container, "Name is too long (max 80 characters).", "error");
-        return;
-      }
-      if (body.length > 5000) {
-        setStatus(container, "Comment is too long (max 5000 characters).", "error");
-        return;
-      }
+      if (!validateInputs(container, authorName, body)) return;
 
       if (submitButton) submitButton.disabled = true;
       try {
-        try {
-          localStorage.setItem("sb-comments-name", authorName);
-        } catch (err) {
-          // ignore
-        }
+        saveName(authorName);
 
         await submitComment({
           container,
@@ -229,6 +434,7 @@
           threadId,
           authorName,
           body,
+          parentId: null,
           requireApproval: requireApprovalBool
         });
         bodyInput.value = "";
