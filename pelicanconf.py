@@ -1,3 +1,5 @@
+import os
+
 # AUTHOR = "Joana"
 SITENAME = "JoJo's Blog"
 SITEURL = ""
@@ -122,3 +124,14 @@ PROJECTS = [
     },
 ]
 USE_SHORTCUT_ICONS = True
+
+# Supabase comments (optional)
+# - Create a Supabase project + `comments` table (see `SUPABASE_COMMENTS.md`)
+# - Set env vars locally / in CI to enable
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
+SUPABASE_ANON_KEY = os.environ.get("SUPABASE_ANON_KEY", "")
+SUPABASE_COMMENTS_TABLE = os.environ.get("SUPABASE_COMMENTS_TABLE", "comments")
+SUPABASE_COMMENTS_REQUIRE_APPROVAL = (
+    os.environ.get("SUPABASE_COMMENTS_REQUIRE_APPROVAL", "true").strip().lower()
+    in ("1", "true", "yes", "on")
+)

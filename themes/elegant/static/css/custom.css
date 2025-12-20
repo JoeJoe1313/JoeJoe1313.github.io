@@ -199,6 +199,70 @@ div.highlight,
     background-color: #ffebe9;
 }
 
+/* Supabase comments */
+[data-supabase-comments] {
+    margin-top: 24px;
+}
+
+.sb-comments__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 0 0 10px 0;
+}
+
+.sb-comments__count {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.sb-comment {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin: 0 0 12px 0;
+}
+
+.sb-comment__meta {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 6px;
+}
+
+.sb-comment__body {
+    white-space: pre-wrap;
+}
+
+.sb-comments__form input,
+.sb-comments__form textarea {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.sb-comments__form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.sb-comments__status {
+    margin-top: 8px;
+    font-size: 0.95em;
+}
+
+.sb-comments__status[data-kind="muted"] {
+    color: #666;
+}
+
+.sb-comments__status[data-kind="success"] {
+    color: #15803d;
+}
+
+.sb-comments__status[data-kind="error"] {
+    color: #b42318;
+}
+
 .highlight .g,
 .highlight .esc,
 .highlight .l,

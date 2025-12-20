@@ -44,6 +44,11 @@ jobs:
           stork --version
 
       - name: Build site
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_COMMENTS_TABLE: ${{ secrets.SUPABASE_COMMENTS_TABLE }}
+          SUPABASE_COMMENTS_REQUIRE_APPROVAL: ${{ secrets.SUPABASE_COMMENTS_REQUIRE_APPROVAL }}
         run: |
           make html
 

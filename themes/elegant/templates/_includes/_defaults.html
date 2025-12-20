@@ -91,6 +91,37 @@
 {% set COMMENTBOX_FILTER = COMMENTBOX_FILTER %}
 {% endif %}
 
+{# Supabase comments (self-hosted) #}
+{% if not SUPABASE_URL %}
+{% set SUPABASE_URL = '' %}
+{% else %}
+{% set SUPABASE_URL = SUPABASE_URL %}
+{% endif %}
+
+{% if not SUPABASE_ANON_KEY %}
+{% set SUPABASE_ANON_KEY = '' %}
+{% else %}
+{% set SUPABASE_ANON_KEY = SUPABASE_ANON_KEY %}
+{% endif %}
+
+{% if not SUPABASE_COMMENTS_TABLE %}
+{% set SUPABASE_COMMENTS_TABLE = 'comments' %}
+{% else %}
+{% set SUPABASE_COMMENTS_TABLE = SUPABASE_COMMENTS_TABLE %}
+{% endif %}
+
+{% if not SUPABASE_COMMENTS_FILTER %}
+{% set SUPABASE_COMMENTS_FILTER = False %}
+{% else %}
+{% set SUPABASE_COMMENTS_FILTER = SUPABASE_COMMENTS_FILTER %}
+{% endif %}
+
+{% if SUPABASE_COMMENTS_REQUIRE_APPROVAL is not defined %}
+{% set SUPABASE_COMMENTS_REQUIRE_APPROVAL = True %}
+{% else %}
+{% set SUPABASE_COMMENTS_REQUIRE_APPROVAL = SUPABASE_COMMENTS_REQUIRE_APPROVAL %}
+{% endif %}
+
 {# Author's twitter handle. Used in Twitter card meta data #}
 {% if not TWITTER_USERNAME %}
 {% set TWITTER_USERNAME = '' %}

@@ -1,12 +1,14 @@
 {% macro comments_section(article) %}
 
-{% from '_includes/_defaults.html' import DISQUS_FILTER, UTTERANCES_FILTER, COMMENTBOX_FILTER with context %}
+{% from '_includes/_defaults.html' import DISQUS_FILTER, UTTERANCES_FILTER, COMMENTBOX_FILTER, SUPABASE_COMMENTS_FILTER, SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_COMMENTS_TABLE, SUPABASE_COMMENTS_REQUIRE_APPROVAL with context %}
 
 {% set use_disqus = (not DISQUS_FILTER or article.disqus_filter == "off") and DISQUS_SITENAME and article.disqus_filter != "on" %}
 
 {% set use_utterances = (not UTTERANCES_FILTER or article.utterances_filter == "off") and UTTERANCES_REPO and article.utterances_filter != "on" %}
 
 {% set use_commentbox = (not COMMENTBOX_FILTER or article.commentbox_filter == "off") and COMMENTBOX_PROJECT and article.commentbox_filter != "on" %}
+
+{% set use_supabase = (not SUPABASE_COMMENTS_FILTER or article.supabase_filter == "off") and SUPABASE_URL and SUPABASE_ANON_KEY and article.supabase_filter != "on" %}
 
 {% set url = SITEURL+ '/' + article.url %}
 {% set identifier = SITEURL+ '/' + article.url %}
@@ -22,7 +24,7 @@
 {% set intro = article.comments_intro %}
 {% endif %}
 
-{% if article.status != 'draft' and article.comments != 'False' and (use_disqus or use_utterances or use_commentbox) %}
+{% if article.status != 'draft' and article.comments != 'False' and (use_disqus or use_utterances or use_commentbox or use_supabase) %}
 
 <section>
     <h6 style="display:none;">Comments</h6>
@@ -61,6 +63,42 @@
                         {% from '_includes/commentbox_scripts.html' import comments_script_commentbox with context %}
                         {{ comments_script_commentbox(COMMENTBOX_PROJECT, identifier) }}
                         {% endif %}
+
+                        {% if use_supabase %}
+                        {% set thread_id = article.url %}
+                        {% if article.comment_id %}
+                        {% set thread_id = article.comment_id %}
+                        {% endif %}
+                        <div
+                            class="sb-comments"
+                            data-supabase-comments
+                            data-supabase-url="{{ SUPABASE_URL|e }}"
+                            data-supabase-anon-key="{{ SUPABASE_ANON_KEY|e }}"
+                            data-supabase-table="{{ SUPABASE_COMMENTS_TABLE|e }}"
+                            data-thread-id="{{ thread_id|e }}"
+                            data-require-approval="{{ 'true' if SUPABASE_COMMENTS_REQUIRE_APPROVAL else 'false' }}"
+                        >
+                            <div class="sb-comments__header">
+                                <h4 class="sb-comments__title">Comments</h4>
+                                <div class="sb-comments__count">
+                                    <span data-sb-comments-count>—</span> approved
+                                </div>
+                            </div>
+                            <div class="sb-comments__list" data-sb-comments-list></div>
+                            <form class="sb-comments__form" data-sb-comments-form>
+                                <label>
+                                    Name
+                                    <input type="text" name="sb-name" maxlength="80" required>
+                                </label>
+                                <label>
+                                    Comment
+                                    <textarea name="sb-body" maxlength="5000" required></textarea>
+                                </label>
+                                <button type="submit" class="btn btn-primary">Post comment</button>
+                                <div class="sb-comments__status" data-sb-comments-status role="status" aria-live="polite"></div>
+                            </form>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -71,6 +109,10 @@
 {% endmacro %}
 
 {% macro comments_script() %}
+{% from '_includes/_defaults.html' import SUPABASE_URL, SUPABASE_ANON_KEY with context %}
+{% if SUPABASE_URL and SUPABASE_ANON_KEY %}
+<script src="{{ SITEURL }}/theme/js/supabase-comments.js" defer></script>
+{% endif %}
 <script>
     (function () {
         if (window.location.hash.match(/^#comment-\d+$/)) {
