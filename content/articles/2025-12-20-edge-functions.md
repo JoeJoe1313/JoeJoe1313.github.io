@@ -32,7 +32,7 @@ To understand Edge Functions, we should first understand the runtime technology.
 
 # Edge vs. Serverless
 
-Here is the comparison across four critical dimensions.
+Here we are going to compare four critical dimensions.
 
 #### Latency & Network Topology
 
