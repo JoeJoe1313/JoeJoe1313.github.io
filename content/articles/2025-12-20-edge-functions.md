@@ -32,7 +32,7 @@ To understand Edge Functions, we should first understand the runtime technology.
 
 # Edge vs. Serverless
 
-Here is the comparison across five critical dimensions.
+Here is the comparison across four critical dimensions.
 
 #### Latency & Network Topology
 
@@ -57,10 +57,26 @@ This is where the "theoretical" constraints become practical roadblocks.
 | Execution Limit | Long (15 mins on Lambda). | Short (Often 10ms–30s depending on provider). |
 | Code Size | Large (50MB+ zipped). | Tiny (Often < 1MB-5MB). |
 
-#### Data Connectivity
+#### Data Connectivity (The "Database Paradox")
 
-- **Serverless:** Ideal for connecting to centralized databases (PostgreSQL, MySQL). They can hold persistent TCP connections (via connection pooling) and sit inside a VPC for security.
-- **Edge:** If your code runs in Sydney but your database is in Virginia, you lose the latency benefit because the Edge function still has to make a long round-trip to fetch data. Furthermore, standard TCP connections are usually difficult to manage in serverless V8 environments.
+This is often the most confusing aspect of Edge computing. If Edge functions are so fast, why are they considered "bad" for database operations?
+
+**The Physics Problem:**
+When you connect to a standard database (Postgres/MySQL) via TCP, two things kill performance at the Edge:
+
+- **Connection Exhaustion:** Edge functions scale infinitely. If 10,000 users visit your site, 10,000 functions spin up. They will instantly exhaust the connection limit of a standard database (often limited to ~100 connections).
+- **Handshake Latency:** Setting up a secure TCP connection requires a "handshake." If your function is in Tokyo and your DB is in Virginia, the handshake requires multiple round-trips across the ocean *before* the query is even sent.
+
+**The Solution (e.g., Supabase, Neon):**
+Modern "Serverless Databases" solve this by abandoning raw TCP connections in favor of HTTP/REST and Connection Pooling.
+
+- **HTTP over TCP:** Instead of a persistent connection, the Edge function makes a lightweight HTTP request (like a REST API call).
+- **Connection Pooling:** A middleware (like Supabase's Supavisor, see **Figure 1** below) sits in front of the database. It manages the heavy TCP connections and serves the lightweight Edge requests, preventing the database from crashing.
+
+<figure>
+  <img src="../images/2025-12-20-edge-functions/tcp_http.png" alt="tcp-http" class="zoomable" style="display: block; margin: 0 auto; width: 100%">
+  <figcaption style="text-align: center">Figure 1. The edge database problem and Supabase's connection pool solution </figcaption>
+</figure> 
 
 # When to use which?
 
