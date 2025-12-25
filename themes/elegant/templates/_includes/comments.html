@@ -80,7 +80,8 @@
                         >
                             <div class="sb-comments__header">
                                 <div class="sb-comments__count">
-                                    <span data-sb-comments-count>—</span> approved
+                                    <span data-sb-comments-count>—</span>
+                                    {{ "approved" if SUPABASE_COMMENTS_REQUIRE_APPROVAL else "comments" }}
                                 </div>
                             </div>
                             <div class="sb-comments__list" data-sb-comments-list></div>

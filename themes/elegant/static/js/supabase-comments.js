@@ -202,7 +202,8 @@
     const entry = {
       thread_id: threadId,
       author_name: authorName,
-      body
+      body,
+      is_approved: !requireApproval
     };
 
     if (parentId !== undefined && parentId !== null && parentId !== "") {

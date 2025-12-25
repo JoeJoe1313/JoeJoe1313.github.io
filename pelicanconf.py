@@ -1,5 +1,27 @@
 import os
 
+
+def load_local_env(path):
+    if not os.path.exists(path):
+        return
+    with open(path, "r") as handle:
+        for line in handle:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if line.startswith("export "):
+                line = line[len("export ") :].strip()
+            if "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            key = key.strip()
+            if not key or key in os.environ:
+                continue
+            os.environ[key] = value.strip().strip('"').strip("'")
+
+
+load_local_env(os.path.join(os.path.dirname(__file__), ".env"))
+
 # AUTHOR = "Joana"
 SITENAME = "JoJo's Blog"
 SITEURL = ""
@@ -132,6 +154,6 @@ SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
 SUPABASE_ANON_KEY = os.environ.get("SUPABASE_ANON_KEY", "")
 SUPABASE_COMMENTS_TABLE = os.environ.get("SUPABASE_COMMENTS_TABLE", "comments")
 SUPABASE_COMMENTS_REQUIRE_APPROVAL = (
-    os.environ.get("SUPABASE_COMMENTS_REQUIRE_APPROVAL", "true").strip().lower()
+    os.environ.get("SUPABASE_COMMENTS_REQUIRE_APPROVAL", "false").strip().lower()
     in ("1", "true", "yes", "on")
 )

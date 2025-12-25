@@ -244,12 +244,13 @@ div.highlight,
     background: none;
     border: 0;
     padding: 0;
-    color: #3875d7;
+    color: #800000;
     cursor: pointer;
 }
 
 .sb-comment__reply:hover,
 .sb-comment__reply:focus {
+    color: #d14;
     text-decoration: underline;
 }
 
@@ -283,6 +284,21 @@ div.highlight,
     display: flex;
     gap: 8px;
     margin-top: 6px;
+}
+
+.sb-comments__form .btn-primary,
+.sb-comments__reply-actions .btn-primary {
+    background-color: #800000;
+    border-color: #800000;
+    background-image: none;
+}
+
+.sb-comments__form .btn-primary:hover,
+.sb-comments__form .btn-primary:focus,
+.sb-comments__reply-actions .btn-primary:hover,
+.sb-comments__reply-actions .btn-primary:focus {
+    background-color: #5c0000;
+    border-color: #5c0000;
 }
 
 .sb-comments__status {
