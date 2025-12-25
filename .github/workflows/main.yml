@@ -120,7 +120,6 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    if: needs.build.result == 'success'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -129,7 +128,7 @@ jobs:
       - name: Debug - Print build status
         run: |
           echo "Build result: ${{ needs.build.result }}"
-          echo "Build status: ${{ job.status }}"
+          echo "Job status: ${{ job.status }}"
       
       - name: Deploy to GitHub Pages
         id: deployment
