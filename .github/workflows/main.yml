@@ -75,8 +75,9 @@ jobs:
     needs: [migrations, edge-functions]
     runs-on: ubuntu-latest
     if: |
-      (needs.migrations.result != 'failure') &&
-      (needs.edge-functions.result != 'failure')
+      always() &&
+      (needs.migrations.result == 'success' || needs.migrations.result == 'skipped') &&
+      (needs.edge-functions.result == 'success' || needs.edge-functions.result == 'skipped')
 
     steps:
       - name: Checkout
@@ -119,11 +120,17 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    if: needs.build.result == 'success'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
+      - name: Debug - Print build status
+        run: |
+          echo "Build result: ${{ needs.build.result }}"
+          echo "Build status: ${{ job.status }}"
+      
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
