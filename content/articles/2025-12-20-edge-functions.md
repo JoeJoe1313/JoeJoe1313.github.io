@@ -15,6 +15,11 @@ This post covers the technical and theoretical differences between **Edge Functi
 
 At its core, an **Edge Function** is a piece of code that executes as close to the user as possible. Unlike traditional cloud functions that run in a specific "Region" (Northern Virginia - `us-east-1`), Edge Functions are **deployed globally** across a **Content Delivery Network (CDN)**. When a user makes a request, the code executes at the **Point of Presence (PoP)** nearest to them.
 
+<figure>
+  <img src="../images/2025-12-20-edge-functions/pop.png" alt="pop" class="zoomable" style="display: block; margin: 0 auto; width: 100%">
+  <figcaption style="text-align: center">Figure 1. Centralised cloud vs edge computing architecture </figcaption>
+</figure> 
+
 #### "Isolates" vs. Containers
 
 To understand Edge Functions, we should first understand the runtime technology. Most traditional serverless functions (like AWS Lambda) use **Containers** or **Firecracker MicroVMs**. When a function is triggered, the provider spins up a mini-server (container). This is powerful but heavy. Edge Functions (like Cloudflare Workers or Vercel Edge) typically use **V8 Isolates**.
@@ -75,7 +80,7 @@ Modern "Serverless Databases" solve this by abandoning raw TCP connections in fa
 
 <figure>
   <img src="../images/2025-12-20-edge-functions/tcp_http.png" alt="tcp-http" class="zoomable" style="display: block; margin: 0 auto; width: 100%">
-  <figcaption style="text-align: center">Figure 1. The edge database problem and Supabase's connection pool solution </figcaption>
+  <figcaption style="text-align: center">Figure 2. The edge database problem and Supabase's connection pool solution </figcaption>
 </figure> 
 
 # When to use which?
