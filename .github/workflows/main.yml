@@ -120,24 +120,12 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    if: always()
+    if: always() && needs.build.result == 'success'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Debug - Print build status
-        run: |
-          echo "Build result: ${{ needs.build.result }}"
-          echo "Current job status: ${{ job.status }}"
-      
-      - name: Check if build succeeded
-        run: |
-          if [ "${{ needs.build.result }}" != "success" ]; then
-            echo "Build did not succeed, exiting"
-            exit 1
-          fi
-      
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
