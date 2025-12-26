@@ -1,3 +1,6 @@
+-- Migration: Auto-approve comments on insert
+-- Description: Sets the default value for is_approved to true and updates the insert policy
+-- to allow public insertion of pre-approved comments with validation rules.
 alter table public.comments
   alter column is_approved set default true;
 
