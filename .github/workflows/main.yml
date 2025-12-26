@@ -16,15 +16,61 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  migrations:
+  changes:
     runs-on: ubuntu-latest
-    if: |
-      github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'push' && (
-        contains(join(github.event.commits.*.added, '\n'), 'supabase/migrations/') ||
-        contains(join(github.event.commits.*.modified, '\n'), 'supabase/migrations/') ||
-        contains(join(github.event.commits.*.removed, '\n'), 'supabase/migrations/')
-      ))
+    outputs:
+      migrations: ${{ steps.detect.outputs.migrations }}
+      edge_functions: ${{ steps.detect.outputs.edge_functions }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed paths
+        id: detect
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "migrations=true" >> "$GITHUB_OUTPUT"
+            echo "edge_functions=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          before="${{ github.event.before }}"
+          after="${{ github.sha }}"
+
+          if [ -z "$before" ] || [ "$before" = "0000000000000000000000000000000000000000" ]; then
+            echo "migrations=true" >> "$GITHUB_OUTPUT"
+            echo "edge_functions=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if ! git cat-file -e "${before}^{commit}" 2>/dev/null; then
+            echo "migrations=true" >> "$GITHUB_OUTPUT"
+            echo "edge_functions=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          migrations_changed="$(git diff --name-only "$before" "$after" -- supabase/migrations/ | head -n 1)"
+          edge_changed="$(git diff --name-only "$before" "$after" -- supabase/functions/ | head -n 1)"
+
+          if [ -n "$migrations_changed" ]; then
+            echo "migrations=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "migrations=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if [ -n "$edge_changed" ]; then
+            echo "edge_functions=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "edge_functions=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  migrations:
+    needs: changes
+    runs-on: ubuntu-latest
+    if: needs.changes.outputs.migrations == 'true'
 
     env:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
@@ -45,14 +91,9 @@ jobs:
         run: supabase db push
 
   edge-functions:
+    needs: changes
     runs-on: ubuntu-latest
-    if: |
-      github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'push' && (
-        contains(join(github.event.commits.*.added, '\n'), 'supabase/functions/') ||
-        contains(join(github.event.commits.*.modified, '\n'), 'supabase/functions/') ||
-        contains(join(github.event.commits.*.removed, '\n'), 'supabase/functions/')
-      ))
+    if: needs.changes.outputs.edge_functions == 'true'
 
     env:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
