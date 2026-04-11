@@ -3,3 +3,4 @@ __pycache__/
 output/
 .env
 .env.local
+supabase/.temp
