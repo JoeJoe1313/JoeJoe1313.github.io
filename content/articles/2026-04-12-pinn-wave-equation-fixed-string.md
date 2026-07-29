@@ -4,7 +4,7 @@ Date: 2026-04-12 12:00
 Category: Machine Learning
 Tags: pde, machine-learning, pinn, wave-equation
 Slug: pinn-wave-equation-fixed-string
-Status: published
+Status: draft
 Series: The Wave Equation
 ---
 
