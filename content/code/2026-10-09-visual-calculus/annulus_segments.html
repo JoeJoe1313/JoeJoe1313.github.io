@@ -300,15 +300,15 @@
         },
         yaxis: { range: [-3.2, 3.2] },
         xaxis2: {
-          range: [-2.2, 2.2],
+          range: [-3.2, 3.2],
           scaleanchor: "y2",
           scaleratio: 1,
           title: "Translated segments (tangent cluster)"
         },
-        yaxis2: { range: [-2.2, 2.2] }
+        yaxis2: { range: [-3.2, 3.2] }
       };
 
-      Plotly.newPlot(plotDiv, data, layout, { displayModeBar: false });
+      Plotly.newPlot(plotDiv, data, layout, { displayModeBar: false, responsive: true });
     }
 
     function updateSegments(count) {
