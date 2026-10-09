@@ -113,9 +113,18 @@ MATH_JAX = {
     "linebreak_automatic": True,
 }
 
-DIRECT_TEMPLATES = ("index", "tags", "categories", "archives", "search")
+DIRECT_TEMPLATES = (
+    "index",
+    "tags",
+    "categories",
+    "archives",
+    "search",
+    "tech_notes",
+)
 SEARCH_SAVE_AS = "search.html"
 SEARCH_URL = "search.html"
+TECH_NOTES_SAVE_AS = "tech-notes.html"
+TECH_NOTES_URL = "tech-notes.html"
 STORK_INPUT_OPTIONS = {
     "html_selector": ".article-content",
 }

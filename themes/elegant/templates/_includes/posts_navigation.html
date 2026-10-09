@@ -1,0 +1,5 @@
+{% from '_includes/_defaults.html' import ARCHIVES_URL with context %}
+<nav class="posts-navigation" aria-label="Post types">
+    <a href="{{ SITEURL }}/{{ ARCHIVES_URL }}"{% if posts_view == 'articles' %} aria-current="page"{% endif %}>Articles</a>
+    <a href="{{ SITEURL }}/{{ TECH_NOTES_URL }}"{% if posts_view == 'notes' %} aria-current="page"{% endif %}>Tech Notes</a>
+</nav>

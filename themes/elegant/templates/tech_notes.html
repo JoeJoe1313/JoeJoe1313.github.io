@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Tech Notes · Posts · {{ super() }}
+{% endblock title %}
+
+{% block head_description %}
+Short technical definitions with practical context from {{ SITENAME|striptags|e }}.
+{% endblock head_description %}
+
+{% block meta_tags_in_head %}
+{{ super() }}
+{% from '_includes/_defaults.html' import FEATURED_IMAGE with context %}
+<meta property="og:title" content="Tech Notes · Posts · {{ SITENAME|striptags|e }}"/>
+<meta name="twitter:title" content="Tech Notes · Posts · {{ SITENAME|striptags|e }}">
+<meta property="og:url" content="{{ SITEURL }}/{{ TECH_NOTES_URL }}" />
+<meta property="og:description" content="Short technical definitions with practical context." />
+<meta name="twitter:description" content="Short technical definitions with practical context.">
+<meta property="og:site_name" content="{{ SITENAME|striptags|e }}" />
+<meta property="og:article:author" content="{{ AUTHOR }}" />
+{% if FEATURED_IMAGE %}
+<meta property="og:image" content="{{ FEATURED_IMAGE }}" />
+<meta name="twitter:image" content="{{ FEATURED_IMAGE }}">
+{% endif %}
+{% endblock meta_tags_in_head %}
+
+{% block content %}
+{% from '_includes/_defaults.html' import ARCHIVES_URL with context %}
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1><a href="{{ SITEURL }}/{{ ARCHIVES_URL }}">Posts</a></h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+    <div class="span10 offset2">
+        {% set posts_view = 'notes' %}
+        {% include '_includes/posts_navigation.html' %}
+        <p class="posts-intro">Quick definitions and practical takeaways, one concept at a time.</p>
+
+        {% if posts.notes %}
+        <div class="tech-notes-search" hidden>
+            <label class="visually-hidden" for="tech-notes-search">Find a Tech Note</label>
+            <input
+                id="tech-notes-search"
+                type="search"
+                class="search-query"
+                placeholder="Find a Tech Note…"
+                aria-controls="tech-notes-list">
+            <span class="tech-notes-count" role="status" aria-live="polite"></span>
+        </div>
+
+        <ul id="tech-notes-list" class="tech-notes-list">
+            {% for article in posts.notes|sort(attribute='title') %}
+            <li id="{{ article.slug }}-ref" class="tech-note-preview">
+                <h2><a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a></h2>
+                <p>{{ article.summary|striptags|truncate(180)|e }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+        <p class="tech-notes-empty" hidden>No notes match your search. Try another term.</p>
+        {% else %}
+        <p>No Tech Notes have been published yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+{{ super() }}
+<script src="{{ SITEURL }}/theme/js/tech-notes.js"></script>
+{% endblock script %}

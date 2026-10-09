@@ -1,0 +1,35 @@
+{% from '_includes/_defaults.html' import CATEGORIES_URL with context %}
+
+{% macro recent_posts(heading_id, title, entries, archive_url, archive_label, summary_length) %}
+{% if entries %}
+<div class="row-fluid">
+    <section class="home-post-section {% if PROJECTS and LANDING_PAGE_TITLE %}span12{% else %}span8 offset2{% endif %}" aria-labelledby="{{ heading_id }}">
+        <header class="recent-posts-heading">
+            <h2 id="{{ heading_id }}">{{ title }}</h2>
+            <a href="{{ SITEURL }}/{{ archive_url }}">{{ archive_label }} →</a>
+        </header>
+        <div class="recent-posts">
+            {% for article in entries %}
+            <div itemscope class="recent-posts-article">
+                <h3>
+                    <a href="{{ SITEURL }}/{{ article.url }}">
+                        {{ article.title }}
+                        {% if article.subtitle %}
+                        <small class="subtitle">{{ article.subtitle }}</small>
+                        {% endif %}
+                    </a>
+                </h3>
+                <div class="recent-posts-posted">
+                    <a href="{{ SITEURL }}/{{ CATEGORIES_URL }}#{{ article.category.slug }}-ref">{{ article.category }}</a>
+                    <time itemprop="dateCreated" datetime="{{ article.date.isoformat() }}">{{ article.locale_date }}</time>
+                </div>
+                {% if RECENT_ARTICLE_SUMMARY %}
+                <p>{{ article.summary|striptags|truncate(summary_length)|e }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endif %}
+{% endmacro %}

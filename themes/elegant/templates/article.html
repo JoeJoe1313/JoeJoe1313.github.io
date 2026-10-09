@@ -32,6 +32,14 @@
 <article itemscope>
 <div class="row-fluid">
     <header class="page-header span10 offset2">
+        {% if is_tech_note %}
+        {% from '_includes/_defaults.html' import ARCHIVES_URL with context %}
+        <nav class="post-breadcrumb" aria-label="Breadcrumb">
+            <a href="{{ SITEURL }}/{{ ARCHIVES_URL }}">Posts</a>
+            <span aria-hidden="true">/</span>
+            <a href="{{ SITEURL }}/{{ TECH_NOTES_URL }}">Tech Notes</a>
+        </nav>
+        {% endif %}
         <h1>
             <a href="{{ SITEURL }}/{{ article.url }}">
                 {{ article.title }}

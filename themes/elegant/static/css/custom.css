@@ -95,7 +95,7 @@ a.ampl::after {
     margin-bottom: 0.5em;
 }
 
-/* Home Recent Posts: boxed style like notmyidea */
+/* Shared homepage cards for articles and Tech Notes. */
 .recent-posts .recent-posts-article {
     background: #fff;
     border: 1px solid #eee;
@@ -103,15 +103,38 @@ a.ampl::after {
     padding: 16px 18px;
     margin: 0 0 20px 0;
     box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-    font-size: 1.8rem;
-    line-height: 1.25;
+    font-size: 1rem;
+    line-height: 1.5;
 }
 
-/* target only paragraphs inside the box */
-/* .recent-posts .recent-posts-article p {
-    font-size: 0.95rem;
-    margin: 0 0 0.8em 0;
-} */
+.recent-posts-article h3 {
+    margin: 0 0 0.5rem;
+    border: none;
+    font-size: 1.6rem;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+.recent-posts .recent-posts-posted {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+    margin-bottom: 0.65rem;
+    font-size: 0.85rem;
+}
+
+.recent-posts .recent-posts-posted time {
+    float: none;
+}
+
+.recent-posts .recent-posts-article p {
+    margin: 0;
+    font-family: inherit;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    text-align: left;
+}
 
 /* Code Theme (pygments.css) */
 :root {
@@ -697,12 +720,126 @@ header.page-header h1,
     border-bottom: none;
 }
 
-h1#recent-posts {
-    margin-bottom: 1.5rem;
+.home-post-section {
+    margin-top: 1.5rem;
+}
+
+.recent-posts-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.recent-posts-heading h2 {
+    margin: 0;
+    border: none;
+    font-size: 2.2rem;
+    line-height: 1.3;
+}
+
+.recent-posts-heading > a {
+    font-size: 1rem;
 }
 
 .recent-posts {
     margin-top: 1rem;
+}
+
+/* Posts: articles and short technical notes share one navigation. */
+.posts-navigation {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.posts-navigation a {
+    padding: 0.65rem 1rem;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+}
+
+.posts-navigation a[aria-current="page"] {
+    border-bottom-color: #800000;
+    font-weight: 600;
+}
+
+.posts-navigation a:hover,
+.posts-navigation a:focus {
+    background: #faf5f5;
+}
+
+.posts-intro {
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+.tech-notes-search {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.tech-notes-search input[type="search"] {
+    box-sizing: border-box;
+    width: 22rem;
+    max-width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0.6rem 0.8rem;
+    font: inherit;
+}
+
+.tech-notes-count,
+.tech-notes-empty {
+    color: #666;
+}
+
+.tech-notes-list {
+    list-style: none;
+    margin: 0 0 2rem;
+    padding: 0;
+}
+
+.tech-note-preview {
+    padding: 1rem 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.tech-note-preview h2,
+.tech-note-preview h3 {
+    margin: 0 0 0.4rem;
+    border-bottom: none;
+    font-size: 1.25rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.tech-note-preview p {
+    margin: 0;
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.post-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.tech-notes-search[hidden],
+.tech-note-preview[hidden],
+.tech-notes-empty[hidden] {
+    display: none;
 }
 
 /* .article-content h1:first-child {

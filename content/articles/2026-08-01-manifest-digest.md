@@ -1,0 +1,36 @@
+---
+Title: "Manifest Digest: A Container Image's Immutable Fingerprint"
+Date: 2026-08-01 07:00
+Category: Computer Science
+Tags: cs, docker, containers, oci, tech-notes
+Slug: manifest-digest
+Status: published
+---
+
+A **manifest digest** is a content-based identifier for a container image manifest. The manifest is the JSON document that points to an image's configuration and filesystem layers; its digest is calculated from the manifest's exact bytes and usually looks like `sha256:…`.
+
+## Tag vs. digest
+
+A tag such as:
+
+```text
+nginx:latest
+```
+
+is a convenient, human-readable pointer. Tags are mutable: the registry can make `latest` point to a newer manifest tomorrow.
+
+A digest-pinned reference looks like:
+
+```text
+nginx@sha256:<digest>
+```
+
+It identifies one exact manifest. If any byte in that manifest changes—including a referenced configuration or layer digest—the manifest digest changes too. A container client can recalculate the digest after downloading the manifest and verify that it received the expected content.
+
+## Why it matters
+
+Pulling by digest makes builds and deployments reproducible: development, CI, and production all resolve the same manifest instead of whatever a tag happens to reference at that moment. It also provides an integrity check. The trade-off is that updates become intentional—you must replace the pinned digest to adopt a newer image.
+
+For a multi-platform image, there can be two relevant digests: one for the top-level **image index** and another for the platform-specific manifest selected for `linux/amd64`, `linux/arm64`, or another platform. They identify different JSON objects, so they should not be expected to match.
+
+For the formal definition, see the [OCI content descriptor specification](https://github.com/opencontainers/image-spec/blob/main/descriptor.md). Docker's [image digest documentation](https://docs.docker.com/dhi/core-concepts/digests/) shows how digests are used to pin image pulls.
