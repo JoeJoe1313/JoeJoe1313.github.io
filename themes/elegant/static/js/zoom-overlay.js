@@ -8,11 +8,9 @@
     var media = overlay.querySelector('.zoom-overlay__media');
     var caption = overlay.querySelector('.zoom-overlay__caption');
     var closeBtn = overlay.querySelector('.zoom-overlay__close');
-    var zoomBtn = overlay.querySelector('.zoom-overlay__toggle');
     var renderToken = 0;
     var activeMedia = null;
     var mediaSize = null;
-    var zoomed = false;
     var opener = null;
     var previousOverflow = '';
 
@@ -27,13 +25,11 @@
             return;
         }
         // Measure the viewport, including space reserved for controls and the caption.
-        // offsetWidth stays stable when magnification introduces scrollbars.
-        var scale = Math.min(Math.min(viewport.offsetWidth, 1600) / mediaSize.width,
-            viewport.offsetHeight / mediaSize.height);
+        var scale = Math.min(Math.min(viewport.clientWidth, 1600) / mediaSize.width,
+            viewport.clientHeight / mediaSize.height);
         if (!mediaSize.vector) {
             scale = Math.min(scale, 1);
         }
-        scale *= zoomed ? 2 : 1;
         activeMedia.style.width = Math.floor(mediaSize.width * scale) + 'px';
         activeMedia.style.height = Math.floor(mediaSize.height * scale) + 'px';
         activeMedia.style.maxWidth = 'none';
@@ -48,14 +44,12 @@
         activeMedia = element;
         mediaSize = { width: width, height: height, vector: vector };
         media.replaceChildren(element);
-        zoomBtn.disabled = false;
         fitMedia();
     }
 
     function showMessage(message) {
         activeMedia = null;
         mediaSize = null;
-        zoomBtn.disabled = true;
         var status = document.createElement('p');
         status.setAttribute('role', 'status');
         status.textContent = message;
@@ -64,8 +58,6 @@
 
     function openShell(element, isSvg, message) {
         renderToken += 1;
-        zoomed = false;
-        zoomBtn.textContent = 'Zoom in (2×)';
         showMessage(message);
         caption.textContent = getCaption(element);
         overlay.classList.toggle('is-svg', isSvg);
@@ -220,14 +212,6 @@
         });
     });
 
-    zoomBtn.addEventListener('click', function () {
-        zoomed = !zoomed;
-        zoomBtn.textContent = zoomed ? 'Fit to screen' : 'Zoom in (2×)';
-        fitMedia();
-        // Start at the center; the viewport supports touch, mouse and keyboard scrolling.
-        viewport.scrollTo((viewport.scrollWidth - viewport.clientWidth) / 2,
-            (viewport.scrollHeight - viewport.clientHeight) / 2);
-    });
     closeBtn.addEventListener('click', closeOverlay);
     overlay.addEventListener('cancel', function (event) {
         event.preventDefault();

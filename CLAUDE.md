@@ -90,6 +90,10 @@ Status: draft        # omit to publish; `draft` keeps it out of listings
   currently `images`, `code`, and `theme/images`.
 - **Embedding source files:** the `include_code` / `include_code_collapsible` liquid tags
   pull a file from `content/code/` into a fenced block.
+- **Zoomable figures:** add `class="zoomable"` to article images (or `{.zoomable}` on
+  Markdown images). The shared viewer supports click/keyboard activation, fits images to the screen,
+  and copies the enclosing `<figcaption>`. Use `data-zoom-src` for a larger source and
+  `zoomable--transparent` alongside `zoomable` for transparent PNGs needing a white backdrop.
 - **Content can use Jinja2** (via the `jinja2content` plugin) in addition to Markdown.
 
 ## Plugins
