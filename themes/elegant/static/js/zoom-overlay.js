@@ -4,260 +4,239 @@
         return;
     }
 
-    var overlayMedia = overlay.querySelector('.zoom-overlay__media');
-    if (!overlayMedia) {
-        return;
-    }
-
+    var viewport = overlay.querySelector('.zoom-overlay__viewport');
+    var media = overlay.querySelector('.zoom-overlay__media');
+    var caption = overlay.querySelector('.zoom-overlay__caption');
     var closeBtn = overlay.querySelector('.zoom-overlay__close');
-    var mermaidRenderToken = 0;
-    var activeResizeHandler = null;
+    var zoomBtn = overlay.querySelector('.zoom-overlay__toggle');
+    var renderToken = 0;
+    var activeMedia = null;
+    var mediaSize = null;
+    var zoomed = false;
+    var opener = null;
+    var previousOverflow = '';
 
-    function clearActiveResizeHandler() {
-        if (!activeResizeHandler) {
+    function getCaption(element) {
+        var figure = element.closest('figure');
+        var figcaption = figure && figure.querySelector('figcaption');
+        return figcaption ? figcaption.textContent.trim() : (element.alt || '');
+    }
+
+    function fitMedia() {
+        if (!activeMedia || !mediaSize || !overlay.open) {
             return;
         }
-        window.removeEventListener('resize', activeResizeHandler);
-        activeResizeHandler = null;
+        // Measure the viewport, including space reserved for controls and the caption.
+        // offsetWidth stays stable when magnification introduces scrollbars.
+        var scale = Math.min(Math.min(viewport.offsetWidth, 1600) / mediaSize.width,
+            viewport.offsetHeight / mediaSize.height);
+        if (!mediaSize.vector) {
+            scale = Math.min(scale, 1);
+        }
+        scale *= zoomed ? 2 : 1;
+        activeMedia.style.width = Math.floor(mediaSize.width * scale) + 'px';
+        activeMedia.style.height = Math.floor(mediaSize.height * scale) + 'px';
+        activeMedia.style.maxWidth = 'none';
+        activeMedia.style.maxHeight = 'none';
     }
 
-    function setActiveResizeHandler(handler) {
-        clearActiveResizeHandler();
-        activeResizeHandler = handler;
-        window.addEventListener('resize', activeResizeHandler);
+    function setMedia(element, width, height, vector) {
+        if (!(width > 0 && height > 0)) {
+            showMessage('Unable to determine the image size.');
+            return;
+        }
+        activeMedia = element;
+        mediaSize = { width: width, height: height, vector: vector };
+        media.replaceChildren(element);
+        zoomBtn.disabled = false;
+        fitMedia();
     }
 
-    function getOverlayAvailableBox() {
-        var rect = overlay.getBoundingClientRect();
-        var styles = window.getComputedStyle(overlay);
-        var padLeft = parseFloat(styles.paddingLeft) || 0;
-        var padRight = parseFloat(styles.paddingRight) || 0;
-        var padTop = parseFloat(styles.paddingTop) || 0;
-        var padBottom = parseFloat(styles.paddingBottom) || 0;
+    function showMessage(message) {
+        activeMedia = null;
+        mediaSize = null;
+        zoomBtn.disabled = true;
+        var status = document.createElement('p');
+        status.setAttribute('role', 'status');
+        status.textContent = message;
+        media.replaceChildren(status);
+    }
 
-        var maxWidth = Math.min(rect.width - padLeft - padRight, 1600, window.innerWidth * 0.96);
-        var maxHeight = Math.min(rect.height - padTop - padBottom, window.innerHeight * 0.95);
+    function openShell(element, isSvg, message) {
+        renderToken += 1;
+        zoomed = false;
+        zoomBtn.textContent = 'Zoom in (2×)';
+        showMessage(message);
+        caption.textContent = getCaption(element);
+        overlay.classList.toggle('is-svg', isSvg);
+        if (!overlay.open) {
+            opener = element.closest('a') || element;
+            previousOverflow = document.body.style.overflow;
+            document.body.style.overflow = 'hidden';
+            overlay.showModal();
+        }
+        viewport.scrollTo(0, 0);
+        closeBtn.focus();
+        return renderToken;
+    }
 
-        return {
-            width: Math.max(0, maxWidth),
-            height: Math.max(0, maxHeight)
+    function isCurrent(token) {
+        return token === renderToken && overlay.open;
+    }
+
+    function openImage(img) {
+        var src = img.dataset.zoomSrc || img.currentSrc || img.src;
+        var isSvg = /\.svg(?:[?#]|$)/i.test(src) || /^data:image\/svg\+xml/i.test(src);
+        var whiteBackground = isSvg || img.classList.contains('zoomable--transparent');
+        var token = openShell(img, whiteBackground, 'Loading image…');
+        var enlarged = new Image();
+        enlarged.alt = img.alt || '';
+        enlarged.onload = function () {
+            if (isCurrent(token)) {
+                setMedia(enlarged, enlarged.naturalWidth, enlarged.naturalHeight, isSvg);
+            }
         };
+        enlarged.onerror = function () {
+            if (isCurrent(token)) {
+                showMessage('Unable to load this image. Close the viewer and try again.');
+            }
+        };
+        enlarged.src = src;
     }
 
-    function getSvgViewBox(svg) {
-        if (svg.viewBox && svg.viewBox.baseVal && svg.viewBox.baseVal.width && svg.viewBox.baseVal.height) {
-            return {
-                width: svg.viewBox.baseVal.width,
-                height: svg.viewBox.baseVal.height
-            };
-        }
-
-        var viewBox = svg.getAttribute('viewBox');
-        if (!viewBox) {
-            return null;
-        }
-
-        var parts = viewBox.trim().split(/\s+|,/).map(Number);
-        if (parts.length !== 4 || parts.some(function (n) { return !Number.isFinite(n); })) {
-            return null;
-        }
-
-        return { width: parts[2], height: parts[3] };
-    }
-
-    function fitSvgToViewport(svg) {
-        var viewBox = getSvgViewBox(svg);
-        if (!viewBox) {
+    function setSvg(svg, description) {
+        var box = svg.viewBox && svg.viewBox.baseVal;
+        if (!box || !(box.width > 0 && box.height > 0)) {
+            showMessage('Unable to determine the diagram size.');
             return;
         }
-
-        var available = getOverlayAvailableBox();
-        if (available.width <= 0 || available.height <= 0) {
-            return;
+        svg.setAttribute('role', 'img');
+        if (!svg.getAttribute('aria-label')) {
+            svg.setAttribute('aria-label', description || 'Diagram');
         }
-
-        var aspect = viewBox.width / viewBox.height;
-        if (!Number.isFinite(aspect) || aspect <= 0) {
-            return;
-        }
-
-        var width = available.width;
-        var height = width / aspect;
-        if (height > available.height) {
-            height = available.height;
-            width = height * aspect;
-        }
-
+        svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
         svg.removeAttribute('width');
         svg.removeAttribute('height');
-        svg.style.width = Math.floor(width) + 'px';
-        svg.style.height = Math.floor(height) + 'px';
-        svg.style.maxWidth = 'none';
-        svg.style.maxHeight = 'none';
+        setMedia(svg, box.width, box.height, true);
     }
 
-    function openOverlayShell(isSvg) {
-        overlay.classList.toggle('is-svg', Boolean(isSvg));
-        overlay.classList.add('is-open');
-        overlay.setAttribute('aria-hidden', 'false');
-        overlayMedia.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-        closeBtn.focus();
-    }
-
-    function openOverlay(img) {
-        clearActiveResizeHandler();
-        var zoomSrc = img.dataset.zoomSrc || img.src;
-        var srcWithoutQuery = zoomSrc.split(/[?#]/)[0];
-        var isSvg = /\.svg$/i.test(srcWithoutQuery);
-        var isTransparentPng = /\.png$/i.test(srcWithoutQuery) && img.classList.contains('zoomable--transparent');
-
-        overlayMedia.textContent = '';
-        var overlayImg = document.createElement('img');
-        overlayImg.src = zoomSrc;
-        overlayImg.alt = img.alt || '';
-        overlayMedia.appendChild(overlayImg);
-        openOverlayShell(isSvg || isTransparentPng);
-    }
-
-    function getMermaidAlt(mermaidEl) {
-        var figure = mermaidEl.closest && mermaidEl.closest('figure');
-        if (!figure) {
-            return 'Diagram';
-        }
-
-        var caption = figure.querySelector('figcaption');
-        if (!caption) {
-            return 'Diagram';
-        }
-
-        return (caption.textContent || '').trim() || 'Diagram';
-    }
-
-    function openMermaidOverlay(mermaidEl) {
-        clearActiveResizeHandler();
-        var source = mermaidEl.dataset.mermaidSrc;
+    function openMermaid(diagram) {
+        var source = diagram.dataset.mermaidSrc;
         var mermaid = window.mermaid;
-
-        mermaidRenderToken += 1;
-        var token = mermaidRenderToken;
-
-        overlayMedia.textContent = 'Loading diagram…';
-        openOverlayShell(true);
-
+        var token = openShell(diagram, true, 'Loading diagram…');
         if (!mermaid || !source) {
-            var existingSvg = mermaidEl.querySelector('svg');
-            if (!existingSvg) {
-                overlayMedia.textContent = 'Unable to zoom diagram.';
-                return;
+            var existing = diagram.querySelector('svg');
+            if (existing) {
+                setSvg(existing.cloneNode(true), getCaption(diagram));
+            } else {
+                showMessage('Unable to zoom this diagram.');
             }
-
-            overlayMedia.textContent = '';
-            var clonedSvg = existingSvg.cloneNode(true);
-            overlayMedia.appendChild(clonedSvg);
-            fitSvgToViewport(clonedSvg);
-            setActiveResizeHandler(function () {
-                if (token !== mermaidRenderToken || !overlay.classList.contains('is-open')) {
-                    return;
-                }
-                fitSvgToViewport(clonedSvg);
-            });
             return;
         }
 
-        var renderId = 'zoom-diagram-' + Math.random().toString(36).slice(2);
-        Promise.resolve(mermaid.render(renderId, source)).then(function (result) {
-            if (token !== mermaidRenderToken || !overlay.classList.contains('is-open')) {
+        // Starting in a promise also catches synchronous render failures.
+        Promise.resolve().then(function () {
+            return mermaid.render('zoom-diagram-' + token, source);
+        }).then(function (result) {
+            if (!isCurrent(token)) {
                 return;
             }
-
             var svgCode = result && result.svg ? result.svg : result;
-            if (!svgCode || typeof svgCode !== 'string') {
-                overlayMedia.textContent = 'Unable to render diagram.';
+            if (typeof svgCode !== 'string') {
+                showMessage('Unable to render this diagram.');
                 return;
             }
-
-            overlayMedia.innerHTML = svgCode;
+            media.innerHTML = svgCode;
+            var svg = media.querySelector('svg');
+            if (!svg) {
+                showMessage('Unable to render this diagram.');
+                return;
+            }
+            setSvg(svg, getCaption(diagram));
             if (typeof result.bindFunctions === 'function') {
-                result.bindFunctions(overlayMedia);
-            }
-
-            var renderedSvg = overlayMedia.querySelector('svg');
-            if (renderedSvg && !renderedSvg.getAttribute('aria-label')) {
-                renderedSvg.setAttribute('aria-label', getMermaidAlt(mermaidEl));
-            }
-            if (renderedSvg && !renderedSvg.getAttribute('preserveAspectRatio')) {
-                renderedSvg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-            }
-            if (renderedSvg) {
-                fitSvgToViewport(renderedSvg);
-                setActiveResizeHandler(function () {
-                    if (token !== mermaidRenderToken || !overlay.classList.contains('is-open')) {
-                        return;
-                    }
-                    fitSvgToViewport(renderedSvg);
-                });
+                result.bindFunctions(media);
             }
         }).catch(function () {
-            if (token !== mermaidRenderToken || !overlay.classList.contains('is-open')) {
-                return;
+            if (isCurrent(token)) {
+                showMessage('Unable to render this diagram.');
             }
-            overlayMedia.textContent = 'Unable to render diagram.';
         });
     }
 
     function closeOverlay() {
-        mermaidRenderToken += 1;
-        clearActiveResizeHandler();
-        overlay.classList.remove('is-open');
-        overlay.setAttribute('aria-hidden', 'true');
-        overlay.classList.remove('is-svg');
-        overlayMedia.textContent = '';
-        overlayMedia.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
+        if (!overlay.open) {
+            return;
+        }
+        renderToken += 1;
+        overlay.close();
+        activeMedia = null;
+        mediaSize = null;
+        media.replaceChildren();
+        document.body.style.overflow = previousOverflow;
+        if (opener && opener.isConnected) {
+            opener.focus({ preventScroll: true });
+        }
+        opener = null;
+    }
+
+    function makeTrigger(element, label, open) {
+        element.setAttribute('tabindex', '0');
+        element.setAttribute('role', 'button');
+        element.setAttribute('aria-haspopup', 'dialog');
+        element.setAttribute('aria-controls', 'zoom-overlay');
+        if (!element.getAttribute('aria-label')) {
+            element.setAttribute('aria-label', label);
+        }
+        element.addEventListener('click', function (event) {
+            // Keep links inside Mermaid diagrams usable.
+            if (event.target.closest('a') && event.target.closest('a') !== element) {
+                return;
+            }
+            event.preventDefault();
+            open();
+        });
+        element.addEventListener('keydown', function (event) {
+            if (event.target !== element) {
+                return;
+            }
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                open();
+            }
+        });
     }
 
     document.querySelectorAll('.article-content img.zoomable').forEach(function (img) {
-        img.addEventListener('click', function () {
-            openOverlay(img);
+        makeTrigger(img.closest('a') || img, 'Zoom image: ' + (img.alt || 'Figure'), function () {
+            openImage(img);
         });
     });
-
     document.querySelectorAll('.article-content pre.mermaid').forEach(function (diagram) {
         if (!diagram.dataset.mermaidSrc && !diagram.querySelector('svg')) {
-            diagram.dataset.mermaidSrc = (diagram.textContent || '').trim();
+            diagram.dataset.mermaidSrc = diagram.textContent.trim();
         }
-
-        diagram.setAttribute('tabindex', '0');
-        diagram.setAttribute('role', 'button');
-        if (!diagram.getAttribute('aria-label')) {
-            diagram.setAttribute('aria-label', 'Zoom diagram');
-        }
-
-        diagram.addEventListener('click', function (event) {
-            if (event.target && event.target.closest && event.target.closest('a')) {
-                return;
-            }
-            openMermaidOverlay(diagram);
-        });
-
-        diagram.addEventListener('keydown', function (event) {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                openMermaidOverlay(diagram);
-            }
+        makeTrigger(diagram, 'Zoom diagram', function () {
+            openMermaid(diagram);
         });
     });
 
-    overlay.addEventListener('click', function (event) {
-        if (event.target === overlay) {
-            closeOverlay();
-        }
+    zoomBtn.addEventListener('click', function () {
+        zoomed = !zoomed;
+        zoomBtn.textContent = zoomed ? 'Fit to screen' : 'Zoom in (2×)';
+        fitMedia();
+        // Start at the center; the viewport supports touch, mouse and keyboard scrolling.
+        viewport.scrollTo((viewport.scrollWidth - viewport.clientWidth) / 2,
+            (viewport.scrollHeight - viewport.clientHeight) / 2);
     });
     closeBtn.addEventListener('click', closeOverlay);
-    document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape' && overlay.classList.contains('is-open')) {
+    overlay.addEventListener('cancel', function (event) {
+        event.preventDefault();
+        closeOverlay();
+    });
+    overlay.addEventListener('click', function (event) {
+        if (event.target === overlay || event.target === viewport || event.target === media) {
             closeOverlay();
         }
     });
+    window.addEventListener('resize', fitMedia);
 }());

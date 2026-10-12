@@ -22,7 +22,7 @@ Suppose a curve crosses two edges of a square cell. Marching Squares, the two-di
 Now suppose we also know the normal at each crossing. Each normal determines a tangent line. Intersecting those lines gives us a candidate corner, even though the corner itself does not lie on a grid edge.
 
 <figure>
-  <img src="{static}/images/2026-10-12-dual-contouring/corner_fit.svg" alt="A sharp corner inside a grid cell. Connecting the edge crossings cuts across it, while fitting their two tangent lines places a vertex at the corner." style="display:block;margin:0 auto;width:100%;">
+  <img class="zoomable" src="{static}/images/2026-10-12-dual-contouring/corner_fit.svg" alt="A sharp corner inside a grid cell. Connecting the edge crossings cuts across it, while fitting their two tangent lines places a vertex at the corner." style="display:block;margin:0 auto;width:100%;">
   <figcaption style="text-align:center;">Figure 1. Positions alone give the orange segment on the left. Adding normals recovers the orange corner vertex on the right. This illustrates local vertex placement; neighboring cell vertices are connected in a later step.</figcaption>
 </figure>
 
@@ -270,7 +270,7 @@ Merely connecting every pair of neighboring active cells is incorrect: their sha
 An interior grid edge belongs to **four** cubes. A sign change creates a quad through their four vertices, ordered cyclically around the edge.
 
 <figure>
-  <img src="{static}/images/2026-10-12-dual-contouring/edge_to_quad.svg" alt="Four cubes share a vertical grid edge with opposite endpoint signs. One vertex from each cube forms an orange quadrilateral around that edge." style="display:block;margin:0 auto;width:100%;max-width:760px;">
+  <img class="zoomable" src="{static}/images/2026-10-12-dual-contouring/edge_to_quad.svg" alt="Four cubes share a vertical grid edge with opposite endpoint signs. One vertex from each cube forms an orange quadrilateral around that edge." style="display:block;margin:0 auto;width:100%;max-width:760px;">
   <figcaption style="text-align:center;">Figure 2. The blue grid edge supplies the crossing test. The four orange cell vertices supply the corners of one mesh face.</figcaption>
 </figure>
 
@@ -306,7 +306,7 @@ on the grid whose coordinates are $-3,-2,\ldots,3$. At an edge crossing $\mathbf
 The grid contains $6\times6$ cells. Only 20 are active. Solving their QEFs and connecting across crossed edges produces 20 vertices and 20 segments forming a single closed loop.
 
 <figure>
-  <img src="{static}/images/2026-10-12-dual-contouring/circle_pipeline.svg" alt="A circle sampled on a square grid. The left panel shows crossing positions, outward normals, and active cells. The right panel shows the resulting closed polygon of fitted cell vertices." style="display:block;margin:0 auto;width:100%;">
+  <img class="zoomable" src="{static}/images/2026-10-12-dual-contouring/circle_pipeline.svg" alt="A circle sampled on a square grid. The left panel shows crossing positions, outward normals, and active cells. The right panel shows the resulting closed polygon of fitted cell vertices." style="display:block;margin:0 auto;width:100%;">
   <figcaption style="text-align:center;">Figure 3. The same samples supply the local fits and the crossing-based connectivity. The fitted polygon approximates the dashed circle; its vertices are not constrained to lie on it.</figcaption>
 </figure>
 
@@ -337,7 +337,7 @@ $$
 There are $6^3=216$ cells. The implementation produces **128 vertices and 126 quads**. The interactive display splits those quads into 252 triangles, while the dark lines show the original quad boundaries.
 
 <figure>
-  <img src="{static}/images/2026-10-12-dual-contouring/sphere_mesh.svg" alt="A coarse quadrilateral approximation of a sphere, with 128 fitted vertices and 126 quadrilateral faces." style="display:block;margin:0 auto;width:100%;max-width:760px;">
+  <img class="zoomable" src="{static}/images/2026-10-12-dual-contouring/sphere_mesh.svg" alt="A coarse quadrilateral approximation of a sphere, with 128 fitted vertices and 126 quadrilateral faces." style="display:block;margin:0 auto;width:100%;max-width:760px;">
   <figcaption style="text-align:center;">Figure 4. A sphere extracted from a uniform grid. Every face comes from one sign-changing grid edge.</figcaption>
 </figure>
 

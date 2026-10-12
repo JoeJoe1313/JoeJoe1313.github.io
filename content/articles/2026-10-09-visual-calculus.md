@@ -90,7 +90,7 @@ $$
 where $f'(x)\ne0$. The subtangent is a projection of the tangent segment, not the segment's full length.
 
 <figure>
-  <img src="{static}/images/2026-10-09-visual-calculus/subtangent.svg" alt="A point P on a curve, its tangent meeting the horizontal axis at Q, and a right triangle with height f(x) and signed horizontal base s(x)." style="display:block;margin:0 auto;width:100%;max-width:720px;">
+  <img class="zoomable" src="{static}/images/2026-10-09-visual-calculus/subtangent.svg" alt="A point P on a curve, its tangent meeting the horizontal axis at Q, and a right triangle with height f(x) and signed horizontal base s(x)." style="display:block;margin:0 auto;width:100%;max-width:720px;">
   <figcaption style="text-align:center;">Figure 2. Knowing the subtangent locates a second point on the tangent line.</figcaption>
 </figure>
 
@@ -125,7 +125,7 @@ $$
 As $t$ runs from $-\infty$ to $a$, the translated endpoints run up the vertical line at horizontal coordinate $b$, from height approaching zero to height $Y$. Their segments fill a right triangle of base $b$ and height $Y$.
 
 <figure>
-  <img src="{static}/images/2026-10-09-visual-calculus/exponential.svg" alt="Left: the area under an exponential divided into a blue tangent sweep and an orange terminal triangle. Right: the translated tangent segments fill a triangle of base b and height Y." style="display:block;margin:0 auto;width:100%;">
+  <img class="zoomable" src="{static}/images/2026-10-09-visual-calculus/exponential.svg" alt="Left: the area under an exponential divided into a blue tangent sweep and an orange terminal triangle. Right: the translated tangent segments fill a triangle of base b and height Y." style="display:block;margin:0 auto;width:100%;">
   <figcaption style="text-align:center;">Figure 3. The blue sweep has the same area as the green cluster. The orange triangle is the remaining part of the area under the curve.</figcaption>
 </figure>
 
@@ -166,7 +166,7 @@ $$
 If we call the new horizontal coordinate $q$, these endpoints lie on $y=(2q)^2$: a horizontally compressed copy of the original parabola.
 
 <figure>
-  <img src="{static}/images/2026-10-09-visual-calculus/parabola.svg" alt="Left: the area under a parabola separated into its tangent sweep and the triangle below the final tangent. Right: the cluster lies between a straight line from the origin and a horizontally compressed parabola." style="display:block;margin:0 auto;width:100%;">
+  <img class="zoomable" src="{static}/images/2026-10-09-visual-calculus/parabola.svg" alt="Left: the area under a parabola separated into its tangent sweep and the triangle below the final tangent. Right: the cluster lies between a straight line from the origin and a horizontally compressed parabola." style="display:block;margin:0 auto;width:100%;">
   <figcaption style="text-align:center;">Figure 4. The two tangent regions have equal area. Compressing the parabola horizontally by a factor of two halves the area beneath it.</figcaption>
 </figure>
 
@@ -221,7 +221,7 @@ Let $P$ be the tracing point, $B$ the disk's contact point with the ground, and 
 As the disk rolls, $Q$ moves along the top edge of the rectangle. The segments $PQ$ sweep the region between that edge and the cycloid.
 
 <figure>
-  <img src="{static}/images/2026-10-09-visual-calculus/cycloid.svg" alt="Left: a cycloid arch inside a rectangle, with tangent chords joining the curve to the top edge. Right: translating their upper endpoints to one point produces a disk of the same radius as the rolling disk." style="display:block;margin:0 auto;width:100%;">
+  <img class="zoomable" src="{static}/images/2026-10-09-visual-calculus/cycloid.svg" alt="Left: a cycloid arch inside a rectangle, with tangent chords joining the curve to the top edge. Right: translating their upper endpoints to one point produces a disk of the same radius as the rolling disk." style="display:block;margin:0 auto;width:100%;">
   <figcaption style="text-align:center;">Figure 5. The space above one cycloid arch has the area of one generating disk. The common endpoint O is on the boundary of the cluster disk, not at its center.</figcaption>
 </figure>
 

@@ -577,81 +577,95 @@ figure.code figcaption a:before {
   }
 }
 
+/* Native dialog keeps focus inside the viewer and makes the page behind it inert. */
 .zoom-overlay {
     position: fixed;
     inset: 0;
     display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    background: rgba(0, 0, 0, 0.85);
-    color: #fff;
-    z-index: 1050;
-}
-.zoom-overlay.is-open { display: flex; }
-.zoom-overlay__media {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 auto;
-}
-.zoom-overlay__media img {
-    display: block;
-    max-width: min(96vw, 1600px);
-    max-height: 95vh;
-    width: auto;
-    height: auto;
-    box-shadow: 0 0 24px rgba(0, 0, 0, 0.6);
-    border-radius: 6px;
-}
-.zoom-overlay__media svg {
-    display: block;
-    max-width: min(96vw, 1600px);
-    max-height: 95vh;
+    flex-direction: column;
+    gap: 0.75rem;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
     margin: 0;
-    box-shadow: 0 0 24px rgba(0, 0, 0, 0.6);
-    border-radius: 6px;
-}
-.zoom-overlay__close {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    padding: 0.4rem 0.75rem;
-    font-size: 1.6rem;
-    line-height: 1;
-    color: currentColor;
-    background: rgba(0, 0, 0, 0.55);
+    padding: 1.25rem;
     border: 0;
-    border-radius: 999px;
+    background: rgba(15, 18, 23, 0.94);
+    color: #fff;
+}
+.zoom-overlay[open] { display: flex; }
+.zoom-overlay::backdrop { background: rgba(0, 0, 0, 0.5); }
+.zoom-overlay__toolbar {
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+.zoom-overlay__toolbar button {
+    padding: 0.5rem 0.85rem;
+    border: 1px solid #707780;
+    border-radius: 6px;
+    font: inherit;
+    line-height: 1.4;
+    color: #fff;
+    background: #252a33;
     cursor: pointer;
 }
-.zoom-overlay.is-svg {
-    background: rgba(0, 0, 0, 0.85);
-    color: #fff;
+.zoom-overlay__toolbar button:hover { background: #3c4450; }
+.zoom-overlay__toolbar button:disabled { opacity: 0.5; cursor: default; }
+.zoom-overlay :focus-visible,
+.article-content .zoomable:focus-visible,
+.article-content pre.mermaid:focus-visible {
+    outline: 3px solid #58b9ff;
+    outline-offset: 3px;
 }
-.zoom-overlay.is-svg .zoom-overlay__close {
-    background: rgba(0, 0, 0, 0.55);
+.zoom-overlay__viewport {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
 }
-.zoom-overlay.is-svg .zoom-overlay__media svg,
-.zoom-overlay.is-svg .zoom-overlay__media img {
+.zoom-overlay__media {
+    display: flex;
+    width: max-content;
+    min-width: 100%;
+    min-height: 100%;
+}
+.zoom-overlay__media > img,
+.zoom-overlay__media > svg {
+    display: block;
+    flex: 0 0 auto;
+    max-width: none;
+    max-height: none;
+    margin: auto;
+    border-radius: 6px;
+}
+.zoom-overlay__media > p { margin: auto; }
+.zoom-overlay.is-svg .zoom-overlay__media > svg,
+.zoom-overlay.is-svg .zoom-overlay__media > img {
     background: #fff;
 }
-.zoomable--transparent {
-    cursor: zoom-in;
+.zoom-overlay__caption {
+    flex: 0 0 auto;
+    max-height: 20vh;
+    max-width: 80ch;
+    margin: 0 auto;
+    overflow: auto;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    text-align: center;
+    color: #e0e4eb;
 }
-.zoomable {
-    cursor: zoom-in;
-}
+.zoom-overlay__caption:empty { display: none; }
+.zoomable,
+.zoomable--transparent { cursor: zoom-in; }
 
 @media (max-width: 600px) {
-    .zoom-overlay {
-        padding: 1rem;
-    }
-
-    .zoom-overlay__close {
-        top: 1rem;
-        right: 1rem;
-    }
+    .zoom-overlay { padding: 0.75rem; }
+    .zoom-overlay__caption { font-size: 0.85rem; }
 }
 
 /* Match NotMyIdea typography and spacing */
