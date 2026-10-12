@@ -27,7 +27,7 @@ SITENAME = "JoJo's Blog"
 SITEURL = ""
 
 PATH = "content"
-ARTICLE_PATHS = ["articles"]
+ARTICLE_PATHS = ["articles", "tech-notes"]
 PAGE_PATHS = ["pages"]
 PAGE_SAVE_AS = "{slug}.html"
 PAGE_URL = "{slug}.html"

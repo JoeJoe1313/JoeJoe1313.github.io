@@ -65,8 +65,11 @@ on a daily cron and commits it.
 
 ## Content authoring model
 
-Articles are `content/articles/YYYY-MM-DD-<slug>.md`; pages are `content/pages/<name>.md`.
-Both render to a flat `{slug}.html` URL (no date in the path). Front matter is Markdown-meta
+Articles are `content/articles/YYYY-MM-DD-<slug>.md`; tech notes are
+`content/tech-notes/YYYY-MM-DD-<slug>.md`; pages are `content/pages/<name>.md`.
+Pelican reads both post folders through `ARTICLE_PATHS`. Keep the `tech-notes` tag on
+tech notes: the theme uses it to separate the article and tech note listings.
+All render to a flat `{slug}.html` URL (no date in the path). Front matter is Markdown-meta
 style (not YAML fences):
 
 ```
