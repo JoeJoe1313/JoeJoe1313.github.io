@@ -190,7 +190,7 @@ config = {
 }
 
 fig.write_html(
-    file="content/code/2025-01-20-dual-contouring/dc_3d.html",
+    file="content/code/2026-10-12-dual-contouring/dc_3d.html",
     include_plotlyjs=True,
     full_html=True,
     auto_play=False,

@@ -91,8 +91,8 @@ def plot_two_obj(obj_path1, obj_path2, title1="Mesh 1", title2="Mesh 2"):
 
 
 if __name__ == "__main__":
-    obj_file1 = "./content/images/2025-01-20-dual-contouring/output_mc.obj"
-    obj_file2 = "./content/images/2025-01-20-dual-contouring/output_dc.obj"
+    obj_file1 = "./content/images/2026-10-12-dual-contouring/output_mc.obj"
+    obj_file2 = "./content/images/2026-10-12-dual-contouring/output_dc.obj"
 
     fig = plot_two_obj(obj_file1, obj_file2, "Marching Cubes", "Dual Contouring")
 
@@ -102,7 +102,7 @@ if __name__ == "__main__":
     }
 
     fig.write_html(
-        file="content/code/2025-01-20-dual-contouring/comparison.html",
+        file="content/code/2026-10-12-dual-contouring/comparison.html",
         include_plotlyjs=True,
         full_html=True,
         auto_play=False,
