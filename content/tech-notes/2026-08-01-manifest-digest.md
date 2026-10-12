@@ -1,5 +1,5 @@
 ---
-Title: "Manifest Digest: A Container Image's Immutable Fingerprint"
+Title: Manifest Digest
 Date: 2026-08-01 07:00
 Category: Computer Science
 Tags: cs, docker, containers, oci, tech-notes
