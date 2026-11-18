@@ -1,0 +1,61 @@
+{
+  "updated": "2026-11-18",
+  "shelves": [
+    {
+      "name": "currently-reading",
+      "title": "Currently Reading",
+      "url": "https://www.goodreads.com/review/list/109326321?shelf=currently-reading",
+      "books": [
+        {
+          "id": "6613404",
+          "url": "https://www.goodreads.com/book/show/6613404",
+          "title": "Anatomy of the State",
+          "author": "Murray N. Rothbard",
+          "cover": "images/books/6613404.jpg"
+        },
+        {
+          "id": "254596077",
+          "url": "https://www.goodreads.com/book/show/254596077",
+          "title": "Because I Killed Him (The Nine Gentlemen)",
+          "author": "Edith Birde",
+          "cover": "images/books/254596077.jpg"
+        }
+      ]
+    },
+    {
+      "name": "favourite",
+      "title": "Favourite",
+      "url": "https://www.goodreads.com/review/list/109326321?shelf=favourite",
+      "books": [
+        {
+          "id": "220341389",
+          "url": "https://www.goodreads.com/book/show/220341389",
+          "title": "Everything Is Tuberculosis: The History and Persistence of Our Deadliest Infection",
+          "author": "John Green",
+          "cover": "images/books/220341389.jpg"
+        },
+        {
+          "id": "53349431",
+          "url": "https://www.goodreads.com/book/show/53349431",
+          "title": "The Art of Doing Science and Engineering: Learning to Learn",
+          "author": "Richard W. Hamming",
+          "cover": "images/books/53349431.jpg"
+        }
+      ]
+    }
+  ],
+  "quotes": [
+    {
+      "text": "“life is never simple paths—only dizzying labyrinths folding in on themselves.”",
+      "author": "John Green",
+      "book": "The Anthropocene Reviewed",
+      "url": "https://www.goodreads.com/quotes/11166537-life-is-never-simple-paths-only-dizzying-labyrinths-folding-in-on"
+    },
+    {
+      "text": "“If you want something done well, do it yourself,”",
+      "author": "Beth O'Leary",
+      "book": "The Switch",
+      "url": "https://www.goodreads.com/quotes/10638470-if-you-want-something-done-well-do-it-yourself"
+    }
+  ]
+}
