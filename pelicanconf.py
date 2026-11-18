@@ -84,8 +84,7 @@ PLUGINS = [
     "plugins.render_math",
     "plugins.liquid_tags.include_code",
     "plugins.liquid_tags.include_code_collapsible",
-    "plugins.goodreads_activity",
-    "plugins.goodreads_quotes",
+    "plugins.reading_list",
     "plugins.series",
     "plugins.statistics",
     "plugins.search",
@@ -132,12 +131,10 @@ STORK_INPUT_OPTIONS = {
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
 
-GOODREADS_ACTIVITY_FEED = {
-    "currently_reading": "https://www.goodreads.com/review/list_rss/109326321?key=3I5TuNfj-aUSty_wg0vzJhR3GxSlg6BKJdcqnhIF5wEZ8xuH&shelf=currently-reading",
-    # "mathematics": "https://www.goodreads.com/review/list_rss/109326321?key=3I5TuNfj-aUSty_wg0vzJhR3GxSlg6BKJdcqnhIF5wEZ8xuH&shelf=mathematics",
-    "favourite": "https://www.goodreads.com/review/list_rss/109326321?key=3I5TuNfj-aUSty_wg0vzJhR3GxSlg6BKJdcqnhIF5wEZ8xuH&shelf=favourite"
-}
-GOODREADS_QUOTES = "https://www.goodreads.com/quotes/list_rss/109326321-joana"
+# Goodreads retired its RSS feeds. Builds use the saved shelves and quotes.
+READING_LIST_DATA = os.path.join(
+    os.path.dirname(__file__), "content", "data", "reading-list.json"
+)
 
 RECENT_ARTICLES_COUNT = 5
 RECENT_ARTICLE_SUMMARY = True

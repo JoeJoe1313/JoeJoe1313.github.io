@@ -144,6 +144,19 @@ jobs:
           echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
           stork --version
 
+      - name: Cache reading list between builds
+        uses: actions/cache@v4
+        continue-on-error: true
+        with:
+          path: content/data/reading-list.json
+          key: goodreads-v1-${{ hashFiles('content/data/reading-list.json') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            goodreads-v1-${{ hashFiles('content/data/reading-list.json') }}-
+
+      - name: Refresh Goodreads shelves and quotes
+        run: |
+          python scripts/sync_goodreads.py || echo "::warning::Goodreads refresh failed. Building with the saved reading list."
+
       - name: Build site
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}

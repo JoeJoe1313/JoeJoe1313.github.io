@@ -1,21 +1,12 @@
-{%- if goodreads_quotes %}
-<section id="content" class="body">
-<h2>{{ goodreads_quotes.shelf_title }}</h2>
-{%- for quote in goodreads_quotes.quotes %}
+{% if reading_list.quotes %}
+<section aria-labelledby="reading-quotes">
+<h2 id="reading-quotes">Quotes</h2>
+{% for quote in reading_list.quotes %}
 <div class="quote-wrapper">
-<div class="quote-content">{{ quote.quote }}</div>
-<div class="quote-author">{{ quote.author }}</div>
+<div class="quote-content">{{ quote.text|e }}</div>
+<div class="quote-author">— {{ quote.author|e }}{% if quote.book %}, <cite>{{ quote.book|e }}</cite>{% endif %}</div>
+<a href="{{ quote.url|e }}" target="_blank" rel="noopener noreferrer">View on Goodreads</a>
 </div>
-{%- endfor %}
+{% endfor %}
 </section>
-{%- elif GOODREADS_QUOTES and GOODREADS_QUOTES.quotes is defined %}
-<section id="content" class="body">
-<h2>{{ GOODREADS_QUOTES.shelf_title }}</h2>
-{%- for quote in GOODREADS_QUOTES.quotes %}
-<div class="quote-wrapper">
-<div class="quote-content">{{ quote.quote }}</div>
-<div class="quote-author">{{ quote.author }}</div>
-</div>
-{%- endfor %}
-</section>
-{%- endif %}
+{% endif %}

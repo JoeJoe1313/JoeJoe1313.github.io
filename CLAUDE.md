@@ -27,7 +27,8 @@ make html                  # one-off build (this is exactly what CI runs)
 make clean                 # delete the build output
 ```
 
-There is no test suite; **`make html` with zero metadata warnings is the validation step.**
+**`make html` with zero metadata warnings is the site validation step.** Reading-list
+checks run with `.venv/bin/python -m unittest discover -s tests -p 'test_reading_list.py'`.
 Plugins ship their own pytest files (e.g. `plugins/render_math/test_render_math.py`) but
 they are not wired into a project-wide runner.
 
@@ -101,8 +102,10 @@ Status: draft        # omit to publish; `draft` keeps it out of listings
 All plugins live in `plugins/` and are activated by the `PLUGINS` list in `pelicanconf.py`
 (adding a folder there does nothing until it is listed). Beyond `render_math` and `search`
 (Stork) covered above: `summary` (first-paragraph summaries), `series` (link posts via a
-`Series:` front-matter key), `statistics`, `extract_toc`, and `goodreads_activity` /
-`goodreads_quotes` (fetch RSS feeds configured by `GOODREADS_*` settings).
+`Series:` front-matter key), `statistics`, `extract_toc`, and `reading_list` (loads
+the local JSON configured by `READING_LIST_DATA`). Goodreads RSS feeds are retired;
+the Pages build refreshes both shelves and quotes once per deployment from public Goodreads
+pages. See `READING_LIST.md` for the data sources and failure behavior.
 
 ## Comments (Supabase)
 
